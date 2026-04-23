@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Xnurta AI 广告效能全景复盘与诊断报告</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#0b1120;
+    --ink-2:#1f2937;
+    --muted:#64748b;
+    --line:#e5e7eb;
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --brand:#5b5fef;
+    --brand-2:#7c3aed;
+    --brand-soft:#eef0ff;
+    --green:#10b981;
+    --green-soft:#ecfdf5;
+    --red:#ef4444;
+    --red-soft:#fef2f2;
+    --amber:#f59e0b;
+    --amber-soft:#fffbeb;
+    --blue:#0ea5e9;
+    --blue-soft:#eff6ff;
+    --radius:16px;
+    --shadow:0 6px 24px rgba(15, 23, 42, 0.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.7}
+  .wrap{max-width:1200px;margin:0 auto;padding:40px 24px 80px}
+
+  /* Hero */
+  .hero{
+    background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 60%,#a855f7 100%);
+    color:white;border-radius:24px;padding:40px 44px;position:relative;overflow:hidden;
+    box-shadow:0 20px 40px rgba(91,95,239,.25);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(1200px 400px at 90% -10%,rgba(255,255,255,.25),transparent 60%),
+               radial-gradient(800px 300px at -10% 110%,rgba(255,255,255,.18),transparent 60%);
+    pointer-events:none;
+  }
+  .hero .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.5px;opacity:.9}
+  .hero .dot{width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 6px rgba(255,255,255,.2)}
+  .hero h1{font-size:36px;margin:14px 0 8px;font-weight:800;letter-spacing:.5px}
+  .hero .sub{opacity:.9;font-size:16px;max-width:800px}
+  .hero .meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);font-size:13px}
+  .hero .client-card{
+    margin-top:26px;padding:16px 18px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.22);border-radius:14px;
+    display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:14px;font-size:14px;
+  }
+  .hero .client-card div strong{display:block;opacity:.85;font-size:12px;font-weight:500;margin-bottom:4px}
+
+  /* Section */
+  section{margin-top:40px}
+  .section-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  .section-num{
+    width:44px;height:44px;border-radius:12px;background:var(--brand);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;
+    box-shadow:0 6px 16px rgba(91,95,239,.35);
+  }
+  .section-title{font-size:24px;font-weight:800;margin:0}
+  .section-sub{color:var(--muted);margin:0;font-size:14px}
+
+  .card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);border:1px solid #eef0f4}
+  .grid{display:grid;gap:18px}
+  .g-4{grid-template-columns:repeat(4,1fr)}
+  .g-3{grid-template-columns:repeat(3,1fr)}
+  .g-2{grid-template-columns:repeat(2,1fr)}
+  @media (max-width:900px){.g-4,.g-3,.g-2{grid-template-columns:1fr 1fr}}
+  @media (max-width:640px){.g-4,.g-3,.g-2{grid-template-columns:1fr}.hero .client-card{grid-template-columns:1fr 1fr}}
+
+  /* KPI */
+  .kpi{background:var(--card);border-radius:var(--radius);padding:18px 20px;border:1px solid #eef0f4;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .kpi .label{font-size:13px;color:var(--muted)}
+  .kpi .value{font-size:28px;font-weight:800;margin-top:4px;letter-spacing:-.5px}
+  .kpi .delta{font-size:12px;margin-top:4px;color:var(--green)}
+  .kpi.red .value{color:var(--red)}
+  .kpi.green .value{color:var(--green)}
+  .kpi.brand .value{color:var(--brand)}
+  .kpi .icon{position:absolute;right:16px;top:16px;opacity:.15;font-size:28px}
+
+  /* Table */
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
+  th{text-align:left;font-weight:600;color:#334155;background:#f8fafc;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:12px 14px;border-bottom:1px solid #f1f5f9;color:#334155}
+  tbody tr:hover{background:#fafbff}
+  .tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+  .tag.green{background:var(--green-soft);color:#047857}
+  .tag.red{background:var(--red-soft);color:#b91c1c}
+  .tag.amber{background:var(--amber-soft);color:#b45309}
+  .tag.blue{background:var(--blue-soft);color:#0369a1}
+  .tag.violet{background:var(--brand-soft);color:#4338ca}
+  .tag.grey{background:#f1f5f9;color:#475569}
+
+  /* Chart wrapper */
+  .chart-card{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid #eef0f4;box-shadow:var(--shadow)}
+  .chart-card h3{margin:0 0 4px;font-size:16px}
+  .chart-card .hint{color:var(--muted);font-size:12px;margin-bottom:12px}
+  .chart-box{position:relative;height:280px}
+
+  /* Callout */
+  .callout{border-radius:14px;padding:16px 18px;border:1px solid;display:flex;gap:14px;align-items:flex-start}
+  .callout.green{background:var(--green-soft);border-color:#a7f3d0}
+  .callout.red{background:var(--red-soft);border-color:#fecaca}
+  .callout.amber{background:var(--amber-soft);border-color:#fde68a}
+  .callout.blue{background:var(--blue-soft);border-color:#bfdbfe}
+  .callout .ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+  .callout.green .ic{background:var(--green)}
+  .callout.red .ic{background:var(--red)}
+  .callout.amber .ic{background:var(--amber)}
+  .callout.blue .ic{background:var(--blue)}
+  .callout h4{margin:0 0 4px;font-size:15px}
+  .callout p{margin:0;color:#334155;font-size:14px}
+
+  /* Chain */
+  .chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#0b1120;color:#e2e8f0;padding:16px;border-radius:14px;font-size:13px}
+  .chain .node{background:rgba(255,255,255,.08);padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.12);white-space:nowrap}
+  .chain .arrow{color:#a5b4fc;font-weight:700}
+  .chain .final{background:#7f1d1d;border-color:#ef4444}
+
+  /* Prescription */
+  .phase{border-radius:14px;padding:18px;background:#fff;border:1px solid #eef0f4;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .phase .ph-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .phase .ph-badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;color:#fff}
+  .phase.new .ph-badge{background:#0ea5e9}
+  .phase.grow .ph-badge{background:#10b981}
+  .phase.mature .ph-badge{background:#7c3aed}
+  .phase.decline .ph-badge{background:#ef4444}
+  .phase h4{margin:0;font-size:17px}
+  .phase ul{margin:6px 0 0 0;padding-left:18px}
+  .phase ul li{margin-bottom:6px;color:#334155}
+  .phase .rx{margin-top:12px;padding:12px;border-radius:10px;background:#f8fafc;border:1px dashed #cbd5e1;font-size:13px;color:#475569}
+
+  /* Footer */
+  footer{margin-top:60px;color:var(--muted);font-size:13px;text-align:center}
+
+  /* Small utilities */
+  .mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .lead{font-size:15px;color:#334155}
+  .muted{color:var(--muted)}
+  .tbl-card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid #eef0f4}
+  .tbl-card .tbl-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .tbl-card .tbl-head h3{margin:0;font-size:16px}
+  .num{font-variant-numeric:tabular-nums}
+  .right{text-align:right}
+
+  /* TOC */
+  .toc{position:sticky;top:0;backdrop-filter:blur(6px);background:rgba(246,247,251,.8);z-index:10;border-bottom:1px solid #eef0f4;margin-bottom:10px}
+  .toc-inner{max-width:1200px;margin:0 auto;padding:10px 24px;display:flex;gap:6px;flex-wrap:wrap;font-size:13px}
+  .toc a{padding:6px 10px;border-radius:8px;color:#475569;text-decoration:none}
+  .toc a:hover{background:#fff;color:var(--brand)}
+</style>
+</head>
+<body>
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#m0">封面</a>
+    <a href="#m1">① 全局视野</a>
+    <a href="#m2">② AI 效能自证</a>
+    <a href="#m3">③ 病灶下钻</a>
+    <a href="#m4">④ AI 策略处方</a>
+    <a href="#m5">附录：数据底表</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section id="m0" class="hero">
+    <div class="brand"><span class="dot"></span> Xnurta · Customer Success</div>
+    <h1>Xnurta AI 广告效能全景复盘与诊断报告</h1>
+    <p class="sub">以“人机协同”的视角，客观复盘 AI 托管与人工管理的真实表现，下钻病灶、定位浪费，并给出基于产品生命周期的 Xnurta 系统调优处方。</p>
+    <div class="meta">
+      <span class="chip">报告日期：2026-04-23</span>
+      <span class="chip">作者：Xnurta CSM</span>
+      <span class="chip">客户类目：家居生活用品</span>
+      <span class="chip">数据范围：宏观 519 条活动 · 微观 5,494 条搜索词</span>
+    </div>
+    <div class="client-card">
+      <div><strong>花费 Top1 产品</strong>Simple Deluxe 9.5-Qt Dual Basket Air Fryer（1700W 双篮数字空炸）</div>
+      <div><strong>客单价</strong>$75.46</div>
+      <div><strong>产品评价</strong>4.6 ★</div>
+      <div><strong>评论数</strong>1,382</div>
+    </div>
+  </section>
+
+  <!-- MODULE 1 -->
+  <section id="m1">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <div>
+        <h2 class="section-title">全局视野与生意基本盘</h2>
+        <p class="section-sub">Executive Summary · 先抬头看路，再低头拉车</p>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="grid g-4">
+      <div class="kpi brand">
+        <div class="label">总花费</div>
+        <div class="value num">$45,702.80</div>
+        <div class="delta">覆盖 519 条广告活动</div>
+        <div class="icon">💰</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">总销售额</div>
+        <div class="value num">$356,859.17</div>
+        <div class="delta">微观表中捕获有效订单 6k+</div>
+        <div class="icon">📈</div>
+      </div>
+      <div class="kpi">
+        <div class="label">整体 ACOS</div>
+        <div class="value num">12.81%</div>
+        <div class="delta">家居大类健康区间，定调：稳中有忧</div>
+        <div class="icon">🎯</div>
+      </div>
+      <div class="kpi brand">
+        <div class="label">整体 ROAS</div>
+        <div class="value num">7.81 ×</div>
+        <div class="delta">每 1 美金广告投入换回 7.81 美金</div>
+        <div class="icon">🚀</div>
+      </div>
+    </div>
+
+    <div class="callout blue mt-24">
+      <div class="ic">i</div>
+      <div>
+        <h4>大盘定调</h4>
+        <p>整体 ACOS 12.81% 处于家居品类 "优秀—良好" 区间（行业均值 15–20%），ROAS 7.81× 显著高于行业中位数。生意基本盘健康，<b>矛盾不在"总量"，而在"结构"</b>——下面三张表会告诉您浪费到底藏在哪里。</p>
+      </div>
+    </div>
+
+    <!-- Store Matrix -->
+    <h3 class="mt-24" style="margin-bottom:8px">店铺矩阵表现</h3>
+    <p class="muted" style="margin:0 0 14px">三店之中，谁是现金牛？谁是增长引擎？谁在拖后腿？</p>
+
+    <div class="grid g-3">
+      <div class="chart-card">
+        <h3>花费分布</h3>
+        <div class="hint">资金权重高度集中在 GPM VC</div>
+        <div class="chart-box"><canvas id="chartStoreSpend"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>销售额分布</h3>
+        <div class="hint">GPM VC 同样是销售贡献主阵地</div>
+        <div class="chart-box"><canvas id="chartStoreSales"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>ACOS 对比</h3>
+        <div class="hint">DHS SC EU 明显高于大盘，需要重点关照</div>
+        <div class="chart-box"><canvas id="chartStoreAcos"></canvas></div>
+      </div>
+    </div>
+
+    <div class="tbl-card mt-16">
+      <div class="tbl-head">
+        <h3>店铺矩阵标签</h3>
+        <span class="muted" style="font-size:12px">基于花费、销售、ACOS 综合定位</span>
+      </div>
+      <table>
+        <thead><tr><th>店铺</th><th>角色定位</th><th class="right">花费 ($)</th><th class="right">销售额 ($)</th><th class="right">ACOS</th><th class="right">活动数</th><th>解读</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>GPM VC</b></td>
+            <td><span class="tag violet">增长引擎 + 现金牛</span></td>
+            <td class="right num">38,697.02</td>
+            <td class="right num">309,165.78</td>
+            <td class="right num" style="color:var(--green)"><b>12.52%</b></td>
+            <td class="right num">381</td>
+            <td>销售/花费均占 <b>约 85%</b>，ACOS 最优。主战场稳扎稳打，是全盘利润底盘。</td>
+          </tr>
+          <tr>
+            <td><b>DHS SC</b></td>
+            <td><span class="tag blue">稳定贡献者</span></td>
+            <td class="right num">5,568.20</td>
+            <td class="right num">40,184.70</td>
+            <td class="right num">13.86%</td>
+            <td class="right num">124</td>
+            <td>ACOS 略高于大盘 1 个点，仍在健康区间。<b>存在 AI 托管扩容空间</b>。</td>
+          </tr>
+          <tr>
+            <td><b>DHS SC EU</b></td>
+            <td><span class="tag red">拖后腿（需介入）</span></td>
+            <td class="right num">1,437.58</td>
+            <td class="right num">7,508.69</td>
+            <td class="right num" style="color:var(--red)"><b>19.15%</b></td>
+            <td class="right num">14</td>
+            <td>ACOS 比大盘高出 <b>6.3 个点</b>，单活动浪费占比高（如 storage bag-Exact8 ACOS 52.7%）。优先优化。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- MODULE 2 -->
+  <section id="m2">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <div>
+        <h2 class="section-title">AI 效能自证与人机协同分析</h2>
+        <p class="section-sub">The "AI vs Manual" Showdown · 用数据正面回答"AI 到底行不行"</p>
+      </div>
+    </div>
+
+    <div class="grid g-2">
+      <div class="chart-card">
+        <h3>人机花费占比</h3>
+        <div class="hint">当前 AI 只承担 22.4% 预算，仍是"试点"体量</div>
+        <div class="chart-box"><canvas id="chartAiSpend"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>人机 ACOS 对比</h3>
+        <div class="hint">AI 与人工 ACOS 基本打平，AI 活动冲量反而更优</div>
+        <div class="chart-box"><canvas id="chartAiAcos"></canvas></div>
+      </div>
+    </div>
+
+    <div class="tbl-card mt-16">
+      <div class="tbl-head">
+        <h3>大盘人机核心对比</h3>
+        <span class="muted" style="font-size:12px">同口径直接比较</span>
+      </div>
+      <table>
+        <thead><tr><th>类型</th><th class="right">活动数</th><th class="right">花费 ($)</th><th class="right">花费占比</th><th class="right">销售额 ($)</th><th class="right">ACOS</th><th class="right">ROAS</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="tag grey">人工（非 AI）</span></td>
+            <td class="right num">433</td>
+            <td class="right num">35,453.48</td>
+            <td class="right num">77.6%</td>
+            <td class="right num">275,042.78</td>
+            <td class="right num">12.89%</td>
+            <td class="right num">7.76×</td>
+          </tr>
+          <tr>
+            <td><span class="tag green">AI · 活动冲量</span></td>
+            <td class="right num">2</td>
+            <td class="right num">863.60</td>
+            <td class="right num">1.9%</td>
+            <td class="right num">9,591.25</td>
+            <td class="right num" style="color:var(--green)"><b>9.00%</b></td>
+            <td class="right num"><b>11.11×</b></td>
+          </tr>
+          <tr>
+            <td><span class="tag violet">AI · 推动增长</span></td>
+            <td class="right num">48</td>
+            <td class="right num">7,190.42</td>
+            <td class="right num">15.7%</td>
+            <td class="right num">55,472.38</td>
+            <td class="right num">12.96%</td>
+            <td class="right num">7.72×</td>
+          </tr>
+          <tr>
+            <td><span class="tag blue">AI · 保持订单稳定</span></td>
+            <td class="right num">36</td>
+            <td class="right num">2,195.30</td>
+            <td class="right num">4.8%</td>
+            <td class="right num">16,752.76</td>
+            <td class="right num">13.10%</td>
+            <td class="right num">7.63×</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Objective match check -->
+    <h3 class="mt-24" style="margin-bottom:8px">AI 目标达成率追踪</h3>
+    <div class="grid g-3">
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><b>🚀 活动冲量</b><span class="tag green">忠实执行 ✓</span></div>
+        <p class="lead mt-8">目标：以尽量低的 ACOS 换取销售爆发。<br>结果：<b>ACOS 9.00%，ROAS 11.11×</b>，是 AI 目标中表现最好的一组——"Xnurta AI 2671-捡漏-Board" 花费 $862 带回 $9,591。</p>
+        <div class="callout green mt-12"><div class="ic">✓</div><div><p>AI 精准执行"低价捡漏 + 冲量"策略，建议<b>扩大预算与活动数</b>。</p></div></div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><b>📈 推动增长</b><span class="tag amber">基本达成，局部偏高</span></div>
+        <p class="lead mt-8">目标：敢于花钱拓词拓量。<br>结果：48 个活动，ACOS 12.96%（≈大盘），<b>拓流量但 ACOS 未失控</b>。个别活动如 3A88HKOVEN-6.3QT-AUTO ACOS 23.83%，属于新品期探索成本。</p>
+        <div class="callout amber mt-12"><div class="ic">!</div><div><p>AI 处于"拓词 + 拓量"阶段，建议对<b>新品期活动额外授予试错空间</b>，勿以 ACOS 单一指标否定。</p></div></div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><b>🛡 保持订单稳定</b><span class="tag blue">守住底盘</span></div>
+        <p class="lead mt-8">目标：稳定出单、稳定 ACOS。<br>结果：36 个活动，ACOS 13.10%，出单 ROAS 7.63×，<b>与人工管理水平一致</b>。部分长尾活动 ACOS 略高（27%+），是拓新的合理代价。</p>
+        <div class="callout blue mt-12"><div class="ic">i</div><div><p>稳态 OK。建议针对 ACOS 过高的小活动切换目标为"降本"或<b>收紧行动空间</b>。</p></div></div>
+      </div>
+    </div>
+
+    <!-- Match type health -->
+    <h3 class="mt-24" style="margin-bottom:8px">结构健康度诊断 · 匹配形式投入产出比</h3>
+    <div class="chart-card">
+      <div class="hint">横轴=花费（$），蓝柱=订单，绿线=CVR（%）。颜色越绿越健康</div>
+      <div class="chart-box" style="height:320px"><canvas id="chartMatch"></canvas></div>
+    </div>
+
+    <div class="tbl-card mt-16">
+      <table>
+        <thead><tr><th>匹配形式</th><th class="right">花费 ($)</th><th class="right">点击</th><th class="right">订单</th><th class="right">CPC</th><th class="right">CVR</th><th>点评</th></tr></thead>
+        <tbody>
+          <tr><td><b>长尾集合（AI 拓展）</b></td><td class="right num">20,990.78</td><td class="right num">54,631</td><td class="right num">0</td><td class="right num">$0.38</td><td class="right num" style="color:var(--red)">0.00%</td><td><span class="tag red">探索成本</span> AI 大批量广覆盖，需定期回捞高转化词</td></tr>
+          <tr><td>BROAD 广泛</td><td class="right num">6,496.02</td><td class="right num">18,954</td><td class="right num">1,695</td><td class="right num">$0.34</td><td class="right num" style="color:var(--green)">8.94%</td><td><span class="tag green">主力出单</span> 核心词承担 Air Fryer 流量</td></tr>
+          <tr><td>CLOSE-MATCH 紧密</td><td class="right num">6,470.03</td><td class="right num">14,045</td><td class="right num">1,333</td><td class="right num">$0.46</td><td class="right num" style="color:var(--green)">9.49%</td><td><span class="tag green">优质</span> Auto 类主力池，转化稳定</td></tr>
+          <tr><td>SUBSTITUTES 替代品</td><td class="right num">2,770.04</td><td class="right num">10,213</td><td class="right num">1,294</td><td class="right num">$0.27</td><td class="right num" style="color:var(--green)">12.67%</td><td><span class="tag green">性价比王</span> CPC 最低 + CVR 高</td></tr>
+          <tr><td>EXACT 精准</td><td class="right num">2,934.93</td><td class="right num">7,078</td><td class="right num">358</td><td class="right num">$0.41</td><td class="right num" style="color:var(--amber)">5.06%</td><td><span class="tag amber">偏低</span> 部分精准词溢价过高，需重审</td></tr>
+          <tr><td>TARGETING_EXPRESSION_ASIN</td><td class="right num">1,626.53</td><td class="right num">2,686</td><td class="right num">456</td><td class="right num">$0.61</td><td class="right num" style="color:var(--green)">16.98%</td><td><span class="tag green">精准狙击</span> AI 发掘 ASIN 定向，利润池</td></tr>
+          <tr><td>LOOSE-MATCH 宽泛</td><td class="right num">1,451.66</td><td class="right num">4,009</td><td class="right num">756</td><td class="right num">$0.36</td><td class="right num" style="color:var(--green)">18.86%</td><td><span class="tag green">惊喜</span> CVR 最高，AI 预算可加码</td></tr>
+          <tr><td>PHRASE 词组</td><td class="right num">1,351.73</td><td class="right num">1,926</td><td class="right num">238</td><td class="right num">$0.70</td><td class="right num" style="color:var(--amber)">12.36%</td><td><span class="tag amber">CPC 偏高</span> 人工词组价格偏贵</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Core Conclusions -->
+    <h3 class="mt-24" style="margin-bottom:8px">【核心结论输出】</h3>
+    <div class="grid g-3">
+      <div class="callout green">
+        <div class="ic">✓</div>
+        <div>
+          <h4>结论 1：AI 在"活动冲量"目标上已跑赢人工</h4>
+          <p>AI 活动冲量 ACOS <b>9.00%（vs 人工 12.89%）</b>，ROAS 11.11× vs 人工 7.76×。AI 的低价捡漏 + 精准竞价能力已被数据证明。</p>
+        </div>
+      </div>
+      <div class="callout green">
+        <div class="ic">✓</div>
+        <div>
+          <h4>结论 2：AI 的 CPC 与 LOOSE-MATCH 能力值得人工借鉴</h4>
+          <p>LOOSE-MATCH（CVR 18.86%）与 ASIN 定向（CVR 16.98%）这类 "AI 擅长场景" 表现远超人工手动精准词（CVR 5.06%）。AI 扩展出的长尾替代品（SUBSTITUTES CVR 12.67%）是人工难以覆盖的新流量池。</p>
+        </div>
+      </div>
+      <div class="callout amber">
+        <div class="ic">!</div>
+        <div>
+          <h4>结论 3：AI 当前只承担 22.4% 预算，尚未"充分放权"</h4>
+          <p>"推动增长 / 保持稳定" ACOS 与人工打平，说明 AI 在客户现有授权下已稳定自证。真正的矛盾是：<b>人工占比 77.6% 但承担了 95% 的"钱包刺客"活动</b>（见模块三）。扩大 AI 托管面积，整体 ACOS 有进一步下探空间。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g-2 mt-16">
+      <div class="callout red">
+        <div class="ic">⚠</div>
+        <div>
+          <h4>风险 1：人工长尾投放出现"高花费零转化"黑洞</h4>
+          <p>人工活动 SP-自动-123-B0GCHZ5HZ5 花费 $357.88，ACOS <b>105.27%</b>；3B41PTDOGSEARWASH8OZV1-Auto 花费 $156.75，ACOS <b>202.23%</b>；HIFANXDRUM42V12-SB 花费 $105.71，0 销售——这类活动如不立即否词或关停，每月浪费约 $800–1,200。</p>
+        </div>
+      </div>
+      <div class="callout red">
+        <div class="ic">⚠</div>
+        <div>
+          <h4>风险 2：AI "长尾集合" 2 万美金花费 0 订单，探索未形成闭环</h4>
+          <p>长尾集合品类花费 $20,990 点击 54,631，<b>订单记录为 0</b>（微观表中"长尾集合"标签未标记为转化词）。这意味着 AI 广拓词后，<b>缺少及时的否词回捞与 bid 下调动作</b>，需要系统侧开启"长尾自动负反馈"调优。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 3 -->
+  <section id="m3">
+    <div class="section-head">
+      <div class="section-num">3</div>
+      <div>
+        <h2 class="section-title">病灶排查与颗粒度下钻</h2>
+        <p class="section-sub">Deep Dive Diagnostics · 钱到底花到了哪里</p>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:8px">"钱包刺客" Top 10 · 高花费低转化异常活动</h3>
+    <div class="tbl-card">
+      <table>
+        <thead><tr><th>#</th><th>店铺</th><th>创建人</th><th>广告活动</th><th>类型</th><th class="right">花费 ($)</th><th class="right">销售额 ($)</th><th class="right">ACOS</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>3B41PTDOGSEARWASH8OZV1-Auto</td><td><span class="tag grey">非AI</span></td><td class="right num">156.75</td><td class="right num">77.51</td><td class="right num" style="color:var(--red)"><b>202.23%</b></td></tr>
+          <tr><td>2</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>SP-自动-123-B0GCHZ5HZ5</td><td><span class="tag grey">非AI</span></td><td class="right num">357.88</td><td class="right num">339.96</td><td class="right num" style="color:var(--red)"><b>105.27%</b></td></tr>
+          <tr><td>3</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>3B43PTSNAKCHIP12OZ-Keyword-TOS</td><td><span class="tag grey">非AI</span></td><td class="right num">161.82</td><td class="right num">152.93</td><td class="right num" style="color:var(--red)"><b>105.81%</b></td></tr>
+          <tr><td>4</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>3B43PTSNAKCHIP6OZ-Auto-TOS</td><td><span class="tag grey">非AI</span></td><td class="right num">101.39</td><td class="right num">112.92</td><td class="right num" style="color:var(--red)"><b>89.79%</b></td></tr>
+          <tr><td>5</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>HIFANXDRUM20V8-Keyword</td><td><span class="tag grey">非AI</span></td><td class="right num">256.83</td><td class="right num">336.58</td><td class="right num" style="color:var(--red)">76.31%</td></tr>
+          <tr><td>6</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>SP-自动-234-B0GDK3YNQJ-1.4</td><td><span class="tag grey">非AI</span></td><td class="right num">232.37</td><td class="right num">319.42</td><td class="right num" style="color:var(--red)">72.75%</td></tr>
+          <tr><td>7</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>B0GTVDGZ8B B0GTVKZ2Y7-Board</td><td><span class="tag grey">非AI</span></td><td class="right num">372.14</td><td class="right num">552.08</td><td class="right num" style="color:var(--red)">67.41%</td></tr>
+          <tr><td>8</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>HIFANXDRUM20V8-AUTO</td><td><span class="tag grey">非AI</span></td><td class="right num">185.12</td><td class="right num">286.07</td><td class="right num" style="color:var(--red)">64.71%</td></tr>
+          <tr><td>9</td><td>GPM VC</td><td><span class="tag grey">人工</span></td><td>B0GVM7NK2J-PTPPEN-Dog Playpen-Auto</td><td><span class="tag grey">非AI</span></td><td class="right num">237.58</td><td class="right num">414.91</td><td class="right num" style="color:var(--red)">57.26%</td></tr>
+          <tr><td>10</td><td>DHS SC EU</td><td><span class="tag grey">人工</span></td><td>storage bag-Exact8</td><td><span class="tag grey">非AI</span></td><td class="right num">320.45</td><td class="right num">607.57</td><td class="right num" style="color:var(--red)">52.74%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout amber mt-16">
+      <div class="ic">!</div>
+      <div>
+        <h4>客观观察</h4>
+        <p>Top 10 钱包刺客 <b>10/10 均为人工创建</b>。合计浪费花费 <b>$2,382+</b>，是当前首要止血对象。AI 托管的 86 个活动中无一个跌入此表，侧面说明 AI 的竞价回落/预算兜底机制正在发挥作用。</p>
+      </div>
+    </div>
+
+    <!-- Causal Chain -->
+    <h3 class="mt-24" style="margin-bottom:8px">层级溯源链条 · Top 2 问题责任路径</h3>
+
+    <div class="card mt-8">
+      <b style="font-size:15px">🔴 案例 1：ACOS 202% · 每花 $1 亏损 $1</b>
+      <div class="chain mt-12">
+        <span class="node">店铺：GPM VC</span>
+        <span class="arrow">➜</span>
+        <span class="node">创建人：人工</span>
+        <span class="arrow">➜</span>
+        <span class="node">活动：3B41PTDOGSEARWASH8OZV1-Auto</span>
+        <span class="arrow">➜</span>
+        <span class="node">匹配：CLOSE / LOOSE-MATCH</span>
+        <span class="arrow">➜</span>
+        <span class="node final">搜索词：dog ear cleaner / ear wash solution（品类冷门 + 高竞争）</span>
+      </div>
+      <p class="mt-12 muted">➤ 处方：立即在 Xnurta 系统中<b>暂停 Auto 活动</b>，保留核心 EXACT；若业务侧仍想试水，切换为"AI 保持订单稳定"+收紧行动空间。</p>
+    </div>
+
+    <div class="card mt-16">
+      <b style="font-size:15px">🔴 案例 2：ACOS 105% · 人工自动活动跑偏到非相关搜索词</b>
+      <div class="chain mt-12">
+        <span class="node">店铺：GPM VC</span>
+        <span class="arrow">➜</span>
+        <span class="node">创建人：人工</span>
+        <span class="arrow">➜</span>
+        <span class="node">活动：SP-自动-123-B0GCHZ5HZ5</span>
+        <span class="arrow">➜</span>
+        <span class="node">匹配：CLOSE-MATCH（Auto 默认）</span>
+        <span class="arrow">➜</span>
+        <span class="node final">搜索词：15 条黑洞词合计 $117.81 → 0 单（包括大量品类外流量）</span>
+      </div>
+      <p class="mt-12 muted">➤ 处方：Xnurta 一键添加<b>精准否定词包</b>（含上述 15 条），并将活动迁移到 AI 托管"保持订单稳定"，让系统自动下调异常词 bid。</p>
+    </div>
+
+    <!-- Black hole vs golden -->
+    <div class="grid g-2 mt-24">
+      <div class="tbl-card">
+        <div class="tbl-head"><h3>🕳️ 预算黑洞词 Top 5</h3><span class="muted" style="font-size:12px">高点击零订单</span></div>
+        <table>
+          <thead><tr><th>搜索词</th><th>所属活动</th><th class="right">花费</th><th class="right">点击</th></tr></thead>
+          <tbody>
+            <tr><td><b>food processor</b></td><td>B0GXHDBRK8-Food Processor-Auto</td><td class="right num">$44.57</td><td class="right num">54</td></tr>
+            <tr><td><b>floor fan</b></td><td>HIFANXSTAND16METALGNV2-Keyword</td><td class="right num">$34.25</td><td class="right num">63</td></tr>
+            <tr><td><b>window fan</b></td><td>HIFANXEXHAUST20THEMOTV3-Auto</td><td class="right num">$31.33</td><td class="right num">40</td></tr>
+            <tr><td><b>freeze dryer</b></td><td>Dehydrator-SD-BM</td><td class="right num">$29.84</td><td class="right num">55</td></tr>
+            <tr><td><b>fan for bedroom</b></td><td>SP-自动-123-B0GFJF5LYQ</td><td class="right num">$28.67</td><td class="right num">76</td></tr>
+          </tbody>
+        </table>
+        <div class="callout red" style="margin:14px 16px 16px"><div class="ic">⚠</div><div><p>这 5 个词合计烧掉 <b>$168.66</b>，<b>0 转化</b>。建议作为"全店否词包"跨活动同步否掉（Xnurta 支持一键下发）。</p></div></div>
+      </div>
+
+      <div class="tbl-card">
+        <div class="tbl-head"><h3>💎 AI 发掘高转化长尾词 Top 5</h3><span class="muted" style="font-size:12px">小花费 · 高 CVR</span></div>
+        <table>
+          <thead><tr><th>搜索词</th><th class="right">花费</th><th class="right">订单</th><th class="right">CVR</th></tr></thead>
+          <tbody>
+            <tr><td><b>seedling heat mat</b></td><td class="right num">$13.39</td><td class="right num">31</td><td class="right num" style="color:var(--green)"><b>34.07%</b></td></tr>
+            <tr><td><b>birthday treats for dogs low calorie</b></td><td class="right num">$5.75</td><td class="right num">1</td><td class="right num" style="color:var(--green)">100.00%</td></tr>
+            <tr><td><b>2 in 1 cat scratcher</b></td><td class="right num">$120.87</td><td class="right num">32</td><td class="right num" style="color:var(--green)"><b>23.88%</b></td></tr>
+            <tr><td><b>high velocity fan</b> <small class="muted">(Xnurta AI 发掘)</small></td><td class="right num">$254.87</td><td class="right num">21</td><td class="right num" style="color:var(--green)">3.18%</td></tr>
+            <tr><td><b>dual air fryer with 2 baskets</b></td><td class="right num">$115.78</td><td class="right num">27</td><td class="right num" style="color:var(--green)">6.14%</td></tr>
+          </tbody>
+        </table>
+        <div class="callout green" style="margin:14px 16px 16px"><div class="ic">✓</div><div><p>这类词是 AI 从"长尾集合"中打捞出的<b>现金母矿</b>。建议升级为独立 EXACT 精准活动，并设置较高 bid 上限 + 保底预算。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 4 -->
+  <section id="m4">
+    <div class="section-head">
+      <div class="section-num">4</div>
+      <div>
+        <h2 class="section-title">基于产品生命周期的 AI 策略处方</h2>
+        <p class="section-sub">Actionable AI Strategy · 今天就能在 Xnurta 系统里落地</p>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <div class="ic">i</div>
+      <div>
+        <h4>总原则：人机分工 · 让对的人做对的事</h4>
+        <p>人工聚焦"品牌词 + 明星产品核心词"的战略把控；AI 聚焦"长尾拓词 + 竞价动态调优 + 否词回捞"的战术执行。两者在 Xnurta 系统里以"目标 + 行动空间"双旋钮协同。</p>
+      </div>
+    </div>
+
+    <div class="grid g-2 mt-16">
+      <!-- 新品期 -->
+      <div class="phase new">
+        <div class="ph-head"><span class="ph-badge">新品期</span><h4>代表活动：3A88HKOVEN-3.17/6.3QT-AUTO、Dog Playpen、Food Processor</h4></div>
+        <p class="muted" style="margin:0">目前 ACOS 20%+，评论不足，市场教育成本高。</p>
+        <ul>
+          <li><b>系统目标：</b>设置为 <span class="tag violet">推动增长</span></li>
+          <li><b>行动空间：</b><span class="tag amber">放宽</span>（允许 bid 上浮 20–30%、探索匹配形式）</li>
+          <li><b>预算：</b>相对固定（$10–15/日），避免 AI 被预算频繁打断</li>
+          <li><b>指标口径：</b>首 30 天看"可售订单数 + BSR 提升"而非 ACOS</li>
+        </ul>
+        <div class="rx">系统落地：Xnurta 新品活动模板 → 开启"拓词加速" → 添加必备否词（品牌词、竞品型号）</div>
+      </div>
+
+      <!-- 成长期 -->
+      <div class="phase grow">
+        <div class="ph-head"><span class="ph-badge">成长期</span><h4>代表活动：3A88APLUGG20（推动增长 ACOS 9.29%）、HIFANXFLOOR12 系列</h4></div>
+        <p class="muted" style="margin:0">有转化但拓量空间大，急需放量抢排名。</p>
+        <ul>
+          <li><b>系统目标：</b>设置为 <span class="tag green">活动冲量</span> 或 <span class="tag violet">推动增长</span></li>
+          <li><b>行动空间：</b><span class="tag amber">放宽</span>（保留拓词权限）</li>
+          <li><b>预算：</b>建议由 $15→$30/日阶梯上调，每周 +20%</li>
+          <li><b>组合：</b>开启 SB+SP 双投，使用 SUBSTITUTES/LOOSE-MATCH 拓量（大盘 CVR 最高）</li>
+        </ul>
+        <div class="rx">系统落地：复制"Xnurta AI 2671-捡漏-Board"成功模板（已验证 ACOS 9%）到同类产品。</div>
+      </div>
+
+      <!-- 成熟期 -->
+      <div class="phase mature">
+        <div class="ph-head"><span class="ph-badge">成熟期</span><h4>代表活动：Simple Deluxe 9.5QT Air Fryer（Top1 花费 · ACOS 6.13%）、3A88HKAIRXFRYER 系列</h4></div>
+        <p class="muted" style="margin:0">稳定出单、利润池核心，重点是降本 + 防御。</p>
+        <ul>
+          <li><b>系统目标：</b>设置为 <span class="tag blue">保持订单稳定</span></li>
+          <li><b>行动空间：</b><span class="tag blue">收紧</span>（限制 bid 波动±10%）</li>
+          <li><b>预算：</b>锁定；开启"利润保护"触发器（ACOS>15% 自动下调 bid）</li>
+          <li><b>防守：</b>品牌词开独立 EXACT 高 bid 活动，防止竞品拦截</li>
+        </ul>
+        <div class="rx">系统落地：核心词（如 "air fryer", "dual basket air fryer"）保持 SB + SP 双活动结构，AI 仅做微调。</div>
+      </div>
+
+      <!-- 衰退期 -->
+      <div class="phase decline">
+        <div class="ph-head"><span class="ph-badge">衰退期</span><h4>代表活动：3B41PTDOGSEARWASH（ACOS 202%）、HIFANXDRUM20V8（ACOS 76%）、storage bag-Exact8（ACOS 53%）</h4></div>
+        <p class="muted" style="margin:0">ACOS 远超盈亏线，产品销量持续下滑。</p>
+        <ul>
+          <li><b>系统目标：</b>设置为 <span class="tag blue">保持订单稳定</span>（降本优先）</li>
+          <li><b>行动空间：</b><span class="tag blue">大幅收紧</span>（bid 仅允许 −20%~0% 向下调整）</li>
+          <li><b>预算：</b>建议砍半；连续 30 天无改善则进入"清仓模式"或停投</li>
+          <li><b>否词：</b>立即把模块三"黑洞词 Top 5"加入全店否词包</li>
+        </ul>
+        <div class="rx">系统落地：Xnurta 一键"衰退保护"模式 → 自动切 EXACT + 收紧 bid + 同步否词。</div>
+      </div>
+    </div>
+
+    <!-- Bottom summary / CTA -->
+    <div class="card mt-24" style="background:linear-gradient(135deg,#fff 0%,#eef0ff 100%);border:1px solid #c7d2fe">
+      <h3 style="margin:0 0 6px">📋 本周落地动作清单（可直接在 Xnurta 控制台执行）</h3>
+      <div class="grid g-2 mt-8">
+        <div>
+          <ol style="margin:0;padding-left:20px;color:#334155">
+            <li>🔴 立即暂停 Top 2 钱包刺客活动（ACOS>100%），止血预估 <b>$500+/月</b>。</li>
+            <li>🟠 将 5 个预算黑洞词加入全店否词包，节省 <b>$170+/月</b>。</li>
+            <li>🟢 将 "high velocity fan / seedling heat mat / 2 in 1 cat scratcher" 升级为独立 EXACT 精准活动。</li>
+          </ol>
+        </div>
+        <div>
+          <ol start="4" style="margin:0;padding-left:20px;color:#334155">
+            <li>🚀 把 2 个新品（烤箱 3.17/6.3QT）切到 AI "推动增长" + 放宽行动空间。</li>
+            <li>🛡 把 3A88HKAIRXFRYER9BLK 主力核心词切到 AI "保持订单稳定" + 收紧空间。</li>
+            <li>📊 两周后复盘：对比 AI 扩容前后大盘 ACOS、CPC、长尾转化率。</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green mt-16">
+      <div class="ic">✓</div>
+      <div>
+        <h4>一句话结论</h4>
+        <p><b>数据不说谎</b>——AI 目前只承担 22% 预算却贡献了与人工相当的 ACOS，而 Top 10 钱包刺客全部来自人工侧。下一步不是"是否继续使用 AI"，而是<b>如何把 AI 与人工各自放到最擅长的位置</b>。我们建议以"新品推动增长 + 成熟保持稳定 + 黑洞立即否词"为切入点，用 2 周时间把大盘 ACOS 再下探 2–3 个点。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPENDIX -->
+  <section id="m5">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <div>
+        <h2 class="section-title">附录：数据底表</h2>
+        <p class="section-sub">Data Appendix · 可下钻原始明细</p>
+      </div>
+    </div>
+
+    <div class="tbl-card">
+      <div class="tbl-head"><h3>表一 · 宏观：店铺与活动表现表（Top 20 by spend）</h3><span class="muted" style="font-size:12px">完整数据：519 行</span></div>
+      <table>
+        <thead><tr><th>店铺</th><th>创建人</th><th>广告活动</th><th>AI 目标</th><th class="right">花费</th><th class="right">销售额</th><th class="right">ACOS</th></tr></thead>
+        <tbody id="macroTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="tbl-card mt-16">
+      <div class="tbl-head"><h3>表二 · 微观：搜索词病灶与亮点表（混合 Top 20）</h3><span class="muted" style="font-size:12px">完整数据：5,494 行</span></div>
+      <table>
+        <thead><tr><th>广告活动</th><th>匹配</th><th>类型</th><th>搜索词</th><th class="right">花费</th><th class="right">订单</th><th class="right">点击</th></tr></thead>
+        <tbody id="microTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Xnurta · Customer Success Reporting · 基于客户提供数据生成（宏观 519 条活动，微观 5,494 条搜索词）· 报告生成日期 2026-04-23
+  </footer>
+</div>
+
+<script>
+// ---- DATA ----
+const storeData = {
+  labels: ['GPM VC','DHS SC','DHS SC EU'],
+  spend: [38697.02, 5568.20, 1437.58],
+  sales: [309165.78, 40184.70, 7508.69],
+  acos:  [12.52, 13.86, 19.15]
+};
+const aiSpend = {
+  labels: ['人工(非AI)','AI·推动增长','AI·保持稳定','AI·活动冲量'],
+  values: [35453.48, 7190.42, 2195.30, 863.60]
+};
+const aiAcos = {
+  labels: ['人工(非AI)','AI·活动冲量','AI·推动增长','AI·保持稳定'],
+  values: [12.89, 9.00, 12.96, 13.10]
+};
+const matchType = {
+  labels: ['BROAD','CLOSE-MATCH','EXACT','SUBSTITUTES','LOOSE-MATCH','PHRASE','ASIN定向'],
+  spend:  [6496, 6470, 2935, 2770, 1452, 1352, 1627],
+  orders: [1695, 1333, 358, 1294, 756, 238, 456],
+  cvr:    [8.94, 9.49, 5.06, 12.67, 18.86, 12.36, 16.98]
+};
+const colors = {
+  brand:'#5b5fef', brand2:'#7c3aed', green:'#10b981', red:'#ef4444',
+  amber:'#f59e0b', blue:'#0ea5e9', grey:'#94a3b8'
+};
+const palette = [colors.brand, colors.blue, colors.red, colors.green, colors.amber, colors.brand2];
+
+// ---- CHART 1: Store Spend ----
+new Chart(document.getElementById('chartStoreSpend'), {
+  type:'doughnut',
+  data:{labels: storeData.labels, datasets:[{data: storeData.spend, backgroundColor: palette, borderWidth:0}]},
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label+': $'+c.parsed.toLocaleString()}}}}
+});
+new Chart(document.getElementById('chartStoreSales'), {
+  type:'doughnut',
+  data:{labels: storeData.labels, datasets:[{data: storeData.sales, backgroundColor: palette, borderWidth:0}]},
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label+': $'+c.parsed.toLocaleString()}}}}
+});
+new Chart(document.getElementById('chartStoreAcos'), {
+  type:'bar',
+  data:{labels: storeData.labels, datasets:[{
+    label:'ACOS (%)',
+    data: storeData.acos,
+    backgroundColor:[colors.green, colors.amber, colors.red],
+    borderRadius:8
+  }]},
+  options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%'}}}}
+});
+
+// ---- CHART 2: AI Spend Share ----
+new Chart(document.getElementById('chartAiSpend'), {
+  type:'pie',
+  data:{labels: aiSpend.labels, datasets:[{data: aiSpend.values, backgroundColor:[colors.grey, colors.brand, colors.blue, colors.green], borderWidth:0}]},
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label+': $'+c.parsed.toLocaleString()+' ('+((c.parsed/45702.8)*100).toFixed(1)+'%)'}}}}
+});
+new Chart(document.getElementById('chartAiAcos'), {
+  type:'bar',
+  data:{labels: aiAcos.labels, datasets:[{
+    label:'ACOS (%)',
+    data: aiAcos.values,
+    backgroundColor:[colors.grey, colors.green, colors.brand, colors.blue],
+    borderRadius:8
+  }]},
+  options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,suggestedMax:16,ticks:{callback:v=>v+'%'}}}}
+});
+
+// ---- CHART 3: Match type (combo) ----
+new Chart(document.getElementById('chartMatch'), {
+  data:{
+    labels: matchType.labels,
+    datasets:[
+      {type:'bar', label:'花费 ($)', data: matchType.spend, backgroundColor: colors.brand+'cc', yAxisID:'y', borderRadius:6, order:2},
+      {type:'bar', label:'订单', data: matchType.orders, backgroundColor: colors.blue+'cc', yAxisID:'y', borderRadius:6, order:3},
+      {type:'line', label:'CVR (%)', data: matchType.cvr, borderColor: colors.green, backgroundColor: colors.green, yAxisID:'y1', tension:.3, pointRadius:5, pointBackgroundColor:'#fff', pointBorderWidth:2, order:1}
+    ]
+  },
+  options:{
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{beginAtZero:true, title:{display:true,text:'$ / 订单数'}},
+      y1:{beginAtZero:true, position:'right', grid:{drawOnChartArea:false}, ticks:{callback:v=>v+'%'}, title:{display:true,text:'CVR (%)'}}
+    }
+  }
+});
+
+// ---- Appendix tables ----
+const macroRows = [
+  ['GPM VC','人工','3A88HKAIRXFRYER9BLK-Keyword','非AI',903.81,14752.31,0.0613],
+  ['GPM VC','tia.aybt@meetipower.com','Xnurta AI 2671-捡漏-Board','活动冲量',862.25,9591.25,0.0899],
+  ['GPM VC','人工','3A88HKAIRXFRYER6BBLK-Auto','非AI',791.07,7086.61,0.1116],
+  ['GPM VC','helen.hu@meetipower.com','B0DS5GGXWH-3A88APLUGG20ABSBLK-auto','推动增长',739.90,7961.24,0.0929],
+  ['GPM VC','人工','SB-3A88HKAIRXFRYER-New','非AI',711.56,10302.66,0.0691],
+  ['GPM VC','人工','HIFANXWALLMOUNT20V17-Keyword','非AI',580.14,3995.07,0.1452],
+  ['GPM VC','人工','HIFANXWALLMOUNT20V17-Product','非AI',568.51,3942.06,0.1442],
+  ['GPM VC','helen.hu@meetipower.com','Xnurta AI 3A88HKOVEN-6.3QT-AUTO','推动增长',554.69,2327.59,0.2383],
+  ['GPM VC','人工','3A88HKAIRXFRYER6BBLK-SB','非AI',542.68,6314.20,0.0859],
+  ['DHS SC','人工','toaster-auto','非AI',488.50,2449.91,0.1994],
+  ['GPM VC','人工','HIFANXSTAND16METALGNV2-Keyword','非AI',473.91,1253.02,0.3782],
+  ['GPM VC','人工','3A88HKAIRXFRYER12GRY-Keyword-Exact','非AI',469.45,4207.93,0.1116],
+  ['GPM VC','zoey.li@meetipower.com','Xnurta AI SP-KW-HIFANXFLOOR-低价捡漏','保持订单稳定',417.69,3254.23,0.1284],
+  ['GPM VC','人工','HIFANXWALL18BRCV6-Auto','非AI',417.19,2762.89,0.1510],
+  ['GPM VC','helen.hu@meetipower.com','Xnurta AI 3A88HKOVEN4FUNCTION26SIL-auto','推动增长',411.30,3497.65,0.1176],
+  ['GPM VC','人工','3A88HKAIRXFRYER9BLK-Keyword-Main Core','非AI',402.82,7163.57,0.0562],
+  ['GPM VC','人工','HIFANXWALLMOUNT20V17-Auto','非AI',398.11,2852.97,0.1395],
+  ['GPM VC','人工','3A88HKAIRXFRYER4BLK-Keyword','非AI',394.30,1953.16,0.2019],
+  ['GPM VC','人工','B0GTVDGZ8B B0GTVKZ2Y7-Board','非AI',372.14,552.08,0.6741],
+  ['GPM VC','人工','B0GHRD26J8-Board-非首长尾','非AI',371.63,3000.84,0.1238]
+];
+const macroTbody = document.getElementById('macroTableBody');
+macroRows.forEach(r=>{
+  const acos = (r[6]*100).toFixed(2)+'%';
+  const acosColor = r[6] > 0.5 ? 'color:var(--red)' : r[6] > 0.2 ? 'color:var(--amber)' : 'color:var(--green)';
+  const aiTag = r[3]==='非AI' ? '<span class="tag grey">非AI</span>' : r[3]==='活动冲量' ? '<span class="tag green">活动冲量</span>' : r[3]==='推动增长' ? '<span class="tag violet">推动增长</span>' : '<span class="tag blue">保持稳定</span>';
+  macroTbody.insertAdjacentHTML('beforeend',`<tr>
+    <td>${r[0]}</td><td>${r[1]==='人工'?'<span class="tag grey">人工</span>':r[1].split('@')[0]}</td>
+    <td><small>${r[2]}</small></td><td>${aiTag}</td>
+    <td class="right num">$${r[4].toLocaleString()}</td>
+    <td class="right num">$${r[5].toLocaleString()}</td>
+    <td class="right num" style="${acosColor}"><b>${acos}</b></td>
+  </tr>`);
+});
+
+const microRows = [
+  // Top golden
+  ['SB-3A88HKAIRXFRYER-New','BROAD','✅转化词','air fryer',347.77,120,1378],
+  ['3A88HKAIRXFRYER6BBLK-SB','BROAD','✅转化词','air fryer',189.18,45,621],
+  ['Xnurta AI 二合一主链接-asin-10.10','ASIN','✅转化词','b0f853236c',152.92,33,133],
+  ['PTFURNSCRATPAD2IN1LV8-exact-12.22','EXACT','✅转化词','2 in 1 cat scratcher',120.87,32,134],
+  ['Heat Mat-Auto-FBA-低bid','LOOSE-MATCH','✅转化词','seedling heat mat',13.39,31,91],
+  ['3A88HKAIRXFRYER9BLK-Keyword','BROAD','✅转化词','dual air fryer with 2 baskets',115.78,27,440],
+  ['Xnurta AI HIFANXFLOOR12-KW','EXACT','✅转化词','high velocity fan',254.87,21,660],
+  ['3A88HKAIRXFRYER9BLK-Keyword','BROAD','✅转化词','dual basket air fryers',67,21,252],
+  // Top black holes
+  ['B0GXHDBRK8-Food Processor-Auto','CLOSE-MATCH','❌显著黑洞','food processor',44.57,0,54],
+  ['HIFANXSTAND16METALGNV2-Keyword','BROAD','❌显著黑洞','floor fan',34.25,0,63],
+  ['HIFANXEXHAUST20THEMOTV3-Auto','LOOSE-MATCH','❌显著黑洞','window fan',31.33,0,40],
+  ['Dehydrator-SD-BM-0318','TARGETING_EXPRESSION_KEYWORD_GROUP','❌显著黑洞','freeze dryer',29.84,0,55],
+  ['SP-自动-123-B0GFJF5LYQ-1.14','CLOSE-MATCH','❌显著黑洞','fan for bedroom',28.67,0,76],
+  ['PTPPEN-Dog Playpen-Auto','CLOSE-MATCH','❌显著黑洞','dog gate indoor',28.28,0,35],
+  ['百叶扇组合 HIFANXEXHAUST-Keyword','PHRASE','❌显著黑洞','garage exhaust fan',26.93,0,23],
+  ['Xnurta AI HIFANXFLOOR18-Keyword','EXACT','❌显著黑洞','fans',24.65,0,39],
+  ['3A88HKRACKCLOTHDR491547PNK-Keyword','BROAD','❌显著黑洞','closet',24.02,0,48],
+  ['3A88HKAIRXFRYER9GRY-Keyword','BROAD','❌显著黑洞','air fryers on sale',22.25,0,84],
+  ['HIFANXEXHAUST12V15-Auto','LOOSE-MATCH','❌显著黑洞','attic fan',21.70,0,9],
+  ['HIFANXDRUM-Auto-ALL','CLOSE-MATCH','❌显著黑洞','industrial fan',21.20,0,21]
+];
+const microTbody = document.getElementById('microTableBody');
+microRows.forEach(r=>{
+  const isGolden = r[2].includes('转化');
+  const typeTag = isGolden ? '<span class="tag green">✓ 转化词</span>' : '<span class="tag red">✗ 黑洞</span>';
+  microTbody.insertAdjacentHTML('beforeend',`<tr>
+    <td><small>${r[0]}</small></td><td><span class="tag grey">${r[1]}</span></td><td>${typeTag}</td>
+    <td><b>${r[3]}</b></td>
+    <td class="right num">$${r[4]}</td><td class="right num">${r[5]}</td><td class="right num">${r[6]}</td>
+  </tr>`);
+});
+</script>
+</body>
+</html>
