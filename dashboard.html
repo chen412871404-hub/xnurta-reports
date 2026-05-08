@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>广告活动诊断仪表盘 · 近 90 天</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --ink:#1f2937;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --sub:#f3f4f6;
+    --pri:#2563eb;
+    --pri-soft:#dbeafe;
+    --teal:#0d9488;
+    --teal-soft:#ccfbf1;
+    --amber:#d97706;
+    --amber-soft:#fef3c7;
+    --rose:#e11d48;
+    --rose-soft:#ffe4e6;
+    --green:#059669;
+    --green-soft:#d1fae5;
+    --violet:#7c3aed;
+    --violet-soft:#ede9fe;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink); margin:0; padding:0;
+  }
+  .wrap{max-width:1280px; margin:0 auto; padding:24px 20px 60px;}
+  header{display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:18px;}
+  header h1{font-size:22px; margin:0 0 4px; letter-spacing:-0.01em;}
+  header .meta{font-size:13px; color:var(--muted);}
+  .badge{display:inline-block; padding:2px 8px; background:var(--pri-soft); color:var(--pri); border-radius:999px; font-size:12px; font-weight:600;}
+
+  /* KPI cards */
+  .kpis{display:grid; grid-template-columns:repeat(6, 1fr); gap:12px; margin:16px 0 24px;}
+  .kpi{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; min-height:74px;}
+  .kpi .lbl{font-size:12px; color:var(--muted); margin-bottom:4px;}
+  .kpi .val{font-size:22px; font-weight:700; letter-spacing:-0.01em;}
+  .kpi .sub{font-size:11px; color:var(--muted); margin-top:2px;}
+  .kpi .delta-up{color:var(--green); font-weight:600;}
+  .kpi .delta-down{color:var(--rose); font-weight:600;}
+
+  @media (max-width: 980px){ .kpis{grid-template-columns:repeat(3, 1fr);} }
+  @media (max-width: 560px){ .kpis{grid-template-columns:repeat(2, 1fr);} }
+
+  /* Filter bar */
+  .filterbar{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 16px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:18px;}
+  .filterbar .lbl{font-size:13px; color:var(--muted); margin-right:6px;}
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 12px; background:var(--sub); border:1px solid var(--line); border-radius:999px;
+    font-size:13px; color:var(--ink); cursor:pointer; transition:all .15s;
+  }
+  .chip:hover{background:#e7eaef;}
+  .chip.active{background:var(--pri); color:white; border-color:var(--pri);}
+  .chip .num{font-size:11px; opacity:.7; margin-left:2px;}
+  .chip.active .num{opacity:.85;}
+
+  /* Section card */
+  .section{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:18px;}
+  .section h2{font-size:16px; margin:0 0 4px; display:flex; align-items:center; gap:10px;}
+  .section h2 .tip{font-size:12px; font-weight:400; color:var(--muted);}
+  .section .desc{font-size:13px; color:var(--muted); margin-bottom:14px;}
+
+  /* Two col layout */
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media (max-width: 980px){ .row{grid-template-columns:1fr;} }
+
+  /* Chart */
+  .chart-wrap{position:relative; height:280px;}
+  .chart-wrap.tall{height:320px;}
+
+  /* Tables */
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{padding:9px 8px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap;}
+  th:first-child, td:first-child{text-align:left; padding-left:0;}
+  th{font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; cursor:pointer; user-select:none;}
+  th:hover{color:var(--pri);}
+  th.sorted{color:var(--pri);}
+  th.sorted::after{content:"▾"; margin-left:3px; font-size:9px;}
+  th.sorted.asc::after{content:"▴";}
+  td{color:var(--ink);}
+  tr.dim td{color:var(--muted);}
+  tr:hover td{background:#fafbfc;}
+
+  .tag{display:inline-block; padding:1px 7px; border-radius:6px; font-size:11px; font-weight:500; line-height:1.5;}
+  .tag-good{background:var(--green-soft); color:var(--green);}
+  .tag-bad{background:var(--rose-soft); color:var(--rose);}
+  .tag-warn{background:var(--amber-soft); color:var(--amber);}
+  .tag-info{background:var(--pri-soft); color:var(--pri);}
+  .tag-ghost{background:var(--sub); color:var(--muted);}
+  .tag-teal{background:var(--teal-soft); color:var(--teal);}
+
+  /* Pairing grid */
+  .pair-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:8px;}
+  .pair{padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--sub);}
+  .pair .pname{font-size:12.5px; font-weight:600; margin-bottom:4px;}
+  .pair .pmeta{font-size:11px; color:var(--muted);}
+  .pair.both{background:var(--green-soft); border-color:#a7f3d0;}
+  .pair.auto-only{background:var(--amber-soft); border-color:#fcd34d;}
+  .pair.manual-only{background:var(--violet-soft); border-color:#c4b5fd;}
+
+  /* Recommendation list */
+  .rec{padding:14px 16px; border-radius:10px; margin-bottom:10px; display:flex; gap:12px;}
+  .rec .icon{flex-shrink:0; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-size:14px; font-weight:700;}
+  .rec .body{flex:1;}
+  .rec .body .title{font-size:14px; font-weight:600; margin-bottom:4px;}
+  .rec .body .text{font-size:13px; color:var(--ink); line-height:1.55;}
+  .rec.urgent{background:var(--rose-soft);}
+  .rec.urgent .icon{background:var(--rose); color:white;}
+  .rec.warn{background:var(--amber-soft);}
+  .rec.warn .icon{background:var(--amber); color:white;}
+  .rec.info{background:var(--pri-soft);}
+  .rec.info .icon{background:var(--pri); color:white;}
+  .rec.green{background:var(--green-soft);}
+  .rec.green .icon{background:var(--green); color:white;}
+
+  .small{font-size:12px; color:var(--muted);}
+  .ttip{cursor:help; border-bottom:1px dotted var(--muted);}
+
+  .num-good{color:var(--green); font-weight:600;}
+  .num-bad{color:var(--rose); font-weight:600;}
+  .num-warn{color:var(--amber); font-weight:600;}
+
+  /* Search input */
+  .search{padding:6px 10px; border:1px solid var(--line); border-radius:8px; font-size:13px; outline:none; min-width:180px;}
+  .search:focus{border-color:var(--pri);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>广告活动诊断仪表盘 <span class="badge" id="dataPeriod">2026-02-08 → 2026-05-08</span></h1>
+      <div class="meta">5 个店铺 · <span id="totalCampaignsCount">69</span> 条活动 · SP/SB/SD · 数据来源：SA Campaign List</div>
+    </div>
+    <div>
+      <input type="text" class="search" id="searchInput" placeholder="搜索活动 / 产品..." />
+    </div>
+  </header>
+
+  <!-- KPI cards -->
+  <div class="kpis" id="kpiGrid"></div>
+
+  <!-- Filter bar -->
+  <div class="filterbar">
+    <span class="lbl">店铺</span>
+    <div id="shopChips" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    <span class="lbl" style="margin-left:14px;">状态</span>
+    <div id="statusChips" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+  </div>
+
+  <!-- Store performance -->
+  <div class="section">
+    <h2>① 店铺表现 <span class="tip">点击表头排序 · 点击行展开看细节</span></h2>
+    <div class="desc">把所有"在跑 + OOB"的活动按店铺汇总。Ended 活动单独看，避免历史尸体影响判断。</div>
+    <table id="shopTable"></table>
+  </div>
+
+  <div class="row">
+    <div class="section">
+      <h2>② 各店铺花费 vs 销售</h2>
+      <div class="desc">对比花费投入和产出销售，柱条越高越赚钱。</div>
+      <div class="chart-wrap"><canvas id="shopBarChart"></canvas></div>
+    </div>
+    <div class="section">
+      <h2>③ Auto / Manual 花费占比</h2>
+      <div class="desc">健康结构是 Auto 30% / Manual 70%。Auto 比例过高 = 拓词机变成主战场，没收割。</div>
+      <div class="chart-wrap"><canvas id="autoManualChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 广告结构建议 -->
+  <div class="section">
+    <h2>④ 广告结构 · Auto / Manual 配对</h2>
+    <div class="desc">每个产品理想是 1 Auto（拓词）+ 1 Manual（收割）。下面 <b style="color:var(--green)">绿色</b>=配对完整，<b style="color:var(--amber)">黄色</b>=只有 Auto，<b style="color:var(--violet)">紫色</b>=只有 Manual。</div>
+    <div id="pairingGrid" class="pair-grid"></div>
+  </div>
+
+  <div class="row">
+    <div class="section">
+      <h2>⑤ 竞价策略分布</h2>
+      <div class="desc">SP 三种策略：固定竞价（不推荐除特殊场景） / 动态-仅降低（防御） / 动态-提高或降低（攻击）。</div>
+      <div class="chart-wrap"><canvas id="bidStrategyChart"></canvas></div>
+    </div>
+    <div class="section">
+      <h2>⑥ AI 托管目标分布</h2>
+      <div class="desc">看 AI 的"工作目标"分布。通常 Auto 用「保持订单稳定」，Manual 用「推动增长」。</div>
+      <div class="chart-wrap"><canvas id="aiGoalChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Insights / recommendations -->
+  <div class="section">
+    <h2>⑦ 自动洞察 · 给客户的话</h2>
+    <div class="desc">基于规则引擎从 69 条活动里挖出来的关键问题，按紧急度排序。</div>
+    <div id="recList"></div>
+  </div>
+
+  <!-- Campaign-level table -->
+  <div class="section">
+    <h2>⑧ 活跃活动详情 <span class="tip" id="campaignCountLbl"></span></h2>
+    <div class="desc">点击表头排序。颜色规则：ACOS &lt; 25% 绿、25-40% 中性、&gt; 50% 红。</div>
+    <table id="campaignTable"></table>
+  </div>
+
+  <!-- Ended sink-cost -->
+  <div class="section">
+    <h2>⑨ 已结束活动盘点 <span class="tip">检查历史是否清理干净</span></h2>
+    <div id="endedSummary"></div>
+    <table id="endedTable" style="margin-top:10px;"></table>
+  </div>
+
+  <div class="small" style="text-align:center; margin-top:30px;">
+    Made for yuhao · 数据：SA_Campaign_List_20260208_20260508 · 浏览器本地渲染，无外部数据请求
+  </div>
+</div>
+
+<script id="data" type="application/json">[{"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Arsenal_Auto target_product", "product": "Arsenal", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 12.0, "budgetRaw": "£12.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "4", "spend": 738.76, "sales": 3656.71, "orders": 107.0, "clicks": 1338.0, "imp": 170261.0, "ctr": 0.786, "cvr": 8.0, "cpc": 0.552, "acos": 20.2, "roas": 4.95, "prevSpend": 666.25, "prevSales": 1745.97, "prevOrders": 48.0, "spendChange": 10.9, "salesChange": 109.4, "ordersChange": 122.9}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Liverpool_auto target", "product": "Liverpool", "type": "auto", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 12.0, "budgetRaw": "£12.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 596.3, "sales": 1369.18, "orders": 41.0, "clicks": 862.0, "imp": 122335.0, "ctr": 0.705, "cvr": 4.76, "cpc": 0.692, "acos": 43.6, "roas": 2.3, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Arsenal_manual target_have order", "product": "Arsenal", "type": "manual", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 12.0, "budgetRaw": "£12.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "4", "spend": 582.72, "sales": 770.66, "orders": 20.0, "clicks": 636.0, "imp": 65814.0, "ctr": 0.966, "cvr": 3.14, "cpc": 0.916, "acos": 75.6, "roas": 1.32, "prevSpend": 1225.39, "prevSales": 2102.28, "prevOrders": 63.0, "spendChange": -52.4, "salesChange": -63.3, "ordersChange": -68.3}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Chelsea_Manuel Target", "product": "Chelsea", "type": "manual", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 5.0, "budgetRaw": "£5.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "4", "spend": 394.61, "sales": 838.16, "orders": 24.0, "clicks": 588.0, "imp": 87631.0, "ctr": 0.671, "cvr": 4.08, "cpc": 0.671, "acos": 47.1, "roas": 2.12, "prevSpend": 278.31, "prevSales": 808.88, "prevOrders": 22.0, "spendChange": 41.8, "salesChange": 3.6, "ordersChange": 9.1}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI Chelsea - manuel target", "product": "Chelsea - manuel target", "type": "manual", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 5.0, "budgetRaw": "$5.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 350.95, "sales": 1596.38, "orders": 42.0, "clicks": 437.0, "imp": 49441.0, "ctr": 0.884, "cvr": 9.61, "cpc": 0.803, "acos": 22.0, "roas": 4.55, "prevSpend": 431.31, "prevSales": 1177.28, "prevOrders": 37.0, "spendChange": -18.6, "salesChange": 35.6, "ordersChange": 13.5}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Chelsea_Auto Target", "product": "Chelsea", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 5.0, "budgetRaw": "£5.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 341.09, "sales": 771.44, "orders": 23.0, "clicks": 525.0, "imp": 118565.0, "ctr": 0.443, "cvr": 4.38, "cpc": 0.65, "acos": 44.2, "roas": 2.26, "prevSpend": 225.59, "prevSales": 774.32, "prevOrders": 23.0, "spendChange": 51.2, "salesChange": -0.4, "ordersChange": 0.0}, {"shop": "AlloyCollectors-North America", "country": "US", "name": "Xnurta AI Club America -US - Auto Target", "product": "Club America -US", "type": "auto", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 205.74, "sales": 249.9, "orders": 10.0, "clicks": 694.0, "imp": 51440.0, "ctr": 1.349, "cvr": 1.44, "cpc": 0.296, "acos": 82.3, "roas": 1.21, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI PD0500 - auto target", "product": "PD0500", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "5", "spend": 200.64, "sales": 183.84, "orders": 8.0, "clicks": 277.0, "imp": 21666.0, "ctr": 1.279, "cvr": 2.89, "cpc": 0.724, "acos": 109.1, "roas": 0.92, "prevSpend": 395.51, "prevSales": 444.18, "prevOrders": 17.0, "spendChange": -49.3, "salesChange": -58.6, "ordersChange": -52.9}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI Man City-US- manuel target", "product": "Man City-US- manuel target", "type": "manual", "adType": "sponsoredProducts", "status": "Portfolio Out Of Budget", "enabled": "enabled", "budget": 5.0, "budgetRaw": "$5.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 200.32, "sales": 789.84, "orders": 22.0, "clicks": 225.0, "imp": 24007.0, "ctr": 0.937, "cvr": 9.78, "cpc": 0.89, "acos": 25.4, "roas": 3.94, "prevSpend": 344.98, "prevSales": 1167.28, "prevOrders": 34.0, "spendChange": -41.9, "salesChange": -32.3, "ordersChange": -35.3}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI Chelsea_US_Auto target", "product": "Chelsea_US", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 196.16, "sales": 835.52, "orders": 22.0, "clicks": 275.0, "imp": 49152.0, "ctr": 0.559, "cvr": 8.0, "cpc": 0.713, "acos": 23.5, "roas": 4.26, "prevSpend": 178.74, "prevSales": 614.62, "prevOrders": 18.0, "spendChange": 9.7, "salesChange": 35.9, "ordersChange": 22.2}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Liverpool_Manuel target", "product": "Liverpool", "type": "manual", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 12.0, "budgetRaw": "£12.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 176.83, "sales": 744.23, "orders": 22.0, "clicks": 301.0, "imp": 16169.0, "ctr": 1.862, "cvr": 7.31, "cpc": 0.587, "acos": 23.8, "roas": 4.21, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI Newcastle - Auto Target", "product": "Newcastle", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 3.0, "budgetRaw": "£3.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 160.43, "sales": 303.7, "orders": 9.0, "clicks": 284.0, "imp": 32441.0, "ctr": 0.875, "cvr": 3.17, "cpc": 0.565, "acos": 52.8, "roas": 1.89, "prevSpend": 4.42, "prevSales": 34.0, "prevOrders": 1.0, "spendChange": 3529.6, "salesChange": 793.2, "ordersChange": 800.0}, {"shop": "AlloyCollectors-North America", "country": "US", "name": "Xnurta AI Club America-Manual Target", "product": "Club America", "type": "manual", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 156.89, "sales": 174.93, "orders": 7.0, "clicks": 368.0, "imp": 17228.0, "ctr": 2.136, "cvr": 1.9, "cpc": 0.426, "acos": 89.7, "roas": 1.11, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Barcelona - Manuel Target", "product": "Barcelona", "type": "manual", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 138.31, "sales": 443.02, "orders": 11.0, "clicks": 260.0, "imp": 3247.0, "ctr": 8.007, "cvr": 4.23, "cpc": 0.532, "acos": 31.2, "roas": 3.2, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI Barcelona_US_Auto target", "product": "Barcelona_US", "type": "auto", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 7.0, "budgetRaw": "$7.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 108.83, "sales": 553.96, "orders": 15.0, "clicks": 306.0, "imp": 8547.0, "ctr": 3.58, "cvr": 4.9, "cpc": 0.356, "acos": 19.6, "roas": 5.09, "prevSpend": 116.14, "prevSales": 329.8, "prevOrders": 9.0, "spendChange": -6.3, "salesChange": 68.0, "ordersChange": 66.7}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI EWI 1314-auto target", "product": "EWI 1314", "type": "auto", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 85.58, "sales": 80.97, "orders": 1.0, "clicks": 179.0, "imp": 14964.0, "ctr": 1.196, "cvr": 0.56, "cpc": 0.478, "acos": 105.7, "roas": 0.95, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI NY0100-Auto targeting", "product": "NY0100", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 5.0, "budgetRaw": "$5.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "活动冲量", "aiPersona": "3", "spend": 69.38, "sales": 91.92, "orders": 4.0, "clicks": 123.0, "imp": 5137.0, "ctr": 2.394, "cvr": 3.25, "cpc": 0.564, "acos": 75.5, "roas": 1.32, "prevSpend": 129.06, "prevSales": 91.0, "prevOrders": 4.0, "spendChange": -46.2, "salesChange": 1.0, "ordersChange": 0.0}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI Eng FC_Auto Target", "product": "Eng FC", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 6.0, "budgetRaw": "$6.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 57.57, "sales": 34.98, "orders": 1.0, "clicks": 117.0, "imp": 10890.0, "ctr": 1.074, "cvr": 0.85, "cpc": 0.492, "acos": 164.6, "roas": 0.61, "prevSpend": 290.43, "prevSales": 1040.36, "prevOrders": 30.0, "spendChange": -80.2, "salesChange": -96.6, "ordersChange": -96.7}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "Xnurta AI WC-England-Auto Target", "product": "WC-England", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 2.0, "budgetRaw": "£2.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 57.21, "sales": 67.37, "orders": 2.0, "clicks": 99.0, "imp": 16868.0, "ctr": 0.587, "cvr": 2.02, "cpc": 0.578, "acos": 84.9, "roas": 1.18, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI ManCity_US_Auto target", "product": "ManCity_US", "type": "auto", "adType": "sponsoredProducts", "status": "Portfolio Out Of Budget", "enabled": "enabled", "budget": 5.0, "budgetRaw": "$5.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 38.37, "sales": 135.92, "orders": 3.0, "clicks": 74.0, "imp": 7781.0, "ctr": 0.951, "cvr": 4.05, "cpc": 0.519, "acos": 28.2, "roas": 3.54, "prevSpend": 24.42, "prevSales": 130.92, "prevOrders": 3.0, "spendChange": 57.1, "salesChange": 3.8, "ordersChange": 0.0}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "Xnurta AI_B0FPBHZDDP_Non-branded_Custom01_Manual_Broad", "product": "AI_B0FPBHZDDP_Non-branded_Custom01", "type": "manual", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 5.0, "budgetRaw": "£5.00", "currency": "£", "biddingStrategy": "固定竞价", "aiGoal": "推动增长", "aiPersona": "3", "spend": 21.38, "sales": 27.61, "orders": 1.0, "clicks": 28.0, "imp": 3923.0, "ctr": 0.714, "cvr": 3.57, "cpc": 0.764, "acos": 77.4, "roas": 1.29, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "All Eng FC", "product": "All Eng FC", "type": "manual", "adType": "sponsoredProducts", "status": "Out Of Budget", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$5.00", "currency": "C$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 15.52, "sales": 0.0, "orders": 0.0, "clicks": 26.0, "imp": 3516.0, "ctr": 0.739, "cvr": 0.0, "cpc": 0.597, "acos": 0, "roas": 0.0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "Xnurta AI_B0FPBHZDDP_Auto_Automatic_Auto_Loose match/Complements/Substitutes/Close match", "product": "AI_B0FPBHZDDP", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 5.0, "budgetRaw": "£5.00", "currency": "£", "biddingStrategy": "固定竞价", "aiGoal": "推动增长", "aiPersona": "3", "spend": 13.64, "sales": 0.0, "orders": 0.0, "clicks": 51.0, "imp": 6117.0, "ctr": 0.834, "cvr": 0.0, "cpc": 0.267, "acos": 0, "roas": 0.0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - UK EU", "country": "UK", "name": "WC-Netherlands-Auto Target", "product": "WC-Netherlands", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 2.0, "budgetRaw": "£2.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 6.79, "sales": 0.0, "orders": 0.0, "clicks": 13.0, "imp": 4515.0, "ctr": 0.288, "cvr": 0.0, "cpc": 0.522, "acos": 0, "roas": 0.0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI World club-England-Auto", "product": "World club-England", "type": "auto", "adType": "sponsoredProducts", "status": "Portfolio Out Of Budget", "enabled": "enabled", "budget": 2.5, "budgetRaw": "$2.50", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 6.12, "sales": 34.98, "orders": 1.0, "clicks": 8.0, "imp": 1007.0, "ctr": 0.794, "cvr": 12.5, "cpc": 0.765, "acos": 17.5, "roas": 5.72, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI Tottenham_Auto Target", "product": "Tottenham", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "保持订单稳定", "aiPersona": "3", "spend": 3.44, "sales": 0.0, "orders": 0.0, "clicks": 5.0, "imp": 1828.0, "ctr": 0.274, "cvr": 0.0, "cpc": 0.688, "acos": 0, "roas": 0.0, "prevSpend": 83.79, "prevSales": 257.84, "prevOrders": 8.0, "spendChange": -95.9, "salesChange": -100.0, "ordersChange": -100.0}, {"shop": "EWILHK - US", "country": "US", "name": "Xnurta AI WC-Netherland-Auto target", "product": "WC-Netherland", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 2.5, "budgetRaw": "$2.50", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 3.34, "sales": 0.0, "orders": 0.0, "clicks": 6.0, "imp": 1115.0, "ctr": 0.538, "cvr": 0.0, "cpc": 0.557, "acos": 0, "roas": 0.0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "World cup-Manuel product", "product": "World cup", "type": "manual", "adType": "sponsoredProducts", "status": "Portfolio Out Of Budget", "enabled": "enabled", "budget": 1.0, "budgetRaw": "$1.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - ASIA", "country": "AU", "name": "England FC team_Auto target", "product": "England FC team", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 0.0, "budgetRaw": "A$8.00", "currency": "A$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "推动增长", "aiPersona": "3", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 4.88, "prevSales": 30.58, "prevOrders": 1.0, "spendChange": -100.0, "salesChange": -100.0, "ordersChange": -100.0}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 1/11/2024 20:16:32.164", "product": "Campaign - 1/11/2024 20:16:32.164", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "August PD0200 ad trial campaign - CA to US", "product": "August PD0200 ad trial campaign - CA to US", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 2.23, "budgetRaw": "$2.23", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "PartyDroid PD0100 - PD0400", "product": "PartyDroid PD0100 - PD0400", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 10.0, "budgetRaw": "$10.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "PartyDroid PD0400", "product": "PartyDroid PD0400", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "PartyDroid PD0300", "product": "PartyDroid PD0300", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "PartyDroid PD0200", "product": "PartyDroid PD0200", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "1101", "product": "1101", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "1102", "product": "1102", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/4/2021 06:21:50", "product": "Campaign - 2/4/2021 06:21:50", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/3/2021 10:24:42", "product": "Campaign - 2/3/2021 10:24:42", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/3/2021 10:17:55", "product": "Campaign - 2/3/2021 10:17:55", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 2.0, "budgetRaw": "$2.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/3/2021 10:16:15", "product": "Campaign - 2/3/2021 10:16:15", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/3/2021 10:10:50", "product": "Campaign - 2/3/2021 10:10:50", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 6.0, "budgetRaw": "$6.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/2/2021 12:46:21", "product": "Campaign - 2/2/2021 12:46:21", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 2/2/2021 12:34:03", "product": "Campaign - 2/2/2021 12:34:03", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 4.0, "budgetRaw": "$4.00", "currency": "$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "Campaign - 1/15/2021 16:25:40", "product": "Campaign - 1/15/2021 16:25:40", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 2.0, "budgetRaw": "$2.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "HA0100_AUTO DISCOVER", "product": "HA0100_AUTO DISCOVER", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$8.00", "currency": "C$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2023-10-25 22:35:42.231", "product": "Campaign - 2023-10-25 22:35:42.231", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$5.00", "currency": "C$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "August PD0200 ad trial campaign", "product": "August PD0200 ad trial campaign", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$3.00", "currency": "C$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "PD & EWI 2101", "product": "PD & EWI 2101", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$2.00", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "PartyDroid 1234", "product": "PartyDroid 1234", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$1.00", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2021-02-04 11:00:36", "product": "Campaign - 2021-02-04 11:00:36", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$3.00", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2021-02-04 11:04:52", "product": "Campaign - 2021-02-04 11:04:52", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$1.00", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2021-02-02 20:49:55", "product": "Campaign - 2021-02-02 20:49:55", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$1.50", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2021-02-02 20:46:46", "product": "Campaign - 2021-02-02 20:46:46", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$3.00", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2021-01-31 24:10:55", "product": "Campaign - 2021-01-31 24:10:55", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$2.00", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "CA", "name": "Campaign - 2021-01-15 17:24:52", "product": "Campaign - 2021-01-15 17:24:52", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 0.0, "budgetRaw": "C$1.25", "currency": "C$", "biddingStrategy": "动态竞价-仅降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-North America", "country": "US", "name": "Product ad 1", "product": "Product ad 1", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 10.0, "budgetRaw": "$10.00", "currency": "$", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "IT", "name": "Inter Milan all 3 kits - UK to IT", "product": "Inter Milan all 3 kits - UK to IT", "type": "auto", "adType": "sponsoredProducts", "status": "Delivering", "enabled": "enabled", "budget": 29.97, "budgetRaw": "€29.97", "currency": "€", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 6.0, "ctr": 0.0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "IT", "name": "Campaign - 02/12/2024 13:02:25.562 - UK to IT", "product": "Campaign - 02/12/2024 13:02:25.562 - UK to IT", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 30.12, "budgetRaw": "€30.12", "currency": "€", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "West Ham retro test", "product": "West Ham retro test", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 10.0, "budgetRaw": "£10.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "Evergreen amazon Ad - all products (available)", "product": "Evergreen amazon Ad - all products (available)", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 25.0, "budgetRaw": "£25.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "Chelsea Keywords - 22/11/2024 11:04:30.342", "product": "Chelsea Keywords - 22/11/2024 11:04:30.342", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 20.0, "budgetRaw": "£20.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "New product - B0DFZP4MH4 - 13/11/2024 14:20:34", "product": "New product - B0DFZP4MH4 - 13/11/2024 14:20:34", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 20.0, "budgetRaw": "£20.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "New product - B0DFZ58GS3 - 13/11/2024 14:20:34", "product": "New product - B0DFZ58GS3 - 13/11/2024 14:20:34", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 40.0, "budgetRaw": "£40.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "New product - B0DFZ2QW6P - 13/11/2024 14:20:34", "product": "New product - B0DFZ2QW6P - 13/11/2024 14:20:34", "type": "manual", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 25.0, "budgetRaw": "£25.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "UK", "name": "PSG Weekend Test 26/01/2024", "product": "PSG Weekend Test 26/01/2024", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 15.0, "budgetRaw": "£15.00", "currency": "£", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-EU", "country": "FR", "name": "Campaign - 02/12/2024 13:02:25.562 - UK to FR", "product": "Campaign - 02/12/2024 13:02:25.562 - UK to FR", "type": "auto", "adType": "sponsoredProducts", "status": "Ended", "enabled": "enabled", "budget": 30.12, "budgetRaw": "€30.12", "currency": "€", "biddingStrategy": "动态竞价-提高或降低", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "AlloyCollectors-North America", "country": "US", "name": "Sponsored Brand", "product": "Sponsored Brand", "type": "manual", "adType": "sponsoredBrands", "status": "Ended", "enabled": "enabled", "budget": 10.0, "budgetRaw": "$10.00", "currency": "$", "biddingStrategy": "自动竞价", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}, {"shop": "EWILHK - US", "country": "US", "name": "NY0100 adv 2", "product": "NY0100 adv 2", "type": "manual", "adType": "sponsoredDisplay", "status": "Ended", "enabled": "enabled", "budget": 3.0, "budgetRaw": "$3.00", "currency": "$", "biddingStrategy": "", "aiGoal": "(未托管)", "aiPersona": "0", "spend": 0.0, "sales": 0.0, "orders": 0.0, "clicks": 0.0, "imp": 0.0, "ctr": 0, "cvr": 0, "cpc": 0, "acos": 0, "roas": 0, "prevSpend": 0.0, "prevSales": 0.0, "prevOrders": 0.0, "spendChange": null, "salesChange": null, "ordersChange": null}]</script>
+<script>
+const ALL = JSON.parse(document.getElementById('data').textContent);
+const PERIOD_DAYS = 90;
+const fmt$ = n => '$' + Math.round(n).toLocaleString();
+const fmt$d = n => '$' + (n||0).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:0});
+const fmtPct = (n, dp=1) => (n==null ? '—' : (n*1).toFixed(dp) + '%');
+const fmtROAS = n => (n||0).toFixed(2)+'x';
+
+let state = {
+  shop: 'all',
+  status: 'active',
+  search: '',
+  campaignSort: {k:'spend', asc:false},
+  shopSort: {k:'spend', asc:false},
+};
+
+// ============= helpers =============
+function filtered(){
+  return ALL.filter(c => {
+    if(state.shop !== 'all' && c.shop !== state.shop) return false;
+    if(state.status === 'active' && c.status === 'Ended') return false;
+    if(state.status === 'ended' && c.status !== 'Ended') return false;
+    if(state.status === 'oob' && !c.status.includes('Out Of Budget')) return false;
+    if(state.search){
+      const q = state.search.toLowerCase();
+      if(!c.name.toLowerCase().includes(q) && !c.product.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function sumOf(rows, k){ return rows.reduce((s,r)=>s+(r[k]||0),0); }
+function aggMetrics(rows){
+  const spend = sumOf(rows,'spend'), sales = sumOf(rows,'sales'),
+        orders = sumOf(rows,'orders'), clicks = sumOf(rows,'clicks'),
+        imp = sumOf(rows,'imp'),
+        prevSpend = sumOf(rows,'prevSpend'), prevSales = sumOf(rows,'prevSales'),
+        prevOrders = sumOf(rows,'prevOrders');
+  return {
+    n: rows.length, spend, sales, orders, clicks, imp,
+    ctr: imp ? clicks/imp*100 : 0,
+    cvr: clicks ? orders/clicks*100 : 0,
+    cpc: clicks ? spend/clicks : 0,
+    acos: sales ? spend/sales*100 : 0,
+    roas: spend ? sales/spend : 0,
+    spendChange: prevSpend ? (spend-prevSpend)/prevSpend*100 : null,
+    salesChange: prevSales ? (sales-prevSales)/prevSales*100 : null,
+    ordersChange: prevOrders ? (orders-prevOrders)/prevOrders*100 : null,
+  };
+}
+
+function classifyAcos(a){
+  if(!a) return '';
+  if(a<25) return 'num-good';
+  if(a<40) return '';
+  if(a<70) return 'num-warn';
+  return 'num-bad';
+}
+
+// ============= KPI cards =============
+function renderKPIs(){
+  const rows = filtered();
+  const m = aggMetrics(rows);
+  const oobN = rows.filter(c => c.status.includes('Out Of Budget')).length;
+  const cards = [
+    {lbl:'活跃活动', val:m.n, sub:`含 ${oobN} 条 OOB`},
+    {lbl:'90 天总花费', val:fmt$(m.spend), sub:`日均 ${fmt$d(m.spend/PERIOD_DAYS)}`,
+      delta: m.spendChange},
+    {lbl:'90 天总销售', val:fmt$(m.sales), sub:`日均 ${fmt$d(m.sales/PERIOD_DAYS)}`,
+      delta: m.salesChange},
+    {lbl:'订单数', val:Math.round(m.orders).toLocaleString(), sub:`CVR ${m.cvr.toFixed(2)}%`,
+      delta: m.ordersChange},
+    {lbl:'综合 ACOS', val:m.acos.toFixed(1)+'%', sub:`ROAS ${m.roas.toFixed(2)}x`},
+    {lbl:'平均 CPC', val:'$'+m.cpc.toFixed(2), sub:`CTR ${m.ctr.toFixed(2)}%`},
+  ];
+  document.getElementById('kpiGrid').innerHTML = cards.map(c => {
+    let delta = '';
+    if(c.delta != null && !isNaN(c.delta)){
+      const cls = c.delta >= 0 ? 'delta-up' : 'delta-down';
+      const arrow = c.delta >= 0 ? '↑' : '↓';
+      delta = ` <span class="${cls}">${arrow}${Math.abs(c.delta).toFixed(0)}%</span>`;
+    }
+    return `<div class="kpi"><div class="lbl">${c.lbl}</div><div class="val">${c.val}</div><div class="sub">${c.sub}${delta}</div></div>`;
+  }).join('');
+}
+
+// ============= Filter chips =============
+function renderChips(){
+  // Shop chips
+  const shops = {};
+  ALL.forEach(c => shops[c.shop] = (shops[c.shop]||0) + 1);
+  const allCount = ALL.length;
+  let html = `<button class="chip ${state.shop==='all'?'active':''}" data-shop="all">全部 <span class="num">${allCount}</span></button>`;
+  Object.entries(shops).sort((a,b)=>b[1]-a[1]).forEach(([s,n]) => {
+    html += `<button class="chip ${state.shop===s?'active':''}" data-shop="${s}">${s} <span class="num">${n}</span></button>`;
+  });
+  document.getElementById('shopChips').innerHTML = html;
+
+  // Status chips
+  const counts = {
+    'active': ALL.filter(c => c.status !== 'Ended').length,
+    'oob': ALL.filter(c => c.status.includes('Out Of Budget')).length,
+    'ended': ALL.filter(c => c.status === 'Ended').length,
+    'all': ALL.length,
+  };
+  const statuses = [
+    ['active','活跃 (跑+OOB)'],
+    ['oob','OOB'],
+    ['ended','已结束'],
+    ['all','全部'],
+  ];
+  let sh = statuses.map(([k,lbl]) =>
+    `<button class="chip ${state.status===k?'active':''}" data-status="${k}">${lbl} <span class="num">${counts[k]}</span></button>`
+  ).join('');
+  document.getElementById('statusChips').innerHTML = sh;
+
+  document.querySelectorAll('#shopChips .chip').forEach(b => b.onclick = () => { state.shop = b.dataset.shop; renderAll(); });
+  document.querySelectorAll('#statusChips .chip').forEach(b => b.onclick = () => { state.status = b.dataset.status; renderAll(); });
+}
+
+// ============= Shop table =============
+function renderShopTable(){
+  // Group by shop, only filtered status
+  const status = state.status;
+  const rows = ALL.filter(c => {
+    if(status === 'active' && c.status === 'Ended') return false;
+    if(status === 'oob' && !c.status.includes('Out Of Budget')) return false;
+    if(status === 'ended' && c.status !== 'Ended') return false;
+    return true;
+  });
+  const groups = {};
+  rows.forEach(c => {
+    if(!groups[c.shop]) groups[c.shop] = [];
+    groups[c.shop].push(c);
+  });
+  const data = Object.entries(groups).map(([shop, gs]) => {
+    const m = aggMetrics(gs);
+    const auto_n = gs.filter(g => g.type==='auto').length;
+    const manual_n = gs.filter(g => g.type==='manual').length;
+    const oob_n = gs.filter(g => g.status.includes('Out Of Budget')).length;
+    return {shop, n:gs.length, auto:auto_n, manual:manual_n, oob:oob_n, ...m};
+  });
+  const k = state.shopSort.k, asc = state.shopSort.asc;
+  data.sort((a,b) => {
+    let av = a[k], bv = b[k];
+    if(typeof av === 'string'){ return av.localeCompare(bv) * (asc?1:-1); }
+    return ((av||0) - (bv||0)) * (asc?1:-1);
+  });
+  const cols = [
+    ['shop','店铺','left'],
+    ['n','活动','right'],
+    ['auto','Auto','right'],
+    ['manual','Manual','right'],
+    ['oob','OOB','right'],
+    ['spend','花费','right'],
+    ['sales','销售','right'],
+    ['orders','订单','right'],
+    ['acos','ACOS','right'],
+    ['roas','ROAS','right'],
+    ['ctr','CTR','right'],
+    ['cvr','CVR','right'],
+  ];
+  let head = '<thead><tr>' + cols.map(([key,lbl,al]) => {
+    const sortedCls = state.shopSort.k===key ? 'sorted '+(asc?'asc':'') : '';
+    return `<th class="${sortedCls}" data-sort="${key}" data-tbl="shop" style="text-align:${al}">${lbl}</th>`;
+  }).join('') + '</tr></thead>';
+  let body = '<tbody>' + data.map(r => {
+    const acosCls = classifyAcos(r.acos);
+    const oobTag = r.oob ? `<span class="tag tag-bad">${r.oob}</span>` : '<span class="tag tag-ghost">0</span>';
+    return `<tr>
+      <td><b>${r.shop}</b></td>
+      <td>${r.n}</td>
+      <td>${r.auto}</td>
+      <td>${r.manual}</td>
+      <td>${oobTag}</td>
+      <td>${fmt$(r.spend)}</td>
+      <td>${fmt$(r.sales)}</td>
+      <td>${Math.round(r.orders)}</td>
+      <td class="${acosCls}">${r.acos ? r.acos.toFixed(1)+'%' : '—'}</td>
+      <td>${r.roas ? r.roas.toFixed(2)+'x' : '—'}</td>
+      <td>${r.ctr ? r.ctr.toFixed(2)+'%' : '—'}</td>
+      <td>${r.cvr ? r.cvr.toFixed(1)+'%' : '—'}</td>
+    </tr>`;
+  }).join('') + '</tbody>';
+  document.getElementById('shopTable').innerHTML = head + body;
+
+  document.querySelectorAll('th[data-tbl="shop"]').forEach(th => th.onclick = () => {
+    const k = th.dataset.sort;
+    if(state.shopSort.k === k) state.shopSort.asc = !state.shopSort.asc;
+    else { state.shopSort = {k, asc:false}; }
+    renderShopTable();
+  });
+}
+
+// ============= Charts =============
+let charts = {};
+
+function renderShopBarChart(){
+  if(charts.shop) charts.shop.destroy();
+  const status = state.status;
+  const rows = ALL.filter(c => {
+    if(status === 'active' && c.status === 'Ended') return false;
+    if(status === 'oob' && !c.status.includes('Out Of Budget')) return false;
+    if(status === 'ended' && c.status !== 'Ended') return false;
+    return true;
+  });
+  const grouped = {};
+  rows.forEach(c => {
+    if(!grouped[c.shop]) grouped[c.shop] = {spend:0, sales:0};
+    grouped[c.shop].spend += c.spend;
+    grouped[c.shop].sales += c.sales;
+  });
+  const labels = Object.keys(grouped);
+  const spend = labels.map(l => Math.round(grouped[l].spend));
+  const sales = labels.map(l => Math.round(grouped[l].sales));
+  charts.shop = new Chart(document.getElementById('shopBarChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {label:'花费 ($)', data:spend, backgroundColor:'#fda4af', borderRadius:6},
+        {label:'销售 ($)', data:sales, backgroundColor:'#86efac', borderRadius:6},
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:12}}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eee'}, beginAtZero:true}}
+    }
+  });
+}
+
+function renderAutoManualChart(){
+  if(charts.am) charts.am.destroy();
+  const rows = ALL.filter(c => c.status !== 'Ended');
+  const auto_spend = rows.filter(c=>c.type==='auto').reduce((s,c)=>s+c.spend,0);
+  const manual_spend = rows.filter(c=>c.type==='manual').reduce((s,c)=>s+c.spend,0);
+  const total = auto_spend + manual_spend;
+  charts.am = new Chart(document.getElementById('autoManualChart'), {
+    type:'doughnut',
+    data:{
+      labels:[
+        `Auto  ${(auto_spend/total*100).toFixed(0)}% · ${fmt$(auto_spend)}`,
+        `Manual  ${(manual_spend/total*100).toFixed(0)}% · ${fmt$(manual_spend)}`,
+      ],
+      datasets:[{data:[auto_spend, manual_spend], backgroundColor:['#fbbf24','#a78bfa'], borderWidth:2, borderColor:'#fff'}]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{font:{size:12}, padding:14}}},
+      cutout:'60%'
+    }
+  });
+}
+
+function renderBidStrategyChart(){
+  if(charts.bid) charts.bid.destroy();
+  const rows = ALL.filter(c => c.status !== 'Ended');
+  const counts = {};
+  rows.forEach(c => {
+    const key = c.biddingStrategy || '(空)';
+    counts[key] = (counts[key]||0) + 1;
+  });
+  const labels = Object.keys(counts);
+  const data = labels.map(l => counts[l]);
+  charts.bid = new Chart(document.getElementById('bidStrategyChart'), {
+    type:'bar',
+    data:{labels, datasets:[{data, backgroundColor:['#60a5fa','#fbbf24','#a78bfa','#fb7185'], borderRadius:6}]},
+    options:{
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => ctx.parsed.x + ' 条活动'}}},
+      scales:{x:{grid:{color:'#eee'}, beginAtZero:true, ticks:{precision:0}}, y:{grid:{display:false}}}
+    }
+  });
+}
+
+function renderAIGoalChart(){
+  if(charts.ai) charts.ai.destroy();
+  const rows = ALL.filter(c => c.status !== 'Ended');
+  const counts = {};
+  rows.forEach(c => {
+    const key = c.aiGoal;
+    counts[key] = (counts[key]||0) + 1;
+  });
+  const labels = Object.keys(counts);
+  const data = labels.map(l => counts[l]);
+  charts.ai = new Chart(document.getElementById('aiGoalChart'), {
+    type:'pie',
+    data:{labels, datasets:[{data, backgroundColor:['#60a5fa','#86efac','#fbbf24','#c4b5fd','#f472b6'], borderWidth:2, borderColor:'#fff'}]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{font:{size:12}, padding:14}}}
+    }
+  });
+}
+
+// ============= Pairing =============
+function renderPairing(){
+  const rows = ALL.filter(c => c.status !== 'Ended');
+  const grp = {};
+  rows.forEach(c => {
+    if(!grp[c.product]) grp[c.product] = {auto:[], manual:[]};
+    grp[c.product][c.type].push(c);
+  });
+  // Group by shop too
+  const byShop = {};
+  Object.entries(grp).forEach(([prod, d]) => {
+    const shop = (d.auto[0] || d.manual[0]).shop;
+    if(!byShop[shop]) byShop[shop] = [];
+    byShop[shop].push({prod, ...d});
+  });
+  let html = '';
+  Object.entries(byShop).sort((a,b) => b[1].length - a[1].length).forEach(([shop, prods]) => {
+    html += `<div style="grid-column:1/-1; font-size:12px; color:var(--muted); margin-top:10px; font-weight:600; padding-left:2px;">${shop} · ${prods.length} 个产品</div>`;
+    prods.sort((a,b) => {
+      const sa = a.auto.reduce((s,c)=>s+c.spend,0) + a.manual.reduce((s,c)=>s+c.spend,0);
+      const sb = b.auto.reduce((s,c)=>s+c.spend,0) + b.manual.reduce((s,c)=>s+c.spend,0);
+      return sb - sa;
+    });
+    prods.forEach(p => {
+      const aN = p.auto.length, mN = p.manual.length;
+      const aSpend = p.auto.reduce((s,c)=>s+c.spend,0);
+      const mSpend = p.manual.reduce((s,c)=>s+c.spend,0);
+      let cls = aN && mN ? 'both' : (aN ? 'auto-only' : 'manual-only');
+      let icon = aN && mN ? '✓' : (aN ? 'Auto only' : 'Manual only');
+      html += `<div class="pair ${cls}">
+        <div class="pname">${p.prod}</div>
+        <div class="pmeta">${icon} · A:${aN} M:${mN} · ${fmt$(aSpend+mSpend)}</div>
+      </div>`;
+    });
+  });
+  document.getElementById('pairingGrid').innerHTML = html;
+}
+
+// ============= Recommendations =============
+function buildRecommendations(){
+  const recs = [];
+  const active = ALL.filter(c => c.status !== 'Ended');
+
+  // 1. OOB blocking earners
+  const oobMoneyMakers = active.filter(c => c.status.includes('Out Of Budget') && c.acos > 0 && c.acos < 35 && c.spend > 100);
+  if(oobMoneyMakers.length){
+    recs.push({
+      level:'urgent',
+      title:`🚨 ${oobMoneyMakers.length} 条赚钱活动正在 OOB（ACOS&lt;35%、累计花费&gt;$100）`,
+      text: oobMoneyMakers.slice(0,5).map(c=>`<b>${c.name}</b>（${c.shop}）ACOS ${c.acos}%、ROAS ${c.roas}x、日预算 ${c.budgetRaw}`).join('<br>')
+        + `<br><br><i>动作：把这些活动的日预算翻 1.5-2 倍。它们能赚钱但被预算锁住，每天都在丢单。</i>`
+    });
+  }
+
+  // 2. ACOS black holes
+  const blackHoles = active.filter(c => c.spend > 50 && c.acos > 70);
+  if(blackHoles.length){
+    recs.push({
+      level:'urgent',
+      title:`💸 ${blackHoles.length} 条 ACOS 黑洞（花费&gt;$50 + ACOS&gt;70%）`,
+      text: blackHoles.slice(0,5).map(c=>`<b>${c.name}</b>（${c.shop}）花费 ${fmt$(c.spend)} 销售 ${fmt$(c.sales)} ACOS ${c.acos}%`).join('<br>')
+        + `<br><br><i>动作：先暂停或砍 50% 预算，再回头查搜索词 / 否定 / listing 错配。这部分钱大概率烧在不相关流量上。</i>`
+    });
+  }
+
+  // 3. Pairing incomplete - high spend products without partner
+  const grp = {};
+  active.forEach(c => {
+    if(!grp[c.product]) grp[c.product] = {auto:[], manual:[]};
+    grp[c.product][c.type].push(c);
+  });
+  const lonely = Object.entries(grp).filter(([p, d]) => {
+    const tot = d.auto.reduce((s,c)=>s+c.spend,0) + d.manual.reduce((s,c)=>s+c.spend,0);
+    return tot > 50 && (d.auto.length === 0 || d.manual.length === 0);
+  });
+  if(lonely.length){
+    recs.push({
+      level:'warn',
+      title:`🔧 ${lonely.length} 个高花费产品缺另一半（没有 Auto+Manual 配对）`,
+      text: `孤品列表：${lonely.slice(0,8).map(([p,d]) => {
+        const tot = d.auto.reduce((s,c)=>s+c.spend,0) + d.manual.reduce((s,c)=>s+c.spend,0);
+        const has = d.auto.length ? 'Auto only' : 'Manual only';
+        return `<b>${p}</b>（${has}, ${fmt$(tot)}）`;
+      }).join('，')}<br><br><i>标准结构：Auto 拓词 30% 预算 + Manual 收割 70% 预算。只有 Auto 没 Manual = 永远不收割；只有 Manual 没 Auto = 没新词进来。</i>`
+    });
+  }
+
+  // 4. Auto/Manual budget structure - too auto-heavy
+  const autoSpend = active.filter(c=>c.type==='auto').reduce((s,c)=>s+c.spend,0);
+  const manSpend = active.filter(c=>c.type==='manual').reduce((s,c)=>s+c.spend,0);
+  const total = autoSpend + manSpend;
+  const autoPct = total ? autoSpend/total*100 : 0;
+  if(autoPct > 50){
+    recs.push({
+      level:'warn',
+      title:`⚖️ Auto 花费占比 ${autoPct.toFixed(0)}% 偏高（理想 ≤ 35%）`,
+      text:`整盘 Auto 花了 ${fmt$(autoSpend)} / Manual 花了 ${fmt$(manSpend)}。Auto 是拓词机不是主战场。如果 Auto 花得比 Manual 多，说明：① Auto 跑出来的好词没及时搬到 Manual；② 或者 Manual 出价 / 关键词数量太弱抢不到流量。<br><br><i>动作：每周一次"Auto → Manual 收割"，把出 1+ 单 ACOS &lt; 30% 的搜索词加进 Manual EXACT；同时在 Auto 加为 negativePhrase（防同店蚕食）。</i>`
+    });
+  }
+
+  // 5. AlloyCollectors-EU dead zone
+  const aeu = active.filter(c => c.shop === 'AlloyCollectors-EU');
+  if(aeu.length){
+    const aeuSpend = aeu.reduce((s,c)=>s+c.spend,0);
+    const aeuOrders = aeu.reduce((s,c)=>s+c.orders,0);
+    if(aeu.length >= 3 && aeuOrders <= 2){
+      recs.push({
+        level:'warn',
+        title:`🏚️ AlloyCollectors-EU 几乎没产出（${aeu.length} 条活跃，90 天累计仅 ${aeuOrders} 单）`,
+        text:`整个店 90 天花费仅 ${fmt$(aeuSpend)}，但活动数 ${aeu.length} 条。这种"开了广告但实际没量"的店通常是：<br>① listing 没流量基础（评论&lt;20 / BSR 极低）<br>② 出价太低赢不了拍卖<br>③ Portfolio 预算上限锁死<br><br><i>动作：先确认 listing 状态再决定是要"放弃这个市场"还是"加预算救起来"。资源有限的话直接关停，把预算转去 EWILHK 主战场。</i>`
+      });
+    }
+  }
+
+  // 6. EWILHK-US has too many Ended
+  const usEnded = ALL.filter(c => c.shop==='EWILHK - US' && c.status==='Ended').length;
+  const usActive = ALL.filter(c => c.shop==='EWILHK - US' && c.status!=='Ended').length;
+  if(usEnded > usActive){
+    recs.push({
+      level:'info',
+      title:`🗑️ EWILHK-US 已结束活动 ${usEnded} 条 vs 活跃 ${usActive} 条`,
+      text:`历史尸体堆了不少，可能是迭代试错留下的。不影响当下，但建议在 Xnurta 把它们 archive 掉，避免后续 reporting 看错数据。`
+    });
+  }
+
+  // 7. Bidding strategy diversity
+  const bidStrats = {};
+  active.forEach(c => bidStrats[c.biddingStrategy] = (bidStrats[c.biddingStrategy]||0) + 1);
+  const upDown = bidStrats['动态竞价-提高或降低'] || 0;
+  if(upDown / active.length > 0.85){
+    recs.push({
+      level:'info',
+      title:`🎯 ${(upDown/active.length*100).toFixed(0)}% 活动用「动态竞价 - 提高或降低」`,
+      text:`这是攻击型策略，亚马逊会按转化概率把出价 +100% 或 -100%。<br>建议把成熟的、ACOS 已经稳定的活动切到「<b>动态竞价 - 仅降低</b>」，让 Amazon 帮压低胜率位置的钱。<br><br>切换标准：<br>· 活动跑了 ≥ 30 天且 ACOS &lt; 30% → 切到「仅降低」<br>· BD / 新品冲量期 → 用「提高或降低」<br>· 防御型 / 老款 → 用「仅降低」`
+    });
+  }
+
+  // 8. Top performer to scale
+  const stars = active.filter(c => c.spend > 100 && c.acos > 0 && c.acos < 25 && !c.status.includes('Out Of Budget'))
+    .sort((a,b)=>a.acos-b.acos);
+  if(stars.length){
+    recs.push({
+      level:'green',
+      title:`✨ ${stars.length} 条明星活动可以加大投入（ACOS &lt; 25%，没 OOB）`,
+      text: stars.slice(0,5).map(c=>`<b>${c.name}</b>（${c.shop}）ACOS ${c.acos}% · ROAS ${c.roas}x · 90 天花 ${fmt$(c.spend)}`).join('<br>')
+        + `<br><br><i>动作：把这些活动的预算上调 50-100%，配合把 bid 上限放宽 20-30%。它们没 OOB 不代表不能继续花，可能只是 bid 不够抢量。</i>`
+    });
+  }
+
+  return recs;
+}
+
+function renderRecs(){
+  const recs = buildRecommendations();
+  const order = {urgent:0, warn:1, info:2, green:3};
+  recs.sort((a,b) => order[a.level] - order[b.level]);
+  const icons = {urgent:'!', warn:'⚠', info:'i', green:'✓'};
+  document.getElementById('recList').innerHTML = recs.map(r => `
+    <div class="rec ${r.level}">
+      <div class="icon">${icons[r.level]}</div>
+      <div class="body">
+        <div class="title">${r.title}</div>
+        <div class="text">${r.text}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============= Campaign table =============
+function renderCampaignTable(){
+  const rows = filtered();
+  const k = state.campaignSort.k, asc = state.campaignSort.asc;
+  rows.sort((a,b) => {
+    let av = a[k], bv = b[k];
+    if(typeof av === 'string'){ return (av||'').localeCompare(bv||'') * (asc?1:-1); }
+    return ((av||0) - (bv||0)) * (asc?1:-1);
+  });
+  document.getElementById('campaignCountLbl').textContent = `${rows.length} 条结果`;
+  const cols = [
+    ['name','活动','left'],
+    ['shop','店铺','left'],
+    ['type','类型','left'],
+    ['status','状态','left'],
+    ['budgetRaw','日预算','right'],
+    ['spend','花费','right'],
+    ['sales','销售','right'],
+    ['orders','订单','right'],
+    ['acos','ACOS','right'],
+    ['roas','ROAS','right'],
+    ['ctr','CTR','right'],
+    ['cvr','CVR','right'],
+    ['cpc','CPC','right'],
+    ['biddingStrategy','竞价','left'],
+    ['aiGoal','AI 目标','left'],
+  ];
+  let head = '<thead><tr>' + cols.map(([key,lbl,al]) => {
+    const sortedCls = state.campaignSort.k===key ? 'sorted '+(asc?'asc':'') : '';
+    return `<th class="${sortedCls}" data-sort="${key}" data-tbl="campaign" style="text-align:${al}">${lbl}</th>`;
+  }).join('') + '</tr></thead>';
+  let body = '<tbody>' + rows.map(r => {
+    const acosCls = classifyAcos(r.acos);
+    const stTag = r.status === 'Delivering' ? 'tag-good'
+                  : r.status.includes('Out Of Budget') ? 'tag-bad'
+                  : r.status === 'Ended' ? 'tag-ghost' : 'tag-warn';
+    const typeTag = r.type === 'auto' ? 'tag-warn' : 'tag-info';
+    return `<tr ${r.status==='Ended'?'class="dim"':''}>
+      <td title="${r.name}">${r.name.length > 50 ? r.name.slice(0,48)+'…' : r.name}</td>
+      <td>${r.shop}</td>
+      <td><span class="tag ${typeTag}">${r.type}</span></td>
+      <td><span class="tag ${stTag}">${r.status}</span></td>
+      <td>${r.budgetRaw}</td>
+      <td>${fmt$(r.spend)}</td>
+      <td>${fmt$(r.sales)}</td>
+      <td>${Math.round(r.orders)}</td>
+      <td class="${acosCls}">${r.acos ? r.acos.toFixed(1)+'%' : '—'}</td>
+      <td>${r.roas ? r.roas.toFixed(2)+'x' : '—'}</td>
+      <td>${r.ctr ? r.ctr.toFixed(2)+'%' : '—'}</td>
+      <td>${r.cvr ? r.cvr.toFixed(1)+'%' : '—'}</td>
+      <td>${r.cpc ? '$'+r.cpc.toFixed(2) : '—'}</td>
+      <td class="small">${r.biddingStrategy || '—'}</td>
+      <td class="small">${r.aiGoal || '—'}</td>
+    </tr>`;
+  }).join('') + '</tbody>';
+  document.getElementById('campaignTable').innerHTML = head + body;
+
+  document.querySelectorAll('th[data-tbl="campaign"]').forEach(th => th.onclick = () => {
+    const k = th.dataset.sort;
+    if(state.campaignSort.k === k) state.campaignSort.asc = !state.campaignSort.asc;
+    else { state.campaignSort = {k, asc:false}; }
+    renderCampaignTable();
+  });
+}
+
+// ============= Ended summary =============
+function renderEnded(){
+  const ended = ALL.filter(c => c.status === 'Ended');
+  const m = aggMetrics(ended);
+  document.getElementById('endedSummary').innerHTML = `
+    <div style="display:flex; gap:24px; flex-wrap:wrap; font-size:13px;">
+      <div><span class="small">总数</span> <b>${ended.length}</b></div>
+      <div><span class="small">累计花费</span> <b>${fmt$(m.spend)}</b></div>
+      <div><span class="small">订单</span> <b>${Math.round(m.orders)}</b></div>
+      <div><span class="small">销售</span> <b>${fmt$(m.sales)}</b></div>
+      <div><span class="small">综合 ACOS</span> <b>${m.acos.toFixed(1)}%</b></div>
+    </div>
+    <div class="small" style="margin-top:8px;">注：Ended 总花费小（占总盘 ~3%），说明这些大多是早期试错或短期活动，没烧太多钱。</div>
+  `;
+  // 列出 Ended 中花费最大的几条
+  const top = ended.filter(c => c.spend > 0).sort((a,b)=>b.spend-a.spend).slice(0,10);
+  if(top.length){
+    let head = `<thead><tr>
+      <th style="text-align:left">活动</th>
+      <th style="text-align:left">店铺</th>
+      <th style="text-align:left">类型</th>
+      <th>花费</th><th>销售</th><th>ACOS</th>
+    </tr></thead>`;
+    let body = '<tbody>' + top.map(r => `
+      <tr>
+        <td title="${r.name}">${r.name.length>50?r.name.slice(0,48)+'…':r.name}</td>
+        <td>${r.shop}</td>
+        <td><span class="tag ${r.type==='auto'?'tag-warn':'tag-info'}">${r.type}</span></td>
+        <td>${fmt$(r.spend)}</td>
+        <td>${fmt$(r.sales)}</td>
+        <td class="${classifyAcos(r.acos)}">${r.acos ? r.acos.toFixed(1)+'%' : '—'}</td>
+      </tr>
+    `).join('') + '</tbody>';
+    document.getElementById('endedTable').innerHTML = head + body;
+  } else {
+    document.getElementById('endedTable').innerHTML = '';
+  }
+}
+
+// ============= Render all =============
+function renderAll(){
+  renderChips();
+  renderKPIs();
+  renderShopTable();
+  renderShopBarChart();
+  renderAutoManualChart();
+  renderBidStrategyChart();
+  renderAIGoalChart();
+  renderPairing();
+  renderRecs();
+  renderCampaignTable();
+  renderEnded();
+}
+
+document.getElementById('searchInput').oninput = e => { state.search = e.target.value; renderCampaignTable(); renderKPIs(); };
+
+renderAll();
+</script>
+</body>
+</html>
