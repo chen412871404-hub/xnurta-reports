@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOMYHOME · Xnurta AI 广告诊断看板</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--blue:#2563eb;--green:#059669;--red:#dc2626;--amber:#d97706;--purple:#7c3aed;--border:#e5e7eb;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+h1{font-size:24px;font-weight:600}h2{font-size:18px;font-weight:600;margin-bottom:12px}h3{font-size:14px;font-weight:600}
+.container{max-width:1280px;margin:0 auto;padding:24px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+.header-left h1{margin-bottom:4px}.header-left .sub{color:var(--muted);font-size:13px}
+.header-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.badge-ai{background:#ede9fe;color:var(--purple)}.badge-date{background:#f3f4f6;color:var(--muted)}
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border)}
+.tab{padding:10px 20px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .2s}
+.tab:hover{color:var(--text)}.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-content{display:none}.tab-content.active{display:block}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.metric{background:var(--card);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border)}
+.metric .label{font-size:12px;color:var(--muted);margin-bottom:4px}
+.metric .value{font-size:26px;font-weight:700}
+.metric .delta{font-size:12px;margin-top:2px}
+.metric.good{border-left:3px solid var(--green)}.metric.warn{border-left:3px solid var(--amber)}.metric.bad{border-left:3px solid var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border);margin-bottom:16px}
+.card h2{margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 12px;background:#f9fafb;font-weight:600;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border)}tr:hover td{background:#f9fafb}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.tag-ai{background:#ede9fe;color:var(--purple)}.tag-good{background:#ecfdf5;color:var(--green)}.tag-warn{background:#fef3c7;color:var(--amber)}.tag-bad{background:#fef2f2;color:var(--red)}
+.insight{background:#eff6ff;border-left:3px solid var(--blue);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin-bottom:12px;font-size:13px}
+.insight strong{color:var(--blue)}.insight-warn{background:#fef3c7;border-left-color:var(--amber)}.insight-warn strong{color:var(--amber)}.insight-good{background:#ecfdf5;border-left-color:var(--green)}.insight-good strong{color:var(--green)}
+.chart-wrap{position:relative;width:100%}.chart-wrap.h200{height:200px}.chart-wrap.h240{height:240px}.chart-wrap.h300{height:300px}
+.footer{text-align:center;margin-top:32px;padding:20px 0;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+.footer a{color:var(--blue);text-decoration:none}
+.note{font-size:12px;color:var(--muted);margin-top:8px;padding:8px 12px;background:#f9fafb;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="header-left">
+    <h1>HOMYHOME · Xnurta AI 广告诊断看板</h1>
+    <p class="sub">数据周期：2026.04.09 – 2026.05.08（30天） · 在投活动 133 个 · 8个国家站点</p>
+  </div>
+  <div class="header-right">
+    <span class="badge badge-ai">Xnurta AI 托管 · 106个活动 · 占花费 82.2%</span>
+    <span class="badge badge-date">报告日期 2026.05.08</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('overview')">📊 数据总览</button>
+  <button class="tab" onclick="switchTab('stores')">🏪 店铺对比</button>
+  <button class="tab" onclick="switchTab('architecture')">🏗️ 广告架构</button>
+  <button class="tab" onclick="switchTab('campaigns')">🎯 活动诊断</button>
+  <button class="tab" onclick="switchTab('insights')">💡 AI 洞察</button>
+  <button class="tab" onclick="switchTab('searchterms')">🔍 搜索词</button>
+</div>
+
+<!-- ═══ TAB 1：数据总览 ═══ -->
+<div id="tab-overview" class="tab-content active">
+  <div class="metrics">
+    <div class="metric"><div class="label">30天总花费</div><div class="value">$48,106</div><div class="delta">133个在投活动</div></div>
+    <div class="metric good"><div class="label">30天总销售额</div><div class="value">$160,309</div><div class="delta">16,256 单</div></div>
+    <div class="metric"><div class="label">整体 ACOS</div><div class="value">30.0%</div><div class="delta">ROAS 3.33</div></div>
+    <div class="metric good"><div class="label">平均 CPC</div><div class="value">$0.72</div><div class="delta">CVR 24.4%</div></div>
+    <div class="metric"><div class="label">AI托管覆盖率</div><div class="value">82.2%</div><div class="delta">106个AI / 27个手动</div></div>
+    <div class="metric warn"><div class="label">在投活动总数</div><div class="value">133</div><div class="delta">覆盖 8 个国家站点</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>AI托管 vs 手动投放（在投活动）</h2>
+      <div class="chart-wrap h240"><canvas id="chartAiVsManual"></canvas></div>
+      <p class="note">AI托管 106个活动，花费 $39,535，ACOS 27.1%<br>手动投放 27个活动，花费 $8,571，ACOS 59.0%</p>
+    </div>
+    <div class="card">
+      <h2>各国家站点表现</h2>
+      <div class="chart-wrap h240"><canvas id="chartCountry"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>产品线花费分布</h2>
+      <div class="chart-wrap h240"><canvas id="chartSpendFlow"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>托管目标类型分布</h2>
+      <div class="chart-wrap h240"><canvas id="chartGoals"></canvas></div>
+      <p class="note">「保持订单稳定」目标 ACOS 20.3%，「推动增长」目标 ACOS 49.9%</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 2：店铺对比 ═══ -->
+<div id="tab-stores" class="tab-content">
+  <div class="metrics">
+    <div class="metric good"><div class="label">HOMYHOME（欧洲）</div><div class="value">ACOS 24.3%</div><div class="delta">111个在投 · 95个AI · AI化 91.8%</div></div>
+    <div class="metric bad"><div class="label">HOMYHOME-NA（美国）</div><div class="value">ACOS 56.0%</div><div class="delta">22个在投 · 11个AI · AI化 63.3%</div></div>
+    <div class="metric warn"><div class="label">美国站AI化差距</div><div class="value">28.5%</div><div class="delta">比欧洲低 28.5 个百分点</div></div>
+  </div>
+
+  <div class="card">
+    <h2>店铺核心数据对比</h2>
+    <table>
+      <tr><th>指标</th><th>HOMYHOME（欧洲）</th><th>HOMYHOME-NA（美国）</th></tr>
+      <tr><td>在投活动数</td><td>111（AI: 95）</td><td>22（AI: 11）</td></tr>
+      <tr><td>AI托管花费占比</td><td style="color:var(--green);font-weight:700">91.8%</td><td style="color:var(--amber);font-weight:700">63.3%</td></tr>
+      <tr><td>广告花费</td><td>$31,908</td><td>$16,199</td></tr>
+      <tr><td>销售额</td><td style="font-weight:700">$131,189</td><td>$29,120</td></tr>
+      <tr><td>ACOS</td><td style="color:var(--green);font-weight:700">24.3%</td><td style="color:var(--red);font-weight:700">56.0%</td></tr>
+      <tr><td>ROAS</td><td style="font-weight:700">4.11</td><td>1.79</td></tr>
+      <tr><td>CPC</td><td>$0.62</td><td>$1.12</td></tr>
+      <tr><td>CVR</td><td>24.7%</td><td>23.5%</td></tr>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>欧洲各站点细分</h2>
+      <div class="chart-wrap h200"><canvas id="chartEuBreakdown"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>美国站分析</h2>
+      <div style="font-size:13px">
+        <p style="margin-bottom:10px">美国站 ACOS <strong style="color:var(--red)">56.0%</strong>，是欧洲站（24.3%）的 <strong>2.3 倍</strong>。</p>
+        <p style="margin-bottom:10px">两个明显差异：</p>
+        <p style="margin-bottom:6px">1. CPC $1.12，是欧洲 $0.62 的 1.8 倍</p>
+        <p style="margin-bottom:6px">2. AI托管花费占比 <strong>63.3%</strong>，欧洲已达 91.8%</p>
+        <p style="margin-bottom:6px">3. 手动活动 ACOS 59.0%，AI托管活动 ACOS 27.1%</p>
+        <div class="insight-warn insight" style="margin-top:12px">
+          <strong>建议：</strong>美国站花费最高的手动活动「色丁-Q-silk 根词A1-E1」（$3,839, ACOS 70.9%）和「色丁-Q-satin 根词A2-E1」可考虑接入AI托管，参考欧洲站已有的操作经验
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 3：广告架构 ═══ -->
+<div id="tab-architecture" class="tab-content">
+  <div class="grid2">
+    <div class="card">
+      <h2>投放类型效率对比：自动 vs 手动</h2>
+      <div class="chart-wrap h260"><canvas id="chartMatchType"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>关键数据</h2>
+      <table>
+        <tr><th>指标</th><th>自动投放（auto）</th><th>手动投放（manual）</th></tr>
+        <tr><td>活动数量</td><td>47</td><td>86</td></tr>
+        <tr><td>花费</td><td>$8,453</td><td>$39,653</td></tr>
+        <tr><td>花费占比</td><td>17.6%</td><td>82.4%</td></tr>
+        <tr><td>ACOS</td><td style="color:var(--green);font-weight:700">20.7%</td><td style="font-weight:700">33.2%</td></tr>
+        <tr><td>ROAS</td><td style="font-weight:700">4.83</td><td>3.01</td></tr>
+        <tr><td>CVR</td><td>20.4%</td><td>25.9%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>广告架构分析</h2>
+    <table>
+      <tr><th>维度</th><th>发现</th><th>说明</th></tr>
+      <tr>
+        <td>自动投放效率</td>
+        <td>ACOS 20.7%，ROAS 4.83</td>
+        <td>自动投放的ACOS比手动低12.5个百分点，ROAS高出60%。但自动投放仅占花费的17.6%，占比偏低</td>
+      </tr>
+      <tr>
+        <td>手动投放规模</td>
+        <td>ACOS 33.2%，但占花费82.4%</td>
+        <td>手动投放承担了主要花费，但其中包含大量精准/词组匹配的精细化活动，部分表现优异（如品牌推广类ROAS 8+），不能一刀切</td>
+      </tr>
+      <tr>
+        <td>自动 vs 手动的最优场景</td>
+        <td>自动适合跑量发现，手动适合精准收割</td>
+        <td>自动投放ROAS最高的活动集中在关联商品定位（ROAS 11.9）和同类商品定位；手动投放中品牌推广类ROAS最高（8.7）</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>建议方向</h2>
+    <table>
+      <tr><th>#</th><th>建议</th><th>优先级</th></tr>
+      <tr>
+        <td>1</td>
+        <td><strong>适当提高自动投放的花费占比</strong>：目前自动仅占17.6%，而ACOS（20.7%）显著优于手动（33.2%）。可在现有手动活动中挑选表现一般的，增设对应的自动投放版本进行对比测试</td>
+        <td><span class="tag tag-warn">P1</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>手动投放中区分精准词和词组的表现</strong>：手动投放内部差异很大，品牌推广类ROAS可达8以上，但根词大词类ACOS偏高。建议对手动活动按匹配类型进一步分层管理</td>
+        <td><span class="tag tag-warn">P1</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>关联商品定位和同类商品定位是高效类型</strong>：ROAS最高的活动集中在这两类，可考虑在更多产品线复制这种投放方式</td>
+        <td><span class="tag tag-amber">P2</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ TAB 4：活动诊断 ═══ -->
+<div id="tab-campaigns" class="tab-content">
+  <div class="metrics">
+    <div class="metric warn"><div class="label">预算瓶颈活动</div><div class="value">37个</div></div>
+    <div class="metric good"><div class="label">表现好应提额</div><div class="value">19个</div></div>
+    <div class="metric bad"><div class="label">表现差应先优化</div><div class="value">18个</div></div>
+    <div class="metric bad"><div class="label">ACOS远超目标</div><div class="value">8个</div></div>
+    <div class="metric good"><div class="label">ROAS标杆活动</div><div class="value">10个</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🟢 建议提额的活动（ACOS低于30%且日预算已花光）</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">以下活动ACOS表现较好，但日预算利用率超过85%，预算每天都在花光，导致AI频繁断流。适当提高日预算可以让这些活动持续在线、获取更多转化。</p>
+    <table>
+      <tr><th>活动名称</th><th>花费</th><th>销售额</th><th>ACOS</th><th>ROAS</th><th>日预算</th><th>利用率</th></tr>
+      <tr><td>Xnurta AI 色丁-4080-satin-B1-拉链款</td><td>$474</td><td>$2,574</td><td style="color:var(--green)">18.4%</td><td>5.4</td><td>$10</td><td style="font-weight:700">158%</td></tr>
+      <tr><td>Xnurta AI 色丁-4080-satin-B1</td><td>$427</td><td>$2,869</td><td style="color:var(--green)">14.9%</td><td>6.7</td><td>$15</td><td style="font-weight:700">95%</td></tr>
+      <tr><td>Xnurta AI 色丁-5075-satin A-B1</td><td>$608</td><td>$2,942</td><td style="color:var(--green)">20.7%</td><td>4.8</td><td>$15</td><td style="font-weight:700">135%</td></tr>
+      <tr><td>Xnurta AI 色丁-5075-silk A-B1</td><td>$656</td><td>$3,032</td><td style="color:var(--green)">21.6%</td><td>4.6</td><td>$20</td><td style="font-weight:700">109%</td></tr>
+      <tr><td>Xnurta AI 色丁-8080-satin 长尾A-B1</td><td>$281</td><td>$2,240</td><td style="color:var(--green)">12.6%</td><td>8.0</td><td>$10</td><td style="font-weight:700">94%</td></tr>
+      <tr><td>Xnurta AI 色丁-4070-auto</td><td>$385</td><td>$1,531</td><td style="color:var(--green)">25.1%</td><td>4.0</td><td>$6</td><td style="font-weight:700">214%</td></tr>
+      <tr><td>Xnurta AI 色丁-8080-AUTO-拉链款-紧密</td><td>$332</td><td>$1,628</td><td style="color:var(--green)">20.4%</td><td>4.9</td><td>$8</td><td style="font-weight:700">138%</td></tr>
+      <tr><td>Xnurta AI 色丁-5070发圈-Auto-紧密</td><td>$316</td><td>$1,851</td><td style="color:var(--green)">17.1%</td><td>5.9</td><td>$10</td><td style="font-weight:700">105%</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🔴 应先优化再考虑提额的活动（ACOS高于30%且日预算花光）</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">以下活动日预算同样花光，但ACOS偏高。这种情况下提高预算可能放大亏损，建议先检查关键词策略和出价水平，等ACOS改善后再考虑预算调整。</p>
+    <table>
+      <tr><th>活动名称</th><th>花费</th><th>销售额</th><th>ACOS</th><th>日预算</th><th>利用率</th></tr>
+      <tr><td>纯色件套-135-4-auto-主力-紧密</td><td>$207</td><td>$358</td><td style="color:var(--red)">57.7%</td><td>$5</td><td style="font-weight:700">138%</td></tr>
+      <tr><td>Xnurta AI 色丁-4080-seiden A-B1精准</td><td>$1,719</td><td>$3,369</td><td style="color:var(--red)">51.0%</td><td>$50</td><td style="font-weight:700">115%</td></tr>
+      <tr><td>Xnurta AI 色丁-Q-satin 根词B1-E1</td><td>$922</td><td>$1,704</td><td style="color:var(--red)">54.1%</td><td>$30</td><td style="font-weight:700">102%</td></tr>
+      <tr><td>Xnurta AI 龟背毯-根词 B1-E</td><td>$263</td><td>$528</td><td style="color:var(--red)">49.9%</td><td>$10</td><td style="font-weight:700">88%</td></tr>
+      <tr><td>Xnurta AI 色丁-6060-Auto-彩色</td><td>$500</td><td>$1,498</td><td style="color:var(--red)">33.4%</td><td>$15</td><td style="font-weight:700">111%</td></tr>
+      <tr><td>Xnurta AI 色丁-8080-seiden 长尾A-B1</td><td>$861</td><td>$2,552</td><td style="color:var(--red)">33.8%</td><td>$25</td><td style="font-weight:700">115%</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>实际ACOS与目标偏差较大的活动</h2>
+    <table>
+      <tr><th>活动名称</th><th>花费</th><th>实际ACOS</th><th>目标ACOS</th><th>差距</th><th>店铺</th></tr>
+      <tr><td>Xnurta AI 磨毛布-4040-AUTO</td><td>$522</td><td style="color:var(--red)">57%</td><td>29%</td><td style="color:var(--red)">+28%</td><td>HOMYHOME</td></tr>
+      <tr><td>Xnurta AI 龟背毯-根词 B1-E</td><td>$263</td><td style="color:var(--red)">50%</td><td>23%</td><td style="color:var(--red)">+27%</td><td>HOMYHOME</td></tr>
+      <tr><td>Xnurta AI SD_AUDT 本品购买再营销</td><td>$79</td><td style="color:var(--red)">35%</td><td>15%</td><td style="color:var(--red)">+21%</td><td>HOMYHOME</td></tr>
+      <tr><td>Xnurta AI 龟背毯-根词A-E1</td><td>$980</td><td style="color:var(--red)">57%</td><td>40%</td><td style="color:var(--red)">+17%</td><td>HOMYHOME</td></tr>
+      <tr><td>Xnurta AI 磨毛布-40x145-AUTO-主力1-宽泛</td><td>$470</td><td style="color:var(--red)">25%</td><td>9%</td><td style="color:var(--red)">+17%</td><td>HOMYHOME</td></tr>
+    </table>
+    <p class="note">这些活动的实际ACOS与目标差距较大，建议检查：1）目标ACOS是否设置过低；2）关键词/竞价是否需要调整</p>
+  </div>
+</div>
+
+<!-- ═══ TAB 5：AI洞察 ═══ -->
+<div id="tab-insights" class="tab-content">
+  <div class="insight insight-good">
+    <strong>AI人格类型与表现</strong><br>
+    当前在投的AI托管活动中，人格3（152个活动）ACOS <strong>21.9%</strong>，人格4（47个活动）ACOS <strong>38.2%</strong>。两种人格的表现存在明显差异。建议检查人格4活动的配置是否适合当前产品阶段，如有需要可考虑切换至人格3进行测试对比。
+  </div>
+  <div class="insight insight-warn">
+    <strong>美国站AI托管覆盖</strong><br>
+    美国站22个在投活动中，AI托管花费占比 <strong>63.3%</strong>，低于欧洲站的 91.8%。手动活动 ACOS 59.0%，AI托管活动 ACOS 27.1%。美国站花费最高的手动活动「色丁-Q-silk 根词A1-E1」（$3,839, ACOS 70.9%）和「色丁-Q-satin 根词A2-E1」可优先考虑接入AI托管。
+  </div>
+  <div class="insight">
+    <strong>托管目标「推动增长」的活动需要关注</strong><br>
+    当前83个活动设置了「推动增长」目标，整体ACOS为 <strong>49.9%</strong>。「推动增长」目标通常用于新品推广或冲排名阶段，可以接受较高的ACOS。但如果部分活动已运行较长时间、ACOS持续偏高且销量趋于平缓，说明可能已经过了合适的高投入阶段，建议逐批评估这些活动是否需要调整目标，或者优化关键词和出价策略。
+  </div>
+  <div class="insight">
+    <strong>自动投放类型的效率表现</strong><br>
+    自动投放（auto）活动的ACOS为 <strong>20.7%</strong>，明显低于手动投放的 33.2%，但自动投放仅占在投花费的 17.6%。自动投放的高ROAS活动集中在关联商品定位和同类商品定位场景（ROAS 8-12），建议在更多产品线尝试这类投放方式。
+  </div>
+  <div class="insight insight-good">
+    <strong>德国站预算利用率偏高</strong><br>
+    德国站是花费最高的站点（$22,487），ACOS 24.9%表现稳定。但19个表现较好（ACOS低于30%）的活动日预算利用率超过85%，预算每天基本花光，活动存在断流情况。建议对其中ACOS表现好的活动适当提高日预算。
+  </div>
+  <div class="insight">
+    <strong>高ROAS活动的共性</strong><br>
+    当前ROAS最高的几个活动集中在「关联商品定位」（ROAS 11.9）、「品牌推广」（ROAS 8.7）和「同类商品定位」（ROAS 6.9）等投放场景。可以分析这些高效活动的投放方式、关键词和竞价设置，将有效做法推广到同产品线的其他活动中。
+  </div>
+</div>
+
+<!-- ═══ TAB 6：搜索词 ═══ -->
+<div id="tab-searchterms" class="tab-content">
+  <div class="metrics">
+    <div class="metric"><div class="label">总搜索词数</div><div class="value">19,490</div></div>
+    <div class="metric good"><div class="label">EXACT 匹配</div><div class="value">ACOS 50.7%</div><div class="delta">58个词 · 花费$18,655</div></div>
+    <div class="metric good"><div class="label">BROAD 匹配</div><div class="value">ACOS 27.6%</div><div class="delta">9,303个词 · 花费$18,397</div></div>
+    <div class="metric good"><div class="label">PHRASE 匹配</div><div class="value">ACOS 17.7%</div><div class="delta">852个词 · 花费$2,333</div></div>
+    <div class="metric good"><div class="label">SUBSTITUTES</div><div class="value">ACOS 17.6%</div><div class="delta">3,824个词 · 花费$3,360</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>匹配类型效率对比</h2>
+      <div class="chart-wrap h240"><canvas id="chartMatchTypeSt"></canvas></div>
+      <p class="note">EXACT 精准匹配花费与 BROAD 相当，但 ACOS 高出近一倍。PHRASE 和 SUBSTITUTES 效率最优但占比最低</p>
+    </div>
+    <div class="card">
+      <h2>EXACT vs BROAD：花费相当，效率差一倍</h2>
+      <div class="chart-wrap h240"><canvas id="chartExactVsBroad"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔴 美国站高花费低效搜索词</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">以下搜索词是美国站 ACOS 偏高的主要来源，四个词共计花费 <strong>$9,712</strong>，占美国站总花费约 60%</p>
+    <table>
+      <tr><th>搜索词</th><th>匹配类型</th><th>花费</th><th>销售额</th><th>ACOS</th><th>订单</th><th>CPC</th></tr>
+      <tr><td>satin pillowcase</td><td><span class="tag tag-bad">EXACT</span></td><td>$4,768</td><td>$7,576</td><td style="color:var(--red);font-weight:700">62.9%</td><td>988</td><td>$1.37</td></tr>
+      <tr><td>silk pillow cases</td><td><span class="tag tag-bad">EXACT</span></td><td>$3,506</td><td>$4,966</td><td style="color:var(--red);font-weight:700">70.6%</td><td>659</td><td>$1.27</td></tr>
+      <tr><td>satin pillow cases 2 pack</td><td><span class="tag tag-bad">EXACT</span></td><td>$911</td><td>$1,697</td><td style="color:var(--red);font-weight:700">53.7%</td><td>213</td><td>$1.33</td></tr>
+      <tr><td>silk pillow cases 2 pack</td><td><span class="tag tag-bad">EXACT</span></td><td>$527</td><td>$794</td><td style="color:var(--red);font-weight:700">66.4%</td><td>107</td><td>$1.26</td></tr>
+      <tr><td>satin pillowcases</td><td><span class="tag tag-bad">EXACT</span></td><td>$398</td><td>$534</td><td style="color:var(--red);font-weight:700">74.6%</td><td>64</td><td>$1.37</td></tr>
+      <tr><td>satin pillow case</td><td><span class="tag tag-bad">EXACT</span></td><td>$466</td><td>$743</td><td style="color:var(--red);font-weight:700">62.7%</td><td>97</td><td>$1.34</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🟢 欧洲站高效率搜索词（花费>$200）</h2>
+    <table>
+      <tr><th>搜索词</th><th>匹配类型</th><th>店铺</th><th>花费</th><th>ACOS</th><th>ROAS</th><th>订单</th></tr>
+      <tr><td>satin kissenbezug</td><td><span class="tag tag-good">PHRASE</span></td><td>HOMYHOME</td><td>$208</td><td style="color:var(--green)">12.6%</td><td>7.9</td><td>168</td></tr>
+      <tr><td>satin kissenbezug</td><td><span class="tag tag-good">BROAD</span></td><td>HOMYHOME</td><td>$232</td><td style="color:var(--green)">14.3%</td><td>7.0</td><td>169</td></tr>
+      <tr><td>silk pillowcase</td><td><span class="tag tag-good">EXACT</span></td><td>HOMYHOME</td><td>$296</td><td style="color:var(--green)">22.9%</td><td>4.4</td><td>155</td></tr>
+      <tr><td>seitenschläferkissen bezug</td><td><span class="tag tag-good">EXACT</span></td><td>HOMYHOME</td><td>$288</td><td style="color:var(--green)">24.4%</td><td>4.1</td><td>102</td></tr>
+      <tr><td>kopfkissenbezug 40x80</td><td><span class="tag tag-good">EXACT</span></td><td>HOMYHOME</td><td>$434</td><td style="color:var(--green)">29.2%</td><td>3.4</td><td>162</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>⚠ 同词不同匹配类型的内耗</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">同一个搜索词被多个匹配类型同时投放，但效率差异明显。以下两组是典型：</p>
+    <table>
+      <tr><th>搜索词</th><th>匹配类型</th><th>花费</th><th>ACOS</th><th>说明</th></tr>
+      <tr><td>satin pillowcase</td><td>EXACT</td><td>$4,768</td><td style="color:var(--red)">62.9%</td><td rowspan="2" style="font-size:12px;color:var(--muted)">同一搜索词，PHRASE 匹配的 ACOS 远低于 EXACT，可能存在竞价重叠</td></tr>
+      <tr><td>satin pillowcase</td><td>PHRASE</td><td>$1,139</td><td style="color:var(--green)">22.4%</td></tr>
+      <tr style="background:#f9fafb"><td colspan="5"></td></tr>
+      <tr><td>seidenkissenbezug</td><td>BROAD</td><td>$1,643</td><td style="color:var(--red)">51.1%</td><td rowspan="2" style="font-size:12px;color:var(--muted)">BROAD 匹配花费是另一条 BROAD 的 6 倍，ACOS 也更高</td></tr>
+      <tr><td>seidenkissenbezug</td><td>BROAD</td><td>$259</td><td style="color:var(--green)">27.4%</td></tr>
+    </table>
+    <p class="note">建议：同词出现多个匹配类型时，保留效率最高的，对低效匹配类型设置否定关键词或降低出价，避免内部竞争</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>洞察</h2>
+      <div class="insight">
+        <strong>EXACT 精准匹配花费高但效率最低</strong><br>
+        EXACT 仅 58 个搜索词，花费 $18,655，ACOS 50.7%。高效的 PHRASE（ACOS 17.7%）和 SUBSTITUTES（17.6%）加起来花费仅 $5,693。如果 EXACT 的高花费活动能部分转化为 PHRASE/BROAD 匹配，预计 ACOS 可明显下降。
+      </div>
+      <div class="insight insight-warn">
+        <strong>美国站的高花费词集中在 EXACT 匹配</strong><br>
+        美国站花费 Top 6 搜索词全部是 EXACT 匹配，ACOS 在 53%-75% 之间。这些词的花费合计 $10,577，占美国站总花费约 65%。建议优先检查这些 EXACT 词的出价水平和竞价策略。
+      </div>
+      <div class="insight insight-good">
+        <strong>同词不同匹配类型存在效率差异</strong><br>
+        例如 "satin pillowcase" 在 EXACT 匹配下 ACOS 62.9%，在 PHRASE 匹配下仅 22.4%。如果低效的 EXACT 匹配能被 PHRASE 替代或降低出价，该词的广告效率可大幅改善。
+      </div>
+    </div>
+    <div class="card">
+      <h2>高效搜索词 TOP 10（花费>$200, ROAS 最高）</h2>
+      <div class="chart-wrap h300"><canvas id="chartTopSt"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Powered by Xnurta AI — AI 零售媒体管理平台 | Amazon Ads Advanced Partner</p>
+  <p style="margin-top:4px">数据来源：Amazon Advertising API · 2026.04.09–2026.05.08 · 在投活动 133 个（AI 106 / 手动 27）</p>
+</div>
+</div>
+
+<script>
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif";
+Chart.defaults.font.size = 11;
+
+new Chart(document.getElementById('chartAiVsManual'), {
+  type: 'doughnut',
+  data: {
+    labels: ['AI托管 82.2%', '手动投放 17.8%'],
+    datasets: [{ data: [39535, 8571], backgroundColor: ['#7c3aed','#d1d5db'], borderWidth: 0 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' }, tooltip:{ callbacks:{ label: ctx => ctx.label + ' $' + ctx.raw.toLocaleString() } } }
+  }
+});
+
+new Chart(document.getElementById('chartCountry'), {
+  type: 'bar',
+  data: {
+    labels: ['DE','US','UK','FR','ES','IT'],
+    datasets: [
+      { label: '花费 $', data: [22487,16373,5396,3647,937,132], backgroundColor: '#93c5fd', yAxisID:'y' },
+      { label: 'ACOS %', data: [24.9,55.9,21.5,25.8,25.0,15.7], borderColor:'#dc2626', borderWidth:2, type:'line', tension:0.3, pointRadius:5, pointBackgroundColor:'#dc2626', yAxisID:'y1' }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' } },
+    scales: { y:{ position:'left' }, y1:{ position:'right', min:0, max:80, grid:{display:false} } }
+  }
+});
+
+new Chart(document.getElementById('chartSpendFlow'), {
+  type: 'bar',
+  data: {
+    labels: ['枕套-色丁','磨毛布枕套','色丁发圈','色丁枕套','色丁拉链款','龟背毯','色丁无发圈','纯色件套','其他'],
+    datasets: [{ label: '花费 $', data: [15692,8901,7616,5396,2804,2737,2111,1164,2551], backgroundColor: ['#ef4444','#22c55e','#3b82f6','#22c55e','#22c55e','#f59e0b','#f59e0b','#ef4444','#d1d5db'] }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins: { legend:{ display:false } } }
+});
+
+new Chart(document.getElementById('chartGoals'), {
+  type: 'bar',
+  data: {
+    labels: ['保持订单稳定','推动增长','活动冲量','未设置'],
+    datasets: [
+      { label: '花费 $', data: [20502,17989,3764,6717], backgroundColor: '#93c5fd', yAxisID:'y' },
+      { label: 'ACOS %', data: [20.3,49.9,25.8,57.8], borderColor:'#dc2626', borderWidth:2, type:'line', tension:0.3, pointRadius:5, pointBackgroundColor:'#dc2626', yAxisID:'y1' }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' } },
+    scales: { y:{ position:'left' }, y1:{ position:'right', min:0, max:80, grid:{display:false} } }
+  }
+});
+
+new Chart(document.getElementById('chartEuBreakdown'), {
+  type: 'bar',
+  data: {
+    labels: ['DE','UK','FR','ES','IT'],
+    datasets: [
+      { label: '花费 $', data: [22487,5396,3647,937,132], backgroundColor: '#93c5fd', yAxisID:'y' },
+      { label: 'ACOS %', data: [24.9,21.5,25.8,25.0,15.7], borderColor:'#22c55e', borderWidth:2, type:'line', tension:0.3, pointRadius:5, pointBackgroundColor:'#22c55e', yAxisID:'y1' }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' } },
+    scales: { y:{ position:'left' }, y1:{ position:'right', min:0, max:40, grid:{display:false} } }
+  }
+});
+
+new Chart(document.getElementById('chartMatchType'), {
+  type: 'bar',
+  data: {
+    labels: ['ACOS %','ROAS','CVR %'],
+    datasets: [
+      { label: '自动投放（auto）', data: [20.7,4.83,20.4], backgroundColor: '#22c55e', borderColor: '#059669', borderWidth: 1 },
+      { label: '手动投放（manual）', data: [33.2,3.01,25.9], backgroundColor: '#93c5fd', borderColor: '#2563eb', borderWidth: 1 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' } },
+    scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.06)' } } }
+  }
+});
+
+// --- Search Terms Charts ---
+new Chart(document.getElementById('chartMatchTypeSt'), {
+  type: 'bar',
+  data: {
+    labels: ['EXACT','BROAD','SUBSTITUTES','CLOSE-MATCH','PHRASE','LOOSE-MATCH'],
+    datasets: [
+      { label: '花费 $', data: [18655,18397,3360,3158,2333,2086], backgroundColor: ['#ef4444','#f59e0b','#22c55e','#3b82f6','#22c55e','#93c5fd'], yAxisID:'y' },
+      { label: 'ACOS %', data: [50.7,27.6,17.6,25.2,17.7,21.9], borderColor:'#dc2626', borderWidth:2, type:'line', tension:0.3, pointRadius:5, pointBackgroundColor:'#dc2626', yAxisID:'y1' }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' } },
+    scales: { y:{ position:'left' }, y1:{ position:'right', min:0, max:70, grid:{display:false} } }
+  }
+});
+
+new Chart(document.getElementById('chartExactVsBroad'), {
+  type: 'bar',
+  data: {
+    labels: ['花费占比','ACOS %','ROAS'],
+    datasets: [
+      { label: 'EXACT', data: [38.4,50.7,1.97], backgroundColor: '#ef4444', borderColor: '#dc2626', borderWidth:1 },
+      { label: 'BROAD', data: [37.8,27.6,3.63], backgroundColor: '#f59e0b', borderColor: '#d97706', borderWidth:1 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{ position:'bottom' } }
+  }
+});
+
+new Chart(document.getElementById('chartTopSt'), {
+  type: 'bar',
+  data: {
+    labels: ['satin kissenbezug\n(PHRASE)','satin kissenbezug\n(BROAD)','satin pillowcase\n(PHRASE)','silk pillowcase\n(EXACT EU)','silk pillowcase\n(EXACT EU)','seitenschläfer\nkissen','kissenbezug\n80x80','body pillow\npillowcase','seidenkissen\nbezug','kopfkissen\nbezug'],
+    datasets: [{ label: 'ROAS', data: [7.9,7.0,4.5,4.4,4.2,4.1,3.9,3.9,3.7,3.4], backgroundColor: '#22c55e' }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins: { legend:{ display:false } },
+    scales: { x: { title:{ display:true, text:'ROAS（越高越好）', font:{ size:11 } } } }
+  }
+});
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  var map = { overview:0, stores:1, architecture:2, campaigns:3, insights:4, searchterms:5 };
+  document.querySelectorAll('.tab')[map[name]].classList.add('active');
+}
+</script>
+</body>
+</html>
