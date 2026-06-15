@@ -360,43 +360,43 @@ body {
   <div class="kpi-grid" id="kpiGrid">
     <div class="kpi-card gold fade-in" data-country="all">
       <div class="kpi-label">广告花费</div>
-      <div class="kpi-value" data-target="185752" data-prefix="£" data-decimals="0">£0</div>
+      <div class="kpi-value" data-target="185752" data-prefix="£" data-decimals="0">£185,752</div>
       <div class="kpi-sub">Total Ad Spend</div>
     </div>
     <div class="kpi-card gold fade-in" data-country="all">
       <div class="kpi-label">广告销售额</div>
-      <div class="kpi-value" data-target="798883" data-prefix="£" data-decimals="0">£0</div>
+      <div class="kpi-value" data-target="798883" data-prefix="£" data-decimals="0">£798,883</div>
       <div class="kpi-sub">Total Ad Sales</div>
     </div>
     <div class="kpi-card navy fade-in" data-country="all">
       <div class="kpi-label">总订单</div>
-      <div class="kpi-value" data-target="7830" data-prefix="" data-decimals="0">0</div>
+      <div class="kpi-value" data-target="7830" data-prefix="" data-decimals="0">7,830</div>
       <div class="kpi-sub">Total Orders</div>
     </div>
     <div class="kpi-card amber fade-in" data-country="all">
       <div class="kpi-label">整体 ACOS</div>
-      <div class="kpi-value" data-target="23.25" data-prefix="" data-decimals="2" data-suffix="%">0%</div>
+      <div class="kpi-value" data-target="23.25" data-prefix="" data-decimals="2" data-suffix="%">23.25%</div>
       <div class="kpi-sub">Target &lt; 22%</div>
     </div>
     <div class="kpi-card green fade-in" data-country="all">
       <div class="kpi-label">ROAS</div>
-      <div class="kpi-value" data-target="4.30" data-prefix="" data-decimals="2" data-suffix="x">0x</div>
+      <div class="kpi-value" data-target="4.30" data-prefix="" data-decimals="2" data-suffix="x">4.30x</div>
       <div class="kpi-sub">Return on Ad Spend</div>
     </div>
     <div class="kpi-card blue fade-in" data-country="all">
       <div class="kpi-label">平均 CPC</div>
-      <div class="kpi-value" data-target="1.22" data-prefix="£" data-decimals="2">£0.00</div>
+      <div class="kpi-value" data-target="1.22" data-prefix="£" data-decimals="2">£1.22</div>
       <div class="kpi-sub">Cost Per Click</div>
     </div>
     <div class="kpi-card green fade-in" data-country="all">
       <div class="kpi-label">转化率 CVR</div>
-      <div class="kpi-value" data-target="5.15" data-prefix="" data-decimals="2" data-suffix="%">0%</div>
+      <div class="kpi-value" data-target="5.15" data-prefix="" data-decimals="2" data-suffix="%">5.15%</div>
       <div class="kpi-sub">Conversion Rate</div>
     </div>
     <div class="kpi-card navy fade-in" data-country="all">
       <div class="kpi-label">活跃 Campaign</div>
-      <div class="kpi-value" data-target="95" data-prefix="" data-decimals="0" data-sub="/626">95/626</div>
-      <div class="kpi-sub" style="color: var(--red);">84.8%已暂停</div>
+      <div class="kpi-value" data-target="95" data-prefix="" data-decimals="0" data-sub="/626">95</div>
+      <div class="kpi-sub" style="color: var(--red);">/626 84.8%已暂停</div>
     </div>
   </div>
 
@@ -1122,9 +1122,18 @@ body {
     fadeObserver.observe(card);
   });
 
-  // Trigger visible ones immediately
+  // Trigger visible counters immediately and on DOM ready
   triggerVisibleCounters();
-  // Check if any .fade-in is already in viewport
+  window.addEventListener('load', function() { setTimeout(triggerVisibleCounters, 300); });
+  // Fallback: if animation didn't fire, show correct values after 2s
+  setTimeout(function() {
+    document.querySelectorAll('.kpi-value[data-target]').forEach(function(el) {
+      if (el.textContent === '£0' || el.textContent === '0' || el.textContent === '0%' || el.textContent === '0x' || el.textContent === '£0.00') {
+        animateCounter(el);
+      }
+    });
+  }, 2000);
+  // Ensure all .fade-in elements in viewport are visible
   fadeElements.forEach(function(el) {
     var rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0) {
