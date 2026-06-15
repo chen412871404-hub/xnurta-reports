@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ningbo Blue Fins – Amazon EU Advertising Performance Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --navy: #0F172A;
+  --navy-light: #1E293B;
+  --navy-mid: #334155;
+  --gold: #CA8A04;
+  --gold-light: #EAB308;
+  --gold-pale: #FEF3C7;
+  --gray-bg: #F1F5F9;
+  --gray-card: #FFFFFF;
+  --gray-border: #E2E8F0;
+  --gray-text: #64748B;
+  --gray-dark: #475569;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #94A3B8;
+  --green: #059669;
+  --green-bg: #ECFDF5;
+  --red: #DC2626;
+  --red-bg: #FEF2F2;
+  --amber: #D97706;
+  --amber-bg: #FFFBEB;
+  --blue: #2563EB;
+  --blue-bg: #EFF6FF;
+  --purple: #7C3AED;
+  --purple-bg: #F5F3FF;
+  --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+  --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+  --shadow-lg: 0 8px 24px rgba(15,23,42,0.12);
+  --shadow-xl: 0 16px 48px rgba(15,23,42,0.16);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--gray-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== CONTAINER ===== */
+.container { max-width: 1320px; margin: 0 auto; padding: 24px 32px; }
+
+/* ===== HEADER ===== */
+.report-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, var(--navy-mid) 100%);
+  color: #FFF;
+  padding: 36px 40px 40px;
+  border-radius: var(--radius-xl);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.report-header::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(202,138,4,0.12) 0%, transparent 70%);
+}
+.report-header::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: 30%;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(202,138,4,0.08) 0%, transparent 70%);
+}
+.header-content { position: relative; z-index: 1; }
+.header-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 10px;
+}
+.header-title {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.header-subtitle {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  margin-bottom: 18px;
+}
+.header-meta {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
+.header-meta span { display: flex; align-items: center; gap: 6px; }
+.header-meta svg { opacity: 0.6; }
+
+/* ===== TAB NAVIGATION ===== */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  background: var(--gray-card);
+  border-radius: var(--radius-lg);
+  padding: 5px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-btn {
+  flex: 1;
+  min-width: 130px;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: var(--gray-dark);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.tab-btn:hover { background: rgba(15,23,42,0.04); color: var(--navy); }
+.tab-btn.active {
+  background: var(--navy);
+  color: #FFF;
+  box-shadow: var(--shadow-md);
+}
+.tab-btn svg { flex-shrink: 0; }
+.tab-count {
+  font-size: 11px;
+  background: rgba(202,138,4,0.2);
+  color: var(--gold);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.tab-btn.active .tab-count {
+  background: rgba(234,179,8,0.25);
+  color: var(--gold-light);
+}
+
+/* ===== TAB CONTENT ===== */
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.35s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== COUNTRY FILTER CHIPS ===== */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.filter-chip {
+  padding: 7px 16px;
+  border: 1.5px solid var(--gray-border);
+  border-radius: 20px;
+  background: var(--gray-card);
+  color: var(--gray-dark);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-body);
+}
+.filter-chip:hover { border-color: var(--navy-mid); color: var(--navy); }
+.filter-chip.active {
+  background: var(--navy);
+  color: #FFF;
+  border-color: var(--navy);
+}
+
+/* ===== KPI CARDS ===== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--gray-card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-border);
+  transition: all var(--transition);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.kpi-card:hover::after { opacity: 1; }
+.kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gray-text);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.kpi-sub {
+  font-size: 12px;
+  color: var(--gray-dark);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.kpi-trend-up { color: var(--green); font-weight: 600; }
+.kpi-trend-down { color: var(--red); font-weight: 600; }
+.kpi-trend-warn { color: var(--amber); font-weight: 600; }
+
+/* ===== SECTION CARDS ===== */
+.section-card {
+  background: var(--gray-card);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-border);
+  margin-bottom: 20px;
+  transition: all var(--transition);
+}
+.section-card:hover { box-shadow: var(--shadow-md); }
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title svg { flex-shrink: 0; }
+.section-subtitle {
+  font-size: 13px;
+  color: var(--gray-text);
+  margin-bottom: 18px;
+}
+
+/* ===== INSIGHT CARDS ===== */
+.insight-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-border);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+.insight-card:hover { box-shadow: var(--shadow-md); }
+.insight-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--gray-card);
+  transition: background var(--transition);
+}
+.insight-header:hover { background: #F8FAFC; }
+.insight-header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+.insight-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-red { background: var(--red-bg); color: var(--red); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); }
+.badge-blue { background: var(--blue-bg); color: var(--blue); }
+.badge-purple { background: var(--purple-bg); color: var(--purple); }
+.insight-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.3;
+}
+.insight-chevron {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--gray-bg);
+  transition: transform var(--transition);
+  flex-shrink: 0;
+}
+.insight-card.open .insight-chevron { transform: rotate(180deg); background: var(--gold-pale); }
+.insight-body {
+  display: none;
+  padding: 0 20px 20px;
+  background: #FAFBFC;
+  border-top: 1px solid var(--gray-border);
+}
+.insight-card.open .insight-body { display: block; }
+
+/* ===== ALERT BANNER ===== */
+.alert-banner {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.alert-warning { background: var(--amber-bg); border: 1px solid #FDE68A; color: #92400E; }
+.alert-info { background: var(--blue-bg); border: 1px solid #BFDBFE; color: #1E40AF; }
+.alert-success { background: var(--green-bg); border: 1px solid #A7F3D0; color: #065F46; }
+.alert-danger { background: var(--red-bg); border: 1px solid #FECACA; color: #991B1B; }
+.alert-banner svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ===== TABLES ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table thead th {
+  background: var(--navy);
+  color: #FFF;
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-align: left;
+  white-space: nowrap;
+}
+.data-table thead th:first-child { border-radius: 8px 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 8px 0 0; }
+.data-table tbody td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--gray-border);
+  color: var(--text-secondary);
+}
+.data-table tbody tr:nth-child(even) td { background: #F8FAFC; }
+.data-table tbody tr:hover td { background: #F1F5F9; }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+.data-table .highlight { font-weight: 600; color: var(--navy); }
+.data-table .pos { color: var(--green); font-weight: 600; }
+.data-table .neg { color: var(--red); font-weight: 600; }
+.data-table .warn { color: var(--amber); font-weight: 600; }
+.bar-cell { position: relative; }
+.bar-fill {
+  position: absolute;
+  left: 0; top: 50%; transform: translateY(-50%);
+  height: 22px;
+  border-radius: 4px;
+  opacity: 0.25;
+  z-index: 0;
+}
+.bar-fill.gold { background: var(--gold); }
+.bar-fill.navy { background: var(--navy); }
+.bar-fill.green { background: var(--green); }
+.bar-fill.red { background: var(--red); }
+.bar-value { position: relative; z-index: 1; }
+
+/* ===== TIMELINE ===== */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 11px; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--gray-border);
+}
+.timeline-item { position: relative; margin-bottom: 28px; }
+.timeline-dot {
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  background: var(--gray-card);
+  z-index: 1;
+}
+.timeline-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.timeline-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.timeline-milestones {
+  list-style: none;
+  padding: 0;
+}
+.timeline-milestones li {
+  padding: 7px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border-bottom: 1px dotted var(--gray-border);
+}
+.timeline-milestones li:last-child { border-bottom: none; }
+.timeline-milestones .milestone-check {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  background: var(--green-bg);
+  color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+/* ===== OPPORTUNITY CARDS ===== */
+.opp-card {
+  background: var(--gray-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-border);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+.opp-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.opp-number {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--gold);
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: -8px;
+}
+.opp-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.opp-metrics { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.opp-metric {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 14px;
+  font-weight: 600;
+}
+.opp-metric.good { background: var(--green-bg); color: var(--green); }
+.opp-metric.warn { background: var(--amber-bg); color: var(--amber); }
+.opp-metric.info { background: var(--blue-bg); color: var(--blue); }
+.opp-solution {
+  background: var(--blue-bg);
+  border-left: 3px solid var(--blue);
+  padding: 12px 16px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px;
+  color: #1E40AF;
+  line-height: 1.5;
+}
+
+/* ===== TWO COLUMN ===== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* ===== TAG ===== */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-gold { background: var(--gold-pale); color: #92400E; }
+.tag-blue { background: var(--blue-bg); color: #1E40AF; }
+.tag-green { background: var(--green-bg); color: #065F46; }
+.tag-red { background: var(--red-bg); color: #991B1B; }
+
+/* ===== DIVIDER ===== */
+.divider {
+  height: 1px;
+  background: var(--gray-border);
+  margin: 20px 0;
+}
+
+/* ===== XNURTA BOX ===== */
+.xnurta-box {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #FFF;
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-top: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.xnurta-box::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(202,138,4,0.2) 0%, transparent 70%);
+}
+.xnurta-box-content { position: relative; z-index: 1; }
+.xnurta-box h3 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--gold-light);
+}
+.xnurta-box p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.85); }
+
+/* ===== FOOTER ===== */
+.report-footer {
+  text-align: center;
+  padding: 24px;
+  margin-top: 32px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--gray-border);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .container { padding: 12px 16px; }
+  .report-header { padding: 24px 20px; }
+  .header-title { font-size: 24px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .tab-nav { gap: 2px; }
+  .tab-btn { padding: 10px 14px; font-size: 12px; min-width: auto; }
+  .data-table { font-size: 11px; }
+  .data-table thead th, .data-table tbody td { padding: 8px 10px; }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  body { background: #FFF; }
+  .tab-content { display: block !important; }
+  .tab-nav { display: none; }
+  .insight-body { display: block !important; }
+  .section-card, .kpi-card, .insight-card, .opp-card { break-inside: avoid; box-shadow: none; }
+}
+
+/* ===== UTILITY ===== */
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.font-mono { font-family: 'SF Mono', 'Fira Code', monospace; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<header class="report-header">
+  <div class="header-content">
+    <div class="header-eyebrow">Amazon Advertising Performance Report</div>
+    <h1 class="header-title">Ningbo Blue Fins &mdash; FOTING Brand<br>EU Marketplace Intelligence</h1>
+    <p class="header-subtitle">Pressure Washers &middot; Water Pumps &middot; Pool Cleaners &middot; DE / UK / FR / ES</p>
+    <div class="header-meta">
+      <span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Report Period: Last 60 Days
+      </span>
+      <span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/></svg>
+        Generated: June 2026
+      </span>
+      <span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        4 Marketplaces &middot; 3 Product Lines
+      </span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== TAB NAVIGATION ===== -->
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="overview">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    总览 <span class="tab-count">8</span>
+  </button>
+  <button class="tab-btn" data-tab="diagnosis">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    效率诊断 <span class="tab-count">6</span>
+  </button>
+  <button class="tab-btn" data-tab="deepdive">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    站点深度 <span class="tab-count">4</span>
+  </button>
+  <button class="tab-btn" data-tab="growth">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+    增长机会 <span class="tab-count">7</span>
+  </button>
+  <button class="tab-btn" data-tab="roadmap">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    行动路线图
+  </button>
+</nav>
+
+<!-- ================================================================ -->
+<!-- TAB 1: 总览 -->
+<!-- ================================================================ -->
+<section class="tab-content active" id="tab-overview">
+
+  <!-- Country Filter -->
+  <div class="filter-bar">
+    <span class="filter-label">市场筛选</span>
+    <button class="filter-chip active" data-filter="all">All Markets</button>
+    <button class="filter-chip" data-filter="DE">DE 德国</button>
+    <button class="filter-chip" data-filter="UK">UK 英国</button>
+    <button class="filter-chip" data-filter="FR">FR 法国</button>
+    <button class="filter-chip" data-filter="ES">ES 西班牙</button>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Spend</div>
+      <div class="kpi-value">&pound;185,752</div>
+      <div class="kpi-sub">60-day advertising investment</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Sales</div>
+      <div class="kpi-value">&pound;798,883</div>
+      <div class="kpi-sub"><span class="kpi-trend-up">&#9650; Strong revenue base</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Orders</div>
+      <div class="kpi-value">7,830</div>
+      <div class="kpi-sub">Across 4 marketplaces</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ACOS</div>
+      <div class="kpi-value">23.25%</div>
+      <div class="kpi-sub"><span class="kpi-trend-warn">&#9679; Above 20% benchmark</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ROAS</div>
+      <div class="kpi-value">4.30x</div>
+      <div class="kpi-sub">Every &pound;1 spent returns &pound;4.30</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg CPC</div>
+      <div class="kpi-value">&pound;1.22</div>
+      <div class="kpi-sub">All-market blended average</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conversion Rate</div>
+      <div class="kpi-value">5.15%</div>
+      <div class="kpi-sub"><span class="kpi-trend-up">&#9650; Above 5% threshold</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Active Campaigns</div>
+      <div class="kpi-value">95<span style="font-size:16px;color:var(--gray-text);">/626</span></div>
+      <div class="kpi-sub"><span class="kpi-trend-warn">&#9679; 84.8% paused</span></div>
+    </div>
+  </div>
+
+  <!-- Campaign Health Alert -->
+  <div class="alert-banner alert-warning">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div>
+      <strong>Campaign Health Alert:</strong> 530 of 626 campaigns (84.8%) are in paused state. Only 95 campaigns are actively delivering spend. Additionally, 1 campaign has been deleted. The campaign portfolio requires significant restructuring &mdash; paused campaigns create clutter and hide genuine coverage gaps. A cleanup audit should be a Week 1 priority.
+    </div>
+  </div>
+
+  <!-- 4-Country Comparison -->
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      4-Country Performance Comparison
+    </div>
+    <div class="section-subtitle">Key metrics by marketplace with visual ACOS comparison bars</div>
+    <table class="data-table" id="countryComparisonTable">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th class="num">Spend</th>
+          <th class="num">Sales</th>
+          <th class="num">Orders</th>
+          <th class="num">ACOS</th>
+          <th class="num">ROAS</th>
+          <th class="num">CPC</th>
+          <th class="num">CVR</th>
+          <th class="num">Active Campaigns</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-country="DE">
+          <td class="highlight">DE &#x1F1E9;&#x1F1EA; Germany</td>
+          <td class="num">&pound;70,172</td>
+          <td class="num">&pound;302,456</td>
+          <td class="num">2,940</td>
+          <td class="num bar-cell"><span class="bar-fill gold" style="width:82%"></span><span class="bar-value">24.1%</span></td>
+          <td class="num pos">4.31x</td>
+          <td class="num">&pound;1.25</td>
+          <td class="num">4.85%</td>
+          <td class="num">38</td>
+        </tr>
+        <tr data-country="UK">
+          <td class="highlight">UK &#x1F1EC;&#x1F1E7; United Kingdom</td>
+          <td class="num">&pound;69,702</td>
+          <td class="num">&pound;285,149</td>
+          <td class="num">2,810</td>
+          <td class="num bar-cell"><span class="bar-fill gold" style="width:87%"></span><span class="bar-value">24.4%</span></td>
+          <td class="num pos">4.09x</td>
+          <td class="num">&pound;1.19</td>
+          <td class="num">5.38%</td>
+          <td class="num">35</td>
+        </tr>
+        <tr data-country="FR">
+          <td class="highlight">FR &#x1F1EB;&#x1F1F7; France</td>
+          <td class="num">&pound;15,782</td>
+          <td class="num">&pound;78,910</td>
+          <td class="num">785</td>
+          <td class="num bar-cell"><span class="bar-fill green" style="width:67%"></span><span class="bar-value pos">20.0%</span></td>
+          <td class="num pos">5.00x</td>
+          <td class="num">&pound;0.87</td>
+          <td class="num">5.75%</td>
+          <td class="num">12</td>
+        </tr>
+        <tr data-country="ES">
+          <td class="highlight">ES &#x1F1EA;&#x1F1F8; Spain</td>
+          <td class="num">&pound;10,237</td>
+          <td class="num">&pound;48,980</td>
+          <td class="num">495</td>
+          <td class="num bar-cell"><span class="bar-fill green" style="width:70%"></span><span class="bar-value pos">20.9%</span></td>
+          <td class="num pos">4.78x</td>
+          <td class="num">&pound;0.77</td>
+          <td class="num">5.25%</td>
+          <td class="num">10</td>
+        </tr>
+        <tr style="font-weight:700;background:#F1F5F9;" data-country="all">
+          <td>ALL MARKETS</td>
+          <td class="num">&pound;185,752</td>
+          <td class="num">&pound;798,883</td>
+          <td class="num">7,830</td>
+          <td class="num">23.25%</td>
+          <td class="num">4.30x</td>
+          <td class="num">&pound;1.22</td>
+          <td class="num">5.15%</td>
+          <td class="num">95</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Revenue Concentration -->
+  <div class="two-col">
+    <div class="section-card">
+      <div class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Revenue Diversification
+      </div>
+      <div class="section-subtitle">Portfolio risk assessment &mdash; top ASIN concentration analysis</div>
+      <table class="data-table">
+        <thead><tr><th>Concentration Level</th><th class="num">Revenue Share</th><th class="num">ASIN Count</th><th>Assessment</th></tr></thead>
+        <tbody>
+          <tr><td>Top 5 ASINs</td><td class="num highlight">26.1%</td><td class="num">5</td><td><span class="tag tag-green">WELL DIVERSIFIED</span></td></tr>
+          <tr><td>Top 10 ASINs</td><td class="num highlight">37.2%</td><td class="num">10</td><td><span class="tag tag-green">HEALTHY SPREAD</span></td></tr>
+          <tr><td>Active Ad Groups</td><td class="num">100%</td><td class="num">149</td><td><span class="tag tag-blue">BROAD COVERAGE</span></td></tr>
+        </tbody>
+      </table>
+      <div class="alert-banner alert-success mt-16 mb-8" style="font-size:13px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div><strong>Key Takeaway:</strong> Revenue is well diversified. No single product exceeds 6% of total revenue &mdash; meaning Blue Fins has zero single-product dependency risk. The portfolio is resilient.</div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Budget Exhaustion Overview
+      </div>
+      <div class="section-subtitle">Campaign budget-out events across last 60 days</div>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th class="num">Value</th><th>Severity</th></tr></thead>
+        <tbody>
+          <tr><td>Total Budget-Out Events</td><td class="num highlight">625</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+          <tr><td>Daily Average</td><td class="num">10.4/day</td><td><span class="tag tag-red">HIGH</span></td></tr>
+          <tr><td>UK Share</td><td class="num highlight">392 (62.7%)</td><td><span class="tag tag-red">DISPROPORTIONATE</span></td></tr>
+          <tr><td>DE Share</td><td class="num">148 (23.7%)</td><td><span class="tag tag-amber">MODERATE</span></td></tr>
+        </tbody>
+      </table>
+      <div class="alert-banner alert-warning mt-16 mb-8" style="font-size:13px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>UK accounts for <strong>62.7% of all budget-out events</strong> despite being only 37.8% of total spend. Campaigns are consistently hitting their ceiling during peak converting hours.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sponsored Ad Type Split -->
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Ad Type Performance Split
+    </div>
+    <div class="section-subtitle">Sponsored Products vs Sponsored Brands vs Sponsored Display across all markets</div>
+    <table class="data-table">
+      <thead><tr><th>Ad Type</th><th class="num">Campaigns</th><th class="num">Spend</th><th class="num">Sales</th><th class="num">ACOS</th><th class="num">ROAS</th><th class="num">Orders</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Sponsored Products</td>
+          <td class="num">79</td>
+          <td class="num">&pound;164,830</td>
+          <td class="num">&pound;703,580</td>
+          <td class="num">23.4%</td>
+          <td class="num pos">4.27x</td>
+          <td class="num">6,920</td>
+        </tr>
+        <tr>
+          <td>Sponsored Brands</td>
+          <td class="num">9</td>
+          <td class="num">&pound;16,612</td>
+          <td class="num">&pound;76,153</td>
+          <td class="num">21.8%</td>
+          <td class="num pos">4.58x</td>
+          <td class="num">720</td>
+        </tr>
+        <tr>
+          <td>Sponsored Display</td>
+          <td class="num">7</td>
+          <td class="num">&pound;4,310</td>
+          <td class="num">&pound;19,150</td>
+          <td class="num pos">22.5%</td>
+          <td class="num pos">4.44x</td>
+          <td class="num">190</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- ================================================================ -->
+<!-- TAB 2: 效率诊断 -->
+<!-- ================================================================ -->
+<section class="tab-content" id="tab-diagnosis">
+
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Efficiency Diagnostic Framework
+    </div>
+    <div class="section-subtitle">Six critical insights derived from 60-day campaign data across DE/UK/FR/ES. Click each insight to expand for full analysis.</div>
+  </div>
+
+  <!-- Insight A: Revenue Diversified -->
+  <div class="insight-card open">
+    <div class="insight-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="insight-header-left">
+        <span class="insight-badge badge-green">Insight A &middot; POSITIVE</span>
+        <span class="insight-title">Revenue is Well Diversified &mdash; No Single-Product Dependency Risk</span>
+      </div>
+      <div class="insight-chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="insight-body">
+      <table class="data-table mb-16">
+        <thead><tr><th>Concentration Tier</th><th class="num">Revenue Share</th><th class="num">ASIN Count</th><th class="num">Cumulative Share</th></tr></thead>
+        <tbody>
+          <tr><td>Top 5 ASINs</td><td class="num highlight">26.1%</td><td class="num">5</td><td class="num">26.1%</td></tr>
+          <tr><td>Top 10 ASINs</td><td class="num highlight">37.2%</td><td class="num">10</td><td class="num">37.2%</td></tr>
+          <tr><td>Top 15 ASINs</td><td class="num">46.8%</td><td class="num">15</td><td class="num">46.8%</td></tr>
+          <tr><td>All Others</td><td class="num">53.2%</td><td class="num">~95</td><td class="num">100%</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+        <strong>Assessment:</strong> With 149 active ad groups across 4 countries, the revenue distribution is remarkably balanced. The top 5 ASINs contribute only 26.1% of total revenue &mdash; well below the 40-50% threshold that typically signals concentration risk. More than half of revenue (53.2%) comes from the long tail of ~95 ASINs, providing natural portfolio hedging. This is a <strong style="color:var(--green);">structural strength</strong> that enables aggressive testing without risking core revenue.
+      </p>
+    </div>
+  </div>
+
+  <!-- Insight B: Placement Bid Gap -->
+  <div class="insight-card">
+    <div class="insight-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="insight-header-left">
+        <span class="insight-badge badge-red">Insight B &middot; CRITICAL</span>
+        <span class="insight-title">Placement Bid Gap &mdash; 72% of Placements Have Zero Bid Adjustment</span>
+      </div>
+      <div class="insight-chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="insight-body">
+      <table class="data-table mb-16">
+        <thead><tr><th>Placement Type</th><th class="num">Placements</th><th class="num">With Bid Adj</th><th class="num">Zero Bid Adj</th><th class="num">ACOS</th><th class="num">CVR</th></tr></thead>
+        <tbody>
+          <tr><td>Top of Search</td><td class="num">612</td><td class="num warn">256</td><td class="num warn">356 (58.2%)</td><td class="num pos">23.4%</td><td class="num pos">6.24%</td></tr>
+          <tr><td>Product Pages</td><td class="num">1,180</td><td class="num warn">312</td><td class="num warn">868 (73.6%)</td><td class="num">24.8%</td><td class="num">3.85%</td></tr>
+          <tr><td>Rest of Search</td><td class="num">580</td><td class="num warn">97</td><td class="num warn">483 (83.3%)</td><td class="num">25.1%</td><td class="num">4.12%</td></tr>
+          <tr style="font-weight:700;background:#FEF2F2;"><td>TOTAL</td><td class="num">2,372</td><td class="num">665</td><td class="num warn">1,707 (72.0%)</td><td class="num">24.4%</td><td class="num">4.68%</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+        <strong>Key Finding:</strong> Top of Search placements demonstrate significantly better CVR (6.24% vs 3.85% on Product Pages) and lower ACOS (23.4% vs 24.8%). <strong style="color:var(--green);">UK Top of Search CVR reaches 7.12%</strong> &mdash; the single best-performing placement across the entire account. Adding a +20% bid modifier to Top of Search for campaigns with CVR above 5% could meaningfully shift impression share to higher-converting placements and improve blended ROAS.
+      </p>
+    </div>
+  </div>
+
+  <!-- Insight C: UK Auto vs Manual -->
+  <div class="insight-card">
+    <div class="insight-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="insight-header-left">
+        <span class="insight-badge badge-red">Insight C &middot; CRITICAL</span>
+        <span class="insight-title">UK Auto vs Manual Performance Gap &mdash; Same Products, 5.8pp ACOS Difference</span>
+      </div>
+      <div class="insight-chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="insight-body">
+      <table class="data-table mb-16">
+        <thead><tr><th>UK Campaign Type</th><th class="num">Spend</th><th class="num">Sales</th><th class="num">Orders</th><th class="num">ACOS</th><th class="num">ROAS</th><th class="num">CVR</th></tr></thead>
+        <tbody>
+          <tr style="background:#FEF2F2;"><td>Auto Campaigns</td><td class="num">&pound;16,200</td><td class="num">&pound;54,546</td><td class="num">490</td><td class="num neg">29.7%</td><td class="num">3.37x</td><td class="num">4.65%</td></tr>
+          <tr><td>Manual Campaigns</td><td class="num">&pound;53,502</td><td class="num">&pound;230,603</td><td class="num">2,320</td><td class="num pos">23.9%</td><td class="num pos">4.31x</td><td class="num">5.50%</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+        <strong>Root Cause:</strong> UK auto campaigns are matching to broad, low-intent queries. A specific example: the broad-match keyword <em>"pressure washer"</em> has spent <strong>&pound;162 with 0 orders</strong>. Auto campaigns lack the negative keyword controls that manual campaigns benefit from, allowing spend leakage on irrelevant or low-converting search terms.
+      </p>
+      <div class="alert-banner alert-warning mt-12">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div><strong>Recommendation:</strong> Apply the negative keyword strategy from UK manual campaigns to auto campaigns. Review auto campaign search term reports weekly and aggressively negate terms with &gt;&pound;10 spend and 0 orders.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insight D: Price-to-ACOS Sweet Spot -->
+  <div class="insight-card">
+    <div class="insight-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="insight-header-left">
+        <span class="insight-badge badge-blue">Insight D &middot; STRATEGIC</span>
+        <span class="insight-title">Price-to-ACOS Sweet Spot &mdash; &pound;60&ndash;100 Products Show Best Efficiency</span>
+      </div>
+      <div class="insight-chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="insight-body">
+      <table class="data-table mb-16">
+        <thead><tr><th>Price Band</th><th class="num">ASIN Count</th><th class="num">Avg ACOS</th><th class="num">Avg ROAS</th><th class="num">Revenue Contribution</th><th>Assessment</th></tr></thead>
+        <tbody>
+          <tr><td>&pound;30 &ndash; 60</td><td class="num">28</td><td class="num warn">24.0%</td><td class="num">4.17x</td><td class="num">18%</td><td><span class="tag tag-amber">TIGHT MARGIN</span></td></tr>
+          <tr><td>&pound;60 &ndash; 100</td><td class="num">21</td><td class="num pos">21.8%</td><td class="num pos">4.59x</td><td class="num">35%</td><td><span class="tag tag-green">SWEET SPOT</span></td></tr>
+          <tr><td>&pound;100 &ndash; 200</td><td class="num">81</td><td class="num">24.3%</td><td class="num">4.12x</td><td class="num">42%</td><td><span class="tag tag-blue">MAIN REVENUE</span></td></tr>
+          <tr><td>&pound;200 &ndash; 500</td><td class="num">5</td><td class="num pos">20.7%</td><td class="num pos">4.83x</td><td class="num">5%</td><td><span class="tag tag-green">HIGH MARGIN &middot; UNTAPPED</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+        <strong>Key Insight:</strong> The &pound;60&ndash;100 price band delivers the best efficiency (21.8% ACOS) with substantial volume (35% of revenue across 21 ASINs). The <strong>&pound;200&ndash;500 premium segment</strong> shows the lowest ACOS at 20.7% with only 5 ASINs active &mdash; representing a significant untapped growth opportunity. These high-margin products (pressure washers, premium pumps) can sustain higher ad investment while maintaining profitability.
+      </p>
+    </div>
+  </div>
+
+  <!-- Insight E: Negative Keyword Coverage Gap -->
+  <div class="insight-card">
+    <div class="insight-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="insight-header-left">
+        <span class="insight-badge badge-red">Insight E &middot; CRITICAL</span>
+        <span class="insight-title">Negative Keyword Coverage Gap &mdash; Only 1.5% of Waste Terms Actioned</span>
+      </div>
+      <div class="insight-chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="insight-body">
+      <table class="data-table mb-16">
+        <thead><tr><th>Country</th><th class="num">Negative Keywords Added (60d)</th><th class="num">Search Terms</th><th class="num">Waste Terms (0 Orders)</th><th class="num">Coverage Rate</th></tr></thead>
+        <tbody>
+          <tr><td>DE</td><td class="num">372</td><td class="num">18,240</td><td class="num">16,450</td><td class="num neg">2.3%</td></tr>
+          <tr><td>UK</td><td class="num">101</td><td class="num">14,880</td><td class="num">13,210</td><td class="num neg">0.8%</td></tr>
+          <tr><td>FR</td><td class="num">46</td><td class="num">2,904</td><td class="num">2,451</td><td class="num neg">1.9%</td></tr>
+          <tr><td>ES</td><td class="num">2</td><td class="num">2,000</td><td class="num">1,800</td><td class="num neg">0.1%</td></tr>
+          <tr style="font-weight:700;background:#FEF2F2;"><td>TOTAL</td><td class="num">521</td><td class="num">38,024</td><td class="num">34,111</td><td class="num neg">1.5%</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+        <strong>Critical Finding:</strong> Across all markets, only 521 negative keywords have been added in the past 60 days against 34,111 identified waste terms. <strong>98.5% of wasteful search terms remain unprotected.</strong> ES has only 2 negative keywords total &mdash; essentially zero coverage. DE receives the most attention with 372 negations, yet still has &pound;39.4K in identifiable waste. The current manual or AI-driven negative keyword process is operating at only 1.5% of needed capacity.
+      </p>
+    </div>
+  </div>
+
+  <!-- Insight F: Budget Exhaustion Hotspots -->
+  <div class="insight-card">
+    <div class="insight-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="insight-header-left">
+        <span class="insight-badge badge-red">Insight F &middot; CRITICAL</span>
+        <span class="insight-title">Budget Exhaustion Hotspots &mdash; UK Campaigns Cut Off in Peak Hours</span>
+      </div>
+      <div class="insight-chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="insight-body">
+      <table class="data-table mb-16">
+        <thead><tr><th>Campaign</th><th class="num">Budget-Out Events (60d)</th><th class="num">Daily Rate</th><th class="num">Country</th><th class="num">Estimated Lost Sales</th></tr></thead>
+        <tbody>
+          <tr style="background:#FEF2F2;"><td>Xnurta AI 900B237 &#x5E7F;&#x6CDB;+&#x77ED;&#x8BED;</td><td class="num neg">100</td><td class="num neg">1.67/day</td><td>DE</td><td class="num">&pound;1,250</td></tr>
+          <tr style="background:#FEF2F2;"><td>900B3 &#x81EA;&#x52A8; &#x91CD;&#x5F00;6.10</td><td class="num neg">85</td><td class="num neg">1.42/day</td><td>UK</td><td class="num">&pound;980</td></tr>
+          <tr><td>UK SP Auto Catch-All</td><td class="num neg">72</td><td class="num neg">1.20/day</td><td>UK</td><td class="num">&pound;780</td></tr>
+          <tr><td>DE Pool Pump Broad</td><td class="num neg">55</td><td class="num neg">0.92/day</td><td>DE</td><td class="num">&pound;560</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+        <strong>Critical Finding:</strong> 625 budget-out events occurred in 60 days (10.4/day average). The UK disproportionately accounts for <strong>62.7% (392 events)</strong> despite representing only 37.8% of total spend. The top culprit campaign <em>"Xnurta AI 900B237"</em> ran out of budget 100 times &mdash; nearly twice per day. These campaigns are systematically being cut off during their peak converting hours, directly losing sales. Estimated lost revenue from budget exhaustion alone: <strong>&pound;5,000&ndash;8,000</strong> over the 60-day period.
+      </p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================================================================ -->
+<!-- TAB 3: 站点深度 -->
+<!-- ================================================================ -->
+<section class="tab-content" id="tab-deepdive">
+
+  <!-- DE -->
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Germany (DE) &mdash; Largest Market
+    </div>
+    <div class="section-subtitle">37.8% of total spend, 37.9% of total sales. Dominant marketplace with structural efficiency challenges.</div>
+    <table class="data-table mb-16">
+      <thead><tr><th>Metric</th><th class="num">Value</th><th>Metric</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Spend</td><td class="num highlight">&pound;70,172</td><td>Sales</td><td class="num highlight">&pound;302,456</td></tr>
+        <tr><td>Orders</td><td class="num">2,940</td><td>ACOS</td><td class="num warn">24.1%</td></tr>
+        <tr><td>ROAS</td><td class="num pos">4.31x</td><td>CPC</td><td class="num">&pound;1.25</td></tr>
+        <tr><td>CVR</td><td class="num">4.85%</td><td>Active Campaigns</td><td class="num">38</td></tr>
+        <tr><td>SD ACOS (Sand Filter Pumps)</td><td class="num pos">10.4%</td><td>SD ROAS</td><td class="num pos">9.62x</td></tr>
+        <tr><td>Sponsored Display Total ACOS</td><td class="num pos">6.8%</td><td>SD Spend &rarr; Sales</td><td class="num">&pound;159 &rarr; &pound;2,331</td></tr>
+        <tr><td>Budget-Out Events</td><td class="num warn">148</td><td>Negative Keywords</td><td class="num warn">372</td></tr>
+        <tr><td>Waste Spend</td><td class="num neg">&pound;39,400</td><td>Auto Campaign ACOS</td><td class="num warn">27.2%</td></tr>
+      </tbody>
+    </table>
+    <div class="alert-banner alert-info">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <div><strong>DE Summary:</strong> Germany is the largest and most complex market. Sponsored Display is dramatically under-utilized (6.8% ACOS, only &pound;159 spend). Sand filter pump campaigns achieve best-in-account ACOS of 10.4%. Priority actions: activate SD campaigns, increase negative keyword velocity, and reduce auto campaign ACOS from 27.2%.</div>
+    </div>
+  </div>
+
+  <!-- UK -->
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      United Kingdom (UK) &mdash; Highest Spend Intensity
+    </div>
+    <div class="section-subtitle">37.5% of total spend but 62.7% of budget-out events. Performance bottleneck market.</div>
+    <table class="data-table mb-16">
+      <thead><tr><th>Metric</th><th class="num">Value</th><th>Metric</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Spend</td><td class="num highlight">&pound;69,702</td><td>Sales</td><td class="num highlight">&pound;285,149</td></tr>
+        <tr><td>Orders</td><td class="num">2,810</td><td>ACOS</td><td class="num warn">24.4%</td></tr>
+        <tr><td>ROAS</td><td class="num">4.09x</td><td>CPC</td><td class="num">&pound;1.19</td></tr>
+        <tr><td>CVR</td><td class="num pos">5.38%</td><td>Active Campaigns</td><td class="num">35</td></tr>
+        <tr><td>Top of Search CVR</td><td class="num pos">7.12%</td><td>Auto ACOS</td><td class="num neg">29.7%</td></tr>
+        <tr><td>Manual ACOS</td><td class="num">23.9%</td><td>Budget-Out Events</td><td class="num neg">392 (62.7%)</td></tr>
+        <tr><td>Negative Keywords</td><td class="num neg">101</td><td>Waste Spend</td><td class="num neg">&pound;23,900</td></tr>
+        <tr><td>SD ACOS</td><td class="num pos">15.3%</td><td>SD Campaigns Active</td><td class="num">2/12</td></tr>
+      </tbody>
+    </table>
+    <div class="alert-banner alert-warning">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div><strong>UK Summary:</strong> The UK has the worst budget exhaustion problem (392 events, 62.7% share) and a 5.8pp auto-vs-manual ACOS gap. However, it also has the best Top of Search CVR (7.12%) and solid overall CVR (5.38%). Priority actions: fix budget limits, bridge auto-manual gap, add negative keywords (only 101 vs UK&rsquo;s waste), activate 10 dormant SD campaigns.</div>
+    </div>
+  </div>
+
+  <!-- FR -->
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      France (FR) &mdash; Efficient But Under-Scaled
+    </div>
+    <div class="section-subtitle">Smallest mature market with best unit economics. Significant scaling opportunity.</div>
+    <table class="data-table mb-16">
+      <thead><tr><th>Metric</th><th class="num">Value</th><th>Metric</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Spend</td><td class="num highlight">&pound;15,782</td><td>Sales</td><td class="num highlight">&pound;78,910</td></tr>
+        <tr><td>Orders</td><td class="num">785</td><td>ACOS</td><td class="num pos">20.0%</td></tr>
+        <tr><td>ROAS</td><td class="num pos">5.00x</td><td>CPC</td><td class="num pos">&pound;0.87</td></tr>
+        <tr><td>CVR</td><td class="num pos">5.75%</td><td>Active Campaigns</td><td class="num">12</td></tr>
+        <tr><td>Auto ACOS</td><td class="num">19.5%</td><td>Manual ACOS</td><td class="num">20.4%</td></tr>
+        <tr><td>Budget-Out Events</td><td class="num">52</td><td>Negative Keywords</td><td class="num warn">46</td></tr>
+        <tr><td>SD ACOS</td><td class="num pos">14.2%</td><td>SD Campaigns Active</td><td class="num">3/5</td></tr>
+      </tbody>
+    </table>
+    <div class="alert-banner alert-success">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div><strong>FR Summary:</strong> France offers the best unit economics: lowest CPC (&pound;0.87), highest CVR (5.75%), and excellent ROAS (5.00x). The auto/manual gap is negligible (0.9pp), indicating good keyword targeting. Priority actions: increase budget by 20-30% monthly while monitoring ACOS, migrate DE winning keywords (translated), activate remaining SD campaigns.</div>
+    </div>
+  </div>
+
+  <!-- ES -->
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Spain (ES) &mdash; Emerging Efficient Market
+    </div>
+    <div class="section-subtitle">Smallest market with strong fundamentals but near-zero negative keyword coverage.</div>
+    <table class="data-table mb-16">
+      <thead><tr><th>Metric</th><th class="num">Value</th><th>Metric</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Spend</td><td class="num highlight">&pound;10,237</td><td>Sales</td><td class="num highlight">&pound;48,980</td></tr>
+        <tr><td>Orders</td><td class="num">495</td><td>ACOS</td><td class="num pos">20.9%</td></tr>
+        <tr><td>ROAS</td><td class="num pos">4.78x</td><td>CPC</td><td class="num pos">&pound;0.77</td></tr>
+        <tr><td>CVR</td><td class="num">5.25%</td><td>Active Campaigns</td><td class="num">10</td></tr>
+        <tr><td>Auto ACOS</td><td class="num">21.5%</td><td>Manual ACOS</td><td class="num">20.3%</td></tr>
+        <tr><td>Budget-Out Events</td><td class="num">33</td><td>Negative Keywords</td><td class="num neg">2</td></tr>
+        <tr><td>SD ACOS</td><td class="num pos">12.8%</td><td>SD Campaigns Active</td><td class="num">1/4</td></tr>
+      </tbody>
+    </table>
+    <div class="alert-banner alert-info">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <div><strong>ES Summary:</strong> Spain is the most cost-efficient market with &pound;0.77 CPC and healthy 20.9% ACOS. However, it has only 2 negative keywords total &mdash; essentially zero protection against waste. Priority actions: immediately add 50+ negative keywords, scale budget by 20-30%, activate dormant SD campaigns (1/4 active), and apply ES-specific keyword translations from DE winners.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================================================================ -->
+<!-- TAB 4: 增长机会 -->
+<!-- ================================================================ -->
+<section class="tab-content" id="tab-growth">
+
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Growth Opportunity Framework
+    </div>
+    <div class="section-subtitle">Seven actionable growth opportunities identified from cross-market data analysis, each with web-researched implementation solutions.</div>
+  </div>
+
+  <!-- Opportunity 1 -->
+  <div class="opp-card">
+    <div class="opp-number">01</div>
+    <div class="opp-title">Sponsored Display is a Hidden Goldmine</div>
+    <div class="opp-metrics">
+      <span class="opp-metric good">DE SD ACOS: 6.8%</span>
+      <span class="opp-metric good">UK SD ACOS: 15.3%</span>
+      <span class="opp-metric warn">7/33 SD Campaigns Active</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      DE Sponsored Display delivers an extraordinary 6.8% ACOS (&pound;159 spend generating &pound;2,331 in sales). UK SD ACOS of 15.3% is also excellent. Yet only 7 of 33 SD campaigns are active across all markets. This represents the single highest-ROI growth lever available.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> Amazon Sponsored Display ads target shoppers both on and off Amazon. Use views remarketing (target shoppers who viewed your products but didn't purchase) and purchase remarketing (cross-sell to existing customers). Start with a 30-day view remarketing audience at &pound;10/day per market. Expand to similar product targeting for category expansion. Expected ROI: 3&ndash;5x return on incremental SD spend.
+    </div>
+  </div>
+
+  <!-- Opportunity 2 -->
+  <div class="opp-card">
+    <div class="opp-number">02</div>
+    <div class="opp-title">Placement Bid Optimization</div>
+    <div class="opp-metrics">
+      <span class="opp-metric warn">1,707 Placements with Zero Bid</span>
+      <span class="opp-metric good">Top of Search CVR: 6.24%</span>
+      <span class="opp-metric info">UK Top Search CVR: 7.12%</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      72% of placements have no bid adjustment, leaving significant performance on the table. Top of Search placements consistently convert at higher rates (6.24% vs 3.85% on Product Pages) and show lower ACOS (23.4% vs 24.8%). The UK Top of Search CVR of 7.12% is the best-performing placement in the entire account.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> For campaigns with CVR above 5%, add +15&ndash;25% Top of Search bid modifier. For low-CVR placements on Product Pages (CVR below 3%), apply -20% modifier to redirect spend. Monitor for 2 weeks, then adjust based on performance. Amazon's own data shows Top of Search typically converts at 1.5&ndash;2x the rate of product page placements. Implement via campaign manager or Xnurta AI automated rules.
+    </div>
+  </div>
+
+  <!-- Opportunity 3 -->
+  <div class="opp-card">
+    <div class="opp-number">03</div>
+    <div class="opp-title">Budget Allocation to Peak Hours</div>
+    <div class="opp-metrics">
+      <span class="opp-metric warn">625 Budget-Out Events</span>
+      <span class="opp-metric warn">UK: 392 (62.7%)</span>
+      <span class="opp-metric info">10.4 Events/Day</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      Campaigns are systematically running out of budget during peak converting hours. The "Xnurta AI 900B237" campaign alone exhausted budget 100 times in 60 days. Estimated lost revenue from budget exhaustion: &pound;5,000&ndash;8,000 over the period.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> Set daily budget at 1.3x your target daily spend to absorb intra-day fluctuations. Use Amazon's Budget Rules feature to automatically increase budget during peak converting hours (typically 18:00&ndash;22:00 local time for consumer products). Identify top-converting time slots from campaign hourly data and schedule budget increases for those specific windows. Implement budget pacing rules that allocate 60% of daily budget to peak 4-hour windows.
+    </div>
+  </div>
+
+  <!-- Opportunity 4 -->
+  <div class="opp-card">
+    <div class="opp-number">04</div>
+    <div class="opp-title">Portfolio-Level Negative Keywords</div>
+    <div class="opp-metrics">
+      <span class="opp-metric warn">1.5% Coverage Rate</span>
+      <span class="opp-metric warn">34,111 Waste Terms</span>
+      <span class="opp-metric info">Only 521 Negated</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      With 34,111 waste terms identified and only 521 negated, 98.5% of wasteful search terms continue to consume budget. ES has only 2 negative keywords. This is the largest single source of addressable waste in the account.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> Create a master negative keyword list shared across campaigns within each product line. Export search term reports weekly, filter for terms with &gt;&pound;15 spend and 0 orders, and bulk-add to negative lists. Use Amazon's Portfolio-level negative keyword feature to apply shared negations across all campaigns. Prioritize ES (from 2 to 50+ immediately) and UK (from 101 to 300+). Automate through Xnurta AI's negative keyword discovery module.
+    </div>
+  </div>
+
+  <!-- Opportunity 5 -->
+  <div class="opp-card">
+    <div class="opp-number">05</div>
+    <div class="opp-title">Scale DE Success to UK Market</div>
+    <div class="opp-metrics">
+      <span class="opp-metric good">DE Sand Filter Pump ACOS: 10.4%</span>
+      <span class="opp-metric warn">UK Same Category ACOS: 24.1%</span>
+      <span class="opp-metric good">DE ROAS: 9.62x</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      Germany's sand filter pump category achieves best-in-account ACOS of 10.4% with 9.62x ROAS. The same product category in the UK operates at 24.1% ACOS &mdash; a 13.7pp gap. This represents a direct knowledge transfer opportunity.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> Audit DE winning keywords and migrate them to UK campaigns. German keywords like 'sandfilteranlage' don't directly translate, but use tools like Helium 10 Cerebro or Jungle Scout to find UK equivalents. Consider that the UK pool/garden equipment market has different seasonal peaks than DE (UK peaks earlier in spring). Apply DE's negative keyword patterns to UK campaigns. Replicate DE's successful exact-match keyword strategy in UK.
+    </div>
+  </div>
+
+  <!-- Opportunity 6 -->
+  <div class="opp-card">
+    <div class="opp-number">06</div>
+    <div class="opp-title">FR/ES Scale Play &mdash; Efficient Markets, Tiny Budgets</div>
+    <div class="opp-metrics">
+      <span class="opp-metric good">FR ACOS: 20.0%</span>
+      <span class="opp-metric good">ES ACOS: 20.9%</span>
+      <span class="opp-metric info">Combined Only &pound;26K Spend</span>
+      <span class="opp-metric good">FR CPC: &pound;0.87 | ES CPC: &pound;0.77</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      France and Spain combined represent only 14% of total spend (&pound;26K) but deliver the best ACOS figures in the account (20.0% and 20.9%). Both markets have significantly lower CPCs than DE (&pound;1.25) and UK (&pound;1.19), giving them a natural efficiency advantage.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> Gradually increase FR/ES budgets by 20&ndash;30% monthly while monitoring ACOS for any degradation. Copy exact-match winning keywords from DE campaigns and translate them for FR/ES markets. Leverage the lower CPC environment (&pound;0.87 FR, &pound;0.77 ES) to achieve higher impression share at the same cost. Target 15% budget growth month-over-month for 3 months, with ACOS guardrail at 22%.
+    </div>
+  </div>
+
+  <!-- Opportunity 7 -->
+  <div class="opp-card">
+    <div class="opp-number">07</div>
+    <div class="opp-title">Lanchez Operational Model Analysis &mdash; Hybrid AI+Human Beats AI-Only</div>
+    <div class="opp-metrics">
+      <span class="opp-metric warn">Blue Fins ACOS: 24.1%</span>
+      <span class="opp-metric good">Lanchez ACOS: 21.5%</span>
+      <span class="opp-metric info">2.6pp Better</span>
+      <span class="opp-metric good">Lanchez Manual: 34.4%</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+      Lanchez achieves 21.5% ACOS vs Blue Fins' 24.1% &mdash; a 2.6 percentage point advantage. A key differentiator: Lanchez has 34.4% manual operations ratio vs Blue Fins' 15.4%. The data suggests a hybrid AI+human model outperforms a purely AI-driven approach by maintaining strategic human oversight on critical decisions.
+    </p>
+    <div class="opp-solution">
+      <strong>Implementation:</strong> The data suggests a hybrid model improves performance: AI manages routine bid optimization, budget allocation, and keyword harvesting, while humans focus on strategic decisions &mdash; negative keyword curation, new campaign structure design, placement bid adjustments, and seasonal planning. Recommend increasing the manual oversight ratio on the Blue Fins account from the current ~15% to 25&ndash;30%. This is complementary to Xnurta AI, not a replacement.
+    </div>
+  </div>
+
+</section>
+
+<!-- ================================================================ -->
+<!-- TAB 5: 行动路线图 -->
+<!-- ================================================================ -->
+<section class="tab-content" id="tab-roadmap">
+
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      4-Week Action Roadmap
+    </div>
+    <div class="section-subtitle">Prioritized execution plan with weekly milestones, owner assignments, and success metrics.</div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- Week 1 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Week 1</div>
+      <div class="timeline-title">Cleanup &amp; Foundation</div>
+      <ul class="timeline-milestones">
+        <li><span class="milestone-check">&#10003;</span> Audit and archive/delete 530 paused campaigns. Keep only campaigns with spend in last 90 days.</li>
+        <li><span class="milestone-check">&#10003;</span> Add 50+ negative keywords to ES (currently 2). Add 200+ to UK (currently 101). Target 500 total new negatives across all markets.</li>
+        <li><span class="milestone-check">&#10003;</span> Apply +15% Top of Search bid modifier to all campaigns with CVR above 5%. Apply -20% to Product Pages placements with CVR below 3%.</li>
+        <li><span class="milestone-check">&#10003;</span> Identify all campaigns with budget-out events above 30/month and increase daily budgets by 30%.</li>
+        <li><span class="milestone-check">&#10003;</span> Export full search term report for last 60 days. Build master waste-term list for bulk negation.</li>
+      </ul>
+    </div>
+
+    <!-- Week 2 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Week 2</div>
+      <div class="timeline-title">Structure &amp; Optimization</div>
+      <ul class="timeline-milestones">
+        <li><span class="milestone-check">&#10003;</span> Configure Amazon Budget Rules for top 20 campaigns. Set 1.3x daily budget with peak-hour boosts (18:00&ndash;22:00 local).</li>
+        <li><span class="milestone-check">&#10003;</span> Fine-tune placement modifiers based on Week 1 performance data. Increase Top of Search to +20% for UK campaigns.</li>
+        <li><span class="milestone-check">&#10003;</span> Activate 10 dormant Sponsored Display campaigns (DE: 3, UK: 4, FR: 2, ES: 1) with &pound;10/day view remarketing.</li>
+        <li><span class="milestone-check">&#10003;</span> Create shared negative keyword lists per product line. Upload Week 1 waste terms in bulk.</li>
+        <li><span class="milestone-check">&#10003;</span> Review UK auto campaign search terms. Negate all terms with &gt;&pound;10 spend and 0 orders.</li>
+      </ul>
+    </div>
+
+    <!-- Week 3 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Week 3</div>
+      <div class="timeline-title">Scale &amp; Expand</div>
+      <ul class="timeline-milestones">
+        <li><span class="milestone-check">&#10003;</span> Increase FR budget by 25% and ES budget by 30%. Monitor ACOS for 7 days before further increases.</li>
+        <li><span class="milestone-check">&#10003;</span> Migrate DE winning exact-match keywords to UK campaigns (translated via Helium 10 / Jungle Scout).</li>
+        <li><span class="milestone-check">&#10003;</span> Launch 3 new Sponsored Display purchase remarketing campaigns targeting previous buyers for cross-sell.</li>
+        <li><span class="milestone-check">&#10003;</span> Review Week 1&ndash;2 placement bid data. Increase Top of Search modifier to +25% where ACOS remains healthy.</li>
+        <li><span class="milestone-check">&#10003;</span> Apply Xnurta AI automated negative keyword discovery for FR/ES markets.</li>
+      </ul>
+    </div>
+
+    <!-- Week 4 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Week 4</div>
+      <div class="timeline-title">Review &amp; Refine</div>
+      <ul class="timeline-milestones">
+        <li><span class="milestone-check">&#10003;</span> Data-driven stop/go decisions: pause campaigns with ACOS above 30% and no improving trend.</li>
+        <li><span class="milestone-check">&#10003;</span> Refine Xnurta AI parameters based on 4-week performance data. Adjust auto-bidding aggressiveness.</li>
+        <li><span class="milestone-check">&#10003;</span> Evaluate FR/ES budget scaling results. If ACOS stayed below 22%, increase another 20%.</li>
+        <li><span class="milestone-check">&#10003;</span> Produce Month-1 performance comparison report: pre-optimization vs post-optimization metrics.</li>
+        <li><span class="milestone-check">&#10003;</span> Plan Month-2 strategy: target 22% blended ACOS, 5.0x ROAS, 80% campaign activation rate.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Success Targets -->
+  <div class="section-card mt-24">
+    <div class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+      30-Day Success Targets
+    </div>
+    <div class="section-subtitle">Projected outcomes if all Week 1&ndash;4 actions are executed as planned.</div>
+    <table class="data-table">
+      <thead><tr><th>KPI</th><th class="num">Current</th><th class="num">Week 4 Target</th><th class="num">Change</th></tr></thead>
+      <tbody>
+        <tr><td>Blended ACOS</td><td class="num">23.25%</td><td class="num pos">21.5%</td><td class="num pos">-1.75pp</td></tr>
+        <tr><td>Blended ROAS</td><td class="num">4.30x</td><td class="num pos">4.65x</td><td class="num pos">+8.1%</td></tr>
+        <tr><td>Active Campaign Rate</td><td class="num">15.2%</td><td class="num pos">40.0%</td><td class="num pos">+24.8pp</td></tr>
+        <tr><td>Negative Keywords</td><td class="num">521</td><td class="num pos">1,500</td><td class="num pos">+188%</td></tr>
+        <tr><td>Budget-Out Events/Month</td><td class="num">312</td><td class="num pos">&lt;150</td><td class="num pos">-52%</td></tr>
+        <tr><td>Placements with Bid Adj</td><td class="num">28.0%</td><td class="num pos">65.0%</td><td class="num pos">+37pp</td></tr>
+        <tr><td>SD Active Campaigns</td><td class="num">7/33</td><td class="num pos">20/33</td><td class="num pos">+186%</td></tr>
+        <tr><td>FR+ES Spend Share</td><td class="num">14.0%</td><td class="num pos">20.0%</td><td class="num pos">+6pp</td></tr>
+        <tr><td>Waste Coverage Rate</td><td class="num">1.5%</td><td class="num pos">8.0%</td><td class="num pos">+433%</td></tr>
+        <tr><td>UK Auto ACOS</td><td class="num">29.7%</td><td class="num pos">&lt;26.0%</td><td class="num pos">-3.7pp</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- ================================================================ -->
+<!-- DATA REFERENCE SECTION -->
+<!-- ================================================================ -->
+<div class="section-card mt-24">
+  <div class="section-title">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Appendix: Key Data Reference
+  </div>
+  <div class="section-subtitle">All key data points used throughout this report, sourced from Amazon Advertising Console and Xnurta AI analytics platform (60-day trailing window).</div>
+
+  <div class="two-col">
+    <div>
+      <table class="data-table">
+        <thead><tr><th colspan="2">Account-Level KPIs</th></tr></thead>
+        <tbody>
+          <tr><td>Total Spend</td><td class="num highlight">&pound;185,752</td></tr>
+          <tr><td>Total Attributed Sales</td><td class="num highlight">&pound;798,883</td></tr>
+          <tr><td>Total Orders</td><td class="num highlight">7,830</td></tr>
+          <tr><td>Blended ACOS</td><td class="num">23.25%</td></tr>
+          <tr><td>Blended ROAS</td><td class="num">4.30x</td></tr>
+          <tr><td>Average CPC</td><td class="num">&pound;1.22</td></tr>
+          <tr><td>Blended CVR</td><td class="num">5.15%</td></tr>
+          <tr><td>Total Campaigns</td><td class="num">626 (95 active)</td></tr>
+          <tr><td>Active Ad Groups</td><td class="num">149</td></tr>
+          <tr><td>Total Placements</td><td class="num">2,372</td></tr>
+          <tr><td>Placements with Zero Bid Adj</td><td class="num">1,707 (72.0%)</td></tr>
+          <tr><td>Total Negative Keywords (60d)</td><td class="num">521</td></tr>
+          <tr><td>Total Search Terms</td><td class="num">38,024</td></tr>
+          <tr><td>Waste Terms (0 Orders)</td><td class="num">34,111</td></tr>
+          <tr><td>Budget-Out Events (60d)</td><td class="num">625</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table class="data-table">
+        <thead><tr><th colspan="2">Country Breakdown</th></tr></thead>
+        <tbody>
+          <tr><td>DE Spend</td><td class="num">&pound;70,172</td></tr>
+          <tr><td>DE Sales</td><td class="num">&pound;302,456</td></tr>
+          <tr><td>DE ACOS</td><td class="num">24.1%</td></tr>
+          <tr><td>UK Spend</td><td class="num">&pound;69,702</td></tr>
+          <tr><td>UK Sales</td><td class="num">&pound;285,149</td></tr>
+          <tr><td>UK ACOS</td><td class="num">24.4%</td></tr>
+          <tr><td>FR Spend</td><td class="num">&pound;15,782</td></tr>
+          <tr><td>FR Sales</td><td class="num">&pound;78,910</td></tr>
+          <tr><td>FR ACOS</td><td class="num">20.0%</td></tr>
+          <tr><td>ES Spend</td><td class="num">&pound;10,237</td></tr>
+          <tr><td>ES Sales</td><td class="num">&pound;48,980</td></tr>
+          <tr><td>ES ACOS</td><td class="num">20.9%</td></tr>
+          <tr><td>DE CPC</td><td class="num">&pound;1.25</td></tr>
+          <tr><td>UK CPC</td><td class="num">&pound;1.19</td></tr>
+          <tr><td>FR CPC</td><td class="num">&pound;0.87</td></tr>
+          <tr><td>ES CPC</td><td class="num">&pound;0.77</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col mt-16">
+    <div>
+      <table class="data-table">
+        <thead><tr><th colspan="2">Ad Type Performance</th></tr></thead>
+        <tbody>
+          <tr><td>SP Spend</td><td class="num">&pound;164,830</td></tr>
+          <tr><td>SP ACOS</td><td class="num">23.4%</td></tr>
+          <tr><td>SB Spend</td><td class="num">&pound;16,612</td></tr>
+          <tr><td>SB ACOS</td><td class="num">21.8%</td></tr>
+          <tr><td>SD Spend</td><td class="num">&pound;4,310</td></tr>
+          <tr><td>SD ACOS</td><td class="num">22.5%</td></tr>
+          <tr><td>DE SD ACOS</td><td class="num">6.8%</td></tr>
+          <tr><td>UK SD ACOS</td><td class="num">15.3%</td></tr>
+          <tr><td>SD Active Camps</td><td class="num">7/33</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table class="data-table">
+        <thead><tr><th colspan="2">Key Insights Data</th></tr></thead>
+        <tbody>
+          <tr><td>Top 5 ASIN Revenue Share</td><td class="num">26.1%</td></tr>
+          <tr><td>Top 10 ASIN Revenue Share</td><td class="num">37.2%</td></tr>
+          <tr><td>Top of Search ACOS</td><td class="num">23.4%</td></tr>
+          <tr><td>Top of Search CVR</td><td class="num">6.24%</td></tr>
+          <tr><td>UK Top of Search CVR</td><td class="num">7.12%</td></tr>
+          <tr><td>Price &pound;60&ndash;100 ACOS</td><td class="num">21.8%</td></tr>
+          <tr><td>Price &pound;200&ndash;500 ACOS</td><td class="num">20.7%</td></tr>
+          <tr><td>DE Sand Pump ACOS</td><td class="num">10.4%</td></tr>
+          <tr><td>DE Sand Pump ROAS</td><td class="num">9.62x</td></tr>
+          <tr><td>UK Auto ACOS</td><td class="num">29.7%</td></tr>
+          <tr><td>UK Manual ACOS</td><td class="num">23.9%</td></tr>
+          <tr><td>Lanchez ACOS</td><td class="num">21.5%</td></tr>
+          <tr><td>Lanchez Manual Ratio</td><td class="num">34.4%</td></tr>
+          <tr><td>Blue Fins Manual Ratio</td><td class="num">15.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- ABOUT XNURTA -->
+<!-- ================================================================ -->
+<div class="xnurta-box">
+  <div class="xnurta-box-content">
+    <h3>About Xnurta AI</h3>
+    <p>
+      宁波蓝鳍（Ningbo Blue Fins）通过 Xnurta AI 驱动的广告管理系统，实现了 82.3% 的广告操作自动化，覆盖出价管理、预算优化和关键词调整等核心运营环节。Xnurta 平台的跨市场数据洞察能力，使蓝鳍能够在德国、英国、法国和西班牙四个站点之间实现数据互通和策略协同。其智能预算分配器可以根据实时转化数据动态调整各市场的预算配置，而自动否定关键词功能持续扫描搜索词报告，识别并屏蔽低效流量。随着欧洲四站的业务增长，Xnurta 将持续帮助蓝鳍实现从"基础托管"到"策略级 AI"的运营模式升级，在保持自动化效率的同时，强化人工策略决策在关键环节的参与度。
+    </p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- FOOTER -->
+<!-- ================================================================ -->
+<footer class="report-footer">
+  <p>Ningbo Blue Fins &mdash; FOTING Brand &middot; Amazon EU Advertising Performance Report &middot; June 2026</p>
+  <p>Data Source: Amazon Advertising Console + Xnurta AI Analytics Platform &middot; 60-Day Trailing Window</p>
+  <p style="margin-top:6px;color:var(--text-muted);">Confidential &mdash; For Internal Use Only</p>
+</footer>
+
+</div><!-- /.container -->
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+(function() {
+  'use strict';
+
+  // ===== TAB SWITCHING =====
+  const tabNav = document.getElementById('tabNav');
+  const tabButtons = tabNav.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const targetTab = this.getAttribute('data-tab');
+      tabButtons.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      tabContents.forEach(function(tc) {
+        tc.classList.remove('active');
+        if (tc.id === 'tab-' + targetTab) { tc.classList.add('active'); }
+      });
+    });
+  });
+
+  // ===== COUNTRY FILTER CHIPS =====
+  document.querySelectorAll('.filter-chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      const filterBar = this.parentElement;
+      filterBar.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+
+      const filter = this.getAttribute('data-filter');
+      const table = document.getElementById('countryComparisonTable');
+      if (!table) return;
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(function(row) {
+        const country = row.getAttribute('data-country');
+        if (!country) return;
+        if (filter === 'all' || country === filter) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // ===== SMOOTH CARD HOVER ELEVATION =====
+  // CSS handles most of this, but we add a subtle transition class
+
+  // ===== INITIALIZE FIRST INSIGHT AS OPEN =====
+  // The first insight card already has the 'open' class in HTML
+
+})();
+</script>
+
+</body>
+</html>
