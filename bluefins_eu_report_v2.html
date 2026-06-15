@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blue Fins / FOTING EU Amazon Advertising Performance Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy: #0F172A; --navy-light: #1E293B; --navy-lighter: #334155;
+  --gold: #CA8A04; --gold-light: #EAB308; --gold-pale: #FEF3C7;
+  --bg: #F1F5F9; --white: #FFFFFF; --slate-50: #F8FAFC; --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0; --slate-300: #CBD5E1; --slate-400: #94A3B8; --slate-500: #64748B;
+  --slate-600: #475569; --slate-700: #334155; --slate-800: #1E293B; --slate-900: #0F172A;
+  --green: #059669; --green-light: #D1FAE5;
+  --red: #DC2626; --red-light: #FEE2E2;
+  --amber: #D97706; --amber-light: #FEF3C7;
+  --blue: #2563EB; --blue-light: #DBEAFE;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--slate-800); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--white); padding: 48px 0 40px;
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content: ''; position: absolute; top: -80px; right: -120px; width: 400px; height: 400px;
+  border: 2px solid rgba(202,138,4,0.15); border-radius: 50%;
+}
+.header::after {
+  content: ''; position: absolute; bottom: -60px; left: -80px; width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(202,138,4,0.08) 0%, transparent 70%);
+}
+.header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.header-logo {
+  width: 44px; height: 44px; background: var(--gold); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.header-logo svg { width: 24px; height: 24px; }
+.header-client { font-size: 13px; font-weight: 500; color: var(--gold-light); letter-spacing: 0.05em; }
+.header h1 { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+.header h2 { font-size: 16px; font-weight: 400; color: var(--slate-400); margin-top: 8px; }
+.header-meta { display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+.header-meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--slate-400); }
+.header-meta-item svg { width: 16px; height: 16px; opacity: 0.6; }
+.header-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(202,138,4,0.15); border: 1px solid rgba(202,138,4,0.25);
+  color: var(--gold-light); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+}
+
+.container { max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+
+/* Tab Navigation */
+.tab-nav { background: var(--white); border-bottom: 1px solid var(--slate-200); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+.tab-list { display: flex; list-style: none; overflow-x: auto; }
+.tab-item { padding: 16px 24px; font-size: 14px; font-weight: 500; color: var(--slate-500); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s; position: relative; }
+.tab-item:hover { color: var(--slate-700); background: var(--slate-50); }
+.tab-item.active { color: var(--navy); border-bottom-color: var(--gold); font-weight: 600; }
+.tab-count { font-size: 11px; background: var(--slate-100); color: var(--slate-500); padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Country Filter */
+.filter-bar { display: flex; align-items: center; gap: 12px; padding: 20px 0; flex-wrap: wrap; }
+.filter-label { font-size: 13px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em; }
+.filter-chip {
+  padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  border: 1px solid var(--slate-300); background: var(--white); color: var(--slate-600);
+  cursor: pointer; transition: all 0.2s;
+}
+.filter-chip:hover { border-color: var(--gold); color: var(--gold); }
+.filter-chip.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.filter-data { margin-left: auto; font-size: 12px; color: var(--slate-400); }
+
+/* KPI Cards */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; padding: 24px 0; }
+.kpi-card {
+  background: var(--white); border-radius: 12px; padding: 24px;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--slate-100);
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--slate-200); }
+.kpi-card::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+  border-radius: 12px 0 0 12px;
+}
+.kpi-card.gold::after { background: var(--gold); }
+.kpi-card.navy::after { background: var(--navy); }
+.kpi-card.green::after { background: var(--green); }
+.kpi-card.amber::after { background: var(--amber); }
+.kpi-card.blue::after { background: var(--blue); }
+.kpi-label { font-size: 11px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.kpi-value { font-size: 32px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; }
+.kpi-sub { font-size: 12px; color: var(--slate-400); margin-top: 6px; }
+.kpi-icon { position: absolute; top: 16px; right: 16px; opacity: 0.1; }
+
+/* Section Cards */
+.section-card {
+  background: var(--white); border-radius: 16px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--slate-100); margin-bottom: 24px; overflow: hidden;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 28px; border-bottom: 1px solid var(--slate-100);
+  cursor: pointer; user-select: none; transition: background 0.2s;
+}
+.section-header:hover { background: var(--slate-50); }
+.section-title-group { display: flex; align-items: center; gap: 12px; }
+.section-icon { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.section-icon svg { width: 18px; height: 18px; stroke: var(--gold); }
+.section-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--navy); }
+.section-subtitle { font-size: 12px; color: var(--slate-400); }
+.section-actions { display: flex; align-items: center; gap: 12px; }
+.section-badge {
+  font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 12px;
+}
+.section-badge.alert { background: var(--red-light); color: var(--red); }
+.section-badge.warn { background: var(--amber-light); color: var(--amber); }
+.section-badge.info { background: var(--blue-light); color: var(--blue); }
+.section-badge.good { background: var(--green-light); color: var(--green); }
+.section-chevron {
+  width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; color: var(--slate-400);
+}
+.section-chevron.open { transform: rotate(180deg); }
+.section-chevron:hover { background: var(--slate-100); }
+.section-body { padding: 28px; }
+.section-body.collapsed { display: none; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table thead th {
+  font-size: 11px; font-weight: 600; color: var(--slate-500); text-transform: uppercase;
+  letter-spacing: 0.05em; text-align: left; padding: 12px 16px;
+  border-bottom: 2px solid var(--slate-200); background: var(--slate-50);
+}
+.data-table thead th:first-child { border-radius: 8px 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 8px 0 0; }
+.data-table tbody td { padding: 14px 16px; border-bottom: 1px solid var(--slate-100); }
+.data-table tbody tr:nth-child(even) { background: var(--slate-50); }
+.data-table tbody tr:hover { background: #FFF9EC; }
+.data-table tbody tr.total-row { background: var(--navy); color: var(--white); }
+.data-table tbody tr.total-row td { color: var(--white); font-weight: 600; border-bottom: none; }
+.data-table tbody tr.total-row:hover { background: var(--navy); }
+
+/* Country flag pills */
+.country-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 600; font-size: 12px; padding: 2px 10px; border-radius: 4px;
+}
+.country-pill.de { background: #FFE0B2; color: #BF360C; }
+.country-pill.uk { background: #BBDEFB; color: #0D47A1; }
+.country-pill.fr { background: #E1BEE7; color: #4A148C; }
+.country-pill.es { background: #FFECB3; color: #F57F17; }
+
+/* Metric coloring */
+.metric-good { color: var(--green); font-weight: 600; }
+.metric-warn { color: var(--amber); font-weight: 600; }
+.metric-bad { color: var(--red); font-weight: 600; }
+.metric-neutral { color: var(--slate-700); }
+
+/* Insight Cards */
+.insight-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+.insight-card {
+  background: var(--white); border-radius: 12px; padding: 24px; border: 1px solid var(--slate-200);
+  transition: all 0.3s; position: relative;
+}
+.insight-card:hover { box-shadow: var(--shadow-md); border-color: var(--slate-300); }
+.insight-number {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--navy);
+  color: var(--gold); display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; margin-bottom: 12px;
+}
+.insight-card h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.insight-card p { font-size: 13px; color: var(--slate-600); line-height: 1.7; }
+.insight-metric { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 4px; margin: 0 2px; }
+.insight-metric.good { background: var(--green-light); color: var(--green); }
+.insight-metric.warn { background: var(--amber-light); color: var(--amber); }
+.insight-metric.bad { background: var(--red-light); color: var(--red); }
+
+/* Xnurta Cards */
+.xnurta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.xnurta-card {
+  background: var(--white); border-radius: 12px; padding: 24px; border: 1px solid var(--slate-200);
+  transition: all 0.3s; border-left: 3px solid var(--gold); position: relative;
+}
+.xnurta-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.xnurta-card .icon-box {
+  width: 40px; height: 40px; border-radius: 8px; background: var(--gold-pale);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+}
+.xnurta-card h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.xnurta-card p { font-size: 12px; color: var(--slate-600); line-height: 1.6; }
+.xnurta-card .solution {
+  margin-top: 10px; font-size: 12px; color: var(--gold); font-weight: 600;
+  display: flex; align-items: center; gap: 4px;
+}
+.xnurta-card .solution svg { width: 14px; height: 14px; }
+
+/* Product Matrix */
+.matrix-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.matrix-table th {
+  font-size: 11px; font-weight: 600; color: var(--slate-500); text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 12px 16px; background: var(--slate-50); border-bottom: 2px solid var(--slate-200);
+}
+.matrix-table th:first-child { border-radius: 8px 0 0 0; }
+.matrix-table th:last-child { border-radius: 0 8px 0 0; }
+.matrix-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--slate-100); vertical-align: top; position: relative;
+}
+.matrix-table tr:nth-child(even) td { background: var(--slate-50); }
+.matrix-table .product-name { font-weight: 600; color: var(--navy); }
+.matrix-cell { cursor: default; position: relative; transition: all 0.2s; }
+.matrix-cell:hover { background: #FFF9EC !important; }
+.matrix-cell .main-value { font-weight: 600; }
+.matrix-cell .detail { font-size: 11px; color: var(--slate-400); margin-top: 4px; }
+.matrix-cell .na { color: var(--slate-300); font-style: italic; }
+
+/* Tooltip */
+[data-tooltip] { position: relative; cursor: help; }
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%); background: var(--navy); color: var(--white);
+  padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 500;
+  white-space: nowrap; z-index: 1000; pointer-events: none; box-shadow: var(--shadow-lg);
+}
+
+/* Collapsible Sections */
+.collapse-toggle { cursor: pointer; }
+
+/* Footer */
+.footer {
+  background: var(--navy); color: var(--slate-400); padding: 40px 0; margin-top: 24px;
+  text-align: center; font-size: 12px;
+}
+.footer strong { color: var(--gold-light); }
+.footer-links { display: flex; justify-content: center; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+.footer-link { color: var(--slate-400); text-decoration: none; font-size: 12px; transition: color 0.2s; }
+.footer-link:hover { color: var(--gold-light); }
+
+/* Animations */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+@keyframes countIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+.kpi-value.counting { animation: countIn 0.4s ease-out; }
+
+/* Alerts */
+.alert-box {
+  background: var(--red-light); border: 1px solid #FECACA; border-radius: 10px; padding: 20px 24px;
+  display: flex; gap: 16px; margin-bottom: 20px;
+}
+.alert-box.warning {
+  background: var(--amber-light); border: 1px solid #FDE68A;
+}
+.alert-box.info-box {
+  background: var(--blue-light); border: 1px solid #BFDBFE;
+}
+.alert-box .alert-icon { flex-shrink: 0; width: 24px; height: 24px; margin-top: 2px; }
+.alert-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.alert-box h4.red { color: var(--red); }
+.alert-box h4.amber { color: var(--amber); }
+.alert-box h4.blue { color: var(--blue); }
+.alert-box p { font-size: 13px; color: var(--slate-700); line-height: 1.6; }
+
+/* Reference list */
+.ref-list { list-style: none; }
+.ref-list li { padding: 10px 0; border-bottom: 1px solid var(--slate-100); font-size: 13px; color: var(--slate-600); display: flex; align-items: center; gap: 10px; }
+.ref-list li:last-child { border-bottom: none; }
+.ref-list .ref-icon { width: 20px; height: 20px; color: var(--slate-400); flex-shrink: 0; }
+
+/* Top Data Highlights */
+.highlight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 768px) { .highlight-row { grid-template-columns: 1fr; } }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 { font-size: 28px; }
+  .container { padding: 0 16px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .insight-grid { grid-template-columns: 1fr; }
+  .xnurta-grid { grid-template-columns: 1fr; }
+  .tab-item { padding: 12px 16px; font-size: 12px; }
+}
+
+/* Print */
+@media print {
+  body { background: white; }
+  .header { background: var(--navy) !important; -webkit-print-color-adjust: exact; }
+  .section-card { break-inside: avoid; box-shadow: none; }
+  .tab-nav { position: static; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-top">
+      <div class="header-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div class="header-client">宁波蓝鳍 · Blue Fins</div>
+      </div>
+    </div>
+    <h1>FOTING Amazon 广告绩效报告</h1>
+    <h2>欧洲市场 (DE/UK/FR/ES) — 深度分析与优化建议</h2>
+    <div class="header-meta">
+      <div class="header-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> 报告周期: 近60天</div>
+      <div class="header-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 生成时间: June 2026</div>
+      <div><span class="header-badge">Powered by Xnurta</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <div class="container">
+    <ul class="tab-list" id="tabList">
+      <li class="tab-item active" data-tab="overview">总览 <span class="tab-count">Overview</span></li>
+      <li class="tab-item" data-tab="products">产品线 <span class="tab-count">Matrix</span></li>
+      <li class="tab-item" data-tab="country">站点拆解 <span class="tab-count">Country</span></li>
+      <li class="tab-item" data-tab="search">搜索洞察 <span class="tab-count">Search</span></li>
+      <li class="tab-item" data-tab="xnurta">Xnurta建议 <span class="tab-count">Actions</span></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container" style="padding-top: 24px;">
+
+<!-- TAB 1: OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <!-- Country Filter -->
+  <div class="filter-bar">
+    <span class="filter-label">站点筛选</span>
+    <button class="filter-chip active" data-filter="all">All Markets</button>
+    <button class="filter-chip" data-filter="DE">DE</button>
+    <button class="filter-chip" data-filter="UK">UK</button>
+    <button class="filter-chip" data-filter="FR">FR</button>
+    <button class="filter-chip" data-filter="ES">ES</button>
+    <span class="filter-data" id="filterStatus">显示全部站点数据</span>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card gold fade-in" data-country="all">
+      <div class="kpi-label">广告花费</div>
+      <div class="kpi-value" data-target="185752" data-prefix="£" data-decimals="0">£0</div>
+      <div class="kpi-sub">Total Ad Spend</div>
+    </div>
+    <div class="kpi-card gold fade-in" data-country="all">
+      <div class="kpi-label">广告销售额</div>
+      <div class="kpi-value" data-target="798883" data-prefix="£" data-decimals="0">£0</div>
+      <div class="kpi-sub">Total Ad Sales</div>
+    </div>
+    <div class="kpi-card navy fade-in" data-country="all">
+      <div class="kpi-label">总订单</div>
+      <div class="kpi-value" data-target="7830" data-prefix="" data-decimals="0">0</div>
+      <div class="kpi-sub">Total Orders</div>
+    </div>
+    <div class="kpi-card amber fade-in" data-country="all">
+      <div class="kpi-label">整体 ACOS</div>
+      <div class="kpi-value" data-target="23.25" data-prefix="" data-decimals="2" data-suffix="%">0%</div>
+      <div class="kpi-sub">Target &lt; 22%</div>
+    </div>
+    <div class="kpi-card green fade-in" data-country="all">
+      <div class="kpi-label">ROAS</div>
+      <div class="kpi-value" data-target="4.30" data-prefix="" data-decimals="2" data-suffix="x">0x</div>
+      <div class="kpi-sub">Return on Ad Spend</div>
+    </div>
+    <div class="kpi-card blue fade-in" data-country="all">
+      <div class="kpi-label">平均 CPC</div>
+      <div class="kpi-value" data-target="1.22" data-prefix="£" data-decimals="2">£0.00</div>
+      <div class="kpi-sub">Cost Per Click</div>
+    </div>
+    <div class="kpi-card green fade-in" data-country="all">
+      <div class="kpi-label">转化率 CVR</div>
+      <div class="kpi-value" data-target="5.15" data-prefix="" data-decimals="2" data-suffix="%">0%</div>
+      <div class="kpi-sub">Conversion Rate</div>
+    </div>
+    <div class="kpi-card navy fade-in" data-country="all">
+      <div class="kpi-label">活跃 Campaign</div>
+      <div class="kpi-value" data-target="95" data-prefix="" data-decimals="0" data-sub="/626">95/626</div>
+      <div class="kpi-sub" style="color: var(--red);">84.8%已暂停</div>
+    </div>
+  </div>
+
+  <!-- Campaign Health ALERT (prominent) -->
+  <div class="alert-box fade-in">
+    <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div>
+      <h4 class="red">Campaign 健康度告警</h4>
+      <p>626个Campaign中仅95个在投（<strong>15.2%</strong>），528个已暂停。其中115个曾产生£79,485花费和£351,434销售的暂停Campaign值得优先审计。SB广告仅4个在投/78个，SD广告仅7个在投/33个，品牌广告渠道严重缺位。</p>
+    </div>
+  </div>
+
+  <!-- Country Performance Table -->
+  <div class="section-card fade-in">
+    <div class="section-header collapse-toggle" data-section="country-table">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div>
+          <div class="section-title">各站点核心指标一览</div>
+          <div class="section-subtitle">Country Performance at a Glance</div>
+        </div>
+      </div>
+      <div class="section-actions">
+        <span class="section-badge info">4 Markets</span>
+        <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body" id="section-country-table">
+      <table class="data-table" id="countryTable">
+        <thead>
+          <tr>
+            <th>站点</th><th>花费</th><th>销售额</th><th>订单</th><th>ACOS</th><th>CPC</th><th>CVR</th><th>ROAS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-country="DE">
+            <td><span class="country-pill de">DE</span></td>
+            <td class="metric-neutral">£90,150</td>
+            <td class="metric-neutral">£393,151</td>
+            <td class="metric-neutral">3,579</td>
+            <td class="metric-warn">22.9%</td>
+            <td class="metric-neutral">£1.25</td>
+            <td class="metric-good">4.97%</td>
+            <td class="metric-good">4.36x</td>
+          </tr>
+          <tr data-country="UK">
+            <td><span class="country-pill uk">UK</span></td>
+            <td class="metric-neutral">£69,708</td>
+            <td class="metric-neutral">£277,996</td>
+            <td class="metric-neutral">3,179</td>
+            <td class="metric-bad">25.1%</td>
+            <td class="metric-warn">£1.42</td>
+            <td class="metric-good">6.50%</td>
+            <td class="metric-neutral">3.99x</td>
+          </tr>
+          <tr data-country="FR">
+            <td><span class="country-pill fr">FR</span></td>
+            <td class="metric-neutral">£16,950</td>
+            <td class="metric-neutral">£84,927</td>
+            <td class="metric-neutral">715</td>
+            <td class="metric-good">20.0%</td>
+            <td class="metric-good">£0.87</td>
+            <td class="metric-neutral">3.65%</td>
+            <td class="metric-good">5.01x</td>
+          </tr>
+          <tr data-country="ES">
+            <td><span class="country-pill es">ES</span></td>
+            <td class="metric-neutral">£8,944</td>
+            <td class="metric-neutral">£42,809</td>
+            <td class="metric-neutral">357</td>
+            <td class="metric-good">20.9%</td>
+            <td class="metric-good">£0.77</td>
+            <td class="metric-neutral">3.09%</td>
+            <td class="metric-good">4.79x</td>
+          </tr>
+          <tr class="total-row" data-country="all" style="display: none;">
+            <td>EU Total</td><td>£185,752</td><td>£798,883</td><td>7,830</td><td>23.25%</td><td>£1.22</td><td>5.15%</td><td>4.30x</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Key Insights Section -->
+  <div class="section-card fade-in">
+    <div class="section-header collapse-toggle" data-section="key-insights">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div>
+          <div class="section-title">五大核心洞察</div>
+          <div class="section-subtitle">Key Strategic Insights</div>
+        </div>
+      </div>
+      <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="section-key-insights">
+      <div class="insight-grid">
+        <div class="insight-card">
+          <div class="insight-number">1</div>
+          <h4>高压清洗机是规模核心，UK承接效率是主要矛盾</h4>
+          <p>UK高压清洗机ACOS <span class="insight-metric bad">26.0%</span> 显著高于DE的 <span class="insight-metric warn">22.9%</span>，UK CPC £1.42为全站点最高。UK虽然CVR达6.50%，但竞价成本侵蚀利润，需针对性优化出价策略。</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-number">2</div>
+          <h4>水泵/沙缸是利润稳定盘</h4>
+          <p>ES水泵ACOS仅 <span class="insight-metric good">13.4%</span>，DE沙缸泵核心词ACOS仅 <span class="insight-metric good">10.4%</span>，ROAS高达 <span class="insight-metric good">9.6x</span>。该品类在各站均表现优异，值得追加预算投放。</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-number">3</div>
+          <h4>池底吸污需要独立治理策略</h4>
+          <p>DE泳池清洁ACOS <span class="insight-metric bad">32.4%</span>，CPC <span class="insight-metric bad">£2.57</span>，是高投入高风险品类。该品类仅存在于DE市场，需要独立预算规划和精准否定词策略。</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-number">4</div>
+          <h4>品牌广告渠道严重缺位</h4>
+          <p>SB广告仅<span class="insight-metric bad">4个</span>在投（共78个），SD仅<span class="insight-metric bad">7个</span>在投（共33个）。这意味着放弃了品牌搜索流量防御和用户再营销机会，竞争对手可直接截获品牌词搜索意图。</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-number">5</div>
+          <h4>FR/ES效率好但体量小</h4>
+          <p>两站ACOS均<span class="insight-metric good">&lt;21%</span>，CPC分别为£0.87和£0.77。适合低成本复制DE/UK验证过的打法，通过提升预算扩大订单规模。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: PRODUCT LINES -->
+<div class="tab-content" id="tab-products">
+  <div class="filter-bar">
+    <span class="filter-label">站点筛选</span>
+    <button class="filter-chip active" data-filter="all">All Markets</button>
+    <button class="filter-chip" data-filter="DE">DE</button>
+    <button class="filter-chip" data-filter="UK">UK</button>
+    <button class="filter-chip" data-filter="FR">FR</button>
+    <button class="filter-chip" data-filter="ES">ES</button>
+    <span class="filter-data" id="filterStatus2">显示全部站点数据</span>
+  </div>
+
+  <!-- Product Line Matrix -->
+  <div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        <div>
+          <div class="section-title">产品线 × 站点 交叉矩阵</div>
+          <div class="section-subtitle">Product Line Performance Matrix — 悬停单元格查看详情</div>
+        </div>
+      </div>
+      <span class="section-badge info">3 Products · 4 Markets</span>
+    </div>
+    <div class="section-body" style="overflow-x: auto;">
+      <table class="matrix-table" id="productMatrix">
+        <thead>
+          <tr><th>产品线</th><th>DE</th><th>UK</th><th>FR</th><th>ES</th><th>整体</th></tr>
+        </thead>
+        <tbody>
+          <tr data-product="hp-cleaner">
+            <td class="product-name">高压清洗机<br><span style="font-size:10px;color:var(--slate-400);">Pressure Washer</span></td>
+            <td class="matrix-cell" data-tooltip="花费 £26K · 销售 £113K · ACOS 22.9%">
+              <div class="main-value metric-warn">22.9%</div>
+              <div class="detail">£26K / £113K</div>
+            </td>
+            <td class="matrix-cell" data-tooltip="花费 £21K · 销售 £81K · ACOS 26.0%">
+              <div class="main-value metric-bad">26.0%</div>
+              <div class="detail">£21K / £81K</div>
+            </td>
+            <td class="matrix-cell" data-tooltip="花费 £6.1K · 销售 £28K · ACOS 21.3%">
+              <div class="main-value metric-warn">21.3%</div>
+              <div class="detail">£6.1K / £28K</div>
+            </td>
+            <td class="matrix-cell" data-tooltip="花费 £6.2K · 销售 £30K · ACOS 20.7%">
+              <div class="main-value metric-good">20.7%</div>
+              <div class="detail">£6.2K / £30K</div>
+            </td>
+            <td class="matrix-cell" style="font-weight:700;color:var(--navy);" data-tooltip="整体ACOS: 23.5%">
+              23.5%
+            </td>
+          </tr>
+          <tr data-product="pump-filter">
+            <td class="product-name">水泵/沙缸<br><span style="font-size:10px;color:var(--slate-400);">Pump &amp; Sand Filter</span></td>
+            <td class="matrix-cell" data-tooltip="花费 £24K · 销售 £110K · ACOS 22.1%">
+              <div class="main-value metric-warn">22.1%</div>
+              <div class="detail">£24K / £110K</div>
+            </td>
+            <td class="matrix-cell" data-tooltip="花费 £22K · 销售 £93K · ACOS 24.1%">
+              <div class="main-value metric-warn">24.1%</div>
+              <div class="detail">£22K / £93K</div>
+            </td>
+            <td class="matrix-cell" data-tooltip="花费 £1.1K · 销售 £7.5K · ACOS 15.3%">
+              <div class="main-value metric-good">15.3%</div>
+              <div class="detail">£1.1K / £7.5K</div>
+            </td>
+            <td class="matrix-cell" data-tooltip="花费 £1.1K · 销售 £8.6K · ACOS 13.4%">
+              <div class="main-value metric-good">13.4%</div>
+              <div class="detail">£1.1K / £8.6K</div>
+            </td>
+            <td class="matrix-cell" style="font-weight:700;color:var(--navy);" data-tooltip="整体ACOS: 22.4%">
+              22.4%
+            </td>
+          </tr>
+          <tr data-product="pool-clean">
+            <td class="product-name">泳池清洁<br><span style="font-size:10px;color:var(--slate-400);">Pool Cleaner</span></td>
+            <td class="matrix-cell" data-tooltip="花费 £21K · 销售 £64K · ACOS 32.4% · CPC £2.57">
+              <div class="main-value metric-bad">32.4%</div>
+              <div class="detail">£21K / £64K</div>
+            </td>
+            <td class="matrix-cell"><div class="na">N/A</div></td>
+            <td class="matrix-cell"><div class="na">N/A</div></td>
+            <td class="matrix-cell"><div class="na">N/A</div></td>
+            <td class="matrix-cell" style="font-weight:700;color:var(--red);" data-tooltip="仅DE市场运营">32.4%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Placement Performance -->
+  <div class="section-card fade-in">
+    <div class="section-header collapse-toggle" data-section="placement">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></div>
+        <div>
+          <div class="section-title">广告位表现对比</div>
+          <div class="section-subtitle">Placement Performance by Country</div>
+        </div>
+      </div>
+      <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="section-placement">
+      <table class="data-table">
+        <thead>
+          <tr><th>站点</th><th>广告位</th><th>ACOS</th><th>CVR</th><th>评价</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="country-pill de">DE</span></td>
+            <td>Top of Search</td>
+            <td class="metric-good">21.8%</td>
+            <td class="metric-good">6.56%</td>
+            <td><span class="section-badge good">优质</span></td>
+          </tr>
+          <tr>
+            <td><span class="country-pill de">DE</span></td>
+            <td>Detail Page</td>
+            <td class="metric-warn">25.4%</td>
+            <td class="metric-neutral">3.77%</td>
+            <td><span class="section-badge warn">关注</span></td>
+          </tr>
+          <tr>
+            <td><span class="country-pill uk">UK</span></td>
+            <td>Top of Search</td>
+            <td class="metric-bad">28.3%</td>
+            <td class="metric-good">7.12%</td>
+            <td><span class="section-badge alert">高成本</span></td>
+          </tr>
+          <tr>
+            <td><span class="country-pill uk">UK</span></td>
+            <td>Detail Page</td>
+            <td class="metric-bad">30.8%</td>
+            <td class="metric-neutral">4.05%</td>
+            <td><span class="section-badge alert">需优化</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: COUNTRY BREAKDOWN -->
+<div class="tab-content" id="tab-country">
+  <div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div>
+          <div class="section-title">各站点深度拆解</div>
+          <div class="section-subtitle">Market-by-Market Deep Dive</div>
+        </div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;" id="country-deep-dive">
+        <!-- DE -->
+        <div class="insight-card" style="border-left: 3px solid #BF360C;">
+          <h4><span class="country-pill de">DE</span> 德国 — 规模之王</h4>
+          <p style="margin-top:8px;">最大市场，贡献<span class="insight-metric good">48.6%</span>广告花费和<span class="insight-metric good">49.2%</span>销售额。高压清洗机和沙缸泵均为核心品类，但泳池清洁ACOS偏高(32.4%)。Top of Search表现优秀(ACOS 21.8%, CVR 6.56%)。</p>
+          <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">£90,150</strong> <span style="font-size:11px;color:var(--slate-400);">花费</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">3,579</strong> <span style="font-size:11px;color:var(--slate-400);">订单</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--amber);">22.9%</strong> <span style="font-size:11px;color:var(--slate-400);">ACOS</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--green);">4.36x</strong> <span style="font-size:11px;color:var(--slate-400);">ROAS</span></div>
+          </div>
+        </div>
+        <!-- UK -->
+        <div class="insight-card" style="border-left: 3px solid #0D47A1;">
+          <h4><span class="country-pill uk">UK</span> 英国 — 效率瓶颈</h4>
+          <p style="margin-top:8px;">第二大市场但ACOS最高<span class="insight-metric bad">25.1%</span>。CPC £1.42为全站最高，虽然CVR达6.50%，但竞价成本侵蚀利润。SB/SD广告几乎空白，缺少品牌流量护城河。</p>
+          <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">£69,708</strong> <span style="font-size:11px;color:var(--slate-400);">花费</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">3,179</strong> <span style="font-size:11px;color:var(--slate-400);">订单</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--red);">25.1%</strong> <span style="font-size:11px;color:var(--slate-400);">ACOS</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--slate-500);">3.99x</strong> <span style="font-size:11px;color:var(--slate-400);">ROAS</span></div>
+          </div>
+        </div>
+        <!-- FR -->
+        <div class="insight-card" style="border-left: 3px solid #4A148C;">
+          <h4><span class="country-pill fr">FR</span> 法国 — 效率之星</h4>
+          <p style="margin-top:8px;">ACOS最低<span class="insight-metric good">20.0%</span>，ROAS最高<span class="insight-metric good">5.01x</span>。CPC仅£0.87，是低成本扩张的理想市场。但目前体量较小(仅£16.9K花费)，有巨大增长空间。</p>
+          <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">£16,950</strong> <span style="font-size:11px;color:var(--slate-400);">花费</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">715</strong> <span style="font-size:11px;color:var(--slate-400);">订单</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--green);">20.0%</strong> <span style="font-size:11px;color:var(--slate-400);">ACOS</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--green);">5.01x</strong> <span style="font-size:11px;color:var(--slate-400);">ROAS</span></div>
+          </div>
+        </div>
+        <!-- ES -->
+        <div class="insight-card" style="border-left: 3px solid #F57F17;">
+          <h4><span class="country-pill es">ES</span> 西班牙 — 潜力市场</h4>
+          <p style="margin-top:8px;">体量最小但效率优异。ACOS <span class="insight-metric good">20.9%</span>，CPC最低仅<span class="insight-metric good">£0.77</span>。水泵品类表现突出(ACOS 13.4%)，适合作为利润型产品线的增量市场。</p>
+          <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">£8,944</strong> <span style="font-size:11px;color:var(--slate-400);">花费</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--navy);">357</strong> <span style="font-size:11px;color:var(--slate-400);">订单</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--green);">20.9%</strong> <span style="font-size:11px;color:var(--slate-400);">ACOS</span></div>
+            <div style="background:var(--slate-50);padding:10px 16px;border-radius:8px;"><strong style="color:var(--green);">4.79x</strong> <span style="font-size:11px;color:var(--slate-400);">ROAS</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: SEARCH INSIGHTS -->
+<div class="tab-content" id="tab-search">
+  <div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div>
+          <div class="section-title">搜索词效率分析</div>
+          <div class="section-subtitle">Search Term Efficiency &amp; Waste Analysis</div>
+        </div>
+      </div>
+      <span class="section-badge alert">34K+ Terms</span>
+    </div>
+    <div class="section-body">
+      <!-- Overview Stats -->
+      <div class="highlight-row" style="margin-bottom: 24px;">
+        <div style="background:var(--slate-50);border-radius:12px;padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.05em;">搜索词总量</div>
+          <div style="font-size:28px;font-weight:700;color:var(--navy);margin-top:4px;">38,024</div>
+          <div style="font-size:12px;color:var(--slate-400);">Total Unique Search Terms</div>
+        </div>
+        <div style="background:var(--red-light);border-radius:12px;padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.05em;">浪费花费 (零订单词)</div>
+          <div style="font-size:28px;font-weight:700;color:var(--red);margin-top:4px;">£76,366</div>
+          <div style="font-size:12px;color:var(--red);">占搜索词总花费的 29%</div>
+        </div>
+      </div>
+
+      <!-- Top wasting terms -->
+      <div class="alert-box warning fade-in" style="margin-bottom: 20px;">
+        <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <h4 class="amber">Top 3 浪费搜索词</h4>
+          <p>DE "poolsauger" £286 · UK "pressure washer" broad £162 · DE "pool" close-match £137<br>这三个词共浪费 <strong>£585</strong>，代表广泛的否定词设置不足问题（仅添加521个否定词，远低于38K+搜索词的合理覆盖）。</p>
+        </div>
+      </div>
+
+      <!-- Match Type Performance -->
+      <div class="section-card fade-in" style="margin-bottom: 20px;">
+        <div class="section-header collapse-toggle" data-section="match-type">
+          <div class="section-title-group">
+            <div class="section-title" style="font-family:'Inter',sans-serif;font-size:15px;">匹配类型效率对比</div>
+          </div>
+          <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="section-body" id="section-match-type">
+          <table class="data-table">
+            <thead><tr><th>匹配类型</th><th>ACOS</th><th>CVR</th><th>评价</th></tr></thead>
+            <tbody>
+              <tr><td>PHRASE</td><td class="metric-good">20.0%</td><td class="metric-good">6.19%</td><td><span class="section-badge good">最佳</span></td></tr>
+              <tr><td>EXACT</td><td class="metric-warn">22.5%</td><td class="metric-neutral">5.10%</td><td><span class="section-badge info">稳健</span></td></tr>
+              <tr><td>BROAD</td><td class="metric-bad">28.0%</td><td class="metric-neutral">3.80%</td><td><span class="section-badge alert">高浪费</span></td></tr>
+              <tr><td>AUTO</td><td class="metric-warn">24.0%</td><td class="metric-neutral">4.50%</td><td><span class="section-badge warn">监控</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top Converting Terms -->
+      <div class="section-card fade-in">
+        <div class="section-header collapse-toggle" data-section="top-terms">
+          <div class="section-title-group">
+            <div class="section-title" style="font-family:'Inter',sans-serif;font-size:15px;">Top 转化搜索词</div>
+          </div>
+          <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="section-body" id="section-top-terms">
+          <table class="data-table">
+            <thead><tr><th>站点</th><th>搜索词</th><th>匹配方式</th><th>订单</th><th>ACOS</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="country-pill de">DE</span></td>
+                <td>hochdruckreiniger</td>
+                <td>close-match</td>
+                <td class="metric-good">179</td>
+                <td class="metric-warn">26.0%</td>
+              </tr>
+              <tr>
+                <td><span class="country-pill de">DE</span></td>
+                <td>sandfilteranlage pool</td>
+                <td>phrase</td>
+                <td class="metric-good">122</td>
+                <td class="metric-good">13.0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: XNURTA SUGGESTIONS -->
+<div class="tab-content" id="tab-xnurta">
+  <!-- AI Operations Summary -->
+  <div class="section-card fade-in">
+    <div class="section-header collapse-toggle" data-section="ai-ops">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 14v-2a4 4 0 014-4h0a4 4 0 014 4v2"/><circle cx="12" cy="14" r="4"/></svg></div>
+        <div>
+          <div class="section-title">AI运营效率概览</div>
+          <div class="section-subtitle">Xnurta 近60天运营数据</div>
+        </div>
+      </div>
+      <div class="section-actions">
+        <span class="section-badge good">82.3% AI-Driven</span>
+        <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body" id="section-ai-ops">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;" id="aiOpsGrid">
+        <div style="background:var(--slate-50);border-radius:10px;padding:20px;text-align:center;">
+          <div style="font-size:24px;font-weight:700;color:var(--navy);">13,007</div>
+          <div style="font-size:11px;color:var(--slate-500);">总操作次数</div>
+        </div>
+        <div style="background:var(--green-light);border-radius:10px;padding:20px;text-align:center;">
+          <div style="font-size:24px;font-weight:700;color:var(--green);">10,711</div>
+          <div style="font-size:11px;color:var(--green);">AI自动执行</div>
+        </div>
+        <div style="background:var(--slate-50);border-radius:10px;padding:20px;text-align:center;">
+          <div style="font-size:24px;font-weight:700;color:var(--slate-600);">2,296</div>
+          <div style="font-size:11px;color:var(--slate-500);">人工操作</div>
+        </div>
+        <div style="background:var(--amber-light);border-radius:10px;padding:20px;text-align:center;">
+          <div style="font-size:24px;font-weight:700;color:var(--amber);">625</div>
+          <div style="font-size:11px;color:var(--amber);">预算耗尽告警 (10.4/天)</div>
+        </div>
+      </div>
+
+      <div class="alert-box warning fade-in">
+        <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <h4 class="amber">否定词添加不足</h4>
+          <p>60天仅添加<strong>521个</strong>否定关键词，面对38,024个搜索词中29%为浪费词(£76,366)的现状，当前的否定词覆盖率严重偏低。同时店铺对比分析显示：Blue fins ACOS 23.84% vs <strong>Lanchez 18.6%</strong>，Lanchez人工操作比例更高。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Xnurta Value Cards -->
+  <div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div>
+          <div class="section-title">Xnurta 方案：六大痛点 × 解决方案</div>
+          <div class="section-subtitle">Value-Driven Recommendations</div>
+        </div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="xnurta-grid">
+        <div class="xnurta-card">
+          <div class="icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+          <h4>84.8% Campaign暂停</h4>
+          <p>528个暂停Campaign中115个曾有£79,485花费和£351,434销售，潜在巨大恢复价值。</p>
+          <div class="solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Campaign健康度审计 + 智能重启策略</div>
+        </div>
+        <div class="xnurta-card">
+          <div class="icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
+          <h4>29%搜索词浪费（£76K）</h4>
+          <p>零订单搜索词吞噬近三成搜索花费，当前否定词机制覆盖严重不足。</p>
+          <div class="solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 自动否定词收割（£20阈值触发 + 批量添加）</div>
+        </div>
+        <div class="xnurta-card">
+          <div class="icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <h4>UK ACOS 25.1% 效率瓶颈</h4>
+          <p>UK CPC £1.42为最高，竞价成本侵蚀利润，Top of Search ACOS达28.3%。</p>
+          <div class="solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 站点级竞价校准 + 分时段出价策略</div>
+        </div>
+        <div class="xnurta-card">
+          <div class="icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="9" x2="12" y2="15"/></svg></div>
+          <h4>625次预算耗尽告警 (10.4/天)</h4>
+          <p>高频次预算告警说明预算分配策略需从被动响应转向主动规划。</p>
+          <div class="solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 智能预算分配器（基于ACOS动态调配）</div>
+        </div>
+        <div class="xnurta-card">
+          <div class="icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <h4>SB/SD仅11个在投（共111个）</h4>
+          <p>品牌广告几乎空白，放弃了品牌搜索流量防御、竞品截获和用户再营销。</p>
+          <div class="solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 一键品牌广告创建 + 自动创意素材提取</div>
+        </div>
+        <div class="xnurta-card">
+          <div class="icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2"><path d="M2 12h2"/><path d="M6 8h2"/><path d="M10 4h2"/><path d="M14 8h2"/><path d="M18 12h2"/><path d="M6 16h2"/><path d="M10 20h2"/><path d="M14 16h2"/></svg></div>
+          <h4>缺乏跨市场数据洞察</h4>
+          <p>四市场数据分散，无法快速识别跨市场最佳实践和可复制的打法。</p>
+          <div class="solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 多市场绩效仪表板 + 最佳实践自动迁移</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- External References Section (always visible) -->
+<div class="section-card fade-in" style="margin-top: 32px;">
+  <div class="section-header collapse-toggle" data-section="references">
+    <div class="section-title-group">
+      <div class="section-icon" style="background:var(--slate-500);"><svg viewBox="0 0 24 24" fill="none" stroke="#F1F5F9" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+      <div>
+        <div class="section-title">外部参考与行业基准</div>
+        <div class="section-subtitle">External References &amp; Industry Benchmarks</div>
+      </div>
+    </div>
+    <div class="section-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+  <div class="section-body" id="section-references">
+    <ul class="ref-list">
+      <li>
+        <svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span><strong>Ideal Home</strong> — Best Pressure Washers Review (External reference for competitive positioning)</span>
+      </li>
+      <li>
+        <svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span><strong>Good Housekeeping</strong> — Pressure Washer Buying Guide (External reference for keyword &amp; category insights)</span>
+      </li>
+      <li>
+        <svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span><strong>BHG (Better Homes &amp; Gardens)</strong> — Pool Cleaners Testing &amp; Review (External reference for pool product positioning)</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p>本报告由 <strong>Xnurta AI</strong> 自动生成 · 数据来源: Amazon Advertising Console</p>
+    <p style="margin-top:4px;">分析周期: 近60天 · 数据截至: June 2026</p>
+    <div class="footer-links">
+      <span class="footer-link">宁波蓝鳍电子商务有限公司</span>
+      <span class="footer-link">FOTING Brand</span>
+      <span class="footer-link">Confidential</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== TAB NAVIGATION =====
+  var tabs = document.querySelectorAll('.tab-item');
+  var tabContents = document.querySelectorAll('.tab-content');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = this.getAttribute('data-tab');
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      tabContents.forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+      var content = document.getElementById('tab-' + target);
+      if (content) content.classList.add('active');
+      // Retrigger counter animations for visible tab
+      setTimeout(triggerVisibleCounters, 100);
+    });
+  });
+
+  // ===== COUNTRY FILTER =====
+  var filterChips = document.querySelectorAll('.filter-chip');
+  var currentFilter = 'all';
+
+  function applyFilter(country) {
+    currentFilter = country;
+    filterChips.forEach(function(chip) {
+      var f = chip.getAttribute('data-filter');
+      if (f === country) chip.classList.add('active');
+      else chip.classList.remove('active');
+    });
+
+    // Update status text
+    var statusEls = document.querySelectorAll('#filterStatus, #filterStatus2');
+    var statusMap = { all: '显示全部站点数据', DE: '仅显示德国数据', UK: '仅显示英国数据', FR: '仅显示法国数据', ES: '仅显示西班牙数据' };
+    statusEls.forEach(function(el) { el.textContent = statusMap[country] || ''; });
+
+    // Filter KPI cards
+    document.querySelectorAll('#kpiGrid .kpi-card').forEach(function(card) {
+      var cardCountry = card.getAttribute('data-country');
+      if (country === 'all' || cardCountry === 'all') {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Filter country table rows
+    var allRow = document.querySelector('#countryTable tbody tr.total-row');
+    if (allRow) {
+      allRow.style.display = (country === 'all') ? '' : 'none';
+    }
+
+    // Filter product matrix
+    // (Product matrix shows all data always but we could add visual emphasis)
+  }
+
+  filterChips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      applyFilter(this.getAttribute('data-filter'));
+    });
+  });
+
+  // ===== COLLAPSIBLE SECTIONS =====
+  var collapseToggles = document.querySelectorAll('.collapse-toggle');
+  collapseToggles.forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      var sectionId = this.getAttribute('data-section');
+      var body = document.getElementById('section-' + sectionId);
+      var chevron = this.querySelector('.section-chevron');
+      if (body) {
+        var isCollapsed = body.classList.contains('collapsed');
+        if (isCollapsed) {
+          body.classList.remove('collapsed');
+          if (chevron) chevron.classList.add('open');
+        } else {
+          body.classList.add('collapsed');
+          if (chevron) chevron.classList.remove('open');
+        }
+      }
+    });
+  });
+
+  // ===== ANIMATED NUMBER COUNTERS =====
+  var countersAnimated = {};
+
+  function animateCounter(el) {
+    if (countersAnimated[el]) return;
+    countersAnimated[el] = true;
+
+    var target = parseFloat(el.getAttribute('data-target'));
+    var prefix = el.getAttribute('data-prefix') || '';
+    var suffix = el.getAttribute('data-suffix') || '';
+    var decimals = parseInt(el.getAttribute('data-decimals')) || 0;
+    var sub = el.getAttribute('data-sub') || '';
+    var duration = 1500;
+    var startTime = null;
+    var startValue = 0;
+
+    el.classList.add('counting');
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      // Ease out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = startValue + (target - startValue) * eased;
+      if (progress >= 1) {
+        current = target;
+      }
+      var formatted = prefix + current.toFixed(decimals) + suffix;
+      if (sub && progress >= 0.99) {
+        formatted = prefix + Math.round(target) + sub;
+      }
+      el.textContent = formatted;
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.classList.remove('counting');
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function triggerVisibleCounters() {
+    var counters = document.querySelectorAll('.kpi-value[data-target]');
+    counters.forEach(function(counter) {
+      var rect = counter.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        animateCounter(counter);
+      }
+    });
+  }
+
+  // ===== SCROLL ANIMATIONS (Fade In) =====
+  var fadeElements = document.querySelectorAll('.fade-in');
+  var fadeObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        fadeObserver.unobserve(entry.target);
+        // Trigger counters inside visible elements
+        var counters = entry.target.querySelectorAll('.kpi-value[data-target]');
+        counters.forEach(function(c) { animateCounter(c); });
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  fadeElements.forEach(function(el) { fadeObserver.observe(el); });
+
+  // Also observe KPI cards directly
+  document.querySelectorAll('#kpiGrid .kpi-card').forEach(function(card) {
+    fadeObserver.observe(card);
+  });
+
+  // Trigger visible ones immediately
+  triggerVisibleCounters();
+  // Check if any .fade-in is already in viewport
+  fadeElements.forEach(function(el) {
+    var rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('visible');
+    }
+  });
+
+  // ===== TOOLTIP POSITIONING (keep tooltips visible) =====
+  // The CSS tooltip approach handles this via data-tooltip attribute
+
+  // ===== PRODUCT MATRIX TOOLTIP ENHANCEMENT =====
+  document.querySelectorAll('.matrix-cell').forEach(function(cell) {
+    cell.addEventListener('mouseenter', function() {
+      this.style.background = '#FFF9EC';
+    });
+    cell.addEventListener('mouseleave', function() {
+      this.style.background = '';
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
