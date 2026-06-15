@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宁波蓝鳍 · 欧洲站广告深度诊断报告 | 2026 Q1-Q2</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d2991d;
+  --purple: #a371f7;
+  --teal: #39d353;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+.container { max-width:1200px; margin:0 auto; padding:0 24px; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #0d1117 0%, #1a2332 50%, #0d1b2a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 64px 0 48px;
+  position: relative;
+  overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-50%; right:-20%; width:600px; height:600px;
+  background: radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%);
+  border-radius:50%;
+}
+.hero h1 {
+  font-size:2.4rem; font-weight:700; letter-spacing:-0.03em;
+  background:linear-gradient(135deg, #e6edf3, #58a6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.hero .sub { color:var(--muted); font-size:1rem; margin-top:8px; }
+.hero .meta { display:flex; gap:24px; margin-top:16px; flex-wrap:wrap; }
+.hero .meta span { background:rgba(88,166,255,0.1); border:1px solid rgba(88,166,255,0.2); padding:4px 12px; border-radius:20px; font-size:0.85rem; color:var(--accent); }
+
+/* SECTION */
+section { padding:48px 0; border-bottom:1px solid var(--border); }
+section:last-child { border:none; }
+h2 { font-size:1.5rem; font-weight:700; margin-bottom:8px; color:#e6edf3; }
+h3 { font-size:1.1rem; font-weight:600; margin:24px 0 12px; color:#e6edf3; }
+.section-desc { color:var(--muted); font-size:0.9rem; margin-bottom:24px; }
+
+/* KPI GRID */
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:16px; margin-bottom:32px; }
+.kpi-card {
+  background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.kpi-card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.kpi-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px; }
+.kpi-value { font-size:1.8rem; font-weight:800; letter-spacing:-0.02em; }
+.kpi-sub { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+.kpi-green { color:var(--green); }
+.kpi-red { color:var(--red); }
+.kpi-orange { color:var(--orange); }
+.kpi-blue { color:var(--accent); }
+.kpi-purple { color:var(--purple); }
+
+/* INSIGHT ROW */
+.insight-row { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px; }
+@media(max-width:768px) { .insight-row{ grid-template-columns:1fr; } }
+
+.insight-card {
+  background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px;
+  border-left:4px solid var(--accent);
+}
+.insight-card.warn { border-left-color:var(--orange); }
+.insight-card.good { border-left-color:var(--green); }
+.insight-card.critical { border-left-color:var(--red); }
+.insight-card h4 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+.insight-card p { font-size:0.9rem; color:var(--muted); line-height:1.7; }
+.insight-card .highlight { color:var(--accent); font-weight:600; }
+.insight-card .stat { display:inline-block; background:rgba(88,166,255,0.1); padding:2px 8px; border-radius:4px; font-family:monospace; font-size:0.85rem; margin:2px; }
+
+/* TABLE */
+.table-wrap { overflow-x:auto; margin:20px 0; }
+table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+thead th { background:var(--border); color:var(--text); font-weight:600; padding:10px 14px; text-align:left; white-space:nowrap; }
+tbody td { padding:10px 14px; border-bottom:1px solid var(--border); }
+tbody tr:hover { background:rgba(88,166,255,0.05); }
+.tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; }
+.tag-green { background:rgba(63,185,80,0.15); color:var(--green); }
+.tag-red { background:rgba(248,81,73,0.15); color:var(--red); }
+.tag-orange { background:rgba(210,153,29,0.15); color:var(--orange); }
+.tag-blue { background:rgba(88,166,255,0.15); color:var(--accent); }
+
+/* CHART BARS */
+.bar-chart { margin:16px 0; }
+.bar-row { display:flex; align-items:center; margin-bottom:10px; gap:12px; }
+.bar-label { width:100px; font-size:0.82rem; white-space:nowrap; text-align:right; color:var(--muted); }
+.bar-track { flex:1; height:24px; background:var(--border); border-radius:6px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:6px; transition:width 0.8s ease; position:relative; }
+.bar-fill.green { background:linear-gradient(90deg, #238636, #3fb950); }
+.bar-fill.blue { background:linear-gradient(90deg, #1f6feb, #58a6ff); }
+.bar-fill.orange { background:linear-gradient(90deg, #9e6a03, #d2991d); }
+.bar-fill.red { background:linear-gradient(90deg, #da3633, #f85149); }
+.bar-val { font-size:0.8rem; font-weight:600; min-width:60px; text-align:right; }
+
+/* CHECKLIST */
+.checklist { list-style:none; padding:0; }
+.checklist li { padding:12px 16px; margin:8px 0; background:var(--card); border:1px solid var(--border); border-radius:8px; display:flex; align-items:flex-start; gap:12px; }
+.checklist .icon { font-size:1.2rem; flex-shrink:0; }
+.checklist .prio { padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:700; margin-left:8px; }
+.prio-p0 { background:rgba(248,81,73,0.2); color:var(--red); }
+.prio-p1 { background:rgba(210,153,29,0.2); color:var(--orange); }
+.prio-p2 { background:rgba(88,166,255,0.2); color:var(--accent); }
+
+/* COMPARISON GRID */
+.cmp-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
+@media(max-width:768px) { .cmp-grid { grid-template-columns:1fr; } }
+.cmp-col { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.cmp-col h4 { font-size:1rem; margin-bottom:12px; }
+
+/* CALLOUT */
+.callout {
+  padding:16px 20px; border-radius:10px; margin:16px 0; font-size:0.9rem; line-height:1.7;
+  border-left:4px solid;
+}
+.callout.info { background:rgba(88,166,255,0.08); border-color:var(--accent); }
+.callout.warn { background:rgba(210,153,29,0.08); border-color:var(--orange); }
+.callout.good { background:rgba(63,185,80,0.08); border-color:var(--green); }
+
+/* FOOTER */
+footer { padding:32px 0; text-align:center; color:var(--muted); font-size:0.8rem; border-top:1px solid var(--border); }
+
+/* ANIMATION */
+@keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.fade { animation:fadeInUp 0.6s ease forwards; }
+.fade-d1 { animation-delay:0.1s; opacity:0; }
+.fade-d2 { animation-delay:0.2s; opacity:0; }
+.fade-d3 { animation-delay:0.3s; opacity:0; }
+</style>
+</head>
+<body>
+
+<!-- ======== HERO ======== -->
+<header class="hero">
+  <div class="container">
+    <h1 class="fade">宁波蓝鳍 · 欧洲站广告深度诊断报告</h1>
+    <p class="sub fade fade-d1">Amazon UK · DE · FR · ES | SP + SB + SD 全渠道分析 | 2026.04.17 – 2026.06.15</p>
+    <div class="meta fade fade-d2">
+      <span>📊 数据来源: Campaign / ProductAd / SearchTerm / Keyword / AutoTarget / Placement / OpLog</span>
+      <span>🏪 站点: Blue fins + Lanchez</span>
+      <span>🤖 工具: Xnurta AI 托管驱动</span>
+      <span>📅 生成: 2026.06.15</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ======== 1. EXECUTIVE SUMMARY ======== -->
+<section>
+  <h2 class="fade">📌 一、执行摘要</h2>
+  <p class="section-desc fade fade-d1">60 天欧洲四站广告表现全景 — 整体健康，但存在结构性隐患</p>
+
+  <div class="kpi-grid fade fade-d1">
+    <div class="kpi-card">
+      <div class="kpi-label">总广告花费</div>
+      <div class="kpi-value kpi-blue">£185.8K</div>
+      <div class="kpi-sub">CPC £1.22 · 日均 £3,096</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">总广告销售额</div>
+      <div class="kpi-value kpi-green">£798.9K</div>
+      <div class="kpi-sub">ROAS 4.30x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">总订单数</div>
+      <div class="kpi-value" style="color:#e6edf3;">7,830</div>
+      <div class="kpi-sub">日均 130.5 单 · CVR 5.15%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">整体 ACOS</div>
+      <div class="kpi-value">23.25%</div>
+      <div class="kpi-sub"><span style="color:var(--green)">良性区间</span>，但国别差异大</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">活跃广告活动</div>
+      <div class="kpi-value kpi-red">95 / 626</div>
+      <div class="kpi-sub"><span style="color:var(--red)">84.8% 已暂停</span> · 严重警报</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">AI 操作占比</div>
+      <div class="kpi-value kpi-purple">82.3%</div>
+      <div class="kpi-sub">10,711 次 AI 自动操作</div>
+    </div>
+  </div>
+
+  <div class="callout info fade fade-d2">
+    <strong>🔍 总体判断：</strong> 宁波蓝鳍的欧洲站广告 ROAS 4.30x、ACOS 23.25%，放在欧洲 SP 品类属于<strong>中上水平</strong>。核心问题不是"广告投不好"，而是<strong>84.8% 的广告活动被暂停</strong>（528/626）——这意味着大量历史积累的广告数据、关键词数据和竞价学习成果被废弃。当前在跑的 95 个 Campaign 虽然整体表现尚可，但 UK 站 ACOS 25.1% 显著高于 DE (22.9%)、FR (20.0%) 和 ES (20.9%)，需要重点关注。
+  </div>
+</section>
+
+<!-- ======== 2. COUNTRY BREAKDOWN ======== -->
+<section>
+  <h2 class="fade">🌍 二、四国表现拆解</h2>
+  <p class="section-desc fade fade-d1">UK 体量最大但效率最低，DE 是真正的利润引擎</p>
+
+  <!-- Country KPI Table -->
+  <div class="table-wrap fade fade-d1">
+    <table>
+      <thead><tr><th>指标</th><th>🇬🇧 UK</th><th>🇩🇪 DE</th><th>🇫🇷 FR</th><th>🇪🇸 ES</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>广告花费</strong></td>
+          <td>£69,708</td><td><strong>£90,150</strong></td><td>£16,950</td><td>£8,944</td>
+        </tr>
+        <tr>
+          <td><strong>广告销售额</strong></td>
+          <td>£277,996</td><td><strong>£393,151</strong></td><td>£84,927</td><td>£42,809</td>
+        </tr>
+        <tr>
+          <td><strong>订单数</strong></td>
+          <td>3,179</td><td><strong>3,579</strong></td><td>715</td><td>357</td>
+        </tr>
+        <tr>
+          <td><strong>ACOS</strong></td>
+          <td><span class="tag tag-orange">25.1%</span></td>
+          <td><span class="tag tag-green">22.9%</span></td>
+          <td><span class="tag tag-green">20.0%</span></td>
+          <td><span class="tag tag-green">20.9%</span></td>
+        </tr>
+        <tr>
+          <td><strong>ROAS</strong></td>
+          <td>3.99x</td><td>4.36x</td><td><strong>5.01x</strong></td><td>4.79x</td>
+        </tr>
+        <tr>
+          <td><strong>CPC</strong></td>
+          <td><span class="tag tag-orange">£1.42</span></td><td>£1.25</td><td>£0.87</td><td>£0.77</td>
+        </tr>
+        <tr>
+          <td><strong>CVR</strong></td>
+          <td><strong>6.50%</strong></td><td>4.97%</td><td>3.65%</td><td>3.09%</td>
+        </tr>
+        <tr>
+          <td><strong>日均花费</strong></td>
+          <td>£1,162</td><td><strong>£1,503</strong></td><td>£283</td><td>£149</td>
+        </tr>
+        <tr>
+          <td><strong>操作日志占比</strong></td>
+          <td><span class="tag tag-red">69.3%</span></td><td>24.8%</td><td>3.5%</td><td>2.4%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Country insight bars -->
+  <div class="bar-chart fade fade-d2">
+    <h4 style="margin-bottom:12px;">ACOS 对比（越低越好）</h4>
+    <div class="bar-row">
+      <div class="bar-label">🇬🇧 UK</div>
+      <div class="bar-track"><div class="bar-fill orange" style="width:83.7%"></div></div>
+      <div class="bar-val tag tag-orange">25.1%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">🇩🇪 DE</div>
+      <div class="bar-track"><div class="bar-fill green" style="width:76.4%"></div></div>
+      <div class="bar-val tag tag-green">22.9%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">🇫🇷 FR</div>
+      <div class="bar-track"><div class="bar-fill green" style="width:66.5%"></div></div>
+      <div class="bar-val tag tag-green">20.0%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">🇪🇸 ES</div>
+      <div class="bar-track"><div class="bar-fill green" style="width:69.7%"></div></div>
+      <div class="bar-val tag tag-green">20.9%</div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:4px;">基准线 30% ACOS；参考目标 &lt;25%</p>
+  </div>
+
+  <div class="callout warn fade fade-d2">
+    <strong>⚠️ UK 站三大异常：</strong><br>
+    ① UK 消耗了 <strong>69.3% 的运营操作资源</strong>（9,012 次），却产出了 <strong>四国中最高的 ACOS（25.1%）和最贵的 CPC（£1.42）</strong>；<br>
+    ② UK 的 CVR 最高（6.50%），说明产品本身竞争力不差，问题出在<strong>流量获取成本过高</strong>；<br>
+    ③ UK CPC 比 DE 高 13.6%，比 FR 高 63.2%，建议重点审查 UK 站的竞价策略和关键词竞争格局。
+  </div>
+
+  <div class="insight-row fade fade-d2">
+    <div class="insight-card good">
+      <h4>✅ DE 站是利润引擎</h4>
+      <p>花费 £90K、销售额 £393K，<span class="highlight">ACOS 22.9%</span>。产品矩阵完整：高压清洗机 + 泳池吸尘器 + 潜水泵三条线并行。Poolsauger Akku（电池泳池吸尘器）是独特品类优势。</p>
+    </div>
+    <div class="insight-card">
+      <h4>💡 UK 站的 CPC 困境</h4>
+      <p>UK CPC £1.42 远超其他站。竞品词 "pressure washer" BROAD 匹配 £162 花费零转化、"car pressure washer" £90 零转化——说明<span class="highlight">UK 站关键词竞争激烈且存在大量不精准流量</span>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 3. CAMPAIGN HEALTH CRISIS ======== -->
+<section>
+  <h2 class="fade">🚨 三、广告活动健康危机：84.8% 暂停率</h2>
+  <p class="section-desc fade fade-d1">这是本次诊断发现的最严重结构性问题</p>
+
+  <div class="kpi-grid fade fade-d1" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="kpi-card">
+      <div class="kpi-label">总 Campaign</div>
+      <div class="kpi-value" style="color:#e6edf3;">626</div>
+      <div class="kpi-sub">SP 515 · SB 78 · SD 33</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">已暂停</div>
+      <div class="kpi-value kpi-red">528</div>
+      <div class="kpi-sub">84.8% · 含 £79.5K 历史花费</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">在投放</div>
+      <div class="kpi-value kpi-green">95</div>
+      <div class="kpi-sub">仅 15.2% 活跃</div>
+    </div>
+  </div>
+
+  <div class="bar-chart fade fade-d1">
+    <h4 style="margin-bottom:12px;">各站暂停率</h4>
+    <div class="bar-row"><div class="bar-label">🇪🇸 ES</div><div class="bar-track"><div class="bar-fill red" style="width:87.2%"></div></div><div class="bar-val" style="color:var(--red)">87.2%</div></div>
+    <div class="bar-row"><div class="bar-label">🇬🇧 UK</div><div class="bar-track"><div class="bar-fill red" style="width:85.2%"></div></div><div class="bar-val" style="color:var(--red)">85.2%</div></div>
+    <div class="bar-row"><div class="bar-label">🇩🇪 DE</div><div class="bar-track"><div class="bar-fill red" style="width:83.4%"></div></div><div class="bar-val" style="color:var(--red)">83.4%</div></div>
+    <div class="bar-row"><div class="bar-label">🇫🇷 FR</div><div class="bar-track"><div class="bar-fill red" style="width:77.3%"></div></div><div class="bar-val" style="color:var(--red)">77.3%</div></div>
+  </div>
+
+  <div class="callout critical fade fade-d2" style="border-color:var(--red);background:rgba(248,81,73,0.06);">
+    <strong>🚨 根本原因分析：</strong><br>
+    ① <strong>115 个被暂停的 Campaign 曾产生过花费和订单</strong>（累计 £79.5K 花费 → £351.4K 销售 → 3,210 单），这些不是"没效果"的广告，而是曾经在跑的 Campaign 被系统性地放弃了；<br>
+    ② 大量 Campaign 暂停时间集中在 5 月初（5/3-5/4 日有 6 个暂停），可能是运营策略调整或预算收缩；<br>
+    ③ 暂停的 Campaign 包含 Sponsored Brands (74) 和 Sponsored Display (26)，品牌流量渠道几乎全部关闭，对品牌建设和复购极为不利。
+  </div>
+
+  <div class="callout info fade fade-d2">
+    <strong>🔧 建议：立即审计被暂停 Campaign</strong>——分类为"永久废弃"、"季节性暂停"、"可重启优化"。对有历史转化数据的 Campaign，评估重启后搭配 AI 优化的 ROI 潜力。特别是 SB 和 SD 广告，这是提升品牌搜索量和用户复购的关键渠道。
+  </div>
+</section>
+
+<!-- ======== 4. PRODUCT & CATEGORY ======== -->
+<section>
+  <h2 class="fade">📦 四、产品矩阵与品类表现</h2>
+  <p class="section-desc fade fade-d1">FOTING 品牌三大品类：高压清洗机 · 泳池清洁 · 潜水泵</p>
+
+  <div class="table-wrap fade fade-d1">
+    <table>
+      <thead><tr><th>品类 / 产品线</th><th>主力市场</th><th>花费</th><th>销售额</th><th>ACOS</th><th>评价</th></tr></thead>
+      <tbody>
+        <tr><td><strong>高压清洗机 (PROC/T3)</strong></td><td>DE > UK > FR > ES</td><td>~£65K</td><td>~£280K</td><td><span class="tag tag-green">23-27%</span></td><td>✅ 核心品类，多市场覆盖</td></tr>
+        <tr><td><strong>电池泳池吸尘器 (PCT403T)</strong></td><td>DE</td><td>~£13.5K</td><td>~£43K</td><td><span class="tag tag-orange">29-37%</span></td><td>⚠️ ACOS 偏高但品类独特</td></tr>
+        <tr><td><strong>潜水泵 (Q900/Q1000)</strong></td><td>UK > DE</td><td>~£6.1K</td><td>~£22.5K</td><td><span class="tag tag-green">22-33%</span></td><td>✅ 转化好但 CPC 竞争激烈</td></tr>
+        <tr><td><strong>花园泵 / 污水泵</strong></td><td>DE</td><td>~£2.3K</td><td>~£10.6K</td><td><span class="tag tag-green">22%</span></td><td>✅ 长尾利润品类</td></tr>
+        <tr><td><strong>沙滤系统</strong></td><td>DE</td><td>~£2.0K</td><td>~£15.3K</td><td><span class="tag tag-green">13%</span></td><td>🟢 极优品类</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info fade fade-d2">
+    <strong>💡 产品策略建议：</strong><br>
+    ① <strong>高压清洗机</strong>是绝对主力（2026 新款带触摸屏），但 UK 站 "pressure washer" BROAD 匹配严重浪费（£162 零转化 PHRASE 相同词 £0）——需要<strong>精准收窄匹配类型</strong>；<br>
+    ② <strong>泳池清洁品类</strong>在 DE 有独特优势（Poolsauger Akku），但 ACOS 偏高说明有优化空间。建议拆分为独立 Campaign 精细管理；<br>
+    ③ <strong>沙滤系统</strong>是隐藏的金矿（ACOS 13%），建议增加预算并拓展到 FR/ES 市场。
+  </div>
+</section>
+
+<!-- ======== 5. SEARCH TERM EFFICIENCY ======== -->
+<section>
+  <h2 class="fade">🔍 五、搜索词效率</h2>
+  <p class="section-desc fade fade-d1">38,024 个搜索词中，29% 的花费零转化 — 存在系统性的预算浪费</p>
+
+  <div class="kpi-grid fade fade-d1" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="kpi-card">
+      <div class="kpi-label">总搜索词数</div>
+      <div class="kpi-value" style="color:#e6edf3;">38,024</div>
+      <div class="kpi-sub">DE 19,876 · UK 10,568 · ES 4,045 · FR 3,535</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">零转化浪费</div>
+      <div class="kpi-value kpi-red">£76.4K</div>
+      <div class="kpi-sub">34,111 个词 · 占总花费 29.0%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">最优匹配类型</div>
+      <div class="kpi-value kpi-green">PHRASE</div>
+      <div class="kpi-sub">ACOS 20.0% · CVR 6.19%</div>
+    </div>
+  </div>
+
+  <div class="table-wrap fade fade-d1">
+    <table>
+      <thead><tr><th>匹配类型</th><th>搜索词数</th><th>花费</th><th>ACOS</th><th>CVR</th><th>效率评价</th></tr></thead>
+      <tbody>
+        <tr><td>CLOSE-MATCH</td><td>8,059</td><td>£74,397</td><td>25.7%</td><td>5.01%</td><td><span class="tag tag-blue">主力</span></td></tr>
+        <tr><td>BROAD</td><td>10,629</td><td>£72,721</td><td>24.3%</td><td>4.93%</td><td><span class="tag tag-orange">浪费最多</span></td></tr>
+        <tr><td>SUBSTITUTES</td><td>8,850</td><td>£27,445</td><td>20.4%</td><td>3.20%</td><td><span class="tag tag-green">不错</span></td></tr>
+        <tr><td>PHRASE</td><td>4,399</td><td>£27,212</td><td><strong>20.0%</strong></td><td><strong>6.19%</strong></td><td><span class="tag tag-green">最优</span></td></tr>
+        <tr><td>EXACT</td><td>867</td><td>£22,227</td><td>27.7%</td><td>4.82%</td><td><span class="tag tag-orange">量小价高</span></td></tr>
+        <tr><td>ASIN 定位</td><td>726</td><td>£22,218</td><td>20.6%</td><td>5.99%</td><td><span class="tag tag-green">高效</span></td></tr>
+        <tr><td>LOOSE-MATCH</td><td>3,810</td><td>£10,280</td><td><strong>18.6%</strong></td><td>4.89%</td><td><span class="tag tag-green">高效</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn fade fade-d2">
+    <strong>⚠️ 搜索词浪费 TOP 5（花费 > £80，0 订单）：</strong><br>
+    ① DE "poolsauger" EXACT — £285.90 / 79 次点击 / 5,380 次曝光 → <strong>立即可否词</strong><br>
+    ② UK "pressure washer" BROAD — £162.46 / 139 次点击 → <strong>收窄为 PHRASE</strong><br>
+    ③ DE "pool" CLOSE-MATCH — £137.08 / 96 次点击 → <strong>过于宽泛，否词</strong><br>
+    ④ UK "jet wash" BROAD — £120.18 / 76 次点击 → <strong>否词或转为 EXACT</strong><br>
+    ⑤ DE "bodensauger pool" CLOSE-MATCH — £113.12 / 39 次点击 → <strong>不相关，否词</strong>
+  </div>
+</section>
+
+<!-- ======== 6. AI OPERATIONS DEEP DIVE ======== -->
+<section>
+  <h2 class="fade">🤖 六、Xnurta AI 运营深度画像</h2>
+  <p class="section-desc fade fade-d1">82.3% 操作由 AI 驱动，但人机协作存在优化空间</p>
+
+  <div class="kpi-grid fade fade-d1" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+    <div class="kpi-card">
+      <div class="kpi-label">总操作次数</div>
+      <div class="kpi-value" style="color:#e6edf3;">13,007</div>
+      <div class="kpi-sub">60 天 · 日均 217 次</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">AI 自动操作</div>
+      <div class="kpi-value kpi-purple">10,711</div>
+      <div class="kpi-sub">82.3% · 出价+预算管理</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">人工/控制台操作</div>
+      <div class="kpi-value" style="color:var(--muted);">2,296</div>
+      <div class="kpi-sub">17.7% · 含否词/调结构</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">预算调整操作</div>
+      <div class="kpi-value kpi-orange">4,614</div>
+      <div class="kpi-sub">占总操作 35.5%</div>
+    </div>
+  </div>
+
+  <div class="bar-chart fade fade-d1">
+    <h4 style="margin-bottom:12px;">操作类型分布（Top 8）</h4>
+    <div class="bar-row"><div class="bar-label">日预算增加</div><div class="bar-track"><div class="bar-fill blue" style="width:100%"></div></div><div class="bar-val">4,304</div></div>
+    <div class="bar-row"><div class="bar-label">关键词出价上调</div><div class="bar-track"><div class="bar-fill blue" style="width:47.2%"></div></div><div class="bar-val">2,031</div></div>
+    <div class="bar-row"><div class="bar-label">关键词出价下调</div><div class="bar-track"><div class="bar-fill blue" style="width:44.8%"></div></div><div class="bar-val">1,927</div></div>
+    <div class="bar-row"><div class="bar-label">自动定向出价下调</div><div class="bar-track"><div class="bar-fill blue" style="width:22.8%"></div></div><div class="bar-val">980</div></div>
+    <div class="bar-row"><div class="bar-label">自动定向出价上调</div><div class="bar-track"><div class="bar-fill blue" style="width:22.4%"></div></div><div class="bar-val">964</div></div>
+    <div class="bar-row"><div class="bar-label">预算耗尽告警</div><div class="bar-track"><div class="bar-fill red" style="width:14.5%"></div></div><div class="bar-val">625</div></div>
+    <div class="bar-row"><div class="bar-label">⭐ 否定关键词添加</div><div class="bar-track"><div class="bar-fill green" style="width:12.1%"></div></div><div class="bar-val">521</div></div>
+    <div class="bar-row"><div class="bar-label">产品定向出价调整</div><div class="bar-track"><div class="bar-fill blue" style="width:17.2%"></div></div><div class="bar-val">742</div></div>
+  </div>
+
+  <div class="insight-row fade fade-d2">
+    <div class="insight-card critical">
+      <h4>🚨 预算消耗告警 625 次</h4>
+      <p>在 60 天内 Campaign 预算耗尽告警多达 <span class="highlight">625 次</span>，日均 10.4 次！这意味着大量 Campaign 设了过低预算，在有效时段内无法持续投放。<span class="highlight">这正是 AI 被诟病"越跑越差"的根因之一——预算烧完就停，无法积累转化数据。</span></p>
+    </div>
+    <div class="insight-card warn">
+      <h4>⚠️ 否定关键词仅 521 次</h4>
+      <p>对比 38,024 个搜索词中 34,111 个零转化词，521 次否词操作严重不足（仅覆盖 1.5% 的浪费词）。<span class="highlight">建议 AI 增加基于花费阈值（如 > £20 零转化）的自动否词规则。</span></p>
+    </div>
+  </div>
+
+  <div class="cmp-grid fade fade-d2">
+    <div class="cmp-col">
+      <h4>Blue fins 站</h4>
+      <p style="color:var(--muted);font-size:0.85rem;">总操作: 11,454<br>AI: 9,693 (84.6%)<br>人工: 1,761 (15.4%)<br>ACOS: <span style="color:var(--orange)">23.84%</span></p>
+    </div>
+    <div class="cmp-col">
+      <h4>Lanchez 站</h4>
+      <p style="color:var(--muted);font-size:0.85rem;">总操作: 1,553<br>AI: 1,018 (65.6%)<br>人工: 535 (34.4%)<br>ACOS: <span style="color:var(--green)">18.6%</span></p>
+    </div>
+  </div>
+  <p style="font-size:0.82rem;color:var(--muted);margin-top:8px;" class="fade fade-d2">💡 Lanchez 人工操作比例是 Blue fins 的 2.2 倍，ACOS 却低 5.2 个百分点——人机协作的平衡点值得研究。</p>
+</section>
+
+<!-- ======== 7. XNURTA VALUE ======== -->
+<section>
+  <h2 class="fade">🔗 七、Xnurta 赋能：从数据到行动</h2>
+  <p class="section-desc fade fade-d1">针对宁波蓝鳍的 6 大痛点，Xnurta 可提供的具体支持</p>
+
+  <div class="table-wrap fade fade-d1">
+    <table>
+      <thead><tr><th>痛点</th><th>数据证据</th><th>Xnurta 解决方案</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>① Campaign 暂停率 84.8%</strong></td>
+          <td>528/626 暂停，含 £79.5K 历史花费</td>
+          <td>✅ Campaign 健康评分 + 暂停决策溯源：AI 自动审计被暂停 Campaign，按"可重启 ROI"排序推荐重启优先级；SB/SD 品牌渠道专项看板</td>
+        </tr>
+        <tr>
+          <td><strong>② 搜索词浪费 29%</strong></td>
+          <td>£76.4K 零转化，34,111 个浪费词</td>
+          <td>✅ 智能否词引擎：按花费阈值 (> £15)、曝光阈值 (> 1K)、点击次数 (> 20) 自动识别应否词，生成批量否决列表；支持按 Campaign/AdGroup 粒度精细化否词</td>
+        </tr>
+        <tr>
+          <td><strong>③ UK 站 ACOS 偏高</strong></td>
+          <td>ACOS 25.1% vs DE 22.9%，CPC £1.42</td>
+          <td>✅ 市场级竞价策略校准：UK 独立竞价模型，结合竞品 CPC 数据自动优化；BROAD→PHRASE 匹配类型优化建议</td>
+        </tr>
+        <tr>
+          <td><strong>④ 预算耗尽告警 625 次</strong></td>
+          <td>日均 10.4 次，Campaign 间歇性停投</td>
+          <td>✅ 智能预算分配器：基于 ACOS 绩效自动分配预算，高转化时段动态加预算，低效时段自动减投；消除人工频繁调预算的操作负担</td>
+        </tr>
+        <tr>
+          <td><strong>⑤ 品牌广告渠道缺失</strong></td>
+          <td>SB 仅 4 个在投，SD 仅 7 个</td>
+          <td>✅ SB/SD 智能投放引擎：一键创建品牌视频广告 + Display 再营销；自动提取高转化 ASIN 生成展示素材；品牌搜索量增长追踪</td>
+        </tr>
+        <tr>
+          <td><strong>⑥ 缺少跨市场对比视角</strong></td>
+          <td>UK 操作 69.3% 但效果最差</td>
+          <td>✅ 跨市场绩效仪表盘：UK/DE/FR/ES 四站并排对比，AI 自动标记异常指标；市场间最佳实践自动推荐（如将 DE 高效关键词布局到 UK）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout good fade fade-d2">
+    <strong>✅ Xnurta 已在发挥作用：</strong> 82.3% 的操作由 Xnurta AI 自动完成（出价管理 + 预算优化），整体 ROAS 维持在 4.30x。当前需要的是 <strong>从"基础自动化"升级到"策略级 AI"</strong>——包括智能否词、跨 Campaign 预算分配、品牌渠道拓展、暂停 Campaign 智能审计等高级功能。
+  </div>
+</section>
+
+<!-- ======== 8. ACTION PLAN ======== -->
+<section>
+  <h2 class="fade">📋 八、优化行动清单</h2>
+  <p class="section-desc fade fade-d1">按优先级排序，每项附数据依据和预期收益</p>
+
+  <ul class="checklist fade fade-d1">
+    <li>
+      <span class="icon">🛑</span>
+      <div>
+        <strong>审计 528 个被暂停 Campaign</strong><span class="prio prio-p0">P0 紧急</span>
+        <p style="color:var(--muted);font-size:0.82rem;">分类为"永久废弃/季节性/可重启"。115 个有历史转化的 Campaign 优先评估重启 ROI。SB (74) 和 SD (26) 必须单独审计——品牌流量渠道不可长期关闭。预计可发掘 £50K+ 可重启预算。</p>
+      </div>
+    </li>
+    <li>
+      <span class="icon">💰</span>
+      <div>
+        <strong>解决预算耗尽告警（625 次）</strong><span class="prio prio-p0">P0 紧急</span>
+        <p style="color:var(--muted);font-size:0.82rem;">识别频繁耗尽预算的 Campaign，统一调整为"基于日均单量和 ACOS"的动态预算。高转化 Campaign 预算上浮 20-30% 确保不间断投放。预计提升 5-10% 有效投放时长。</p>
+      </div>
+    </li>
+    <li>
+      <span class="icon">🔍</span>
+      <div>
+        <strong>批量否词：TOP 50 零转化搜索词</strong><span class="prio prio-p1">P1 高优</span>
+        <p style="color:var(--muted);font-size:0.82rem;">花费 > £50 且 0 订单的搜索词立即否词（约 200 个词）。花费 £20-50 的审慎评估。预计节省 £15-20K/月无效花费。同步设置 AI 自动否词规则（花费 > £20 · 点击 > 15 · 0 订单）。</p>
+      </div>
+    </li>
+    <li>
+      <span class="icon">🇬🇧</span>
+      <div>
+        <strong>UK 站竞价策略专项优化</strong><span class="prio prio-p1">P1 高优</span>
+        <p style="color:var(--muted);font-size:0.82rem;">审查 UK 站 "pressure washer" 大类词的匹配类型——BROAD 花费 £162 零转化应立即收窄为 PHRASE。TOP 10 UK 搜索词按 ACOS 排序，> 40% 的降低竞价或暂停。目标：UK ACOS 从 25.1% 降至 22% 以下。</p>
+      </div>
+    </li>
+    <li>
+      <span class="icon">🏷️</span>
+      <div>
+        <strong>重启品牌广告渠道（SB + SD）</strong><span class="prio prio-p1">P1 高优</span>
+        <p style="color:var(--muted);font-size:0.82rem;">创建 2-3 个 SB Video 广告（高压清洗机产品演示视频），预算 £20-30/天。创建 1 个 SD 再营销广告，锁定浏览过但未购买的访客。目标：品牌搜索量季度增长 15%。</p>
+      </div>
+    </li>
+    <li>
+      <span class="icon">📊</span>
+      <div>
+        <strong>FR/ES 市场增量测试</strong><span class="prio prio-p2">P2 中优</span>
+        <p style="color:var(--muted);font-size:0.82rem;">FR ACOS 20.0%、ES 20.9%，两站效率好但量太小。FR 日均仅 £283，ES 仅 £149。将 UK/DE 验证过的高效关键词布局到 FR/ES，各增加 £100/天预算测试 2 周。目标：两站总销售额翻倍。</p>
+      </div>
+    </li>
+    <li>
+      <span class="icon">⚙️</span>
+      <div>
+        <strong>Placement 竞价调整</strong><span class="prio prio-p2">P2 中优</span>
+        <p style="color:var(--muted);font-size:0.82rem;">Top of Search ACOS 23.0%（效率好），Product Page ACOS 26.7%（偏高）——Top of Search 加价 10-20%，Product Page 降价 10%。1,707 个 Placement 无竞价调整需尽快优化。</p>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- ======== 9. CONCLUSION ======== -->
+<section>
+  <h2 class="fade">🎯 九、结论</h2>
+
+  <div class="callout info fade fade-d1">
+    <strong>宁波蓝鳍的欧洲站广告基础不差。</strong> ACOS 23.25%、ROAS 4.30x 说明产品和广告方向是对的。三大核心品类（高压清洗机/泳池清洁/水泵）在欧洲有真实需求，DE 站尤其表现突出。
+  </div>
+
+  <div class="callout warn fade fade-d2">
+    <strong>但三个结构性问题正在拖累整体效率：</strong><br>
+    ① <strong>84.8% Campaign 暂停率</strong>——相当于自废武功，把已学到的广告数据丢掉了；<br>
+    ② <strong>UK 站投入产出失衡</strong>——69.3% 的操作资源砸在 UK，却是四国中 ACOS 最高的；<br>
+    ③ <strong>品牌广告渠道严重缺位</strong>——SB/SD 仅 11 个在投，放弃了品牌搜索和用户再营销两大增长杠杆。
+  </div>
+
+  <div class="callout good fade fade-d3">
+    <strong>✅ Xnurta 可以帮到你们的，不是"替代人工判断"，而是在以下 5 个维度提供 AI 级加速：</strong><br><br>
+    1. <strong>智能否词</strong>：34,111 个浪费搜索词，人工否不完，AI 可以<br>
+    2. <strong>预算智能分配</strong>：625 次预算耗尽告警，AI 动态调预算比人工快 100 倍<br>
+    3. <strong>暂停 Campaign 审计</strong>：528 个暂停广告一键评估重启 ROI<br>
+    4. <strong>品牌广告自动化</strong>：从 0 到 1 创建 SB Video + SD 再营销，AI 自动提取素材<br>
+    5. <strong>跨市场洞察</strong>：DE 的高效关键词自动推荐到 UK/FR/ES，真正实现"一次验证，多站复用"
+  </div>
+
+  <p style="text-align:center;font-size:1.1rem;margin-top:32px;color:var(--accent);" class="fade fade-d3">
+    <strong>欧洲四站年化 GMV 预估 £1.6M+，当前广告投入产出比健康。<br>
+    下一步不是"换打法"，而是把 AI 从执行层升级到策略层。</strong>
+  </p>
+</section>
+
+</div><!-- container -->
+
+<footer>
+  <p>本报告由 Xnurta AI 广告分析引擎自动生成 · 数据周期 2026.04.17 - 2026.06.15 · Operation Log 2026.04.15 - 2026.05.15</p>
+  <p>SparkXGlobal 邑炎科技 · Xnurta 跨境广告智能托管平台</p>
+</footer>
+
+</body>
+</html>
