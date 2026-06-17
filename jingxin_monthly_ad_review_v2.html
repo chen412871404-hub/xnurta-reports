@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宁波境心 · 亚马逊广告月度复盘 v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F172A;--navy-light:#1E293B;--ink:#1E293B;--teal:#0D9488;--teal-light:#14B8A6;--teal-pale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#FFFFFF;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--green-bg:#ECFDF5;--red:#DC2626;--red-bg:#FEF2F2;--amber:#D97706;--amber-bg:#FFFBEB;--blue:#2563EB;--blue-bg:#EFF6FF;--sh-sm:0 1px 3px rgba(15,23,42,.06);--sh-md:0 4px 12px rgba(15,23,42,.08);--sh-lg:0 8px 24px rgba(15,23,42,.12);--rad:12px;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-90px;right:-50px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,.22),transparent 70%)}
+.hdr-eyebrow{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--teal-light);margin-bottom:10px}
+.hdr h1{font-family:var(--fh);font-size:29px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14.5px;color:rgba(255,255,255,.75);margin-bottom:16px}
+.hdr-meta{display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.62);position:relative;z-index:1}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:var(--sh-sm);overflow-x:auto}
+.tab{flex:1;min-width:118px;padding:12px 14px;border:none;background:transparent;color:var(--dark);font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;border-radius:9px;transition:.2s;white-space:nowrap}
+.tab:hover{background:rgba(15,23,42,.04);color:var(--navy)}
+.tab.active{background:var(--navy);color:#fff;box-shadow:var(--sh-md)}
+.panel{display:none}.panel.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--sh-sm);border:1px solid var(--border);position:relative;overflow:hidden;transition:.2s}
+.kpi:hover{box-shadow:var(--sh-lg);transform:translateY(-2px)}
+.kpi::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--teal);opacity:0;transition:.2s}
+.kpi:hover::after{opacity:1}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:25px;font-weight:700;color:var(--navy);line-height:1.1}
+.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;box-shadow:var(--sh-sm);border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:340px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:11px 13px;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.6px;text-align:left;white-space:nowrap}
+thead th:first-child{border-radius:7px 0 0 0}thead th:last-child{border-radius:0 7px 0 0}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}tbody tr:hover td{background:#F1F5F9}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;align-items:flex-start;gap:11px;margin-bottom:18px;font-size:14px;line-height:1.7}
+.a-info{background:var(--blue-bg);border:1px solid #BFDBFE;color:#1E40AF}
+.a-ok{background:var(--green-bg);border:1px solid #A7F3D0;color:#065F46}
+.a-warn{background:var(--amber-bg);border:1px solid #FDE68A;color:#92400E}
+.a-teal{background:var(--teal-pale);border:1px solid #99F6E4;color:#115E59}
+.alert .ic{flex-shrink:0;font-size:18px;line-height:1.4}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}
+.t-green{background:var(--green-bg);color:#065F46}.t-red{background:var(--red-bg);color:#991B1B}.t-amber{background:var(--amber-bg);color:#92400E}.t-blue{background:var(--blue-bg);color:#1E40AF}.t-teal{background:var(--teal-pale);color:#115E59}
+.badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:11px;text-transform:uppercase;letter-spacing:.4px}
+.b-teal{background:var(--teal-pale);color:#115E59}.b-amber{background:var(--amber-bg);color:#92400E}.b-blue{background:var(--blue-bg);color:#1E40AF}
+.ins{border-radius:10px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
+.ins-h{padding:15px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card)}
+.ins-h:hover{background:#F8FAFC}.ins-h .lft{display:flex;align-items:center;gap:11px}
+.ins-t{font-size:14.5px;font-weight:600;color:var(--navy)}
+.chev{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--bg);transition:.2s;flex-shrink:0;font-size:12px}
+.ins.open .chev{transform:rotate(180deg);background:var(--teal-pale)}
+.ins-b{display:none;padding:2px 18px 18px;background:#FAFBFC;border-top:1px solid var(--border)}
+.ins.open .ins-b{display:block}.ins-b p{font-size:13.5px;color:var(--dark);line-height:1.75;margin-top:11px}
+.rec{display:flex;gap:13px;padding:14px 0;border-bottom:1px dotted var(--border)}.rec:last-child{border-bottom:none}
+.rec .n{flex-shrink:0;width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.rec .tx{font-size:13.5px;color:var(--dark);line-height:1.7}.rec .tx b{color:var(--navy)}
+.bigstat{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}
+.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}
+.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--dark)}
+.bs .big{font-family:var(--fh);font-size:24px;font-weight:800;line-height:1.15}
+.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}
+.bs .sm{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.6}
+.foot{text-align:center;padding:22px;margin-top:28px;color:#94A3B8;font-size:12px;border-top:1px solid var(--border)}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.bigstat{grid-template-columns:1fr}}
+@media(max-width:600px){.kpis{grid-template-columns:1fr}.hdr h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hdr">
+  <div class="hdr-eyebrow">Amazon Advertising · Monthly Review</div>
+  <h1>宁波境心 · 亚马逊广告月度复盘</h1>
+  <div class="sub">店铺维度 · AI 托管成效(环比)评估</div>
+  <div class="hdr-meta">
+    <span>📅 业绩周期:2026/05/18 – 2026/06/16</span>
+    <span>💶 统一货币:欧元 EUR(GBP×1.16、AUD×0.61、USD×0.86 折算)</span>
+    <span>🤖 AI 托管活动 275 条 · 环比对比</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-t="overview">📊 月度总览</button>
+  <button class="tab" data-t="store">🏬 店铺分析</button>
+  <button class="tab" data-t="market">🔍 市场分析</button>
+  <button class="tab" data-t="aivalue">🤖 AI 价值验证</button>
+  <button class="tab" data-t="cases">📈 成效案例</button>
+  <button class="tab" data-t="adopt">🎯 广告优化</button>
+  <button class="tab" data-t="insights">💡 洞察与建议</button>
+</nav>
+
+<!-- ===== OVERVIEW ===== -->
+<section class="panel active" id="p-overview">
+  <div class="card" style="border-left:4px solid var(--teal)">
+    <h2>📌 本月一句话:同样的预算,多卖了 2.9%</h2>
+    <div class="desc">AI 托管活动 · 开启前 vs 期间(环比,同口径同活动对比)</div>
+    <div class="bigstat" style="grid-template-columns:repeat(3,1fr)">
+      <div class="bs win"><div class="t">① 广告花费 有没有失控?</div><div class="big">没有 · +0.1%</div><div class="sm">€37,142 → €37,165,基本持平</div></div>
+      <div class="bs win"><div class="t">② 销售额 有没有增长?</div><div class="big">有 · +2.9%</div><div class="sm">€140,485 → €144,620,订单 +1.7%</div></div>
+      <div class="bs win"><div class="t">③ ACOS 有没有守住?</div><div class="big">守住并改善 · −2.8%</div><div class="sm">26.4% → 25.7%,ROAS 3.78 → 3.89×</div></div>
+    </div>
+    <div class="alert a-info" style="margin:16px 0 0;font-size:13px;">
+      <span class="ic">ℹ️</span>
+      <div><strong>TACOS 说明:</strong>本次为广告口径数据,未含店铺总销售额,暂无法计算 TACOS。如能提供店铺总营收,可补充"广告费占总营收比(TACOS)是否守住"。从广告口径看,花费零增长而销售增长,TACOS 大概率同步改善。</div>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="l">广告花费 Spend</div><div class="v">€41,425</div><div class="s">本期 30 天(全部活动)</div></div>
+    <div class="kpi"><div class="l">广告销售额 Sales</div><div class="v">€163,158</div><div class="s">ROAS 3.94×</div></div>
+    <div class="kpi"><div class="l">订单数 Orders</div><div class="v">2,660</div><div class="s">客单价 €61.3</div></div>
+    <div class="kpi"><div class="l">ACOS</div><div class="v">25.4%</div><div class="s">稳健区间</div></div>
+    <div class="kpi"><div class="l">AI 托管销售额(环比)</div><div class="v" style="color:var(--green)">+2.9%</div><div class="s">花费仅 +0.1%</div></div>
+    <div class="kpi"><div class="l">AI 托管 ACOS(环比)</div><div class="v" style="color:var(--green)">−2.8%</div><div class="s">26.4% → 25.7%</div></div>
+    <div class="kpi"><div class="l">主力店铺 8店 销售</div><div class="v" style="color:var(--green)">+4.9%</div><div class="s">ACOS −3.6%</div></div>
+    <div class="kpi"><div class="l">AI 月度优化动作</div><div class="v">25,723</div><div class="s">约 857 次/天</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🏬 店铺概览(环比 · AI 托管活动)</h2>
+    <div class="desc">开启前 vs 开启期间对比;金额已折欧元</div>
+    <table>
+      <thead><tr><th>店铺</th><th class="num">活动数</th><th class="num">销售额(期间)</th><th class="num">销售环比</th><th class="num">花费环比</th><th class="num">ACOS(前→后)</th><th class="num">变化</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">8店(主力 · 欧洲多站)</td><td class="num">261</td><td class="num">€136,542</td><td class="num pos">+4.9%</td><td class="num">+1.1%</td><td class="num">25.9% → 25.0%</td><td class="num pos">−3.6%</td></tr>
+        <tr><td class="hl">澳洲店铺群(4店)</td><td class="num">14</td><td class="num">€8,078</td><td class="num neg">−21.4%</td><td class="num">−10.3%</td><td class="num">32.9% → 37.6%</td><td class="num neg">+14.1%</td></tr>
+        <tr style="font-weight:700;background:#F1F5F9"><td>合计</td><td class="num">275</td><td class="num">€144,620</td><td class="num pos">+2.9%</td><td class="num">+0.1%</td><td class="num">26.4% → 25.7%</td><td class="num pos">−2.8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🌍 站点速览 <span class="badge b-blue" style="font-weight:600">概览</span></h2>
+    <div class="desc">本期 30 天各站点表现(精简,详见店铺分析)</div>
+    <div class="two" style="align-items:center">
+      <div class="chart-box"><canvas id="c_country"></canvas></div>
+      <table>
+        <thead><tr><th>站点</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th></tr></thead>
+        <tbody>
+          <tr><td class="hl">UK 英国</td><td class="num">€17,556</td><td class="num">€65,611</td><td class="num warn">26.8%</td></tr>
+          <tr><td class="hl">DE 德国</td><td class="num">€11,138</td><td class="num">€38,961</td><td class="num neg">28.6%</td></tr>
+          <tr><td class="hl">ES 西班牙</td><td class="num">€5,575</td><td class="num">€24,289</td><td class="num pos">23.0%</td></tr>
+          <tr><td class="hl">FR 法国</td><td class="num">€4,753</td><td class="num">€21,735</td><td class="num pos">21.9%</td></tr>
+          <tr><td class="hl">其他(IT/NL/BE/AU)</td><td class="num">€2,403</td><td class="num">€12,562</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STORE ===== -->
+<section class="panel" id="p-store">
+  <div class="alert a-info">
+    <span class="ic">🏬</span>
+    <div><strong>店铺维度说明:</strong>本账户广告几乎集中于<strong>8店(占 95% 的活动,覆盖英德法西意荷比等欧洲站)</strong>,另有少量澳洲店铺。以下以 AI 托管的环比数据,先看两大店铺群,再下钻到 8店 内部的产品线(托管组)。</div>
+  </div>
+
+  <div class="bigstat">
+    <div class="bs win">
+      <div class="t">🏆 8店(主力店铺)— 环比</div>
+      <div class="big">销售 +4.9% · ACOS −3.6%</div>
+      <div class="sm">销售额 €130,211 → €136,542,花费几乎持平(+1.1%),ACOS 25.9% → 25.0%,ROAS 3.86 → 4.00,订单 +3.0%。AI 在主力店铺实现「增收 + 提效」。</div>
+    </div>
+    <div class="bs lose">
+      <div class="t">⚠️ 澳洲店铺群 — 环比</div>
+      <div class="big">销售 −21.4% · ACOS +14.1%</div>
+      <div class="sm">销售额 €10,273 → €8,078,ACOS 32.9% → 37.6%,ROAS 3.04 → 2.66。体量小(仅 14 条活动)但效率下滑,需单独排查(选品/库存/竞价区间)。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏬 两大店铺群 · ACOS 环比对比</h2>
+    <div class="desc">开启前 vs 开启期间 ACOS(越低越好)</div>
+    <div class="chart-box"><canvas id="c_store"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>🧱 8店内部 · 产品线(托管组)环比表现</h2>
+    <div class="desc">按托管组前缀汇总,销售额(期间)Top 产品线 · 金额折欧元</div>
+    <table>
+      <thead><tr><th>产品线</th><th class="num">活动数</th><th class="num">销售额(期间)</th><th class="num">销售环比</th><th class="num">ACOS(前→后)</th><th class="num">ACOS变化</th><th>评估</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">BS03X</td><td class="num">25</td><td class="num">€29,145</td><td class="num neg">−14.2%</td><td class="num">25.3→26.5</td><td class="num neg">+4.7%</td><td><span class="tag t-amber">需关注</span></td></tr>
+        <tr><td class="hl">PC003</td><td class="num">23</td><td class="num">€18,754</td><td class="num pos">+33.5%</td><td class="num">21.4→20.8</td><td class="num pos">−2.8%</td><td><span class="tag t-green">增收提效</span></td></tr>
+        <tr><td class="hl">TVS024</td><td class="num">20</td><td class="num">€14,240</td><td class="num pos">+5.4%</td><td class="num">26.0→25.6</td><td class="num pos">−1.7%</td><td><span class="tag t-green">稳健</span></td></tr>
+        <tr><td class="hl">TVS022</td><td class="num">21</td><td class="num">€13,966</td><td class="num neg">−11.5%</td><td class="num">30.4→30.2</td><td class="num">−0.7%</td><td><span class="tag t-amber">需关注</span></td></tr>
+        <tr><td class="hl">CS006</td><td class="num">9</td><td class="num">€8,773</td><td class="num pos">+40.6%</td><td class="num">28.5→21.7</td><td class="num pos">−23.9%</td><td><span class="tag t-teal">明星</span></td></tr>
+        <tr><td class="hl">BS037</td><td class="num">20</td><td class="num">€8,684</td><td class="num pos">+4.3%</td><td class="num">21.0→20.1</td><td class="num pos">−4.3%</td><td><span class="tag t-green">稳健</span></td></tr>
+        <tr><td class="hl">PC001</td><td class="num">16</td><td class="num">€7,400</td><td class="num pos">+82.6%</td><td class="num">22.1→22.7</td><td class="num">+2.7%</td><td><span class="tag t-green">放量</span></td></tr>
+        <tr><td class="hl">PC004</td><td class="num">23</td><td class="num">€7,301</td><td class="num">+1.3%</td><td class="num">27.0→31.0</td><td class="num neg">+14.8%</td><td><span class="tag t-amber">需关注</span></td></tr>
+        <tr><td class="hl">D2007</td><td class="num">6</td><td class="num">€3,156</td><td class="num pos">+85.0%</td><td class="num">19.4→13.3</td><td class="num pos">−31.5%</td><td><span class="tag t-teal">明星</span></td></tr>
+        <tr><td class="hl">TVS018</td><td class="num">20</td><td class="num">€2,023</td><td class="num pos">+22.8%</td><td class="num">36.9→27.6</td><td class="num pos">−25.2%</td><td><span class="tag t-teal">大幅提效</span></td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-teal" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">🔎</span>
+      <div>产品线分化明显:<strong>CS006、D2007、TVS018、PC003</strong> 在 AI 托管下增收又提效(ACOS 下降),是本月赢家;而 <strong>BS03X、TVS022、PC004</strong> 销售下滑或 ACOS 走高,需要排查(可能是季节、库存或竞争加剧)。建议把赢家产品线的托管打法复制到落后产品线。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARKET ===== -->
+<section class="panel" id="p-market">
+  <div class="alert a-info">
+    <span class="ic">🔍</span>
+    <div><strong>数据来源:卖家精灵(SellerSprite)外部市场数据</strong>,用来回答"广告下滑/增长,有多少是市场决定的"。下表为境心主要产品线所在市场的近况(搜索量、近 3 个月趋势、供需比、市场均价)。币种按各站本币(£/€)。</div>
+  </div>
+
+  <div class="card">
+    <h2>📊 主要品类市场概况</h2>
+    <div class="desc">近 3 个月搜索趋势 + 供需比 + 价格定位</div>
+    <table>
+      <thead><tr><th>品类(对应线)</th><th class="num">月搜索量</th><th class="num">近3月趋势</th><th class="num">供需比</th><th class="num">市场均价</th><th class="num">境心售价</th><th>判断</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">带轮电视柜 · DE(TVS022/024)</td><td class="num">14,747</td><td class="num pos">−1.6%(稳)</td><td class="num pos">68</td><td class="num">€50</td><td class="num warn">€80</td><td><span class="tag t-green">需求强 · 市场没问题</span></td></tr>
+        <tr><td class="hl">角落置物架 · UK(BS03X/037)</td><td class="num">28,310</td><td class="num neg">−22.6%</td><td class="num">3.6</td><td class="num">£22</td><td class="num neg">£40</td><td><span class="tag t-red">市场萎缩+定价偏高</span></td></tr>
+        <tr><td class="hl">显示器支架 · UK(CS006)</td><td class="num">24,111</td><td class="num neg">−25.8%</td><td class="num">5.5</td><td class="num">£16</td><td class="num">高端</td><td><span class="tag t-amber">市场缩但境心逆势增长</span></td></tr>
+        <tr><td class="hl">打印机架 · UK(PC001/003)</td><td class="num">3,704</td><td class="num neg">−24.4%</td><td class="num pos">9.6</td><td class="num">£30</td><td class="num">≈市场</td><td><span class="tag t-blue">供给少 · 可切入</span></td></tr>
+        <tr><td class="hl">带轮电视柜 · UK(TVS)</td><td class="num">1,582</td><td class="num">−5.6%(稳)</td><td class="num pos">9.5</td><td class="num">£39</td><td class="num warn">£80</td><td><span class="tag t-amber">竞价高(£1.23)</span></td></tr>
+        <tr><td class="hl">床头柜 · UK(NS001)</td><td class="num">2,962</td><td class="num">−6.4%(稳)</td><td class="num neg">0.56</td><td class="num">£28</td><td class="num">set</td><td><span class="tag t-red">供给过剩 · 红海</span></td></tr>
+      </tbody>
+    </table>
+    <div class="chart-box" style="margin-top:18px"><canvas id="c_market"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>🔎 市场关键发现</h2>
+    <div class="alert a-warn" style="margin:12px 0 0">
+      <span class="ic">1️⃣</span>
+      <div><strong>多数家居品类近 3 个月在收缩</strong>(角落置物架 −22.6%、显示器支架 −25.8%、打印机架 −24.4%)——这是<strong>大盘需求回落/淡季</strong>,不是境心一家的问题,也部分解释了本月广告整体承压。</div>
+    </div>
+    <div class="alert a-ok" style="margin:12px 0 0">
+      <span class="ic">2️⃣</span>
+      <div><strong>德国电视柜市场是个例外:需求稳(−1.6%)、供需比高达 68(需求远大于供给)。</strong>所以 TVS022 在德国的广告下滑(−28%、ACOS 41%)<strong>是配置问题、不是市场</strong>——应优先重配放量(详见广告优化)。</div>
+    </div>
+    <div class="alert a-info" style="margin:12px 0 0">
+      <span class="ic">3️⃣</span>
+      <div><strong>境心整体走高端定价。</strong>在差异化品类(带 LED/插座/轮子的电视柜、显示器支架)高溢价能成立;但<strong>角落置物架卖 £40、市场均价仅 £22(近 2 倍),且市场还在萎缩</strong>——这条线靠加广告救不回来,要重新看定价/选品。</div>
+    </div>
+    <div class="alert a-ok" style="margin:12px 0 0">
+      <span class="ic">4️⃣</span>
+      <div><strong>显示器支架是亮点:</strong>市场在缩(−25.8%),境心 CS006 却逆势 +40.6%、ACOS −24% —— 说明产品力 + 投放配置都强,是<strong>"在下行市场抢份额"的标杆</strong>,值得复制。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI VALUE ===== -->
+<section class="panel" id="p-aivalue">
+  <div class="alert a-info">
+    <span class="ic">🧭</span>
+    <div><strong>口径:</strong>下列为「AI 开启期 vs 开启前等长周期」的环比对比(各活动开启时长不同,平均约 42 天)。金额按 1 USD≈0.86 EUR 折算,<strong>变化率不受汇率影响</strong>。注:ACOS 的"变化"均为<strong>相对变化率</strong>(例:ACOS 由 25.9% 降到 25.0%,记为 −3.6%)。</div>
+  </div>
+
+  <div class="card">
+    <h2>📊 AI 托管活动 · 开启前 vs 期间 总览</h2>
+    <div class="desc">275 条 AI 托管活动的环比汇总(金额折欧元)</div>
+    <table>
+      <thead><tr><th>口径</th><th class="num">指标</th><th class="num">开启前</th><th class="num">开启期间</th><th class="num">变化</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="5" class="hl" style="vertical-align:middle">全部 AI 托管<br>(275 条)</td><td>销售额</td><td class="num">€140,485</td><td class="num">€144,620</td><td class="num pos">+2.9%</td></tr>
+        <tr><td>广告花费</td><td class="num">€37,142</td><td class="num">€37,165</td><td class="num">+0.1%</td></tr>
+        <tr><td>订单数</td><td class="num">2,647</td><td class="num">2,693</td><td class="num pos">+1.7%</td></tr>
+        <tr><td>ACOS</td><td class="num">26.4%</td><td class="num">25.7%</td><td class="num pos">−2.8%</td></tr>
+        <tr><td>ROAS</td><td class="num">3.78×</td><td class="num">3.89×</td><td class="num pos">+2.9%</td></tr>
+        <tr style="background:#F0FDFA"><td class="hl" style="vertical-align:middle">其中:仍在托管<br>(237 条)</td><td>花费 / ACOS / ROAS</td><td class="num">€34,854 / 26.1% / 3.83×</td><td class="num">€34,236 / 24.9% / 4.01×</td><td class="num pos">花费 −1.8% · ACOS −4.6%</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-ok" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">📈</span>
+      <div><strong>一句话:</strong>AI 托管后,这批活动在<strong>花费基本不变(+0.1%)的前提下,销售额 +2.9%、订单 +1.7%、ACOS 改善 2.8%、ROAS 升至 3.89×</strong>。若只看"仍在托管"的 237 条(剔除中途关停的),效率改善更明显——花费反而 −1.8%、ACOS 改善 4.6%。这说明 AI 的主要贡献是<strong>在不增加预算的情况下提升产出与效率</strong>。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b-teal">验证 1</span> 反面印证:关闭 AI 后,效率明显恶化</h2>
+    <div class="desc">仍在托管(已开启,237条) vs 已关闭托管(已取消,38条)的环比变化</div>
+    <div class="chart-box"><canvas id="c_onoff"></canvas></div>
+    <div class="bigstat" style="margin-top:16px">
+      <div class="bs win">
+        <div class="t">✅ 仍在 AI 托管(237 条)</div>
+        <div class="big">花费 −1.8% · ACOS −4.6%</div>
+        <div class="sm">销售 +2.9% 的同时花费不升反降,ACOS 由 26.1% 改善到 24.9%,ROAS 3.83 → 4.01。</div>
+      </div>
+      <div class="bs lose">
+        <div class="t">⚠️ 已关闭 AI 托管(38 条)</div>
+        <div class="big">花费 +28.0% · ACOS +23.7%</div>
+        <div class="sm">关闭 AI 后花费失控上涨 28%,ACOS 由 32.3% 恶化到 39.9%,ROAS 3.10 → 2.51。</div>
+      </div>
+    </div>
+    <div class="alert a-ok" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">💡</span>
+      <div>这是本月最有说服力的证据:<strong>同一时间窗内,留在 AI 托管的活动效率改善(ACOS 下行),而关闭 AI 的活动 ACOS 大幅上行</strong>。AI 的价值在「持续控本」上体现得最清楚。<br><span style="font-size:12px;opacity:.85">客观补充:被关闭的活动开启前 ACOS 本就偏高(32.3% vs 在管组 26.1%),即多为表现较弱的活动;但关闭后进一步恶化,仍说明撤掉 AI 管理会加剧失控。</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b-teal">关键发现</span> AI 有学习曲线 —— 跑得越久,效果越好</h2>
+    <div class="desc">按 AI 已开启时长分组(已开启活动)· 销售额环比</div>
+    <div class="chart-box"><canvas id="c_curve"></canvas></div>
+    <table style="margin-top:14px">
+      <thead><tr><th>AI 开启时长</th><th class="num">活动数</th><th class="num">销售额环比</th><th class="num">ACOS(前→后)</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">≤ 30 天(学习期)</td><td class="num">68</td><td class="num neg">−17.7%</td><td class="num">30.5% → 32.9%</td><td><span class="tag t-amber">学习中</span></td></tr>
+        <tr><td class="hl">31–50 天</td><td class="num">31</td><td class="num neg">−12.7%</td><td class="num pos">28.2% → 25.4%</td><td><span class="tag t-blue">效率回升</span></td></tr>
+        <tr><td class="hl">51 天以上</td><td class="num">138</td><td class="num pos">+7.1%</td><td class="num pos">25.5% → 24.6%</td><td><span class="tag t-teal">增收+提效</span></td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-ok" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">🔑</span>
+      <div>规律非常清晰:<strong>AI 跑满 50 天以上的活动,销售额环比 +7.1%、ACOS 同时改善(25.5%→24.6%)——增收与提效兼得</strong>;而开启不足 30 天的新活动还在学习期(销售 −17.7%)。这也解释了为何全账户整体提升看起来温和:大量近期才开启的活动拉低了均值。<strong>结论:AI 需要时间,不要在学习期内频繁关停或重置。</strong></div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2><span class="badge b-teal">验证 2</span> 同花费,更多销售</h2>
+      <div class="desc">全部 AI 托管活动 · 开启前 → 期间(ACOS 下降、ROAS 上升)</div>
+      <div class="chart-box"><canvas id="c_pop"></canvas></div>
+      <div class="alert a-ok" style="margin-top:12px;margin-bottom:0;font-size:13px;">
+        <span class="ic">✅</span>
+        <div>花费几乎不变(+0.1%)的前提下,销售额 +2.9%、订单 +1.7%、ACOS −2.8%。AI 把同样的预算花得更有效率。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="badge b-teal">验证 3</span> 按托管目标看</h2>
+      <div class="desc">「保持稳定」与「推动增长」的环比</div>
+      <div class="chart-box"><canvas id="c_goal"></canvas></div>
+      <div class="alert a-info" style="margin-top:12px;margin-bottom:0;font-size:13px;">
+        <span class="ic">🔎</span>
+        <div>「保持稳定」组销售 +4.9%、ACOS −2.4%,稳中有增;「推动增长」组本期更偏控本(花费 −3.7%、ACOS −3.5%),销售基本持平——下月可适度放宽其预算/目标以释放增量。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b-teal">验证 4</span> AI 到底替人做了什么(把 25,723 次动作翻译成人话)</h2>
+    <div class="desc">本月 AI 自动执行优化动作的每日分布</div>
+    <div class="chart-box tall"><canvas id="c_aiops"></canvas></div>
+    <table style="margin-top:16px">
+      <thead><tr><th>AI 替运营做的事</th><th class="num">次数</th><th>相当于人工做什么</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">出价微调</td><td class="num">24,146</td><td>在几千个关键词/ASIN 上逐个动态加价、降价(加价 12,867 / 降价 11,279)</td></tr>
+        <tr><td class="hl">预算分配/调整</td><td class="num">1,467</td><td>给跑得好的活动加预算、给差的收预算</td></tr>
+        <tr><td class="hl">新增定向</td><td class="num">98</td><td>把跑出来的好词/好 ASIN 加进去(捡词)</td></tr>
+        <tr><td class="hl">否定定向</td><td class="num warn">94</td><td>屏蔽无效搜索词(此项偏少,详见建议)</td></tr>
+        <tr><td class="hl">广告位调价</td><td class="num">11</td><td>调整搜索顶部/详情页竞价</td></tr>
+        <tr style="font-weight:700;background:#F0FDFA"><td>合计</td><td class="num">25,723</td><td>日均 857 次,全天候不间断</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-ok" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">⏱️</span>
+      <div><strong>相当于省了多少人工:</strong>按每次"巡检 + 调整"平均 30 秒估算,这些动作 ≈ <strong>214 小时/月</strong>,相当于<strong>约 1.5 名全职运营整月只做"看数据、调出价、改预算"的机械工作</strong>。AI 接管后,运营可把精力转到选品、新品冷启动、大盘策略等更高价值的事上。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b-teal">验证 5</span> 托管组达标率(按目标拆分)</h2>
+    <div class="desc">达标 = 实际 ACOS 达到或优于该组设定的目标 ACOS · 共 238 条托管活动</div>
+    <table>
+      <thead><tr><th>托管目标</th><th class="num">托管活动数</th><th class="num">达标活动数</th><th class="num">达标率</th><th class="num">接近达标(目标+5个点内)</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">推动增长</td><td class="num">77</td><td class="num">28</td><td class="num">36.4%</td><td class="num">—</td></tr>
+        <tr><td class="hl">保持稳定</td><td class="num">161</td><td class="num">40</td><td class="num">24.8%</td><td class="num">—</td></tr>
+        <tr><td class="hl">其中:捡漏组(命名)</td><td class="num">15</td><td class="num">2</td><td class="num warn">13.3%</td><td class="num">—</td></tr>
+        <tr style="font-weight:700;background:#F1F5F9"><td>合计</td><td class="num">238</td><td class="num">68</td><td class="num">28.6%</td><td class="num">约 58%</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-warn" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">⚠️</span>
+      <div>当前严格达标率(实际 ACOS ≤ 目标)为 28.6%(推动增长 36.4% 高于保持稳定 24.8%,排序与历史一致);若放宽到"目标 +5 个点以内"则约 58%。<strong>该数值明显低于贵司 4 月记录的 ~84%</strong>,主因可能是:① 近期新增大量活动仍处学习期(详见学习曲线,50 天前普遍未达标);② 部分老活动/产品线效率回落。<strong>建议与 Xnurta 后台「达标」口径核对一致后,作为下月重点跟踪指标——目标是把未达标组(尤其保持稳定类)逐月压下来。</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge b-teal">验证 6</span> 小站点自动化(引入 AI 的核心初衷)</h2>
+    <div class="desc">小站点 AI 操作占比 vs 大站点,以及效率是否可控</div>
+    <table>
+      <thead><tr><th>站点</th><th class="num">活动数</th><th class="num">AI 操作占比</th><th class="num">ACOS</th><th class="num">ROAS</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">🇳🇱 荷兰 NL</td><td class="num">39</td><td class="num pos">80%</td><td class="num pos">14.5%</td><td class="num">6.9×</td><td><span class="tag t-green">高度自动化 + 高效</span></td></tr>
+        <tr><td class="hl">🇮🇹 意大利 IT</td><td class="num">11</td><td class="num pos">75%</td><td class="num pos">10.1%</td><td class="num">9.9×</td><td><span class="tag t-green">几乎全自动 + 最高效</span></td></tr>
+        <tr><td class="hl">🇧🇪 比利时 BE</td><td class="num">37</td><td class="num">52%</td><td class="num pos">17.1%</td><td class="num">5.9×</td><td><span class="tag t-blue">自动化中等</span></td></tr>
+        <tr><td class="hl">🇦🇺 澳洲 AU</td><td class="num">14</td><td class="num pos">97%</td><td class="num neg">37.3%</td><td class="num">2.7×</td><td><span class="tag t-amber">几乎全自动 · 效率待查</span></td></tr>
+        <tr style="background:#F8FAFC"><td class="hl">对比:大站 UK / DE</td><td class="num">—</td><td class="num warn">32–34%</td><td class="num">26.8 / 28.6%</td><td class="num">—</td><td>仍需大量人工</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-ok" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">🤖</span>
+      <div><strong>结论:小站点基本做到"AI 接管、人只看通知"。</strong>荷兰、意大利、澳洲的 AI 操作占比高达 75–97%(远高于大站的 32–34%),且荷兰/意大利 ACOS 控制在 10–17% 的优秀区间——正是引入 Xnurta 想要的"小站点自动化、省人力"效果。<strong>唯一需单独关注澳洲</strong>:虽 97% 自动化,但 ACOS 37%、ROAS 仅 2.7,需排查选品/竞价(详见店铺分析)。<br><span style="font-size:12px;opacity:.85">注:本期数据未包含瑞典、爱尔兰站,如需评估这两个站请单独提供导出。</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📌 补充:活动级胜率(开启前 vs 期间)</h2>
+    <div class="desc">以"同活动前后对比"为口径,客观呈现 AI 价值的边界</div>
+    <table>
+      <thead><tr><th>角度</th><th class="num">结果</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>活动级 ACOS 改善占比</td><td class="num">49%</td><td>约半数活动开启后 ACOS 下降;赢家集中度高,拉动整体改善</td></tr>
+        <tr><td>活动级 销售增长占比</td><td class="num">43%</td><td>销售增长活动数略少,但单均增幅更大</td></tr>
+        <tr><td>改善活动平均 ACOS 变化</td><td class="num pos">−31%</td><td>82 条改善活动,效率改善幅度可观</td></tr>
+        <tr><td>同时"销售增长 + ACOS 下降"</td><td class="num">33%</td><td>约三分之一活动实现"增收提效"双赢</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-warn" style="margin-top:14px;margin-bottom:0;font-size:13px;">
+      <span class="ic">⚖️</span>
+      <div><strong>客观说明:</strong>本报告 AI 价值全部以<strong>「同一活动开启 AI 前 vs 后」的前后对比</strong>为准(而非简单的 AI vs 非托管横截面)。并非每条活动都更优(约半数改善),AI 价值集中体现在<strong>「同预算提产出」「关闭后会恶化」「成熟期(50天+)双赢」</strong>这几点。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CASES ===== -->
+<section class="panel" id="p-cases">
+  <div class="alert a-info">
+    <span class="ic">📈</span>
+    <div><strong>成效案例(逐日时间线):</strong>两条活动用 30 天逐日数据,叠加 changelog 中 AI 的每日出价动作,展示「AI 持续优化 → 效果」的过程。两条活动整月均在 AI 托管下运行,呈现的是<strong>「AI 持续管理带来的成效」</strong>。</div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h2><span class="badge b-teal">案例 A</span> AI 驱动销量提升</h2>
+      <div class="desc">SparkX AI 白-同类-精准-PC003 · 🇫🇷 FR · 推动增长</div>
+      <div class="chart-box tall"><canvas id="c_caseA"></canvas></div>
+      <div class="alert a-ok" style="margin-top:12px;margin-bottom:0;font-size:13px;line-height:1.75;">
+        <span class="ic">✅</span>
+        <div><strong>AI 做了什么(这是一条「同类商品精准」定向活动):</strong><br>
+        ① <strong>测试找赢家</strong>——前两周(5/18–5/31)对几十个同类/竞品 ASIN 目标做了 200+ 次双向出价测试,边投边筛出能转化的对象,这也是累计 ACOS 一度升到 19.2% 的原因(探索成本)。<br>
+        ② <strong>给赢家加价放量</strong>——进入 6 月,AI 把出价集中加到验证过的高转化 ASIN 上(目标出价均值由 €0.94 提到约 €1.00),订单随即从 6 单加速到 16 单、销售额冲到 €1,179。<br>
+        ③ <strong>再降价锁效率</strong>——月末(6/15–16)反向把出价压到约 €0.66,累计 ACOS 回落并稳定在 14.4%。<br>
+        全月共 412 次 AI 出价动作。一句话:<strong>先测试找赢家 → 给赢家加价放量 → 再降价控本</strong>。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="badge b-blue">案例 B</span> AI 驱动 ACOS 下降</h2>
+      <div class="desc">SparkX AI all-AUTO-仅降低-TVS024/22 · 🇮🇹 IT · 保持稳定</div>
+      <div class="chart-box tall"><canvas id="c_caseB"></canvas></div>
+      <div class="alert a-ok" style="margin-top:12px;margin-bottom:0;font-size:13px;line-height:1.75;">
+        <span class="ic">✅</span>
+        <div><strong>AI 做了什么(这是一条「自动 + 仅降低」低竞价活动):</strong><br>
+        ① <strong>低位控价</strong>——全月对自动定向做了 294 次出价微调,把出价持续压在 €0.22 的低位,只让高相关流量进来。<br>
+        ② <strong>否定屏蔽浪费</strong>——添加 10 个否定(5 个否定词 + 5 个否定 ASIN),挡掉不转化的搜索词/关联位。<br>
+        ③ <strong>结果</strong>——首单期因前期累计花费,累计 ACOS 一度 31%;在低价控制 + 否定下,一周内(到 5/30)压到 8–9% 并全月稳定,<strong>最终 ACOS 10.8%、ROAS 9.3×</strong>,远优于账户均值(25.4% / 3.9×)。<br>
+        一句话:<strong>用低出价 + 持续否定,把效率死死摁住</strong>。</div>
+      </div>
+    </div>
+  </div>
+  <div class="alert a-warn" style="font-size:13px">
+    <span class="ic">⚖️</span>
+    <div><strong>口径说明:</strong>两条活动整月均在 AI 托管,图表呈现的是「AI 持续管理下的效果走势」。若需「开启 AI 前 vs 后」的严格对照,可选取本月内新开启 AI 的活动并提供开启前的逐日数据。</div>
+  </div>
+</section>
+
+<!-- ===== AD OPTIMIZATION ===== -->
+<section class="panel" id="p-adopt">
+  <div class="alert a-info">
+    <span class="ic">🎯</span>
+    <div><strong>广告优化方向:</strong>把"广告后台数据(前后对比 + 操作日志)"和"卖家精灵市场数据"结合起来,给出下月该往哪使劲。核心原则:<strong>市场好的地方加投、市场差的地方控本、配置问题的地方重配。</strong></div>
+  </div>
+
+  <div class="card">
+    <h2>🧭 分品类作战策略(市场判断 → 广告动作)</h2>
+    <div class="desc">每条线该"加投 / 重配 / 控本"一目了然</div>
+    <table>
+      <thead><tr><th>品类(线)</th><th>市场判断</th><th class="num">销售额环比</th><th class="num">ACOS(前→后)</th><th>下月动作</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">带轮电视柜 DE(TVS022)</td><td>需求稳、供需比 68</td><td class="num neg">−11.5%</td><td class="num warn">30.4%→30.2%(偏高)</td><td><span class="tag t-green">重配 + 放量</span> 市场没问题,问题在投放;套用账户内同款的高效配置(同类活动已做到 ACOS 17%)</td></tr>
+        <tr><td class="hl">显示器支架(CS006)</td><td>市场缩但能抢份额</td><td class="num pos">+40.6%</td><td class="num pos">28.5%→21.7%</td><td><span class="tag t-green">维持 + 复制</span> 把这条线的配置沉淀成模板,推广到其他线</td></tr>
+        <tr><td class="hl">打印机架(PC001/003)</td><td>供给少(供需比 9.6)</td><td class="num pos">+33.5%</td><td class="num pos">21.4%→20.8%</td><td><span class="tag t-blue">稳步加投</span> 蓝海可切入,守住 ACOS 逐步放量</td></tr>
+        <tr><td class="hl">角落置物架(BS03X)</td><td class="neg">市场 −22.6% + 定价高</td><td class="num neg">−14.2%</td><td class="num neg">25.3%→26.5%</td><td><span class="tag t-red">控本 + 先调价</span> 别硬投,先解决 £40 vs £22 的定价</td></tr>
+        <tr><td class="hl">床头柜(NS001)</td><td class="neg">供给过剩(供需比 0.56)</td><td class="num">体量小</td><td class="num">—</td><td><span class="tag t-amber">控制投入</span> 红海,低预算维持即可</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🛠️ 通用广告优化动作(全账户)</h2>
+    <div class="rec"><div class="n">1</div><div class="tx"><b>开启 / 加强 AI 否定定向。</b>本月 AI 仅做 94 次否定,基本靠人工。市场词数据显示多数品类点击集中度不高、长尾分散,自动否定能持续堵截无效流量、稳住 ACOS——这是最省力的提效点。</div></div>
+    <div class="rec"><div class="n">2</div><div class="tx"><b>按品类竞价环境分档出价。</b>带轮电视柜 UK 竞价高(£1.23)→ 用低位+精准、避免硬抢;角落置物架竞价低(£0.28)但市场在缩 → 控量;打印机架竞价中等且蓝海 → 可适度提价抢位。</div></div>
+    <div class="rec"><div class="n">3</div><div class="tx"><b>把预算从萎缩品类挪到健康品类。</b>角落置物架、床头柜等萎缩/红海品类收预算,腾给德国电视柜(需求强)、打印机架(蓝海)、显示器支架(能抢份额)。</div></div>
+    <div class="rec"><div class="n">4</div><div class="tx"><b>新品给足学习期。</b>境心多条线是近半年新上(角落置物架、电视柜均 2025 下半年上架),结合"AI 学习曲线"——新活动 50 天内别频繁关停,让 AI 跑顺。</div></div>
+    <div class="rec"><div class="n">5</div><div class="tx"><b>小站点维持自动化、单独看澳洲。</b>荷兰/意大利已 75–80% 自动化且高效,保持"看通知"即可;澳洲 97% 自动化但 ACOS 37%,需排查选品/竞价。</div></div>
+  </div>
+
+  <div class="alert a-ok" style="font-size:13px">
+    <span class="ic">🎯</span>
+    <div><strong>一句话:下月广告重心 = 德国电视柜重配放量 + 打印机架蓝海加投 + 显示器支架打法复制;角落置物架/床头柜控本;全账户开启 AI 否定。</strong></div>
+  </div>
+</section>
+
+<!-- ===== INSIGHTS ===== -->
+<section class="panel" id="p-insights">
+  <div class="card">
+    <h2>💡 核心洞察</h2>
+    <div class="desc">点击展开</div>
+    <div class="ins open">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-teal">洞察 1</span><span class="ins-t">AI 价值最硬的证据:关闭后会恶化</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>留在 AI 托管的活动环比「花费 −1.8%、ACOS −4.6%」;而关闭 AI 的 38 条活动「花费 +28%、ACOS +23.7%(32.3%→39.9%)」。在同一时间窗内对照,说明 AI 的核心价值是<strong>持续控本、防止花费失控</strong>。建议:除非有明确理由,谨慎关闭 AI 托管。</p></div>
+    </div>
+    <div class="ins">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-teal">洞察 2</span><span class="ins-t">AI 有学习曲线:跑满 50 天的活动「增收+提效」兼得</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>按 AI 开启时长分组看得很清楚:开启 <strong>51 天以上的活动销售环比 +7.1%、ACOS 25.5%→24.6%(双赢)</strong>;31–50 天的活动 ACOS 已明显回落(28.2%→25.4%);而开启不足 30 天的新活动还在学习期(销售 −17.7%、ACOS 反升)。这说明 AI 效果是「越跑越准」,也解释了整体提升偏温和的原因——大量近期新开活动拉低了均值。<strong>启示:给 AI 足够的学习时间,避免在 30 天内频繁关停/重置;评估 AI 效果应看成熟期(50 天+)的表现。</strong></p></div>
+    </div>
+    <div class="ins">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-teal">洞察 3</span><span class="ins-t">主力店铺 8店:同花费、增收又提效</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>8店(占 95% 活动)环比销售 +4.9%、花费仅 +1.1%、ACOS −3.6%、ROAS 升到 4.0。这是账户基本盘,AI 托管在这里跑出了「增收 + 提效」的健康结构,是月度成绩的主要来源。</p></div>
+    </div>
+    <div class="ins">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-amber">洞察 4</span><span class="ins-t">产品线分化明显,赢家打法可复制</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>CS006(销售 +40.6%、ACOS −23.9%)、D2007(+85.0%、−31.5%)、TVS018(+22.8%、−25.2%)、PC003(+33.5%、−2.8%)是赢家;BS03X(−14.2%)、TVS022(−11.5%)、PC004(ACOS +14.8%)落后。建议把赢家产品线的托管结构、出价区间、否定策略复制到落后线,并排查落后线是否受季节/库存/竞争影响。</p></div>
+    </div>
+    <div class="ins">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-amber">洞察 5</span><span class="ins-t">澳洲店铺群下滑,需单独排查</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>澳洲店铺群(14 条)环比销售 −21.4%、ACOS +14.1%,与主力店铺方向相反。体量虽小,但效率明显恶化,建议单独核查选品表现、库存可用性、竞价区间设置与季节因素,再决定是收缩还是重做托管。</p></div>
+    </div>
+    <div class="ins">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-blue">洞察 6</span><span class="ins-t">AI 否定能力闲置,是现成提效点</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>本月 AI 仅添加 94 个否定词,否定基本靠人工。开启 AI 否定定向后可自动堵截无效搜索词,在不增加人工的前提下进一步压低 ACOS——与「持续控本」的主线高度一致。</p></div>
+    </div>
+    <div class="ins">
+      <div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><div class="lft"><span class="badge b-blue">洞察 7</span><span class="ins-t">AI 还带动了关联(非广告)商品销售</span></div><div class="chev">▾</div></div>
+      <div class="ins-b"><p>AI 托管活动的「其他商品销售额」(即广告带动的非投放商品/关联购买)占比 <strong>39.8%,高于非托管的 36.5%</strong>。说明 AI 不只买到了被投商品的订单,也更好地带动了店铺关联购买与自然流量转化——广告的真实价值高于账面 ACOS 所反映的。评估时可把这部分「溢出价值」一并考虑。</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🚀 下月行动建议</h2>
+    <div class="desc">按优先级</div>
+    <div class="rec"><div class="n">1</div><div class="tx"><b>保持并扩大 AI 托管覆盖。</b>关闭 AI 的活动效率明显恶化(ACOS +23.7%)。除非有明确理由,不轻易关闭;并把仍未托管的高花费活动纳入 AI。</div></div>
+    <div class="rec"><div class="n">2</div><div class="tx"><b>复制赢家产品线打法。</b>把 CS006 / D2007 / TVS018 / PC003 的托管结构与出价/否定策略,迁移到 BS03X、TVS022、PC004 等落后产品线。</div></div>
+    <div class="rec"><div class="n">3</div><div class="tx"><b>开启 AI 否定定向。</b>当前仅 94 次,自动化否定可进一步控本,减轻人工。</div></div>
+    <div class="rec"><div class="n">4</div><div class="tx"><b>专项排查澳洲店铺群。</b>销售 −21%、ACOS +14.1%,核查选品/库存/竞价/季节后再决定收缩或重做。</div></div>
+    <div class="rec"><div class="n">5</div><div class="tx"><b>适度释放「推动增长」组。</b>该组本期偏控本、销售持平,可小幅放宽预算与目标 ACOS,换取增量。</div></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>宁波境心 · 亚马逊广告月度复盘　|　业绩周期 2026/05/18–06/16　|　货币:欧元(GBP×1.16、AUD×0.61、USD×0.86)</p>
+  <p style="margin-top:5px">数据来源:亚马逊广告后台报表 + AI 托管环比(POP)数据 + 操作日志　|　环比口径:各活动 AI 开启期 vs 开启前等长周期(平均约 42 天)</p>
+</footer>
+
+</div>
+
+<script>
+const COL={navy:'#0F172A',teal:'#0D9488',tealL:'#5EEAD4',gold:'#CA8A04',red:'#DC2626',grayT:'#94A3B8',green:'#059669'};
+Chart.defaults.font.family="'Inter','Noto Sans SC',sans-serif";Chart.defaults.font.size=12;Chart.defaults.color='#475569';
+const CUM={"A":{"dates":["05-18","05-19","05-20","05-21","05-22","05-23","05-24","05-25","05-26","05-27","05-28","05-29","05-30","05-31","06-01","06-02","06-03","06-04","06-05","06-06","06-07","06-08","06-09","06-10","06-11","06-12","06-13","06-14","06-15","06-16"],"cum_sales":[0,78,232,232,232,232,310,310,310,387,387,387,465,465,465,698,814,891,969,1060,1060,1137,1137,1137,1179,1179,1179,1179,1179,1179],"cum_acos":[null,16.7,9.1,11.7,14.1,17.1,15.4,17.3,18.7,15.9,17.6,19.1,16.8,18.1,19.2,14.2,13.4,13.3,13.1,12.9,13.9,13.3,13.7,14.3,14.3,14.3,14.3,14.3,14.4,14.4]},
+"B":{"dates":["05-18","05-19","05-20","05-21","05-22","05-23","05-24","05-25","05-26","05-27","05-28","05-29","05-30","05-31","06-01","06-02","06-03","06-04","06-05","06-06","06-07","06-08","06-09","06-10","06-11","06-12","06-13","06-14","06-15","06-16"],"cum_sales":[0,0,0,0,0,0,0,163,359,441,522,522,882,882,964,1045,1126,1126,1289,1289,1289,1403,1403,1403,1403,1403,1403,1403,1403,1403],"cum_acos":[null,null,null,null,null,null,null,31.2,15.7,14.0,12.6,13.2,8.5,9.1,8.7,8.8,8.4,8.8,8.1,8.4,8.9,8.6,8.8,9.1,9.2,9.4,9.8,10.3,10.7,10.8]}};
+const DAILY={"A":{"acts":[21,22,20,18,18,25,17,13,16,15,13,11,22,13,10,9,13,19,19,21,7,7,8,7,6,9,16,7,6,4]},"B":{"acts":[17,16,13,12,12,9,8,8,6,8,12,12,10,10,12,12,12,14,16,6,6,6,7,10,10,8,8,8,8,6]}};
+const AIOPS=[1061,1048,1029,979,937,1115,957,864,824,883,807,788,898,771,807,929,874,865,832,718,700,667,818,996,767,778,868,717,810,616];
+const OPSD=["05-18","19","20","21","22","23","24","25","26","27","28","29","30","31","06-01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16"];
+const built={};
+function build(id){
+ if(built[id])return;built[id]=true;
+ if(id==='c_country'){new Chart(c('c_country'),{type:'bar',data:{labels:['UK','DE','ES','FR','IT','NL','BE','AU'],datasets:[{label:'花费 €',data:[17556,11138,5575,4753,395,490,382,1136],backgroundColor:COL.teal},{label:'销售额 €',data:[65611,38961,24289,21735,3906,3377,2235,3044],backgroundColor:COL.tealL}]},options:opt({legend:true})});}
+ if(id==='c_store'){new Chart(c('c_store'),{type:'bar',data:{labels:['8店 主力','澳洲店铺群'],datasets:[{label:'开启前 ACOS %',data:[25.9,32.9],backgroundColor:COL.grayT},{label:'开启期间 ACOS %',data:[25.0,37.6],backgroundColor:COL.teal}]},options:opt({legend:true,y:'ACOS %（越低越好）'})});}
+ if(id==='c_onoff'){new Chart(c('c_onoff'),{type:'line',data:{labels:['开启前','开启期间(AI 在管)'],datasets:[{label:'仍在 AI 托管 · ACOS',data:[26.1,24.9],borderColor:COL.teal,backgroundColor:COL.teal,tension:0,borderWidth:3,pointRadius:5},{label:'已关闭 AI · ACOS',data:[32.3,39.9],borderColor:COL.red,backgroundColor:COL.red,tension:0,borderWidth:3,pointRadius:5,borderDash:[6,4]}]},options:slopeOpt('ACOS %（越低越好）',20,42)});}
+ if(id==='c_pop'){new Chart(c('c_pop'),{data:{labels:['开启前','开启期间'],datasets:[{type:'line',label:'ACOS %（越低越好）',data:[26.4,25.7],borderColor:COL.gold,backgroundColor:COL.gold,yAxisID:'y',tension:0,borderWidth:3,pointRadius:5},{type:'line',label:'ROAS ×（越高越好）',data:[3.78,3.89],borderColor:COL.teal,backgroundColor:COL.teal,yAxisID:'y1',tension:0,borderWidth:3,pointRadius:5}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'ACOS %'},min:24,max:28},y1:{position:'right',title:{display:true,text:'ROAS ×'},grid:{drawOnChartArea:false},min:3.5,max:4.2}}}});}
+ if(id==='c_goal'){new Chart(c('c_goal'),{type:'bar',data:{labels:['保持稳定','推动增长'],datasets:[{label:'开启前 ACOS %',data:[26.1,26.9],backgroundColor:COL.grayT},{label:'开启期间 ACOS %',data:[25.5,26.0],backgroundColor:COL.teal}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:x=>x.dataset.label+': '+x.raw+'%'}}},scales:{y:{min:22,max:28,title:{display:true,text:'ACOS %（越低越好）'}}}}});}
+ if(id==='c_curve'){new Chart(c('c_curve'),{type:'bar',data:{labels:['≤30天(学习期)','31–50天','51天以上'],datasets:[{label:'销售额环比 %',data:[-17.7,-12.7,7.1],backgroundColor:['#DC2626','#D97706','#059669']}]},options:opt({legend:false,zero:true,y:'销售额环比 %'})});}
+ if(id==='c_market'){new Chart(c('c_market'),{type:'bar',data:{labels:['电视柜 DE','电视柜 UK','床头柜 UK','角落置物架 UK','打印机架 UK','显示器支架 UK'],datasets:[{label:'近3个月搜索量变化 %',data:[-1.6,-5.6,-6.4,-22.6,-24.4,-25.8],backgroundColor:['#059669','#059669','#059669','#DC2626','#DC2626','#DC2626']}]},options:opt({legend:false,zero:true,y:'近3月搜索量变化 %'})});}
+ if(id==='c_aiops'){new Chart(c('c_aiops'),{type:'bar',data:{labels:OPSD,datasets:[{label:'每日 AI 优化动作',data:AIOPS,backgroundColor:COL.teal}]},options:opt({legend:true,y:'动作数/天'})});}
+ if(id==='c_caseA'){const A=CUM.A;new Chart(c('c_caseA'),{data:{labels:A.dates,datasets:[{type:'bar',label:'每日 AI 出价动作',data:DAILY.A.acts,backgroundColor:'rgba(13,148,136,.18)',yAxisID:'y2',order:3},{type:'line',label:'累计销售额 €',data:A.cum_sales,borderColor:COL.teal,backgroundColor:'rgba(13,148,136,.10)',fill:true,tension:.3,pointRadius:0,yAxisID:'y',order:1},{type:'line',label:'累计 ACOS %',data:A.cum_acos,borderColor:COL.gold,tension:.3,pointRadius:2,spanGaps:true,yAxisID:'y1',order:0}]},options:caseOpt()});}
+ if(id==='c_caseB'){const B=CUM.B;new Chart(c('c_caseB'),{data:{labels:B.dates,datasets:[{type:'bar',label:'每日 AI 出价动作',data:DAILY.B.acts,backgroundColor:'rgba(13,148,136,.20)',yAxisID:'y2',order:3},{type:'line',label:'累计 ACOS %',data:B.cum_acos,borderColor:COL.gold,tension:.3,pointRadius:2,spanGaps:true,yAxisID:'y1',order:0},{type:'line',label:'累计销售额 €',data:B.cum_sales,borderColor:COL.teal,backgroundColor:'rgba(13,148,136,.10)',fill:true,tension:.3,pointRadius:0,yAxisID:'y',order:1}]},options:caseOpt()});}
+}
+function c(id){return document.getElementById(id);}
+function opt(o){return {maintainAspectRatio:false,plugins:{legend:{display:o.legend!==false,position:'bottom'}},scales:{y:{beginAtZero:!o.zero,title:{display:!!o.y,text:o.y||''},grid:{color:o.zero?(ctx=>ctx.tick.value===0?'#94A3B8':'#E2E8F0'):undefined}}}};}
+function slopeOpt(t,mn,mx){return {maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:x=>x.dataset.label+': '+x.raw+'%'}}},scales:{y:{min:mn,max:mx,title:{display:true,text:t}}}};}
+function caseOpt(){return {maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'累计销售额 €'}},y1:{position:'right',title:{display:true,text:'累计 ACOS %'},grid:{drawOnChartArea:false},min:0,max:35},y2:{display:false,max:80}}};}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));this.classList.add('active');
+ const tt=this.getAttribute('data-t');
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ document.getElementById('p-'+tt).classList.add('active');
+ setTimeout(()=>{
+   if(tt==='overview')build('c_country');
+   if(tt==='store'){build('c_store');}
+   if(tt==='market'){build('c_market');}
+   if(tt==='aivalue'){build('c_onoff');build('c_curve');build('c_pop');build('c_goal');build('c_aiops');}
+   if(tt==='cases'){build('c_caseA');build('c_caseB');}
+ },30);
+}));
+build('c_country');
+</script>
+</body>
+</html>
