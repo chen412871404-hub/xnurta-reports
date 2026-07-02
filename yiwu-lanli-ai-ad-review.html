@@ -1,0 +1,607 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>义乌兰鲤 · Xnurta AI 广告月度复盘（客户版）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--tealPale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#fff;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--greenBg:#ECFDF5;--red:#DC2626;--redBg:#FEF2F2;--amber:#D97706;--amberBg:#FFFBEB;--blue:#2563EB;--blueBg:#EFF6FF;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fb);background:var(--bg);color:#1E293B;line-height:1.7}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px}
+.hdr h1{font-family:var(--fh);font-size:28px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14px;color:rgba(255,255,255,.82);margin-bottom:14px}.hdr-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.66)}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:104px;padding:11px 12px;border:none;background:transparent;color:var(--dark);font:500 13.5px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:17px;border:1px solid var(--border)}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--navy)}.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:10px 12px;font-weight:600;font-size:11px;text-transform:uppercase;text-align:left}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;gap:11px;margin-bottom:18px;font-size:13.5px;line-height:1.7}
+.a-info{background:var(--blueBg);border:1px solid #BFDBFE;color:#1E40AF}.a-ok{background:var(--greenBg);border:1px solid #A7F3D0;color:#065F46}.a-warn{background:var(--amberBg);border:1px solid #FDE68A;color:#92400E}.a-teal{background:var(--tealPale);border:1px solid #99F6E4;color:#115E59}.a-red{background:var(--redBg);border:1px solid #FECACA;color:#991B1B}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}.t-green{background:var(--greenBg);color:#065F46}.t-red{background:var(--redBg);color:#991B1B}.t-amber{background:var(--amberBg);color:#92400E}.t-blue{background:var(--blueBg);color:#1E40AF}.t-teal{background:var(--tealPale);color:#115E59}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}.bs.warn{background:linear-gradient(135deg,#FFFBEB,#fff);border-color:#FDE68A}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px}.bs .big{font-family:var(--fh);font-size:21px;font-weight:800}.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}.bs.warn .big{color:var(--amber)}.bs .sm{font-size:12px;color:var(--muted);margin-top:6px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:360px}
+.ins{border-radius:10px;border:1px solid var(--border);margin-bottom:11px;overflow:hidden}
+.ins-h{padding:14px 17px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--card)}
+.ins-t{font-size:14px;font-weight:600;color:var(--navy)}.chev{color:var(--muted);transition:transform .2s}
+.ins-b{display:none;padding:4px 17px 16px;background:#FAFBFC;border-top:1px solid var(--border);font-size:13.5px}
+.ins.open .ins-b{display:block}.ins.open .chev{transform:rotate(180deg)}
+.rec{border-left:3px solid var(--teal);background:#F8FAFC;padding:13px 16px;border-radius:0 8px 8px 0;margin-bottom:11px;font-size:13.5px}
+.rec .rh{font-weight:600;color:var(--navy);margin-bottom:3px}
+.sec-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--teal);margin:6px 0 12px;letter-spacing:.3px}
+.cov{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;font-size:12.5px}
+.cov span{display:flex;gap:7px;align-items:baseline}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.bigstat{grid-template-columns:1fr}.cov{grid-template-columns:1fr}}
+</style></head><body><div class="container">
+<header class="hdr"><h1>义乌兰鲤（户外家具矩阵）· Xnurta AI 广告月度复盘</h1>
+<div class="sub">客户版 · AI 价值验证：AI 前后对比（POP）× AI vs Non-AI 同期对照 × AI 动作价值 × 市场大盘对照</div>
+<div class="hdr-meta"><span>📅 周期 2026-05-25 – 2026-06-25（32 天）</span><span>💵 金额口径：平台导出（USD）</span><span>🌍 站点 US · 6 店铺</span><span>📦 品线：铸铝/HDPE 餐桌椅 · 户外沙发 · 影院椅 · RV 坐垫</span></div></header>
+<nav class="tabs" id="tabs">
+ <button class="tab active" data-t="overview">📊 月度总览</button>
+ <button class="tab" data-t="pop">📈 AI 前后对比</button>
+ <button class="tab" data-t="ainon">⚖️ AI vs Non-AI</button>
+ <button class="tab" data-t="aivalue">🤖 AI 动作价值</button>
+ <button class="tab" data-t="groups">🎯 达标·托管组</button>
+ <button class="tab" data-t="diag">🔍 根因诊断</button>
+ <button class="tab" data-t="market">🌍 市场·竞品</button>
+ <button class="tab" data-t="adstrat">📣 广告打法</button>
+ <button class="tab" data-t="plan">💡 优化计划</button>
+</nav>
+
+<section class="panel active" id="p-overview">
+ <div class="alert a-teal"><span>📋</span><div>本报告基于 5/25–6/25 广告后台全量导出，从四个角度验证 AI 托管的实际价值：<strong>① 同活动开启 AI 前后对比（93 个托管活动）、② AI 托管 vs 手动同期对照、③ AI 替人执行的优化工作量、④ 卖家精灵 / Sorftime 市场大盘对照</strong>，并给出下一步广告打法与优先级清单。</div></div>
+
+ <div class="card">
+  <h2>本期数据覆盖度</h2>
+  <div class="desc">先说清楚证据边界，结论只到证据能支撑的地方</div>
+  <div class="cov">
+   <span>✅ <b>广告端齐全：</b>Campaign（402 条）/ SearchTerm / Changelog（5.96 万条）/ Placement / Keyword / 自动定向 / ProductAd / 托管组（37 组）</span>
+   <span>✅ <b>POP 前后对比：</b>93 个托管活动「开启 AI 前 → 开启期间」同口径数据（截至 7/1，窗口以各活动 AI 开启日为界）</span>
+   <span>✅ <b>市场外部数据：</b>卖家精灵 + Sorftime 双源（取数 7/2）</span>
+   <span>⚠️ <b>缺 TACOS / 店铺总销售</b> → 无法判断广告对整体生意的拉动比例</span>
+   <span>⚠️ <b>缺上月全量导出</b> → 不做环比，趋势证据由 POP 承担</span>
+   <span>⚠️ <b>缺小时级订单数据</b> → 分时策略只能看 AI 动作节奏，不做时段转化归因</span>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)">
+  <h2>📌 本月概要：AI 托管在大盘走弱的逆风里，做到了「放量」和「提效」同时发生</h2>
+  <div class="desc">基于 POP 同口径同活动对比（93 个托管活动，开启 AI 前 → 开启期间）；外部对照：户外餐桌椅大盘搜索量同比约 -20%</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">① 花费有没有失控？</div><div class="big">可控放量 · +28.3%</div><div class="sm">$22,356 → $28,681；曝光 +18.7%，节奏由 AI 预算调度驱动</div></div>
+   <div class="bs win"><div class="t">② 销售/订单有没有增长？</div><div class="big">强增长 · 销售 +51.7%</div><div class="sm">$167,826 → $254,649；订单 288 → 372（+29.2%）</div></div>
+   <div class="bs win"><div class="t">③ ACOS 有没有守住？</div><div class="big">不升反降 · 13.3% → 11.3%</div><div class="sm">放量的同时效率还在改善，属于「双优」结果</div></div>
+  </div>
+  <div class="alert a-teal" style="margin:16px 0 0;font-size:13px"><span>🧭</span><div><strong>怎么读这份报告：</strong>四条证据线相互独立——<strong>① AI 前后对比</strong>看同一批活动开 AI 前后的真实变化；<strong>② AI vs Non-AI</strong>看同期相对水平（只作基准，不作纯因果）；<strong>③ AI 动作价值</strong>量化 AI 替运营做了多少事；<strong>④ 市场对照</strong>用外部大盘剔除「是不是季节涨的」。本期结论：大盘同比在缩、5→6 月历史规律还要环比回落，账户却同口径 +51.7%——<strong>这个增长跑赢了市场，不是季节送的</strong>。</div></div>
+ </div>
+
+ <div class="kpis">
+  <div class="kpi"><div class="l">广告花费</div><div class="v">$24,126</div><div class="s">日均 $754 · CPC $1.16</div></div>
+  <div class="kpi"><div class="l">广告销售额</div><div class="v">$180,840</div><div class="s">ROAS 7.50 · 客单价 $589</div></div>
+  <div class="kpi"><div class="l">订单数</div><div class="v">307</div><div class="s">转化率 1.47%（高客单家具的正常区间）</div></div>
+  <div class="kpi"><div class="l">整体 ACOS</div><div class="v">13.34%</div><div class="s">托管活动 12.64% · 非托管 24.53%</div></div>
+  <div class="kpi"><div class="l">AI 花费占比</div><div class="v">89.2%</div><div class="s">82 个托管活动有花费（共 91 个已接入）</div></div>
+  <div class="kpi"><div class="l">AI 优化动作</div><div class="v">20,211</div><div class="s">运营手动仅 111 次 ≈ 182 : 1</div></div>
+  <div class="kpi"><div class="l">名义达标率</div><div class="v">29.3%</div><div class="s">健康口径 48.8%——差异来自目标设置（见达标页）</div></div>
+  <div class="kpi"><div class="l">预算耗尽信号</div><div class="v">4,152<span style="font-size:14px"> 次</span></div><div class="s">日均约 130 次撞预算上限（见根因诊断）</div></div>
+ </div>
+
+ <div class="card"><h2>分店铺表现：四强一稳一弱</h2><div class="desc">六店同属户外家具矩阵；梓廿（影院椅）是唯一效率异常的店铺，根因在词而不在出价（详见根因诊断与市场页）</div>
+  <div class="chart-box"><canvas id="c_store"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>店铺</th><th>主品线</th><th class="num">花费</th><th class="num">销售额</th><th class="num">订单</th><th class="num">ACOS</th><th class="num">ROAS</th><th class="num">CVR</th></tr></thead><tbody>
+  <tr><td class="hl">永棉美国站</td><td>铸铝餐桌椅套装</td><td class="num">$6,649</td><td class="num">$66,432</td><td class="num">71</td><td class="num"><span class="pos">10.01%</span></td><td class="num">9.99</td><td class="num">1.66%</td></tr>
+  <tr><td class="hl">双币美国站</td><td>HDPE/PE 餐桌椅 · 长椅</td><td class="num">$4,753</td><td class="num">$34,158</td><td class="num">93</td><td class="num">13.91%</td><td class="num">7.19</td><td class="num">2.07%</td></tr>
+  <tr><td class="hl">娇幂美国站</td><td>铸铝套装 · RV 坐垫</td><td class="num">$4,140</td><td class="num">$36,629</td><td class="num">79</td><td class="num"><span class="pos">11.30%</span></td><td class="num">8.85</td><td class="num">1.79%</td></tr>
+  <tr><td class="hl">延秋</td><td>HDPE 餐桌椅</td><td class="num">$3,525</td><td class="num">$15,121</td><td class="num">22</td><td class="num"><span class="warn">23.31%</span></td><td class="num">4.29</td><td class="num">0.98%</td></tr>
+  <tr><td class="hl">骅趣美国站</td><td>铸铝套装 · 功能沙发</td><td class="num">$2,609</td><td class="num">$23,008</td><td class="num">37</td><td class="num"><span class="pos">11.34%</span></td><td class="num">8.82</td><td class="num">1.06%</td></tr>
+  <tr><td class="hl">梓廿</td><td>联排影院椅</td><td class="num">$2,450</td><td class="num">$5,492</td><td class="num">5</td><td class="num"><span class="neg">44.60%</span></td><td class="num">2.24</td><td class="num">0.27%</td></tr>
+  </tbody></table></div>
+
+ <div class="card"><h2>账户健康速读</h2>
+  <div class="two">
+   <div><div class="sec-title">✅ 亮点</div>
+    <div class="alert a-ok" style="display:block"><strong>POP「双优」。</strong>93 个托管活动开启 AI 后销售 +51.7%、订单 +29.2%，ACOS 还从 13.3% 降到 11.3%——放量与提效同时发生，且是在大盘同比走弱的背景下。</div>
+    <div class="alert a-ok" style="display:block"><strong>AI 接管了几乎全部执行。</strong>本期 20,211 次 AI 优化动作（出价 / 预算 / 暂停），运营手动仅 111 次；出价加减各约 4,300 次、中位幅度 ±2.5%，小步快跑。</div>
+    <div class="alert a-ok" style="display:block"><strong>流量买得便宜。</strong>账户 CPC $1.16，核心词实际点击成本约 $2.0，而市场建议竞价 $4.58–$5.25（Sorftime）——同样的预算买到了更多点击，还有向搜索顶部加价的空间。</div>
+   </div>
+   <div><div class="sec-title">⚠️ 需关注</div>
+    <div class="alert a-red" style="display:block"><strong>断货是头号经营风险。</strong>68 个有花费 ASIN 在导出时点库存为 0（账户为自发货模式），其中包含本期贡献 $84,258 销售的在售主力款。旺季断一次货，POP 涨势就可能被打断。</div>
+    <div class="alert a-warn" style="display:block"><strong>梓廿影院椅线在失血。</strong>店铺 ACOS 44.6%、CVR 0.27%；「movie theater chairs」一词花 $721 只出 1 单——外部数据显示这个词全亚马逊月购买量仅 5–8 单，是词的问题，不是出价的问题。</div>
+    <div class="alert a-warn" style="display:block"><strong>预算卡住了优等生。</strong>本期 4,152 次预算耗尽信号；25 个活动预算活跃时间不足 50%，其中多个 ACOS 6–7% 的高效活动每天一半时间处于下线状态。</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="panel" id="p-pop">
+ <div class="alert a-teal"><span>📈</span><div><strong>证据线①：AI 前后对比（POP）。</strong>对同一批托管活动，比较「开启 AI 前」与「开启 AI 期间」的同口径表现——托管价值最直接的趋势证据。本期覆盖 <strong>93 个</strong>托管活动（POP 数据截至 7/1，各活动窗口以其 AI 开启日为界：主力批次约 57 天，第二批约 29–31 天）。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>总览：销售 +51.7%，ACOS 反而下降——「双优」结果</h2>
+  <div class="desc">93 个托管活动汇总 · 开启前 → 开启期间</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">销售额</div><div class="big">+51.7%</div><div class="sm">$167,826 → $254,649</div></div>
+   <div class="bs win"><div class="t">订单数</div><div class="big">+29.2%</div><div class="sm">288 → 372 · 客单上行（更多大套装成交）</div></div>
+   <div class="bs win"><div class="t">ACOS</div><div class="big">13.3% → 11.3%</div><div class="sm">花费 +28.3%、曝光 +18.7% 的同时效率改善</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:16px"><span>🌍</span><div><strong>先排除「是不是季节涨的」：</strong>卖家精灵趋势显示，核心大词 outdoor dining set 月搜索量 2026 年 5 月同比 <strong>-20%</strong>、cast aluminum patio furniture 同比 <strong>-17%</strong>；且按历史规律 5→6 月搜索还会环比回落 16–28%。也就是说，POP 期间的市场需求并不比开启前更好，甚至略差——<strong>+51.7% 是从竞争对手那里赢来的份额，不是大盘的水位抬升</strong>。（市场数据详见「市场·竞品」页）</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>按托管目标拆分</h2><div class="desc">两类目标都在涨，「保持稳定」组实际贡献了主要增量</div>
+   <div class="chart-box"><canvas id="c_pop_obj"></canvas></div></div>
+  <div class="card"><h2>ACOS 开启前 → 期间（按目标）</h2><div class="desc">两组 ACOS 都在改善，「保持稳定」组降幅更大</div>
+   <div class="chart-box"><canvas id="c_pop_acos"></canvas></div></div>
+ </div>
+
+ <div class="card"><h2>两个目标，两种表现</h2>
+  <table><thead><tr><th>托管目标</th><th class="num">活动数</th><th class="num">销售变化</th><th class="num">订单变化</th><th class="num">花费变化</th><th class="num">ACOS 前→期间</th><th>判定</th></tr></thead><tbody>
+   <tr><td class="hl">保持稳定</td><td class="num">40</td><td class="num"><span class="pos">+66.5%</span></td><td class="num"><span class="pos">+28.0%</span></td><td class="num">+36.7%</td><td class="num">11.5% → 9.4%</td><td><span class="tag t-green">超预期 · 稳定目标跑出了增长</span></td></tr>
+   <tr><td class="hl">推动增长</td><td class="num">53</td><td class="num"><span class="pos">+21.2%</span></td><td class="num"><span class="pos">+35.6%</span></td><td class="num">+16.6%</td><td class="num">17.1% → 16.5%</td><td><span class="tag t-blue">符合方向 · 但花费投入偏保守</span></td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:14px"><span>⚠️</span><div><strong>一个值得校正的错位：</strong>真正想冲量的「推动增长」组，花费只增加了 16.6%，比「保持稳定」组（+36.7%）还保守——主要原因是这批活动大多设了偏严的目标 ACOS，AI 不敢放。想让「推动增长」名副其实，需要把这批活动的目标 ACOS 放宽到品类现实区间（详见「达标·托管组」页）。</div></div>
+ </div>
+
+ <div class="card"><h2>分店铺 POP：五升一降，增长引擎在铸铝主力店</h2>
+  <div class="desc">开启前 → 开启期间 · 销售额对比（梓廿为唯一下降店铺）</div>
+  <div class="chart-box tall"><canvas id="c_pop_store"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>店铺</th><th class="num">活动数</th><th class="num">销售 前→期间</th><th class="num">销售变化</th><th class="num">花费变化</th><th class="num">ACOS 前→期间</th><th>解读</th></tr></thead><tbody>
+   <tr><td class="hl">永棉美国站</td><td class="num">13</td><td class="num">$60,556 → $114,831</td><td class="num"><span class="pos">+89.6%</span></td><td class="num">+67.7%</td><td class="num">10.7% → 9.5%</td><td><span class="tag t-green">主引擎 · 放量且提效</span></td></tr>
+   <tr><td class="hl">骅趣美国站</td><td class="num">21</td><td class="num">$33,630 → $57,113</td><td class="num"><span class="pos">+69.8%</span></td><td class="num">+69.2%</td><td class="num">11.9% → 11.9%</td><td><span class="tag t-green">订单 +102%，效率持平</span></td></tr>
+   <tr><td class="hl">延秋</td><td class="num">5</td><td class="num">$4,083 → $12,021</td><td class="num"><span class="pos">+194.5%</span></td><td class="num">+109.2%</td><td class="num">22.9% → 16.3%</td><td><span class="tag t-green">低基数高增长</span></td></tr>
+   <tr><td class="hl">双币美国站</td><td class="num">20</td><td class="num">$22,478 → $30,841</td><td class="num"><span class="pos">+37.2%</span></td><td class="num"><span class="pos">-7.8%</span></td><td class="num">18.9% → 12.7%</td><td><span class="tag t-teal">花更少的钱卖更多 · 效率标杆</span></td></tr>
+   <tr><td class="hl">娇幂美国站</td><td class="num">23</td><td class="num">$34,093 → $32,949</td><td class="num">-3.4%</td><td class="num">-21.0%</td><td class="num">13.0% → 10.6%</td><td><span class="tag t-blue">效率优先 · 销售基本持平</span></td></tr>
+   <tr><td class="hl">梓廿</td><td class="num">11</td><td class="num">$12,986 → $6,894</td><td class="num"><span class="neg">-46.9%</span></td><td class="num">-26.2%</td><td class="num">17.6% → 24.5%</td><td><span class="tag t-red">唯一恶化 · 根因在品线（见诊断）</span></td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>🧠</span><div>双币和娇幂展示了 AI 的另一面价值：<strong>不是只会花钱，也会省钱</strong>——两店花费分别 -7.8% / -21.0%，ACOS 却分别改善 6.2 个百分点和 2.4 个百分点的对应关系（18.9%→12.7%、13.0%→10.6%），说明 AI 在把预算从低效流量里撤出来。梓廿的下滑与 AI 配置关系不大，是影院椅词族本身没有成交盘子（市场页有完整证据）。</div></div>
+ </div>
+
+ <div class="card"><h2>按成熟度分层：增长主力是成熟托管活动，不是低基数新活动</h2>
+  <div class="desc">用 AI 开启天数分层，避免把「新活动低基数大涨」误读为整体能力</div>
+  <div class="two">
+   <div class="alert a-ok" style="display:block"><strong>成熟托管（&gt;35 天，28 个）</strong><br>销售 +82.6%（$94,186 → $171,943）<br>订单 +71.3% · 花费 +68.3%<br>ACOS 11.1% → 10.3%　<span class="tag t-green">增长主引擎</span></div>
+   <div class="alert a-info" style="display:block"><strong>新接入（≤35 天，65 个）</strong><br>销售 +12.3%（$73,639 → $82,705）<br>订单 -1.8% · 花费 -7.0%<br>ACOS 16.1% → 13.3%　<span class="tag t-blue">学习期 · 先收敛效率再放量</span></div>
+  </div>
+  <div class="alert a-info" style="margin-top:4px;font-size:13px"><span>ℹ️</span><div>这个分层结果比表面数字更有说服力：<strong>涨得最多的是基数最大、接入最久的活动</strong>（说明不是统计效应），而 6 月新接入的 65 个活动 AI 先做的是「降 ACOS、收花费」——先把效率整理干净，再进入放量阶段。7 月这批活动值得期待，同时也意味着 7 月预算需求会上来。</div></div>
+ </div>
+
+ <div class="card"><h2>POP 评分：93 个托管活动</h2>
+  <div class="desc">评分规则：贴近目标（|ACOS−目标|≤5）+ 销售增长 + ACOS 改善，各计 1 分；≥1 分为通过，≥2 分为良好，3 分为优秀</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">通过率</div><div class="big">64.5%</div><div class="sm">60/93 个活动至少达到一项基础门槛</div></div>
+   <div class="bs win"><div class="t">良好率</div><div class="big">38.7%</div><div class="sm">36/93 达到两项</div></div>
+   <div class="bs win"><div class="t">优秀率</div><div class="big">17.2%</div><div class="sm">16/93 三项全达（贴目标 + 销售涨 + ACOS 降）</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:14px;font-size:13px"><span>ℹ️</span><div>16 个「三优」活动是账户的黄金模板（下表 Top 增量活动多数在列）；另有 8 个开启前零销售的活动被 AI 激活，直接贡献 $23,499 新增销售。33 个 0 分活动集中在新接入学习期与梓廿影院椅线——前者给时间，后者要换打法。</div></div>
+ </div>
+
+ <div class="card"><h2>开启 AI 后增量最大的活动 Top 8</h2><div class="desc">按销售额绝对增量排序 · 全部为「三优」或「双优」活动</div>
+  <table><thead><tr><th>活动</th><th>店铺</th><th>目标</th><th class="num">销售 前→期间</th><th class="num">销售变化</th><th class="num">订单变化</th><th class="num">ACOS 前→期间</th><th class="num">AI天数</th></tr></thead><tbody>
+   <tr><td class="hl">SparkX AI 9件套-自动</td><td>永棉</td><td><span class="tag t-green">保持稳定</span></td><td class="num">$4,095 → $21,871</td><td class="num"><span class="pos">+434%</span></td><td class="num"><span class="pos">+433%</span></td><td class="num">9.9% → 6.4%</td><td class="num">57d</td></tr>
+   <tr><td class="hl">SparkX AI 7件套全转椅-自动</td><td>永棉</td><td><span class="tag t-green">保持稳定</span></td><td class="num">$4,744 → $17,371</td><td class="num"><span class="pos">+266%</span></td><td class="num"><span class="pos">+275%</span></td><td class="num">11.9% → 7.1%</td><td class="num">57d</td></tr>
+   <tr><td class="hl">SparkX AI 圆桌-7件套-自动</td><td>永棉</td><td><span class="tag t-green">保持稳定</span></td><td class="num">$1,298 → $13,879</td><td class="num"><span class="pos">+969%</span></td><td class="num"><span class="pos">+1200%</span></td><td class="num">31.0% → 5.8%</td><td class="num">57d</td></tr>
+   <tr><td class="hl">SparkX AI 灰色+棕色全拆-loveseat广泛</td><td>骅趣</td><td><span class="tag t-green">保持稳定</span></td><td class="num">$3,195 → $12,584</td><td class="num"><span class="pos">+294%</span></td><td class="num"><span class="pos">+275%</span></td><td class="num">9.6% → 8.8%</td><td class="num">57d</td></tr>
+   <tr><td class="hl">SparkX AI 0809- pe-dining set-自动紧密</td><td>双币</td><td><span class="tag t-green">保持稳定</span></td><td class="num">$1,596 → $8,386</td><td class="num"><span class="pos">+425%</span></td><td class="num"><span class="pos">+350%</span></td><td class="num">11.7% → 3.1%</td><td class="num">31d</td></tr>
+   <tr><td class="hl">SparkX AI 9件套2+4-自动</td><td>永棉</td><td><span class="tag t-green">保持稳定</span></td><td class="num">$0 → $7,441</td><td class="num"><span class="tag t-green">从零激活</span></td><td class="num"><span class="tag t-green">从零激活</span></td><td class="num">— → 8.7%</td><td class="num">57d</td></tr>
+   <tr><td class="hl">SparkX AI 5+7铸铝圆桌-自动</td><td>骅趣</td><td><span class="tag t-blue">推动增长</span></td><td class="num">$1,797 → $7,055</td><td class="num"><span class="pos">+293%</span></td><td class="num"><span class="pos">+200%</span></td><td class="num">13.1% → 5.9%</td><td class="num">56d</td></tr>
+   <tr><td class="hl">SparkX AI 7件套-手动</td><td>永棉</td><td><span class="tag t-blue">推动增长</span></td><td class="num">$6,837 → $12,977</td><td class="num"><span class="pos">+90%</span></td><td class="num"><span class="pos">+71%</span></td><td class="num">8.3% → 13.0%</td><td class="num">57d</td></tr>
+  </tbody></table>
+  <div class="alert a-ok" style="margin-top:12px;font-size:12.5px"><span>✅</span><div>共性很清晰：<strong>铸铝大套装 + 自动定向 + 稳定目标</strong>的组合被 AI 跑通了——「圆桌-7件套」ACOS 从 31.0% 压到 5.8% 的同时销售翻近 10 倍，是本期最佳单案。这套词库和出价结构应沉淀为模板，复制到同品线其它活动。</div></div>
+ </div>
+
+ <div class="card"><h2>需要盯的 6 个 POP 下滑活动</h2><div class="desc">开启期间花费 &gt;$200 且销售明显下滑 · 按销售降幅排序</div>
+  <table><thead><tr><th>活动</th><th>店铺</th><th>目标</th><th class="num">销售 前→期间</th><th class="num">期间花费</th><th class="num">ACOS 前→期间</th><th>建议</th></tr></thead><tbody>
+   <tr><td class="hl">SparkX AI 9件套-全转椅</td><td>永棉</td><td>保持稳定</td><td class="num">$19,281 → $8,042</td><td class="num">$1,391</td><td class="num">6.1% → 17.3%</td><td>核对库存与价格后再判断，勿急着压价</td></tr>
+   <tr><td class="hl">SparkX AI 0407-9件套全转椅-自动</td><td>骅趣</td><td>推动增长</td><td class="num">$4,918 → $0</td><td class="num">$256</td><td class="num">4.3% → —</td><td>期间零售出，先查在售状态/库存</td></tr>
+   <tr><td class="hl">SparkX AI 0407-铸铝9件套-cast aluminum…</td><td>骅趣</td><td>推动增长</td><td class="num">$4,888 → $2,297</td><td class="num">$382</td><td class="num">9.7% → 16.6%</td><td>与上一条同 ASIN 族，一并核查</td></tr>
+   <tr><td class="hl">SparkX AI 0303rv垫子-自动</td><td>娇幂</td><td>保持稳定</td><td class="num">$4,543 → $1,712</td><td class="num">$248</td><td class="num">6.6% → 14.5%</td><td>RV 坐垫季节前移（5 月旺），属正常回落</td></tr>
+   <tr><td class="hl">SparkX AI 0407-铸铝7件套-cast aluminum…</td><td>骅趣</td><td>推动增长</td><td class="num">$1,699 → $0</td><td class="num">$398</td><td class="num">26.2% → —</td><td>零售出且仍在花费，优先处理</td></tr>
+   <tr><td class="hl">SparkX AI 影院椅-黑-自动</td><td>梓廿</td><td>推动增长</td><td class="num">$1,648 → $0</td><td class="num">$331</td><td class="num">36.9% → —</td><td>影院椅线整体换打法（见广告打法）</td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:12px;font-size:13px"><span>⚠️</span><div>注意一个模式：下滑活动里有 3 个来自骅趣 0407 系列、且多个「期间零售出但仍在花费」——这与「断货诊断」里骅趣/永棉多个主力 ASIN 库存为 0 相互印证。<strong>先查库存和在售状态，再谈广告优化</strong>；断货期间继续烧广告是纯损耗。</div></div>
+ </div>
+</section>
+<section class="panel" id="p-ainon">
+ <div class="alert a-teal"><span>⚖️</span><div><strong>证据线②：AI vs Non-AI 同期对照。</strong>同一时间段内，托管活动与非托管活动的对比。它是有用的<strong>基准</strong>，但不是纯因果——两组的活动构成不同（非托管组多为长尾/测试活动，规模小），只能说明相对水平。</div></div>
+
+ <div class="card"><h2>同期对照：AI 扛起 89.2% 花费，ACOS 约为手动组的一半</h2>
+  <div class="chart-box"><canvas id="c_ainon"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>分组</th><th class="num">活动数</th><th class="num">花费</th><th class="num">销售额</th><th class="num">订单</th><th class="num">ACOS</th><th class="num">ROAS</th><th class="num">CTR</th><th class="num">CVR</th></tr></thead><tbody>
+   <tr><td class="hl">🤖 AI 托管</td><td class="num">82</td><td class="num">$21,516</td><td class="num">$170,204</td><td class="num">288</td><td class="num"><span class="pos">12.64%</span></td><td class="num">7.91</td><td class="num">0.96%</td><td class="num">1.51%</td></tr>
+   <tr><td class="hl">✋ Non-AI 手动</td><td class="num">22</td><td class="num">$2,610</td><td class="num">$10,636</td><td class="num">19</td><td class="num"><span class="warn">24.53%</span></td><td class="num">4.08</td><td class="num">0.50%</td><td class="num">1.11%</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:14px"><span>🧠</span><div><strong>结论：</strong>托管组以 8.2 倍于手动组的花费规模，跑出了约一半的 ACOS（12.64% vs 24.53%），且 CTR（0.96% vs 0.50%）、CVR（1.51% vs 1.11%）全面占优——AI 不是靠缩量做漂亮数字，而是在更大的盘子上把流量筛得更准。<strong>诚实说明：</strong>手动组里有一批老 SB/测试活动，本身定位就是边缘流量，这个对比说明「交给 AI 的钱效率更高」，不能单独证明「AI 比人聪明」；更强的因果证据在 POP 页。</div></div>
+ </div>
+
+ <div class="card"><h2>AI 覆盖：已接入 vs 本期有花费</h2>
+  <div class="desc">按 Campaign 的目标ACOS / 托管组 / 托管目标字段判定</div>
+  <table><thead><tr><th>口径</th><th class="num">数量</th><th>说明</th></tr></thead><tbody>
+   <tr><td class="hl">AI 已接入（规则判定）</td><td class="num">91 个</td><td>含 9 个零花费/暂停的托管活动</td></tr>
+   <tr><td class="hl">AI 本期有花费</td><td class="num">82 个</td><td>本期实际产生广告花费的托管活动，占全账户有花费活动（104 个）的 79%</td></tr>
+   <tr><td class="hl">Non-AI 有花费</td><td class="num">22 个</td><td>合计花费 $2,610（占 10.8%），多为长尾手动与老活动</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>账户的 AI 渗透已经很深（花费口径 89.2%）。下一步价值不在「再多开几个托管」，而在<strong>把托管的目标参数设准</strong>（见达标页）和<strong>把非托管的 $2,610 长尾要么并入托管、要么归档</strong>，让口径更干净。</div></div>
+ </div>
+</section>
+
+<section class="panel" id="p-aivalue">
+ <div class="alert a-teal"><span>🤖</span><div><strong>证据线③：AI 动作价值。</strong>本期操作日志共 59,557 条。下面把它拆干净：哪些是 AI 的日常优化、哪些是团队一次性部署、哪些是系统自动记录——三者价值不同，不能混在一起说。</div></div>
+
+ <div class="card"><h2>人机分工：AI 优化 20,211 次，运营手动只需 111 次</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">🤖 AI 日常优化</div><div class="big">20,211</div><div class="sm">出价 / 预算 / 暂停，日均约 632 次 · 全天候</div></div>
+   <div class="bs win"><div class="t">✋ 运营手动</div><div class="big">111</div><div class="sm">3 位运营 · AI : 人工 ≈ 182 : 1</div></div>
+   <div class="bs warn"><div class="t">⚙️ 平台/批量侧</div><div class="big">39,235</div><div class="sm">3.02 万条批量否词部署 + 4,152 次预算耗尽翻牌 + 系统状态记录</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:14px"><span>ℹ️</span><div><strong>口径拆解（这一步很多报告会做错）：</strong>日志里 3.02 万条「添加否定词/否定ASIN」集中出现在 5/31 深夜至 6/1（单小时最高 24,587 条）——这是 AI 全面接管前的<strong>一次性否词库铺底</strong>，属于部署动作，不计入 AI 日常，也不代表日常人工强度。真正的日常人工只有 111 次（调预算 87 次、加否词 16 次、暂停 8 次）。扣除这些后，AI 与人工的日常执行比约 <strong>182 : 1</strong>——运营的时间被释放到选品、库存和 Listing 上。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>AI 都在改什么</h2><div class="desc">按操作类型（对数轴）· 提预算是第一大动作</div>
+   <div class="chart-box"><canvas id="c_ops"></canvas></div>
+   <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>提预算 9,983 次 vs 降预算 1,563 次（6.4:1），与 4,152 次预算耗尽信号相互印证：<strong>AI 一直在把预算顶向上限，账户长期处于预算受限状态</strong>——这不是 AI 乱花钱，而是它找到的高效流量装不下了（见根因诊断）。</div></div></div>
+  <div class="card"><h2>AI 一天里几点在工作</h2><div class="desc">24 小时动作分布 · 0 点峰值为分时预算重置</div>
+   <div class="chart-box"><canvas id="c_hourly"></canvas></div>
+   <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>白天 9–15 点（美西购物高峰前后）是调价高频段，凌晨 0 点集中做预算重置与日初调度——这套节奏人工无法复制。</div></div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>出价：小步快跑，双向微调</h2><div class="desc">加价与降价的次数与中位幅度</div>
+   <div class="chart-box"><canvas id="c_bid"></canvas></div>
+   <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>加价 4,282 次（中位 +2.4%）、降价 4,315 次（中位 -2.5%）：幅度克制、方向均衡，既抢量也控成本。高客单家具单次点击 $1–2，这种细颗粒度调价正是人工做不过来的部分。</div></div></div>
+  <div class="card"><h2>AI 动作量日趋势：接管程度持续加深</h2><div class="desc">日动作量从 5 月底约 340 次/天 爬升至 6 月中下旬约 860 次/天</div>
+   <div class="chart-box"><canvas id="c_daily"></canvas></div>
+   <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>6/1 第二批活动接入后动作量翻倍并保持高位——AI 的管理容量随活动数线性扩展，不存在「人手不够」的瓶颈。</div></div></div>
+ </div>
+</section>
+
+<section class="panel" id="p-groups">
+ <div class="card" style="border-left:4px solid var(--gold)"><h2>🔑 达标率 29.3% 的真相：一半「未达标」其实跑得很健康，是目标定得太狠</h2>
+  <div class="desc">达标 = 实际 ACOS ≤ 目标 ACOS；仅计花费&gt;0 且设了目标的 82 个活动</div>
+  <div class="bigstat">
+   <div class="bs warn"><div class="t">名义达标率</div><div class="big">29.3%</div><div class="sm">24/82 个活动严格达标</div></div>
+   <div class="bs win"><div class="t">健康口径</div><div class="big">48.8%</div><div class="sm">40/82：达标，或贴线（≤1.3×目标），或 ACOS 绝对值 ≤15%</div></div>
+   <div class="bs lose"><div class="t">真正需要处理</div><div class="big">42 个</div><div class="sm">ACOS&gt;15% 或零售出 · 合计花费 $9,035</div></div>
+  </div>
+  <div class="alert a-warn" style="margin-top:14px"><span>⚠️</span><div><strong>证据：</strong>16 个「未达标」活动的 ACOS 绝对值其实 ≤15%（合计花费 $4,963、销售 $51,070、实际 ACOS 仅 9.7%）——例如「铸铝单桌（组）-自动」目标设 3.0%、实际 5.9%（ROAS 17）；「0228-pe-dining set-精准」目标设 1.6%、实际 7.1%（ROAS 14）。这类目标在高客单家具品类里不现实：<strong>15 个活动目标 ACOS 低于 8%，只有 2 个达标</strong>。目标定太狠有两个代价：① 达标率失真，看板一片红降低信任；② AI 出价被压得不敢放，「推动增长」组花费只敢 +16.6%。<strong>行动：把目标 ACOS 校准到品类现实区间（成熟款 8–12%、增长款 12–18%）</strong>。</div></div>
+ </div>
+
+ <div class="card"><h2>分目标达标情况</h2>
+  <div class="chart-box"><canvas id="c_dabiao"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>托管目标</th><th class="num">参评活动</th><th class="num">严格达标</th><th class="num">名义达标率</th><th>主因</th></tr></thead><tbody>
+   <tr><td class="hl">保持订单稳定</td><td class="num">52</td><td class="num">19</td><td class="num">36.5%</td><td>目标偏严 + 部分新接入活动仍在学习期</td></tr>
+   <tr><td class="hl">推动增长</td><td class="num">30</td><td class="num">5</td><td class="num"><span class="warn">16.7%</span></td><td>增长目标却配了偏低目标 ACOS，先天矛盾</td></tr>
+   <tr style="border-top:2px solid var(--navy)"><td class="hl">整体</td><td class="num">82</td><td class="num">24</td><td class="num hl">29.3%</td><td>健康口径 48.8%</td></tr>
+  </tbody></table>
+ </div>
+
+ <div class="card"><h2>托管组红黄绿灯（37 组，按花费排序 Top 14）</h2><div class="desc">绿灯=达标 · 黄灯=超目标但在 1.3 倍内 · 红灯=超 1.3 倍或零售出；红灯不等于跑得差，先看目标是否现实</div>
+  <table><thead><tr><th>托管组</th><th>店铺</th><th>目标</th><th class="num">目标ACOS</th><th class="num">实际ACOS</th><th class="num">花费</th><th class="num">销售</th><th class="num">活动数</th><th>状态</th></tr></thead><tbody>
+   <tr><td class="hl">铸铝餐桌椅系列-自动广告</td><td>永棉</td><td>保持稳定</td><td class="num">8.8%</td><td class="num">9.2%</td><td class="num">$4,401</td><td class="num">$47,982</td><td class="num">9</td><td><span class="tag t-amber">黄灯 · 贴线，可放预算</span></td></tr>
+   <tr><td class="hl">骅趣-铸铝5.7托管</td><td>骅趣</td><td>推动增长</td><td class="num">5.0%</td><td class="num">11.7%</td><td class="num">$1,533</td><td class="num">$13,123</td><td class="num">15</td><td><span class="tag t-red">红灯 · 目标 5% 不现实，建议上调</span></td></tr>
+   <tr><td class="hl">梓廿-9104联排-自动</td><td>梓廿</td><td>推动增长</td><td class="num">20.0%</td><td class="num">—</td><td class="num">$1,251</td><td class="num">$0</td><td class="num">5</td><td><span class="tag t-red">红灯 · 零售出，品线问题</span></td></tr>
+   <tr><td class="hl">娇幂-铸铝套装-自动托管6.1</td><td>娇幂</td><td>保持稳定</td><td class="num">10.0%</td><td class="num">12.1%</td><td class="num">$1,085</td><td class="num">$8,937</td><td class="num">6</td><td><span class="tag t-amber">黄灯 · 新接入收敛中</span></td></tr>
+   <tr><td class="hl">骅趣-全拆沙发5.6托管</td><td>骅趣</td><td>保持稳定</td><td class="num">8.0%</td><td class="num">10.9%</td><td class="num">$1,076</td><td class="num">$9,885</td><td class="num">6</td><td><span class="tag t-red">红灯 · 超 1.3 倍，目标略紧</span></td></tr>
+   <tr><td class="hl">娇幂-铸铝套装-精准托管6.1</td><td>娇幂</td><td>保持稳定</td><td class="num">18.6%</td><td class="num">29.9%</td><td class="num">$1,075</td><td class="num">$3,596</td><td class="num">8</td><td><span class="tag t-red">红灯 · 真实低效，收词收价</span></td></tr>
+   <tr><td class="hl">铸铝餐桌椅套装-手动广告组</td><td>永棉</td><td>推动增长</td><td class="num">9.5%</td><td class="num">16.5%</td><td class="num">$1,014</td><td class="num">$6,139</td><td class="num">2</td><td><span class="tag t-red">红灯 · 大词活动，需拆词管理</span></td></tr>
+   <tr><td class="hl">延秋-老PE餐桌套装-自动</td><td>延秋</td><td>保持稳定</td><td class="num">10.3%</td><td class="num">9.3%</td><td class="num">$952</td><td class="num">$10,231</td><td class="num">2</td><td><span class="tag t-green">绿灯 · 达标且量健康</span></td></tr>
+   <tr><td class="hl">梓廿-9107影院椅-自动</td><td>梓廿</td><td>推动增长</td><td class="num">23.0%</td><td class="num">16.1%</td><td class="num">$882</td><td class="num">$5,492</td><td class="num">6</td><td><span class="tag t-green">绿灯 · 梓廿唯一及格线</span></td></tr>
+   <tr><td class="hl">双币-横梁pe套装-自动托管6.1</td><td>双币</td><td>推动增长</td><td class="num">31.2%</td><td class="num">19.8%</td><td class="num">$749</td><td class="num">$3,794</td><td class="num">1</td><td><span class="tag t-green">绿灯 · 目标偏宽可逐步收紧</span></td></tr>
+   <tr><td class="hl">延秋-新PE餐桌套装-自动</td><td>延秋</td><td>推动增长</td><td class="num">33.3%</td><td class="num">—</td><td class="num">$632</td><td class="num">$0</td><td class="num">1</td><td><span class="tag t-red">红灯 · 新品零售出，先修 Listing</span></td></tr>
+   <tr><td class="hl">娇幂-铸铝桌子-自动托管6.1</td><td>娇幂</td><td>保持稳定</td><td class="num">3.0%</td><td class="num">5.9%</td><td class="num">$500</td><td class="num">$8,427</td><td class="num">1</td><td><span class="tag t-red">「假红灯」· ROAS 17，目标 3% 不现实</span></td></tr>
+   <tr><td class="hl">双币-网格pe套装-精准托管6.1</td><td>双币</td><td>保持稳定</td><td class="num">1.6%</td><td class="num">7.1%</td><td class="num">$496</td><td class="num">$6,989</td><td class="num">1</td><td><span class="tag t-red">「假红灯」· ROAS 14，目标 1.6% 不现实</span></td></tr>
+   <tr><td class="hl">娇幂-铸铝吧桌套装-自动托管6.1</td><td>娇幂</td><td>保持稳定</td><td class="num">11.9%</td><td class="num">10.2%</td><td class="num">$451</td><td class="num">$4,441</td><td class="num">2</td><td><span class="tag t-green">绿灯 · 达标</span></td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>37 组整体：绿灯 11 / 黄灯 4 / 红灯 15 / 零售出 7。红灯里至少 4 组是「目标不现实」造成的假红灯（实际 ROAS 14–17），真红灯集中在梓廿影院椅与娇幂精准组。<strong>先校准目标，看板才有管理价值。</strong></div></div>
+ </div>
+
+ <div class="card"><h2>功能部署：37 个托管组的 AI 权限开关</h2><div class="desc">大部分功能已放开，唯一的大缺口是「按表现调预算」</div>
+  <table><thead><tr><th>功能</th><th class="num">已交给 AI 的组数</th><th>覆盖</th></tr></thead><tbody>
+   <tr><td class="hl">分时调价 / 分时预算</td><td class="num">37/37</td><td><span class="tag t-green">全覆盖</span></td></tr>
+   <tr><td class="hl">广告位调价 · 按表现调价 · 预算重新分配 · 添加否定定向</td><td class="num">36/37</td><td><span class="tag t-green">基本全覆盖</span></td></tr>
+   <tr><td class="hl">定向收割</td><td class="num">35/37</td><td><span class="tag t-green">基本全覆盖</span></td></tr>
+   <tr><td class="hl">定向暂停</td><td class="num">33/37</td><td><span class="tag t-green">广覆盖</span></td></tr>
+   <tr><td class="hl">暂停商品 · 暂停广告活动和广告组</td><td class="num">27/37</td><td><span class="tag t-amber">部分 · 建议补齐（断货自动止损靠它）</span></td></tr>
+   <tr><td class="hl">按表现调预算</td><td class="num">3/37</td><td><span class="tag t-red">最大缺口</span></td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:12px;font-size:13px"><span>💡</span><div><strong>这是本页最值得做的一件事：</strong>本期 AI 提预算 9,983 次，但几乎全部由「分时预算」逻辑驱动（37/37 全开），而「按表现调预算」只开了 3/37——意味着<strong>预算在按时段流动，却没有真正按 ROI 流动</strong>。配合 4,152 次预算耗尽信号看：高效活动撞上限时，AI 没有权限把别处的预算挪过来。把「按表现调预算」放开到主力托管组，是零成本的结构性提效。</div></div>
+ </div>
+</section>
+<section class="panel" id="p-diag">
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🔴 头号风险：断货——增长的天花板不在广告，在库存</h2>
+  <div class="desc">账户为自发货（FBM）模式；以下为导出时点（6/25）库存快照，请以最新库存看板复核</div>
+  <div class="bigstat">
+   <div class="bs lose"><div class="t">库存为 0 且本期有花费的 ASIN</div><div class="big">68 个</div><div class="sm">合计花费 $8,040（占全账户 33%）</div></div>
+   <div class="bs lose"><div class="t">这批 ASIN 本期贡献销售</div><div class="big">$84,258</div><div class="sm">占广告销售 47% —— 在售主力正在断</div></div>
+   <div class="bs warn"><div class="t">典型案例</div><div class="big">B0FP9CCFS6</div><div class="sm">7件套铸铝，本期销售 $10,483，快照库存 0</div></div>
+  </div>
+  <div class="alert a-red" style="margin-top:14px"><span>⚠️</span><div><strong>为什么这是头号问题：</strong>POP 页跑出来的 +51.7% 增长，主要由铸铝大套装贡献，而这批款正是快照断货名单的主力（永棉 B0FP9CCFS6/B0FSRPCDXL、骅趣 B0F3JNVBWM、延秋 B0FGD8RG87 等）。断货后广告停投、自然排名回落，补货回来还要重新爬坡——<strong>一次断货抹掉的增长，比任何广告优化能挣回来的都多</strong>。POP 下滑名单里骅趣 0407 系列「零售出仍在花费」大概率就是这个原因。建议：① 立即核对补货计划，优先 47% 销售所在的 ASIN；② 把「暂停商品」权限补齐到 37 个托管组（当前 27 个），断货自动停投止损。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--gold)"><h2>🔑 头号机会：预算卡脖子——ACOS 6–7% 的优等生每天一半时间下线</h2>
+  <div class="desc">两个独立信号交叉验证：Changelog 预算耗尽事件 × Campaign 预算活跃时间</div>
+  <div class="two">
+   <div class="alert a-warn" style="display:block"><strong>信号一：4,152 次预算耗尽</strong><br>日均约 130 次活动撞预算上限<br>Top：7件套-手动 249 次 · 吧桌套装 201 次 · 9件套-全转椅 148 次 · 9件套-自动 139 次<br><span class="tag t-amber">都是主力活动</span></div>
+   <div class="alert a-warn" style="display:block"><strong>信号二：25 个活动预算活跃时间 &lt;50%</strong><br>合计花费 $6,848 · 销售 $47,518 · ACOS 14.4%<br>其中 0228-pe（ACOS 7.1%）、圆桌-7件套（6.4%）、loveseat 广泛（7.2%）活跃时间仅 30–40%<br><span class="tag t-amber">高效活动在「饿着」</span></div>
+  </div>
+  <div class="alert a-ok" style="margin-top:4px"><span>💰</span><div><strong>确定性最高的增量动作：</strong>给下面这批「ACOS 优秀 + 预算活跃时间低」的活动阶梯提预算（每次 +20–30%，观察 3–5 天）：0228-pe-dining set-精准（$15 日预算 / 活跃 40% / ACOS 7.1%）、圆桌-7件套-自动（$20 / 40% / 6.4%）、灰色+棕色全拆-loveseat广泛（$6 / 30% / 7.2%）、9件套-自动（ACOS 6.5%）、7件套全转椅-自动（6.4%）。同时开启「按表现调预算」，让 AI 自己完成后续的预算再分配。</div></div>
+ </div>
+
+ <div class="card"><h2>零出单活动：$3,827 花费颗粒无收（占总花费 15.9%）</h2>
+  <div class="desc">花费 &gt;$150 且销售为 0 的 15 个活动 · 高度集中在三个产品族</div>
+  <table><thead><tr><th>产品族</th><th class="num">活动数</th><th class="num">合计花费</th><th>代表活动</th><th>判断</th></tr></thead><tbody>
+   <tr><td class="hl">梓廿 · 联排影院椅</td><td class="num">5</td><td class="num">$1,422</td><td>联排4人位-手动（$725 / 305 次点击 / 0 单）</td><td><span class="tag t-red">词族没有成交盘子（见市场页），换打法</span></td></tr>
+   <tr><td class="hl">娇幂 · 0313 铸铝新款系列</td><td class="num">3</td><td class="num">$616</td><td>0313铸铝7件套-150方桌-自动（$208 / 0 单）</td><td><span class="tag t-amber">新款冷启动，先查转化端再放量</span></td></tr>
+   <tr><td class="hl">延秋 · HDPE 新款 / 藤编</td><td class="num">3</td><td class="num">$1,024</td><td>HDPE Dining Set new-自动（$632 / 377 点击 / 0 单）</td><td><span class="tag t-amber">377 次点击零转化，Listing/价格问题优先于广告</span></td></tr>
+   <tr><td class="hl">其它（双币 pe 沙发 / 骅趣 0407 等）</td><td class="num">4</td><td class="num">$765</td><td>pe沙发套装-自动 · 0407-铸铝7件套 等</td><td><span class="tag t-amber">0407 系列疑似断货所致，先核库存</span></td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>判断顺序建议：<strong>先库存 → 再 Listing（价格/评论/主图）→ 最后才是广告</strong>。延秋 HDPE 新款 377 次点击零转化：流量是真实的（点击率正常），用户到页面后没买——这不是广告能修的问题。这类活动继续烧钱前，应先解决转化端。</div></div>
+ </div>
+
+ <div class="card"><h2>搜索词四档词库（家具客单校准口径）</h2>
+  <div class="desc">6,002 个唯一搜索词（合并同词多行后）· 阈值按品类校准：客单 $589、每单约需 66 次点击，分档线用 10% / 25% 而非通用的 15% / 40%</div>
+  <div class="two">
+   <div><div class="chart-box"><canvas id="c_waste"></canvas></div></div>
+   <div><table><thead><tr><th>词库</th><th class="num">词数</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th><th>动作</th></tr></thead><tbody>
+    <tr><td class="hl">金矿库（&lt;10%）</td><td class="num">181</td><td class="num">$3,006</td><td class="num">$133,759</td><td class="num"><span class="pos">2.2%</span></td><td><span class="tag t-green">加投/迁EXACT/抢顶部</span></td></tr>
+    <tr><td class="hl">达标库（10–25%）</td><td class="num">15</td><td class="num">$5,251</td><td class="num">$40,324</td><td class="num">13.0%</td><td><span class="tag t-blue">维持，AI 微调</span></td></tr>
+    <tr><td class="hl">高耗库（&gt;25%）</td><td class="num">5</td><td class="num">$2,675</td><td class="num">$6,758</td><td class="num"><span class="neg">39.6%</span></td><td><span class="tag t-amber">逐词处理（下表）</span></td></tr>
+    <tr><td class="hl">零出单</td><td class="num">5,801</td><td class="num">$13,385</td><td class="num">$0</td><td class="num">—</td><td><span class="tag t-red">长尾否词 + 盯 26 个大额词</span></td></tr>
+   </tbody></table>
+   <div class="alert a-info" style="margin-top:10px;font-size:12px"><span>ℹ️</span><div>零出单花费占 55%，看起来吓人，但要放在品类结构里读：CVR 1.5% 意味着约 2/3 的花费天然落在「本期没出单」的词上（家具决策周期长、点击贵）。<strong>真正要处理的是 26 个花费超 $40 的零单词（合计 $2,041）</strong>，其余是长尾灰尘，交给 AI 持续否词即可。</div></div></div>
+  </div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>金矿词 Top 10（合并同词多行后复核）</h2><div class="desc">出单且 ACOS&lt;15% · 建议迁 EXACT 并加搜索顶部溢价</div>
+   <table><thead><tr><th>搜索词</th><th class="num">花费</th><th class="num">销售</th><th class="num">订单</th><th class="num">ACOS</th></tr></thead><tbody>
+    <tr><td>cast aluminum patio furniture</td><td class="num">$1,712</td><td class="num">$12,962</td><td class="num">13</td><td class="num"><span class="pos">13.2%</span></td></tr>
+    <tr><td>hdpe outdoor dining set</td><td class="num">$1,121</td><td class="num">$9,293</td><td class="num">10</td><td class="num"><span class="pos">12.1%</span></td></tr>
+    <tr><td>aluminum outdoor dining set</td><td class="num">$445</td><td class="num">$6,491</td><td class="num">5</td><td class="num"><span class="pos">6.9%</span></td></tr>
+    <tr><td>outdoor dining set for 8</td><td class="num">$357</td><td class="num">$4,695</td><td class="num">3</td><td class="num"><span class="pos">7.6%</span></td></tr>
+    <tr><td>patio dining set for 8</td><td class="num">$421</td><td class="num">$4,045</td><td class="num">3</td><td class="num"><span class="pos">10.4%</span></td></tr>
+    <tr><td>outdoor dining set</td><td class="num">$443</td><td class="num">$3,542</td><td class="num">3</td><td class="num"><span class="pos">12.5%</span></td></tr>
+    <tr><td>rv dinette cushions</td><td class="num">$278</td><td class="num">$3,234</td><td class="num">15</td><td class="num"><span class="pos">8.6%</span></td></tr>
+    <tr><td>9 piece outdoor dining table set</td><td class="num">$181</td><td class="num">$2,198</td><td class="num">2</td><td class="num"><span class="pos">8.2%</span></td></tr>
+    <tr><td>cast aluminum patio set</td><td class="num">$43</td><td class="num">$2,196</td><td class="num">2</td><td class="num"><span class="pos">2.0%</span></td></tr>
+    <tr><td>cast aluminum outdoor dining set</td><td class="num">$227</td><td class="num">$1,876</td><td class="num">2</td><td class="num"><span class="pos">12.1%</span></td></tr>
+   </tbody></table>
+   <div class="alert a-ok" style="margin-top:10px;font-size:12px"><span>✅</span><div>「cast aluminum patio set」ACOS 2.0% 已按源表逐行复核（$42.92 → $2,196.20，2 单）。「rv dinette cushions」15 单是订单效率最高的词，娇幂 RV 线的核心资产。</div></div></div>
+  <div class="card"><h2>高耗词 5 个（逐词处理清单）+ 大额零单词</h2><div class="desc">出单但 ACOS&gt;25% 的全部 5 个词 · 花费 &gt;$40 的零单词 26 个（合计 $2,041）</div>
+   <table><thead><tr><th>搜索词</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th><th>建议</th></tr></thead><tbody>
+    <tr><td>outdoor table and chairs</td><td class="num">$806</td><td class="num">$2,794</td><td class="num"><span class="warn">28.8%</span></td><td>4 店同投，收位分工</td></tr>
+    <tr><td>movie theater chairs</td><td class="num">$721</td><td class="num">$549</td><td class="num"><span class="neg">131.3%</span></td><td>否定/暂停（市场页有证据）</td></tr>
+    <tr><td>patio dining set for 6</td><td class="num">$607</td><td class="num">$2,098</td><td class="num"><span class="warn">28.9%</span></td><td>5 店同投，收位分工</td></tr>
+    <tr><td>hdpe outdoor furniture</td><td class="num">$443</td><td class="num">$1,098</td><td class="num"><span class="neg">40.4%</span></td><td>降位到词组/收价</td></tr>
+    <tr><td>camper dinette cushions</td><td class="num">$98</td><td class="num">$219</td><td class="num"><span class="neg">44.9%</span></td><td>收价观察</td></tr>
+    <tr><td colspan="5" style="background:#FAFBFC;font-size:12px;color:var(--muted)">零单大额词 Top：patio furniture set $169 · outdoor dining set for 6 $159 · patio table and chairs set $157 · patio dining set $145 · hdpe patio furniture $132 · b0fgpz64dl（竞品ASIN页）$90 …</td></tr>
+   </tbody></table>
+   <div class="alert a-warn" style="margin-top:10px;font-size:12px"><span>⚠️</span><div>注意零单词里的规律：<strong>「for 6 / 6人」组合词大多不出单，「for 8 / 8人」组合词全是金矿</strong>——客户主力是 7/9 件大套装，搜 6 人桌的用户预算带不匹配。建议把「for 6」系词降位或否定，把预算集中给「for 8」「9 piece」。</div></div></div>
+ </div>
+
+ <div class="card"><h2>跨店铺同词竞争：94 个词被 3 家以上自家店铺同时竞价</h2>
+  <div class="desc">合计花费 $9,179（占 38%）· 矩阵霸屏与内部抬价是一体两面</div>
+  <table><thead><tr><th>搜索词</th><th class="num">同投店铺数</th><th class="num">合计花费</th><th class="num">合计销售</th><th class="num">ACOS</th><th>词权分工建议</th></tr></thead><tbody>
+   <tr><td class="hl">cast aluminum patio furniture</td><td class="num">4</td><td class="num">$1,712</td><td class="num">$12,962</td><td class="num"><span class="pos">13.2%</span></td><td>效率尚可，保留多店但错开价位段</td></tr>
+   <tr><td class="hl">hdpe outdoor dining set</td><td class="num">5</td><td class="num">$1,121</td><td class="num">$9,293</td><td class="num"><span class="pos">12.1%</span></td><td>主投延秋/双币（HDPE 主场）</td></tr>
+   <tr><td class="hl">outdoor table and chairs</td><td class="num">4</td><td class="num">$806</td><td class="num">$2,794</td><td class="num"><span class="warn">28.8%</span></td><td>只留转化最好的 1–2 店</td></tr>
+   <tr><td class="hl">patio dining set for 6</td><td class="num">5</td><td class="num">$607</td><td class="num">$2,098</td><td class="num"><span class="warn">28.9%</span></td><td>与「for 6」规律一致，整体收缩</td></tr>
+   <tr><td class="hl">outdoor dining set</td><td class="num">5</td><td class="num">$443</td><td class="num">$3,542</td><td class="num"><span class="pos">12.5%</span></td><td>大词，由 ACOS 最优店主投</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>🧠</span><div>多品牌矩阵同投核心词，好处是搜索结果页多点位「霸屏」，代价是同一次竞价里自家店互相抬 CPC。判别标准很简单：<strong>合并 ACOS 好的词（如 cast aluminum 系）保留多店，合并 ACOS 差的词（outdoor table and chairs、for 6 系）收归单店主投</strong>，其余店铺对该词否定或降位。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>广告位：搜索顶部 ROAS 14.3，但只分到 10.5% 的钱</h2>
+   <table><thead><tr><th>广告位</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th><th class="num">CVR</th><th class="num">ROAS</th></tr></thead><tbody>
+    <tr><td class="hl">Top of Search</td><td class="num">$2,534</td><td class="num">$36,329</td><td class="num"><span class="pos">6.98%</span></td><td class="num">3.98%</td><td class="num"><span class="pos">14.34</span></td></tr>
+    <tr><td class="hl">Detail Page（商品页）</td><td class="num">$13,814</td><td class="num">$94,136</td><td class="num">14.67%</td><td class="num">1.38%</td><td class="num">6.81</td></tr>
+    <tr><td class="hl">Other on-Amazon</td><td class="num">$5,544</td><td class="num">$44,583</td><td class="num">12.43%</td><td class="num">1.51%</td><td class="num">8.04</td></tr>
+    <tr><td class="hl">Off Amazon（站外）</td><td class="num">$2,089</td><td class="num">$5,791</td><td class="num"><span class="neg">36.08%</span></td><td class="num">0.19%</td><td class="num">2.77</td></tr>
+   </tbody></table>
+   <div class="alert a-warn" style="margin-top:10px;font-size:12px"><span>💡</span><div>两端都有动作可做：① 搜索顶部转化率是账户均值 2.7 倍、ACOS 不到 7%，给金矿词加顶部溢价是确定性提效；② 站外流量 $2,089 花费 ACOS 36%——本期 73 个有花费活动的「SP 站外策略」为默认 NOT_SET（涉及 $16,099 花费），建议对站外表现差的活动统一设为 MINIMIZE_SPEND。</div></div></div>
+  <div class="card"><h2>词类结构：搜索词品类透视</h2><div class="desc">按词义归类（唯一词口径，ASIN 词单列）</div>
+   <div class="chart-box"><canvas id="c_cat"></canvas></div>
+   <div class="alert a-info" style="margin-top:10px;font-size:12px"><span>ℹ️</span><div>「餐桌椅套装」词族是账户发动机（$8,347 花费 / $63,076 销售 / 13.2%）；「铸铝材质词」效率最高（7.8%）——材质词用户意图明确、与产品强匹配，值得单独建活动做深。竞品 ASIN 定向词合计 $3,999 → $28,153（14.2%），商品页截流有效。</div></div></div>
+ </div>
+</section>
+
+<section class="panel" id="p-market">
+ <div class="alert a-info"><span>🌍</span><div>市场与竞品数据来自<strong>卖家精灵（SellerSprite）</strong>与 <strong>Sorftime</strong> 双源（取数 2026-07-02），为外部快照，仅作需求与竞争方向参照，不作为账户效率证明；两源统计口径不同，只对照方向、不强求数值一致。</div></div>
+
+ <div class="card"><h2>大盘：正处旺季顶部，但 2026 年需求同比在缩水</h2>
+  <div class="kpis">
+   <div class="kpi"><div class="l">outdoor dining set 月搜索</div><div class="v">9.65万</div><div class="s">Sorftime · 旺季 6 月 · 竞品 14.2 万个</div></div>
+   <div class="kpi"><div class="l">搜索量同比（26年5月）</div><div class="v" style="color:var(--red)">-20%</div><div class="s">cast aluminum 系 -17% · 大盘在缩</div></div>
+   <div class="kpi"><div class="l">市场建议 CPC</div><div class="v">$4.58–5.25</div><div class="s">账户实际 CPC $1.16 · 核心词约 $2.0</div></div>
+   <div class="kpi"><div class="l">5→6月 历史环比</div><div class="v" style="font-size:20px">-16%~-28%</div><div class="s">6 月冲顶后 7 月起季节回落</div></div>
+  </div>
+  <div class="chart-box" style="margin-top:6px"><canvas id="c_trend"></canvas></div>
+  <div class="alert a-ok" style="margin-top:8px;font-size:12.5px"><span>✅</span><div><strong>三个「怎么用」：</strong>① 大盘同比 -17~-20% 而账户 POP +51.7% → 增长是抢来的份额，AI 价值成色高；② 账户 CPC 只有市场建议竞价的 1/4~1/2 → 没有为流量付溢价，金矿词还有加价抢顶部的空间；③ 6 月是全年顶点，<strong>7 月中旬起按季节曲线逐步收紧放量目标、9 月后转利润导向</strong>——别在下行段维持旺季预算。</div></div>
+ </div>
+
+ <div class="card"><h2>竞争格局：高度分散，没有垄断者——矩阵打法有效的市场</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">首页 Top1 产品销量占比</div><div class="big">9.7%–13.9%</div><div class="sm">cast aluminum / outdoor dining set 词下均无垄断</div></div>
+   <div class="bs win"><div class="t">首页低评论产品占比</div><div class="big">100%</div><div class="sm">cast aluminum 词首页产品评论全部 &lt;100 条</div></div>
+   <div class="bs warn"><div class="t">对照类目（Conversation Sets）</div><div class="big">$2,181万/月</div><div class="sm">Top100 月销额 · 新品占 17.7% · 中国卖家 77%</div></div>
+  </div>
+  <div class="alert a-teal" style="margin-top:14px"><span>🧭</span><div><strong>战略含义：</strong>这是一个「大市场、低集中度、低评论门槛」的类目——没有 Momcozy 式的头部霸主，新品 3 个月内就能拿到 17.7% 的销量份额。这正是义乌兰鲤「六店多品牌矩阵」能成立的市场结构：<strong>谁的款多、位多、库存稳，谁拿份额</strong>。反过来，护城河也浅：断货让出的位置，竞品一周就能补上——再次指向库存是第一优先级。</div></div>
+ </div>
+
+ <div class="card"><h2>价格与信任对位：$948 的客单，11 条评论</h2>
+  <div class="desc">卖家精灵 ASIN 快照 · 客户主力款 vs 可比竞品</div>
+  <table><thead><tr><th>维度</th><th>🟢 客户主力款（B0D2NF6KXG 7件套铸铝）</th><th>竞品锚点（SERWALL 7件套 HDPE）</th><th>解读</th></tr></thead><tbody>
+   <tr><td class="hl">售价</td><td class="hl">$948</td><td>$699</td><td>高一个价位段，走「重料大套装」差异化</td></tr>
+   <tr><td class="hl">评分 / 评论数</td><td>5.0★ / <span class="neg">仅 11 条</span></td><td>成熟款 · 月销约 3,364 件</td><td><span class="warn">信任门槛是最大转化瓶颈</span></td></tr>
+   <tr><td class="hl">页面配置</td><td>A+ ✓ · 视频 ✓ · 13 个变体</td><td>—</td><td>页面素材已到位，缺的是社会证明</td></tr>
+   <tr><td class="hl">履约</td><td>FBM 自发货</td><td>—</td><td>大件常规选择，但要求库存管理更精细</td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:12px"><span>💡</span><div><strong>为什么这决定广告天花板：</strong>让用户为一张 $948 的桌子下单，11 条评论是硬约束——广告可以把人带到页面，信任缺口广告补不了。CVR 1.47% 在品类里属正常，但每提升 0.1 个转化率，等于全账户 ACOS 降约 7%。<strong>建议：13 个变体做评论聚合、上 Vine、把已验证的 5.0★ 口碑做进主图/A+ 首屏。</strong>这是比任何出价优化杠杆都大的动作。</div></div>
+ </div>
+
+ <div class="card"><h2>影院椅线的市场判词：这个词族在亚马逊没有成交盘子</h2>
+  <div class="desc">卖家精灵月度数据 · 这是梓廿店铺 ACOS 44.6% 的根因</div>
+  <table><thead><tr><th>关键词</th><th class="num">月搜索量（26年5月)</th><th class="num">月购买量</th><th class="num">购买率</th><th class="num">搜索量同比</th><th>判定</th></tr></thead><tbody>
+   <tr><td class="hl">movie theater chairs</td><td class="num">4,434</td><td class="num"><span class="neg">5 单</span></td><td class="num">0.13%</td><td class="num">-22%</td><td><span class="tag t-red">全市场月成交仅个位数</span></td></tr>
+   <tr><td class="hl">home theater seating</td><td class="num">7,196</td><td class="num"><span class="neg">4 单</span></td><td class="num">0.06%</td><td class="num"><span class="neg">-44%</span></td><td><span class="tag t-red">同族更差，且需求在快速萎缩</span></td></tr>
+   <tr><td class="hl">对照：cast aluminum patio furniture</td><td class="num">3,929</td><td class="num">75 单</td><td class="num"><span class="pos">1.92%</span></td><td class="num">-17%</td><td><span class="tag t-green">购买率是影院椅词的 15–30 倍</span></td></tr>
+  </tbody></table>
+  <div class="alert a-red" style="margin-top:12px"><span>🧠</span><div><strong>把账户数据和市场数据放在一起，结论无可辩驳：</strong>客户在「movie theater chairs」上花 $721 拿到 313 次点击、1 单（ACOS 131%）；而这个词全亚马逊一个月只成交 5–8 单——<strong>就算把这个词 100% 的成交全拿下，也养不活一条产品线</strong>。用户搜这个词多在装修调研（搜索词里出现 movie theater decor/lights/paint colors），真正买家用的是 recliner 系词：骅趣 $399 的 recliner loveseat 出了 10 单就是证据。梓廿的出路不是调出价，是<strong>换流量入口</strong>：recliner 系长尾词 + 竞品 ASIN 定向 + SD 再营销（打法页有具体方案）。</div></div>
+ </div>
+</section>
+<section class="panel" id="p-adstrat">
+ <div class="alert a-teal"><span>📣</span><div>基于本账户结构 + 卖家精灵/Sorftime 市场数据，给出针对「高客单家具 · 多店矩阵 · 分散型市场 · 旺季顶部」的打法。原则：<strong>库存先行、预算跟着 ROI 走、词权分工、高客单补信任、季节收放</strong>。每条都附本报告内的证据出处。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🔴 结构缺口：SB / SD 已建未投，高客单品类恰恰最需要它们</h2>
+  <div class="desc">本期花费 100% 在 SP；账户里已创建 SB 5 个、SD 3 个，但花费全部为 0</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">✅ Sponsored Products</div><div class="big">已跑通</div><div class="sm">$24,126 · ACOS 13.3% · AI 托管 89%</div></div>
+   <div class="bs lose"><div class="t">❌ Sponsored Brands / SBV</div><div class="big">0 花费</div><div class="sm">大套装场景视频是转化利器，全缺位</div></div>
+   <div class="bs lose"><div class="t">❌ Sponsored Display</div><div class="big">0 花费</div><div class="sm">家具决策周期长，浏览再营销缺位</div></div>
+  </div>
+  <div class="alert a-warn" style="margin-top:14px"><span>💡</span><div><strong>为什么这个账户尤其该补：</strong>① 客单 $589–$1,348，用户平均要看多次才下单——SD 浏览再营销是把 57% 花费买来的 Detail Page 流量「捞回来」的唯一工具；② 铸铝大套装的卖点（重料、全转椅、9 件套气派）图文说不清，SBV 场景视频转化通常显著高于纯图文；③ 市场分散、无垄断（见市场页），SB 类目词霸屏的位子还没人占死。<strong>建议每店先拿 5–8% 预算小规模测试，跑出数据再定扩量</strong>，不照搬通用比例。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>① 预算与目标：让钱流向已验证的高效活动</h2>
+   <div class="rec"><div class="rh">给「饿着的优等生」阶梯提预算</div>0228-pe（ACOS 7.1%/活跃 40%）、圆桌-7件套（6.4%/40%）、loveseat 广泛（7.2%/30%）、9件套-自动（6.5%）等，每次 +20–30%，观察 3–5 天再加。证据：根因页「预算卡脖子」。</div>
+   <div class="rec"><div class="rh">开启「按表现调预算」（当前 37 组仅 3 组）</div>让 AI 有权限把预算从低效活动挪向高效活动，替代人工反复盯预算。证据：达标页「功能部署」。</div>
+   <div class="rec"><div class="rh">目标 ACOS 全面校准</div>成熟铸铝款 8–12%、增长/新款 12–18%、清库存款可放宽到 20%+；15 个目标 &lt;8% 的活动逐个上调。证据：达标页「达标率真相」。</div>
+  </div>
+  <div class="card"><h2>② 词层运营：金矿加注、大词拆分、for 6 收缩</h2>
+   <div class="rec"><div class="rh">181 个金矿词迁 EXACT + 搜索顶部溢价</div>合计 ACOS 仅 2.2%，且账户 CPC 远低于市场建议竞价（$1.16 vs $4.58–5.25）——有充足加价空间抢 Top of Search（该位 ROAS 14.3）。</div>
+   <div class="rec"><div class="rh">大词独立活动、独立预算</div>outdoor dining set（月搜 9.65 万）等大词从混合活动拆出，防止单词吃掉整组预算；由合并 ACOS 最优的店主投。</div>
+   <div class="rec"><div class="rh">「for 6」系收缩、「for 8」系加注</div>本期规律：for 8/9 piece 全金矿，for 6 多零单高耗——与主力 7/9 件套的目标人群预算带一致。对 for 6 系降位或否定。</div>
+   <div class="rec"><div class="rh">跨店词权分工</div>94 个 3 店以上同投词：合并 ACOS 好的保留矩阵霸屏，差的收归单店，其余店否定。证据：根因页「跨店铺同词竞争」。</div>
+  </div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>③ 梓廿影院椅：换流量入口，不是调出价</h2>
+   <div class="rec"><div class="rh">停投影院大词族</div>movie theater chairs / home theater seating 全市场月成交 4–8 单且同比 -22%~-44%，词族本身没有盘子。先否定止血（本期已烧 $1,600+）。</div>
+   <div class="rec"><div class="rh">转投 recliner 意图词 + 竞品 ASIN</div>骅趣 $399 recliner loveseat 出 10 单证明 recliner 系有成交力；影院椅应打 recliner sofa with cup holder / power recliner loveseat 等长尾 + 定向可比竞品详情页。</div>
+   <div class="rec"><div class="rh">SD 再营销兜底</div>影院椅客单高、决策最长，浏览再营销是该线最合理的第二触点；若 90 天内仍无起色，建议战略性收缩该线广告预算。</div>
+  </div>
+  <div class="card"><h2>④ 库存×广告联动 + 季节节奏</h2>
+   <div class="rec"><div class="rh">断货 ASIN 立即核对补货</div>68 个快照断货 ASIN 承载 47% 广告销售；优先 B0FP9CCFS6、B0FSRPCDXL、B0F3JNVBWM 等在售主力。补不上的，先降预算避免烧「不可售流量」。</div>
+   <div class="rec"><div class="rh">「暂停商品」权限补齐到 37 组</div>当前 27/37。断货自动停投，是自发货模式下最重要的止损自动化。</div>
+   <div class="rec"><div class="rh">按季节曲线收放</div>6 月=年度顶点，7 月中旬起大盘环比回落 16–28%：届时把「推动增长」组逐步切回「保持稳定」、9 月后转利润导向；明年 2→3 月大盘环比 +96%，提前 2 周恢复放量。证据：市场页趋势图。</div>
+   <div class="rec"><div class="rh">站外流量止漏</div>Off Amazon 位 ACOS 36.1%（$2,089）；73 个活动站外策略为默认 NOT_SET，对站外表现差的活动统一设 MINIMIZE_SPEND。</div>
+  </div>
+ </div>
+
+ <div class="card"><h2>⑤ 转化端（广告管不了但决定广告上限的部分）</h2>
+  <div class="rec"><div class="rh">评论攻坚：11 条评论撑不起 $948 客单</div>主力款 5.0★ 但仅 11 条评分。动作：13 个变体做评论聚合、上 Vine、把真实好评做进 A+ 首屏。每 +0.1 个转化率 ≈ 全账户 ACOS -7%，这是账户里杠杆最大的单项动作。</div>
+  <div class="rec"><div class="rh">377 次点击零转化的新款先修页面再投广告</div>延秋 HDPE 新款、娇幂 0313 系列：点击率正常说明流量对，零转化说明页面/价格/评论不对。广告继续投只会放大问题。</div>
+ </div>
+</section>
+
+<section class="panel" id="p-plan">
+ <div class="card"><h2>下一步优化计划（按优先级）</h2>
+  <div class="desc">从确定性最高、见效最快的动作排起；①②③ 本周内可完成</div>
+  <div class="rec"><div class="rh">① 核对 68 个断货 ASIN 的补货计划　<span class="tag t-red">最高优先 · 经营级</span></div>快照断货 ASIN 承载 47% 广告销售（$84,258）。补货优先级按本期销售排序：B0FP9CCFS6（$10,483）、B0DY1B12WP（$5,486）、B0FSRPCDXL（$4,294）、B0F3JNVBWM（$3,995）…补不上的先手动降预算，同时把「暂停商品」权限从 27 组补齐到 37 组。</div>
+  <div class="rec"><div class="rh">② 给高效「预算受限」活动提预算 + 开启按表现调预算　<span class="tag t-red">高优先 · 确定性最高</span></div>4,152 次预算耗尽、25 个活动预算活跃时间 &lt;50%，其中 ACOS 6–7% 的优等生每天一半时间下线。阶梯提预算（+20–30%/次），并把「按表现调预算」从 3/37 组放开到主力组，让预算跟着 ROI 流动。</div>
+  <div class="rec"><div class="rh">③ 目标 ACOS 全面校准　<span class="tag t-red">高优先 · 零成本</span></div>15 个活动目标 &lt;8%（只 2 个达标），16 个「未达标」活动实际 ACOS 仅 9.7%。按品类现实重设：成熟款 8–12%、增长款 12–18%。目标准了，AI 敢放量、达标看板才有管理意义、「推动增长」组才能真增长（本期花费只敢 +16.6%）。</div>
+  <div class="rec"><div class="rh">④ 梓廿影院椅换打法　<span class="tag t-amber">高优先 · 止血</span></div>否定 movie theater 词族（$721/1 单，全市场月成交 5–8 单），转 recliner 意图词 + 竞品 ASIN 定向；90 天无起色则收缩。本期该线零出单活动已烧 $1,422。</div>
+  <div class="rec"><div class="rh">⑤ 金矿词加注：181 词迁 EXACT + 抢搜索顶部　<span class="tag t-amber">中高优先</span></div>金矿库 ACOS 2.2%（$3,006 → $133,759）；Top of Search ROAS 14.3 但只分到 10.5% 花费；账户 CPC 仅为市场建议竞价的 1/4~1/2，加价空间充足。</div>
+  <div class="rec"><div class="rh">⑥ 跨店词权分工　<span class="tag t-amber">中高优先</span></div>94 个 3 店以上同投词（$9,179）：cast aluminum 系合并 ACOS 好保留矩阵，outdoor table and chairs（28.8%）、for 6 系收归单店，其余店否定——减少内部抬价。</div>
+  <div class="rec"><div class="rh">⑦ 26 个大额零单词处理 + 长尾交给 AI　<span class="tag t-blue">中优先</span></div>零出单 5,801 词中只有 26 个花费 &gt;$40（合计 $2,041），逐个否定/降位；其余长尾灰尘由 AI 持续否词。别人工逐词翻 5,801 个词。</div>
+  <div class="rec"><div class="rh">⑧ 小预算测试 SB/SBV + SD 再营销　<span class="tag t-blue">中优先</span></div>每店 5–8% 预算：SBV 做大套装场景视频，SD 对 Detail Page 流量（57% 花费所在）做浏览再营销。跑 4 周看数据再定扩量。</div>
+  <div class="rec"><div class="rh">⑨ 站外策略统一设置　<span class="tag t-blue">中优先 · 10 分钟能做完</span></div>Off Amazon ACOS 36.1%；73 个 NOT_SET 活动中站外表现差的统一改 MINIMIZE_SPEND。</div>
+  <div class="rec"><div class="rh">⑩ 评论攻坚 + 新款转化端修复　<span class="tag t-blue">长期 · 杠杆最大</span></div>主力款变体评论聚合 + Vine;延秋 HDPE 新款、娇幂 0313 系列先修页面再恢复投放。7 月中旬后按季节曲线逐步收紧放量目标。</div>
+ </div>
+
+ <div class="card"><h2>核心洞察(展开看依据)</h2>
+  <div class="ins open"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">1 · AI 的本期价值:在缩水的大盘里,同时做到了放量和提效</span><span class="chev">▾</span></div><div class="ins-b">POP 同活动对比:销售 +51.7%、订单 +29.2%、ACOS 13.3%→11.3%(双优);外部对照:核心词大盘同比 -17%~-20%,5→6 月还有环比回落。增长跑赢市场约 70 个百分点量级,不是季节水位,是份额转移。同期对照里 AI 组以 8.2 倍花费规模跑出手动组一半的 ACOS。执行层面 AI 日常动作 20,211 次 vs 人工 111 次(182:1)。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">2 · 达标率 29.3% 是口径假象,真问题是目标设置</span><span class="chev">▾</span></div><div class="ins-b">16 个「未达标」活动实际合并 ACOS 只有 9.7%(ROAS 10+),15 个活动目标 &lt;8% 只有 2 个达标。目标过严的隐性代价比看板难看更大:AI 出价被压制,「推动增长」组花费只敢 +16.6%,增长目标名存实亡。校准后预计名义达标率自然回到 50%+,且 AI 有空间把增长组真正做大。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">3 · 预算在按时段流动,还没按 ROI 流动</span><span class="chev">▾</span></div><div class="ins-b">AI 提预算 9,983 次、预算耗尽 4,152 次,说明 AI 一直在顶上限;但「按表现调预算」只开了 3/37 组——预算调度目前主要是分时逻辑。打开这个权限,AI 才能把梓廿影院椅这类低效线的预算,自动挪给 0228-pe(7.1%)、圆桌7件套(6.4%)这类每天饿半天的优等生。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">4 · 零出单 55% 不是黑洞,是高客单品类的呼吸方式——但有 26 个例外</span><span class="chev">▾</span></div><div class="ins-b">客单 $589、CVR 1.5% 意味着约 66 次点击换一单,大量搜索词单期不出单是结构性的。5,801 个零单词合计 $13,385,其中只有 26 个词花费超 $40(合计 $2,041)值得人工处理;真正的高耗只有 5 个出单词(movie theater chairs 131%、hdpe outdoor furniture 40% 等)。管理动作是「盯头部、其余交给 AI 否词」,不是人工翻表。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">5 · 增长的上限在库存和评论,不在流量</span><span class="chev">▾</span></div><div class="ins-b">流量端已被证明便宜且高效(CPC 是市场建议价的 1/4~1/2、金矿词 ACOS 2.2%);但 47% 的广告销售落在快照断货 ASIN 上,主力款 $948 客单只有 11 条评论。这两件事广告调不动:补货节奏和评论积累决定了下一个月 POP 曲线还能不能延续。市场是分散型(Top1 占比 &lt;14%、首页产品评论普遍 &lt;100 条),位置让出去很快被填掉,守住的方式是库存稳、款数多。</div></div>
+ </div>
+
+ <div class="alert a-info" style="font-size:12.5px"><span>📋</span><div><strong>口径与方法说明:</strong>金额为平台导出口径(USD);ACOS=花费/销售额、ROAS=销售额/花费,均用原始加总重算;达标=实际 ACOS≤目标 ACOS(仅计有花费且设目标的 82 个活动);POP 为「开启 AI 前 vs 期间」同活动同口径对比(数据截至 7/1,窗口以各活动 AI 开启日为界),AI vs Non-AI 为同期对照基准、非纯因果;库存为 6/25 导出快照,请以实时看板复核;操作日志中 3.02 万条批量否词为一次性部署,未计入 AI 日常动作;搜索词分档阈值按高客单家具校准(10%/25%);市场数据为卖家精灵/Sorftime 外部快照(7/2),仅作方向参照。本报告无 TACOS/店铺总销售与上月全量数据,相应结论已按此收窄。报告周期 2026-05-25 至 2026-06-25。</div></div>
+</section>
+</div>
+<script>
+const COL={navy:'#0F172A',teal:'#0D9488',tealL:'#5EEAD4',gold:'#CA8A04',red:'#DC2626',amber:'#D97706',grayT:'#94A3B8',green:'#059669',blue:'#2563EB'};
+if(typeof Chart!=='undefined'){
+ Chart.defaults.font.family="'Inter','Noto Sans SC',sans-serif";
+ Chart.defaults.color='#475569';
+ Chart.defaults.font.size=11;
+ Chart.defaults.plugins.tooltip.backgroundColor='rgba(15,23,42,.92)';
+ Chart.defaults.plugins.tooltip.titleColor='#fff';
+ Chart.defaults.plugins.tooltip.bodyColor='#fff';
+ Chart.defaults.plugins.tooltip.borderColor='rgba(255,255,255,.16)';
+ Chart.defaults.plugins.tooltip.borderWidth=1;
+ Chart.defaults.plugins.tooltip.cornerRadius=6;
+ Chart.defaults.plugins.tooltip.padding=10;
+ Chart.defaults.plugins.tooltip.callbacks.label=function(ctx){
+  const label=ctx.dataset&&ctx.dataset.label?ctx.dataset.label:'数值';
+  const raw=ctx.parsed&&ctx.parsed.x!=null&&ctx.chart.options.indexAxis==='y'?ctx.parsed.x:(ctx.parsed&&ctx.parsed.y!=null?ctx.parsed.y:ctx.raw);
+  const value=typeof raw==='number'?raw.toLocaleString('zh-CN',{maximumFractionDigits:2}):raw;
+  return label+'：'+value;
+ };
+}
+function c(id){return document.getElementById(id);}
+function opt(o){o=o||{};return{maintainAspectRatio:false,plugins:{legend:{display:o.legend!==false,position:'bottom'}},scales:{y:{beginAtZero:o.zero!==false,title:{display:!!o.y,text:o.y||''}}}};}
+function dualOpt(y1,y2){return{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:y1},beginAtZero:true},y1:{position:'right',title:{display:true,text:y2},grid:{drawOnChartArea:false},beginAtZero:true}}};}
+function slopeOpt(t,mn,mx){return{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:x=>x.dataset.label+': '+x.raw+'%'}}},scales:{y:{min:mn,max:mx,title:{display:true,text:t}}}};}
+const built={};
+function build(id){
+ if(built[id])return;
+ if(typeof Chart==='undefined'){return;}
+ built[id]=true;
+ if(id==='c_store'){new Chart(c('c_store'),{data:{labels:['永棉','双币','娇幂','延秋','骅趣','梓廿'],datasets:[
+   {type:'bar',label:'花费',data:[6648.78,4753.02,4139.85,3525.23,2609.31,2449.60],backgroundColor:COL.grayT,yAxisID:'y'},
+   {type:'bar',label:'销售额',data:[66431.55,34157.84,36629.47,15120.86,23008.04,5492.42],backgroundColor:COL.teal,yAxisID:'y'},
+   {type:'line',label:'ROAS',data:[9.99,7.19,8.85,4.29,8.82,2.24],borderColor:COL.gold,borderWidth:3,pointRadius:5,yAxisID:'y1'}]},options:dualOpt('USD','ROAS')});}
+ if(id==='c_pop_obj'){new Chart(c('c_pop_obj'),{type:'bar',data:{labels:['保持稳定（40个）','推动增长（53个）'],datasets:[
+   {label:'开启前 销售',data:[113185,54641],backgroundColor:COL.grayT},
+   {label:'开启期间 销售',data:[188450,66198],backgroundColor:COL.teal}]},options:opt({legend:true,y:'销售额 USD'})});}
+ if(id==='c_pop_acos'){new Chart(c('c_pop_acos'),{type:'line',data:{labels:['开启前','开启期间'],datasets:[
+   {label:'保持稳定',data:[11.5,9.4],borderColor:COL.teal,borderWidth:3,pointRadius:5,tension:0},
+   {label:'推动增长',data:[17.1,16.5],borderColor:COL.blue,borderWidth:3,pointRadius:5,tension:0},
+   {label:'整体（93个）',data:[13.3,11.3],borderColor:COL.gold,borderWidth:3,pointRadius:5,tension:0,borderDash:[6,4]}]},options:slopeOpt('ACOS %（越低越好）',5,20)});}
+ if(id==='c_pop_store'){new Chart(c('c_pop_store'),{type:'bar',data:{labels:['永棉','骅趣','娇幂','双币','梓廿','延秋'],datasets:[
+   {label:'开启前 销售',data:[60556,33630,34093,22478,12986,4083],backgroundColor:COL.grayT},
+   {label:'开启期间 销售',data:[114831,57113,32949,30841,6894,12021],backgroundColor:COL.teal}]},options:opt({legend:true,y:'销售额 USD'})});}
+ if(id==='c_ainon'){new Chart(c('c_ainon'),{data:{labels:['花费','销售额','订单×50'],datasets:[
+   {type:'bar',label:'AI 托管（82个）',data:[21516.29,170204.29,14400],backgroundColor:COL.teal},
+   {type:'bar',label:'Non-AI 手动（22个）',data:[2609.50,10635.89,950],backgroundColor:COL.grayT}]},options:opt({legend:true,y:'USD'})});}
+ if(id==='c_ops'){new Chart(c('c_ops'),{type:'bar',data:{labels:['提高日预算','自动定向降价','自动定向加价','关键词降价','降低日预算','关键词加价','商品定向加价','商品定向降价','添加否定关键词','暂停低效ASIN'],datasets:[{label:'AI 动作次数',data:[9983,2406,2311,1590,1563,1549,422,319,15,7],backgroundColor:COL.teal}]},options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{type:'logarithmic',title:{display:true,text:'次数（对数轴）'}}}}});}
+ if(id==='c_hourly'){new Chart(c('c_hourly'),{type:'bar',data:{labels:[...Array(24).keys()].map(h=>h+'点'),datasets:[{label:'AI 动作',data:[2187,113,122,245,296,439,393,539,982,1209,1336,1599,1655,1628,1561,1187,1017,908,741,681,511,317,171,374],backgroundColor:COL.navy}]},options:opt({y:'次数'})});}
+ if(id==='c_daily'){new Chart(c('c_daily'),{type:'line',data:{labels:['5/25','5/26','5/27','5/28','5/29','5/30','5/31','6/1','6/2','6/3','6/4','6/5','6/6','6/7','6/8','6/9','6/10','6/11','6/12','6/13','6/14','6/15','6/16','6/17','6/18','6/19','6/20','6/21','6/22','6/23','6/24','6/25'],datasets:[{label:'AI 日动作量',data:[340,330,278,257,321,322,336,545,507,507,540,505,432,663,726,749,637,795,786,799,824,810,831,803,801,808,812,724,815,880,867,861],borderColor:COL.teal,backgroundColor:'rgba(13,148,136,.10)',fill:true,borderWidth:2,pointRadius:2,tension:.3}]},options:opt({legend:false,y:'次数/天'})});}
+ if(id==='c_bid'){new Chart(c('c_bid'),{data:{labels:['加价','降价'],datasets:[
+   {type:'bar',label:'次数',data:[4282,4315],backgroundColor:[COL.green,COL.amber],yAxisID:'y'},
+   {type:'line',label:'中位幅度%',data:[2.4,-2.5],borderColor:COL.gold,borderWidth:3,pointRadius:6,yAxisID:'y1'}]},options:dualOpt('次数','幅度%')});}
+ if(id==='c_dabiao'){new Chart(c('c_dabiao'),{type:'bar',data:{labels:['保持订单稳定','推动增长','整体（名义）','整体（健康口径）'],datasets:[{label:'达标率%',data:[36.5,16.7,29.3,48.8],backgroundColor:[COL.teal,COL.red,COL.amber,COL.green]}]},options:opt({legend:false,y:'达标率 %'})});}
+ if(id==='c_waste'){new Chart(c('c_waste'),{type:'doughnut',data:{labels:['金矿库(<10%) $3,006','达标库(10-25%) $5,251','高耗库(>25%) $2,675','零出单长尾 $13,385'],datasets:[{data:[3006,5251,2675,13385],backgroundColor:[COL.green,COL.teal,COL.amber,COL.red]}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});}
+ if(id==='c_cat'){new Chart(c('c_cat'),{data:{labels:['餐桌椅套装','竞品ASIN定向','泛户外家具词','其他/未归类','铸铝材质词','坐垫/靠垫','沙发/组合沙发'],datasets:[
+   {type:'bar',label:'销售额',data:[63076,28153,21493,20513,19647,13339,7824],backgroundColor:COL.teal,yAxisID:'y'},
+   {type:'line',label:'ACOS%',data:[13.2,14.2,18.7,15.3,7.8,7.7,15.4],borderColor:COL.red,borderWidth:3,pointRadius:5,yAxisID:'y1'}]},options:dualOpt('销售额 USD','ACOS %')});}
+ if(id==='c_trend'){new Chart(c('c_trend'),{data:{labels:['25年2月','25年3月','25年4月','25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月','26年4月','26年5月'],datasets:[
+   {type:'line',label:'outdoor dining set 月搜索',data:[37176,78894,92420,95108,80326,71598,48624,42374,29243,23726,14916,20949,33779,66268,75756,75833],borderColor:COL.teal,backgroundColor:'rgba(13,148,136,.10)',fill:true,borderWidth:2,pointRadius:3,tension:.3,yAxisID:'y'},
+   {type:'line',label:'cast aluminum patio furniture 月搜索',data:[1457,3753,4898,4729,3412,3377,2068,1816,1324,567,0,0,616,3107,3906,3929],borderColor:COL.gold,borderWidth:2,pointRadius:3,tension:.3,yAxisID:'y1'}]},options:dualOpt('大词月搜索量','材质词月搜索量')});}
+}
+const firstChart={overview:['c_store'],pop:['c_pop_obj','c_pop_acos','c_pop_store'],ainon:['c_ainon'],aivalue:['c_ops','c_hourly','c_bid','c_daily'],groups:['c_dabiao'],diag:['c_waste','c_cat'],market:['c_trend'],adstrat:[],plan:[]};
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));this.classList.add('active');
+  const tt=this.getAttribute('data-t');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+tt).classList.add('active');
+  setTimeout(()=>{(firstChart[tt]||[]).forEach(build);},40);
+}));
+setTimeout(()=>build('c_store'),60);
+</script></body></html>
