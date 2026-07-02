@@ -1,0 +1,505 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALLOPERA · Xnurta AI 广告月度复盘（客户版）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--tealPale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#fff;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--greenBg:#ECFDF5;--red:#DC2626;--redBg:#FEF2F2;--amber:#D97706;--amberBg:#FFFBEB;--blue:#2563EB;--blueBg:#EFF6FF;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fb);background:var(--bg);color:#1E293B;line-height:1.7}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px}
+.hdr h1{font-family:var(--fh);font-size:28px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14px;color:rgba(255,255,255,.82);margin-bottom:14px}.hdr-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.66)}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:104px;padding:11px 12px;border:none;background:transparent;color:var(--dark);font:500 13.5px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:17px;border:1px solid var(--border)}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--navy)}.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:10px 12px;font-weight:600;font-size:11px;text-transform:uppercase;text-align:left}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;gap:11px;margin-bottom:18px;font-size:13.5px;line-height:1.7}
+.a-info{background:var(--blueBg);border:1px solid #BFDBFE;color:#1E40AF}.a-ok{background:var(--greenBg);border:1px solid #A7F3D0;color:#065F46}.a-warn{background:var(--amberBg);border:1px solid #FDE68A;color:#92400E}.a-teal{background:var(--tealPale);border:1px solid #99F6E4;color:#115E59}.a-red{background:var(--redBg);border:1px solid #FECACA;color:#991B1B}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}.t-green{background:var(--greenBg);color:#065F46}.t-red{background:var(--redBg);color:#991B1B}.t-amber{background:var(--amberBg);color:#92400E}.t-blue{background:var(--blueBg);color:#1E40AF}.t-teal{background:var(--tealPale);color:#115E59}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}.bs.warn{background:linear-gradient(135deg,#FFFBEB,#fff);border-color:#FDE68A}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px}.bs .big{font-family:var(--fh);font-size:21px;font-weight:800}.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}.bs.warn .big{color:var(--amber)}.bs .sm{font-size:12px;color:var(--muted);margin-top:6px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:360px}
+.ins{border-radius:10px;border:1px solid var(--border);margin-bottom:11px;overflow:hidden}
+.ins-h{padding:14px 17px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--card)}
+.ins-t{font-size:14px;font-weight:600;color:var(--navy)}.chev{color:var(--muted);transition:transform .2s}
+.ins-b{display:none;padding:4px 17px 16px;background:#FAFBFC;border-top:1px solid var(--border);font-size:13.5px}
+.ins.open .ins-b{display:block}.ins.open .chev{transform:rotate(180deg)}
+.rec{border-left:3px solid var(--teal);background:#F8FAFC;padding:13px 16px;border-radius:0 8px 8px 0;margin-bottom:11px;font-size:13.5px}
+.rec .rh{font-weight:600;color:var(--navy);margin-bottom:3px}
+.sec-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--teal);margin:6px 0 12px;letter-spacing:.3px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.bigstat{grid-template-columns:1fr}}
+</style></head><body><div class="container">
+<header class="hdr"><h1>ALLOPERA（孕妇枕）· Xnurta AI 广告月度复盘</h1>
+<div class="sub">客户版 · AI 价值验证：AI 前后对比（POP） × AI vs Non-AI × AI 动作价值</div>
+<div class="hdr-meta"><span>📅 周期 2026-05-30 – 2026-06-28（30 天）</span><span>💵 金额口径：平台导出折算（≈USD）</span><span>🌍 站点 US / CA / DE</span></div></header>
+<nav class="tabs" id="tabs">
+ <button class="tab active" data-t="overview">📊 月度总览</button>
+ <button class="tab" data-t="pop">📈 AI 前后对比</button>
+ <button class="tab" data-t="ainon">⚖️ AI vs Non-AI</button>
+ <button class="tab" data-t="aivalue">🤖 AI 动作价值</button>
+ <button class="tab" data-t="groups">🎯 达标·托管组</button>
+ <button class="tab" data-t="diag">🔍 根因诊断</button>
+ <button class="tab" data-t="market">🌍 市场·竞品</button>
+ <button class="tab" data-t="adstrat">📣 广告打法</button>
+ <button class="tab" data-t="plan">💡 优化计划</button>
+</nav><section class="panel active" id="p-overview">
+ <div class="alert a-teal"><span>📋</span><div>本报告基于 6 月广告投放全量数据，从三个角度验证 AI 托管的实际价值：<strong>① 同活动开启 AI 前后对比、② AI 托管 vs 人工手动同期对照、③ AI 替人执行的优化工作量</strong>，并结合卖家精灵 / Sorftime 市场数据给出下一步广告打法建议。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)">
+  <h2>📌 本月概要：AI 托管活动在增长目标下实现订单与销售扩张，效率小幅让步</h2>
+  <div class="desc">基于 POP 同口径同活动「开启 AI 前 → 开启期间」对比（40 个托管活动）；订单 +37.7%、销售 +33.3%、ACOS 29.0%→33.9%</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">① 花费有没有失控？</div><div class="big">可控放量 · +56.1%</div><div class="sm">$53,870 → $84,118；放量服务于增长目标</div></div>
+   <div class="bs win"><div class="t">② 销售/订单有没有增长？</div><div class="big">切实增长 · 销售 +33.3%</div><div class="sm">$186,009 → $247,896；订单 5,182 → 7,134（+37.7%）</div></div>
+   <div class="bs warn"><div class="t">③ ACOS 有没有守住？</div><div class="big">小幅上浮 · 29.0% → 33.9%</div><div class="sm">放量期效率的正常代价，仍在健康区间</div></div>
+  </div>
+  <div class="alert a-teal" style="margin:16px 0 0;font-size:13px"><span>🧭</span><div><strong>怎么读这份报告：</strong>三条证据线相互独立、各看一面——
+  <strong>① AI 前后对比</strong>是同一批活动开启 AI 前后的真实变化，最能说明 AI 带来的趋势；<strong>② AI vs Non-AI</strong>是同期人工与 AI 的对照，看 AI 在更大盘子上的相对水平；<strong>③ AI 动作价值</strong>量化 AI 替运营执行了多少工作。增长归因以可比数据为准，不做夸大。</div></div>
+ </div>
+
+ <div class="alert a-info" style="font-size:13px"><span>📊</span><div><strong>环比定调（vs 上月 2026-04-30~05-31）：</strong>本月在加大投入<strong>放量</strong>——花费 <span class="warn">+30.9%</span>、销售 +11.7%、订单 +10.0%；但增速跟不上投入，<strong>效率环比回落</strong>：ACOS 由 26.71% 升到 31.3%、ROAS -14.7%、达标率由 92.0% 降到 58.3%。AI 占比继续提升（花费占比 72.07%→81.8%）。下方每张卡均标注环比。</div></div>
+ <div class="kpis">
+  <div class="kpi"><div class="l">广告花费</div><div class="v">$108,347</div><div class="s">环比 <span class="warn">+30.9%</span>（日均 $3,612）</div></div>
+  <div class="kpi"><div class="l">广告销售额</div><div class="v">$345,939</div><div class="s">环比 <span class="pos">+11.7%</span>（ROAS 3.19，-14.7%）</div></div>
+  <div class="kpi"><div class="l">订单数</div><div class="v">9,693</div><div class="s">环比 <span class="pos">+10.0%</span>（转化率 15.67%）</div></div>
+  <div class="kpi"><div class="l">整体 ACOS</div><div class="v">31.3%</div><div class="s">环比上浮（上月 26.71%）· CPC $1.75</div></div>
+  <div class="kpi"><div class="l">AI 花费占比</div><div class="v">81.8%</div><div class="s">环比升（上月 72.07%）</div></div>
+  <div class="kpi"><div class="l">AI 托管活动</div><div class="v">24<span style="font-size:14px"> 个</span></div><div class="s">有花费；上月 25 个</div></div>
+  <div class="kpi"><div class="l">AI 动作数</div><div class="v">6,231</div><div class="s">运营手动仅 66 次（上月无日志，不环比）</div></div>
+  <div class="kpi"><div class="l">达标率</div><div class="v">58.3%</div><div class="s">环比下滑（上月 92.0%）· 14/24</div></div>
+ </div>
+
+ <div class="card"><h2>分站点表现</h2><div class="desc">US 是绝对主力盘，DE 效率明显偏弱（详见根因诊断）</div>
+  <div class="chart-box"><canvas id="c_country"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>站点</th><th class="num">花费</th><th class="num">销售额</th><th class="num">订单</th><th class="num">ACOS</th><th class="num">ROAS</th><th class="num">CVR</th></tr></thead><tbody>
+  <tr><td class='hl'>US</td><td class='num'>$85,689</td><td class='num'>$289,376</td><td class='num'>8,076</td><td class='num'>29.6%</td><td class='num'>3.38</td><td class='num'>17.61%</td></tr><tr><td class='hl'>CA</td><td class='num'>$12,018</td><td class='num'>$35,819</td><td class='num'>1,037</td><td class='num'>33.6%</td><td class='num'>2.98</td><td class='num'>11.76%</td></tr><tr><td class='hl'>DE</td><td class='num'>$10,640</td><td class='num'>$20,743</td><td class='num'>580</td><td class='num'>51.3%</td><td class='num'>1.95</td><td class='num'>8.09%</td></tr>
+  </tbody></table></div>
+
+ <div class="card"><h2>账户健康速读</h2>
+  <div class="two">
+   <div><div class="sec-title">✅ 亮点</div>
+    <div class="alert a-ok" style="display:block"><strong>放量见效。</strong>托管活动开启 AI 后订单 +37.7%、销售 +33.3%，新开启的美国站活动是增长主引擎。</div>
+    <div class="alert a-ok" style="display:block"><strong>AI 替人做了绝大多数执行。</strong>本期 6,231 次 AI 优化动作 vs 运营手动 66 次，约 94:1。</div>
+    <div class="alert a-ok" style="display:block"><strong>浪费控制良好。</strong>数千个零出单长尾搜索词合计仅约 $10,511，单词超 $40 的浪费仅 3 个——AI 否词在持续清理。</div>
+   </div>
+   <div><div class="sec-title">⚠️ 需关注</div>
+    <div class="alert a-warn" style="display:block"><strong>预算卡脖子（最大机会）。</strong>16 个 Out-of-Budget 活动承接了全站约 75% 的花费，且 ACOS（29.8%）反而优于不缺预算的活动（36.3%）。</div>
+    <div class="alert a-warn" style="display:block"><strong>「推动增长」组没有真增长。</strong>该目标活动 POP 订单 -1.9%、销售 +1.0%，但花费 +16.6%——钱花出去了增长没出来。</div>
+    <div class="alert a-red" style="display:block"><strong>结构性集中风险。</strong>单一爆款 ASIN（BSR #2）贡献了约 99.9% 的广告销售额；婴儿背带新线 ACOS 高达 309.2%，扩品尚未跑通。</div>
+   </div>
+  </div>
+ </div>
+</section><section class="panel" id="p-pop">
+ <div class="alert a-teal"><span>📈</span><div><strong>证据线①：AI 前后对比（POP）。</strong>对同一批托管活动，比较「开启 AI 前」与「开启 AI 期间」的同口径表现——这是托管活动自身最强的趋势证据。本期覆盖 <strong>40 个</strong>托管活动。注意：开启前窗口随各活动 AI 开启时间而定，部分成熟活动的「前」为历史基线，已按成熟度分层呈现。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>总览：开启 AI 后，订单与销售扩张，效率小幅让步</h2>
+  <div class="desc">40 个托管活动汇总 · 开启前 → 开启期间</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">销售额</div><div class="big">+33.3%</div><div class="sm">$186,009 → $247,896</div></div>
+   <div class="bs win"><div class="t">订单数</div><div class="big">+37.7%</div><div class="sm">5,182 → 7,134</div></div>
+   <div class="bs warn"><div class="t">ACOS（放量代价）</div><div class="big">29.0% → 33.9%</div><div class="sm">花费 +56.1%，曝光 +28.0%</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:16px"><span>🧠</span><div><strong>怎么解读：</strong>40 个活动里有 34 个目标是「活动冲量」或「推动增长」（放量导向），因此销售/订单大涨、ACOS 小幅上浮属于<strong>目标内的预期行为</strong>——AI 在增长目标下给好流量更多机会、扩大规模，而非压低 ACOS。18/40 个活动销售增长，18/40 订单增长。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>按 AI 目标拆分</h2><div class="desc">不同目标该看不同结果</div>
+   <div class="chart-box"><canvas id="c_pop_obj"></canvas></div></div>
+  <div class="card"><h2>ACOS 开启前 → 期间（按目标）</h2><div class="desc">放量目标 ACOS 上浮属正常；看绝对值是否仍可接受</div>
+   <div class="chart-box"><canvas id="c_pop_acos"></canvas></div></div>
+ </div>
+
+ <div class="card"><h2>三个目标，三种该有的样子</h2>
+  <table><thead><tr><th>AI 目标</th><th class="num">活动数</th><th class="num">销售变化</th><th class="num">订单变化</th><th class="num">花费变化</th><th class="num">ACOS 前→期间</th><th>判定</th></tr></thead><tbody>
+   <tr><td class="hl">活动冲量</td><td class="num">20</td><td class="num"><span class='pos'>+24.2%</span></td><td class="num"><span class='pos'>+30.2%</span></td><td class="num">+42.9%</td><td class="num">33.8% → 38.9%</td><td><span class="tag t-green">符合预期·放量见效</span></td></tr>
+   <tr><td class="hl">保持稳定</td><td class="num">6</td><td class="num"><span class='pos'>+58.2%</span></td><td class="num"><span class='pos'>+66.9%</span></td><td class="num">+92.1%</td><td class="num">26.3% → 32.0%</td><td><span class="tag t-amber">实为放量·建议核对目标</span></td></tr>
+   <tr><td class="hl">推动增长</td><td class="num">14</td><td class="num"><span class='pos'>+1.0%</span></td><td class="num"><span class='neg'>-1.9%</span></td><td class="num">+16.6%</td><td class="num">27.9% → 32.3%</td><td><span class="tag t-red">未达预期·钱花了增长没来</span></td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:14px"><span>⚠️</span><div><strong>两处需校正：</strong>① 标着「保持稳定」的 6 个活动实际销售 +58.2%、订单 +66.9%，行为更像放量，<strong>目标设定与实际不符</strong>，建议改为「推动增长」让 AI 出价/预算更顺；② 真正标「推动增长」的活动订单 -1.9%、花费却 +16.6%，需查预算活跃时间与目标 ACOS 是否过严。</div></div>
+ </div>
+
+ <div class="card"><h2>按成熟度分层：增长主要来自新开启活动</h2>
+  <div class="desc">避免把「新活动低基数大涨」与「成熟活动稳态」混为一谈</div>
+  <div class="two">
+   <div class="alert a-ok" style="display:block"><strong>新开启（≤35 天，26 个）</strong><br>销售 +49.8%，订单 +59.8%，花费 +73.0%<br>ACOS 30.5% → 35.2%　<span class="tag t-green">增长主引擎</span></div>
+   <div class="alert a-info" style="display:block"><strong>成熟活动（&gt;35 天，14 个）</strong><br>销售 +8.7%，订单 +6.4%，花费 +27.8%<br>ACOS 26.7% → 31.4%　<span class="tag t-blue">稳态贡献</span></div>
+  </div>
+  <div class="alert a-red" style="margin-top:4px"><span>🌍</span><div><strong>站点分化明显：</strong>美国站 POP 销售 +40.0%、订单 +44.2%（ACOS 26.8%→32.2%，强）；<strong>欧洲站销售 -9.4%、订单 -6.0%，ACOS 42.8%→50.9%</strong>——EU 不仅没增长，效率也在恶化，需单独诊断。</div></div>
+ </div>
+
+ <div class="card"><h2>POP 评分：40 个托管活动</h2>
+  <div class="desc">依据 SparkX POP 评分规则（优秀=销售增长且 ACOS 改善；良好=销售增长或 ACOS 优于目标；通过=达到基础门槛）</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">通过率</div><div class="big">85.0%</div><div class="sm">34/40 个活动达到基础门槛</div></div>
+   <div class="bs win"><div class="t">良好率</div><div class="big">50.0%</div><div class="sm">20/40 销售增长或 ACOS 优于目标</div></div>
+   <div class="bs win"><div class="t">优秀率</div><div class="big">15.0%</div><div class="sm">6/40 销售增长且 ACOS 改善</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:14px;font-size:13px"><span>ℹ️</span><div>多数托管活动达到了基础表现门槛（通过率 85.0%），半数达到良好；优秀活动（6 个）是"既放量又提效率"的标杆，可作为词库/出价模板复制到其它活动。</div></div>
+ </div>
+
+ <div class="card"><h2>开启 AI 后增量最大的活动 Top 8</h2><div class="desc">按销售额绝对增量排序</div>
+  <table><thead><tr><th>活动</th><th>目标</th><th>站点</th><th class="num">销售 前→期间</th><th class="num">销售变化</th><th class="num">订单变化</th><th class="num">ACOS 前→期间</th><th class="num">AI天数</th></tr></thead><tbody><tr><td class='hl'>SparkX AI 新-pregnancy pillow-手动精准-固定</td><td><span class='tag t-green'>保持稳定</span></td><td>America</td><td class='num'>$58,822 → $77,787</td><td class='num'><span class='pos'>+32.2%</span></td><td class='num'><span class='pos'>+39.1%</span></td><td class='num'>26.1% → 30.3%</td><td class='num'>16d</td></tr><tr><td class='hl'>新-pregnancy-商品</td><td><span class='tag t-green'>保持稳定</span></td><td>America</td><td class='num'>$461 → $14,193</td><td class='num'><span class='pos'>+2,979.8%</span></td><td class='num'><span class='pos'>+2,875.0%</span></td><td class='num'>70.0% → 39.5%</td><td class='num'>15d</td></tr><tr><td class='hl'>SparkX AI pregnancy pillow精准</td><td><span class='tag t-teal'>活动冲量</span></td><td>America</td><td class='num'>$9,010 → $17,502</td><td class='num'><span class='pos'>+94.2%</span></td><td class='num'><span class='pos'>+112.9%</span></td><td class='num'>33.2% → 32.6%</td><td class='num'>29d</td></tr><tr><td class='hl'>商品-商品</td><td><span class='tag t-green'>保持稳定</span></td><td>America</td><td class='num'>$1,494 → $9,022</td><td class='num'><span class='pos'>+503.6%</span></td><td class='num'><span class='pos'>+502.0%</span></td><td class='num'>41.9% → 38.5%</td><td class='num'>16d</td></tr><tr><td class='hl'>SparkX AI pregnancy广泛</td><td><span class='tag t-teal'>活动冲量</span></td><td>America</td><td class='num'>$0 → $6,945</td><td class='num'><span class='tag t-green'>新增</span></td><td class='num'><span class='tag t-green'>新增</span></td><td class='num'>0.0% → 31.4%</td><td class='num'>29d</td></tr><tr><td class='hl'>SparkX AI pillow</td><td><span class='tag t-teal'>活动冲量</span></td><td>America</td><td class='num'>$0 → $6,069</td><td class='num'><span class='tag t-green'>新增</span></td><td class='num'><span class='tag t-green'>新增</span></td><td class='num'>0.0% → 41.0%</td><td class='num'>29d</td></tr><tr><td class='hl'>SparkX AI pillows for pregnant women</td><td><span class='tag t-blue'>推动增长</span></td><td>America</td><td class='num'>$3,597 → $9,136</td><td class='num'><span class='pos'>+154.0%</span></td><td class='num'><span class='pos'>+154.4%</span></td><td class='num'>25.1% → 32.8%</td><td class='num'>335d</td></tr><tr><td class='hl'>SparkX AI sleeping</td><td><span class='tag t-teal'>活动冲量</span></td><td>America</td><td class='num'>$357 → $5,114</td><td class='num'><span class='pos'>+1,331.1%</span></td><td class='num'><span class='pos'>+1,320.0%</span></td><td class='num'>34.9% → 27.9%</td><td class='num'>34d</td></tr></tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>含两个开启前销售为 0 的新活动（变化率不计），它们直接贡献了约 $1.3 万新增销售，是「AI 把闲置活动激活」的直接体现。</div></div>
+ </div>
+</section><section class="panel" id="p-ainon">
+ <div class="alert a-teal"><span>⚖️</span><div><strong>证据线②：AI vs Non-AI 同期对照。</strong>同一时间段内，AI 托管活动 vs 未托管（手动）活动的对比。它是有用的<strong>基准</strong>，但不是纯因果——两组的产品、阶段、打法不同，只能说明相对水平，不能单独证明 AI 效率。</div></div>
+
+ <div class="card"><h2>同期对照：AI 扛起 81.8% 花费，核心证据在转化质量</h2>
+  <div class="chart-box"><canvas id="c_ainon"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>分组</th><th class="num">活动数</th><th class="num">花费</th><th class="num">销售额</th><th class="num">订单</th><th class="num">ACOS</th><th class="num">ROAS</th><th class="num">CVR</th></tr></thead><tbody>
+   <tr><td class="hl">🤖 AI 托管</td><td class="num">24</td><td class="num">$88,625</td><td class="num">$281,363</td><td class="num">7,887</td><td class="num">31.5%</td><td class="num">3.17</td><td class="num">16.48%</td></tr>
+   <tr><td class="hl">✋ Non-AI 手动</td><td class="num">14</td><td class="num">$19,722</td><td class="num">$64,576</td><td class="num">1,806</td><td class="num">30.5%</td><td class="num">3.27</td><td class="num">12.91%</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:14px"><span>🧠</span><div><strong>结论：</strong>AI 组承担 <strong>81.8% 花费</strong>，花费规模约为手动组 4.5 倍；在这个规模下，ACOS 31.5% 与手动组 30.5% 仅差 1 个点，但流量质量明显更好：CTR 1.77% vs 0.85%，CVR 16.48% vs 12.91%。这说明 AI 本期不是靠压低投入做漂亮 ACOS，而是在更大的盘子里筛出了更容易转化的流量。</div></div>
+ </div>
+
+ <div class="card"><h2>拆开 Non-AI：成熟手动核心 vs 新品测试线</h2>
+  <div class="desc">Non-AI 组并不同质——把“新品测试”和“成熟收割”混在一起会误判</div>
+  <div class="two">
+   <div class="alert a-ok" style="display:block"><strong>成熟手动核心（剔除新品）</strong><br>花费 $18,640 · 销售 $64,226<br>ACOS <strong>29.0%</strong> · ROAS 3.45<br><span class="tag t-green">老品收割，效率最佳</span></div>
+   <div class="alert a-red" style="display:block"><strong>婴儿背带新线（Carrier）</strong><br>花费 $1,082 · 销售 $350<br>ACOS <strong>309.2%</strong> · ROAS 0.32<br><span class="tag t-red">新品冷启动，尚未跑通</span></div>
+  </div>
+  <div class="alert a-warn" style="margin-top:4px"><span>💡</span><div>Non-AI 组的整体 ACOS 之所以好看（30.5%），是因为里面那批成熟手动老品（29.0%）在拉低均值；而新品背带线（309.2%）正在烧钱。<strong>把新品背带交给 AI 托管或暂停止血</strong>，比继续手动测试更稳妥。这也提示：AI vs Non-AI 的差异更多来自“管的是什么活动”，而非“谁更聪明”。</div></div>
+ </div>
+
+ <div class="card"><h2>AI 覆盖：已接入 vs 本期有花费</h2>
+  <div class="desc">按 Campaign 的 目标ACOS / 托管组创建人 / 托管目标 / AI首次开启时间 判定</div>
+  <table><thead><tr><th>口径</th><th class="num">数量</th><th>说明</th></tr></thead><tbody>
+   <tr><td class="hl">AI 已接入（规则判定）</td><td class="num">40 个</td><td>含已暂停 / 零花费的历史托管活动</td></tr>
+   <tr><td class="hl">AI 本期有花费</td><td class="num">24 个</td><td>本期实际产生广告花费的托管活动</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>差额为零花费 / 已暂停的历史托管活动。建议把长期零花费的托管活动归档，让“AI 托管”口径更干净，也便于看真实 AI Spend%。</div></div>
+ </div>
+</section><section class="panel" id="p-aivalue">
+ <div class="alert a-teal"><span>🤖</span><div><strong>证据线③：AI 动作价值。</strong>本期操作日志共 9,897 条。下面量化 AI 替运营执行了多少工作、做了什么、节奏如何——这是人效与托管价值的直接证据。</div></div>
+
+ <div class="card"><h2>人机分工：AI 干了 6,231 次，运营手动只需 66 次</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">🤖 AI 优化动作</div><div class="big">6,231</div><div class="sm">出价 / 预算 / 否词 / 收割，日均约 208 次</div></div>
+   <div class="bs win"><div class="t">✋ 运营手动动作</div><div class="big">66</div><div class="sm">AI : 人工 ≈ 94 : 1</div></div>
+   <div class="bs warn"><div class="t">⚙️ 平台侧动作</div><div class="big">3,600</div><div class="sm">含 1,330 次预算耗尽自动翻牌（系统，非人工）</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:14px"><span>ℹ️</span><div><strong>口径说明：</strong>「平台侧动作」是 Amazon 系统记录（预算耗尽翻牌、系统状态变更等），不是运营的劳动；真正需要人盯的手动改动本期仅 66 次。把这 6,231 次出价与预算微调交给 AI，相当于把运营从高频重复操作里解放出来，专注选品、Listing 与策略。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>AI 都在改什么</h2><div class="desc">按操作类型（对数轴）</div>
+   <div class="chart-box"><canvas id="c_ops"></canvas></div></div>
+  <div class="card"><h2>AI 一天里几点在工作</h2><div class="desc">24 小时动作分布——全天候，不受人工作息限制</div>
+   <div class="chart-box"><canvas id="c_hourly"></canvas></div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>出价：非对称下注</h2><div class="desc">加价与降价的次数与中位幅度</div>
+   <div class="chart-box"><canvas id="c_bid"></canvas></div>
+   <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>加价 1197 次（中位 +5.0%）、降价 1326 次（中位 -4.1%）：小步快跑、双向微调，既抢量也控成本。</div></div></div>
+  <div class="card"><h2>预算：动态再分配</h2><div class="desc">把预算从低效活动挪向高效活动</div>
+   <div class="chart-box"><canvas id="c_budget"></canvas></div>
+   <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>ℹ️</span><div>调高预算 2399 次、调低 1184 次；配合 1,330 次预算耗尽信号，说明账户长期处于「预算受限」状态（见根因诊断）。</div></div></div>
+ </div>
+
+ <div class="card"><h2>关键词维护：AI 在持续清理与收割</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">否定词新增</div><div class="big">60</div><div class="sm">自动剔除无效流量</div></div>
+   <div class="bs win"><div class="t">新词收割</div><div class="big">6</div><div class="sm">把跑出来的好搜索词转为投放</div></div>
+   <div class="bs win"><div class="t">零出单浪费</div><div class="big">$10,511</div><div class="sm">5,493 个唯一词合计，仅 3 个单词超 $40</div></div>
+  </div>
+  <div class="alert a-ok" style="margin-top:14px"><span>✅</span><div>数千个零出单搜索词总浪费被压在约 $10,511（占总花费 9.7%），说明 AI 否词在起作用——浪费是长尾灰尘，不是大额黑洞。</div></div>
+ </div>
+</section><section class="panel" id="p-groups">
+ <div class="card"><h2>达标率：58.3%，放量目标完成度最高</h2>
+  <div class="desc">达标 = 实际 ACOS ≤ 目标 ACOS；仅计花费&gt;0 且设了目标的活动</div>
+  <div class="chart-box"><canvas id="c_dabiao"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>托管目标</th><th class="num">参评活动</th><th class="num">达标活动</th><th class="num">达标率</th></tr></thead><tbody>
+   <tr><td class="hl">活动冲量</td><td class="num">12</td><td class="num">9</td><td class="num"><span class="pos">75.0%</span></td></tr>
+   <tr><td class="hl">推动增长</td><td class="num">6</td><td class="num">3</td><td class="num">50.0%</td></tr>
+   <tr><td class="hl">保持订单稳定</td><td class="num">6</td><td class="num">2</td><td class="num"><span class="warn">33.3%</span></td></tr>
+   <tr style="border-top:2px solid var(--navy)"><td class="hl">整体</td><td class="num">24</td><td class="num">14</td><td class="num hl">58.3%</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>「保持订单稳定」达标率偏低（33.3%），与 POP 里这批活动「实际在放量」一致——目标设定与真实行为不符，是它们没达成「稳定」目标的根因，而非 AI 失灵。</div></div>
+ </div>
+
+ <div class="card"><h2>托管组红黄绿灯</h2><div class="desc">11 条托管组记录 · 第一列为托管组名称，不用店铺名代替（10 条有花费 / 1 条无花费）</div>
+  <table><thead><tr><th>托管组</th><th>目标</th><th class="num">目标ACOS</th><th class="num">实际ACOS</th><th class="num">花费</th><th class="num">销售</th><th class="num">活动数</th><th class="num">功能开启</th><th>状态</th></tr></thead><tbody>
+   <tr><td class='hl'>preg精准<br><span style="font-size:11px;color:var(--muted)">美国站核心精准词组</span></td><td>保持稳定</td><td class='num'>24.0%</td><td class='num'>28.7%</td><td class='num'>$38,149</td><td class='num'>$132,909</td><td class='num'>1</td><td class='num'>7/11</td><td><span class='tag t-amber'>黄灯·略高于目标</span></td></tr>
+   <tr><td class='hl'>词组-否词<br><span style="font-size:11px;color:var(--muted)">词组流量收割与否词</span></td><td>推动增长</td><td class='num'>31.0%</td><td class='num'>30.8%</td><td class='num'>$13,273</td><td class='num'>$43,075</td><td class='num'>12</td><td class='num'>7/11</td><td><span class='tag t-green'>绿灯·贴近目标</span></td></tr>
+   <tr><td class='hl'>保持<br><span style="font-size:11px;color:var(--muted)">EU 宽目标托管组</span></td><td>活动冲量</td><td class='num'>61.22%</td><td class='num'>51.4%</td><td class='num'>$10,633</td><td class='num'>$20,665</td><td class='num'>13</td><td class='num'>7/11</td><td><span class='tag t-green'>绿灯·但目标偏宽</span></td></tr>
+   <tr><td class='hl'>商品-否词<br><span style="font-size:11px;color:var(--muted)">商品定投清理组</span></td><td>保持稳定</td><td class='num'>120.86%</td><td class='num'>28.7%</td><td class='num'>$5,901</td><td class='num'>$20,587</td><td class='num'>2</td><td class='num'>1/11</td><td><span class='tag t-green'>绿灯·目标过宽</span></td></tr>
+   <tr><td class='hl'>否词</td><td>活动冲量</td><td class='num'>35.6%</td><td class='num'>35.2%</td><td class='num'>$5,891</td><td class='num'>$16,733</td><td class='num'>6</td><td class='num'>5/11</td><td><span class='tag t-green'>绿灯·贴线达标</span></td></tr>
+   <tr><td class='hl'>增量</td><td>活动冲量</td><td class='num'>33.0%</td><td class='num'>32.3%</td><td class='num'>$5,808</td><td class='num'>$17,986</td><td class='num'>1</td><td class='num'>10/11</td><td><span class='tag t-green'>绿灯·可承接预算</span></td></tr>
+   <tr><td class='hl'>body-否词</td><td>保持稳定</td><td class='num'>26.22%</td><td class='num'>28.8%</td><td class='num'>$3,071</td><td class='num'>$10,675</td><td class='num'>1</td><td class='num'>2/11</td><td><span class='tag t-amber'>黄灯·需微调</span></td></tr>
+   <tr><td class='hl'>收割<br><span style="font-size:11px;color:var(--muted)">稳定目标</span></td><td>保持稳定</td><td class='num'>28.56%</td><td class='num'>32.6%</td><td class='num'>$3,004</td><td class='num'>$9,215</td><td class='num'>1</td><td class='num'>8/11</td><td><span class='tag t-amber'>黄灯·收紧成本</span></td></tr>
+   <tr><td class='hl'>自动-否词</td><td>保持稳定</td><td class='num'>26.31%</td><td class='num'>30.6%</td><td class='num'>$2,889</td><td class='num'>$9,441</td><td class='num'>1</td><td class='num'>7/11</td><td><span class='tag t-amber'>黄灯·自动流量需清理</span></td></tr>
+   <tr><td class='hl'>收割<br><span style="font-size:11px;color:var(--muted)">推动增长小流量</span></td><td>推动增长</td><td class='num'>54.58%</td><td class='num'>9.3%</td><td class='num'>$7</td><td class='num'>$78</td><td class='num'>1</td><td class='num'>5/11</td><td><span class='tag t-green'>绿灯·样本太小</span></td></tr>
+   <tr><td class='hl'>低活跃托管组</td><td>推动增长</td><td class='num'>35.0%</td><td class='num'>—</td><td class='num'>$0</td><td class='num'>$0</td><td class='num'>1</td><td class='num'>5/11</td><td><span class='tag t-red'>红灯·无花费</span></td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:12px;font-size:13px"><span>⚠️</span><div>这张表要看两件事：第一，托管组不是店铺名，必须按组名追动作；第二，绿色不等于不用管，部分组的目标 ACOS 过宽（如商品-否词、EU 保持），应逐步收紧，否则会掩盖真实成本压力。</div></div>
+ </div>
+
+ <div class="card"><h2>功能部署：AI 动作空间开启情况</h2><div class="desc">11 个托管组中，各项交给 AI 的组数</div>
+  <table><thead><tr><th>功能</th><th class="num">已交给 AI 的组数</th><th>覆盖</th></tr></thead><tbody>
+   <tr><td class='hl'>添加否定定向</td><td class='num'>10/11</td><td><span class='tag t-green'>广覆盖</span></td></tr><tr><td class='hl'>分时预算</td><td class='num'>8/11</td><td><span class='tag t-green'>广覆盖</span></td></tr><tr><td class='hl'>按表现调预算</td><td class='num'>7/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>广告位调价</td><td class='num'>6/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>分时调价</td><td class='num'>6/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>预算重新分配</td><td class='num'>6/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>定向暂停</td><td class='num'>6/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>按表现调价</td><td class='num'>5/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>定向收割</td><td class='num'>4/11</td><td><span class='tag t-amber'>部分</span></td></tr><tr><td class='hl'>暂停广告活动和广告组</td><td class='num'>3/11</td><td><span class='tag t-red'>偏低</span></td></tr><tr><td class='hl'>暂停商品</td><td class='num'>2/11</td><td><span class='tag t-red'>偏低</span></td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>「添加否定定向」已在 10/11 个组开启，是覆盖最广的动作；「暂停商品」「暂停广告活动和广告组」开启较少——对断货/低效 ASIN 的自动止损还有提升空间。</div></div>
+ </div>
+</section><section class="panel" id="p-diag">
+ <div class="card" style="border-left:4px solid var(--gold)"><h2>🔑 头号机会：预算卡脖子（OOB 悖论）</h2>
+  <div class="desc">最值钱的发现——效率最好的活动反而被预算限流</div>
+  <div class="two">
+   <div class="alert a-warn" style="display:block"><strong>Out of Budget（16 个活动）</strong><br>花费 $80,406（占 75%）<br>ACOS <strong class="pos">29.8%</strong> · CVR 16.7%<br><span class="tag t-amber">高效却被限流</span></div>
+   <div class="alert a-info" style="display:block"><strong>Delivering（20 个活动）</strong><br>花费 $27,499<br>ACOS 36.3% · CVR 13.0%<br><span class="tag t-blue">不缺预算，效率反而一般</span></div>
+  </div>
+  <div class="alert a-ok" style="margin-top:4px"><span>💰</span><div><strong>结论与动作：</strong>承接全站约 75% 花费的预算受限活动，ACOS（29.8%）反而优于不缺预算的活动（36.3%）。这意味着<strong>账户的优质流量正被日预算卡住</strong>。优先给这些高效 OOB 活动（尤其美国站核心爆款活动）提预算，是确定性最高的增量来源——配合 AI 已开启的「分时预算 / 按表现调预算」效果更佳。</div></div>
+ </div>
+
+ <div class="card"><h2>搜索词分层（先按 Campaign 投放状态）</h2>
+  <div class="desc">口径：含花费的搜索词记录，按所属活动的投放状态分层（8,176 条记录 / 6,498 个唯一搜索词）</div>
+  <table><thead><tr><th>所属活动状态</th><th class="num">记录数</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th></tr></thead><tbody><tr><td class='hl'>Out of Budget</td><td class='num'>5624</td><td class='num'>$73,465</td><td class='num'>$247,756</td><td class='num'>29.7%</td></tr><tr><td class='hl'>Delivering</td><td class='num'>2131</td><td class='num'>$28,152</td><td class='num'>$77,589</td><td class='num'>36.3%</td></tr><tr><td class='hl'>Paused</td><td class='num'>421</td><td class='num'>$5,617</td><td class='num'>$18,578</td><td class='num'>30.2%</td></tr></tbody></table>
+  <div class="alert a-info" style="margin-top:10px;font-size:12.5px"><span>ℹ️</span><div>大部分花费落在 Out-of-Budget 活动（ACOS 29.7%，优于 Delivering 的 36.3%），与"预算卡脖子"一致；Paused 活动仍带 $5,617 花费，需检查是否应归档。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>投放词三分（按唯一搜索词合并）</h2><div class="desc">合并同词多行后再分档，避免单行口径虚高</div>
+   <div class="chart-box"><canvas id="c_waste"></canvas></div></div>
+  <div class="card"><h2>金矿词 Top（已按唯一词合并核对）</h2><div class="desc">出单且 ACOS 健康，建议迁 EXACT 加投</div>
+   <table><thead><tr><th>搜索词</th><th class="num">花费</th><th class="num">销售</th><th class="num">订单</th><th class="num">ACOS</th></tr></thead><tbody><tr><td>allopera pregnancy pillow</td><td class='num'>$30.0</td><td class='num'>$885</td><td class='num'>25</td><td class='num'><span class='pos'>3.4%</span></td></tr><tr><td>allopera pregnancy pillow, full body 5</td><td class='num'>$18.41</td><td class='num'>$273</td><td class='num'>8</td><td class='num'><span class='pos'>6.7%</span></td></tr><tr><td>pregnancy pillow black</td><td class='num'>$30.46</td><td class='num'>$217</td><td class='num'>6</td><td class='num'><span class='pos'>14.0%</span></td></tr><tr><td>u-shaped body pillows</td><td class='num'>$18.52</td><td class='num'>$209</td><td class='num'>5</td><td class='num'><span class='pos'>8.9%</span></td></tr><tr><td>full body support pillow</td><td class='num'>$27.48</td><td class='num'>$206</td><td class='num'>6</td><td class='num'><span class='pos'>13.3%</span></td></tr><tr><td>allopera 57 inch pregnancy pillow for </td><td class='num'>$19.25</td><td class='num'>$180</td><td class='num'>5</td><td class='num'><span class='pos'>10.7%</span></td></tr><tr><td>gift for mom</td><td class='num'>$7.7</td><td class='num'>$176</td><td class='num'>4</td><td class='num'><span class='pos'>4.4%</span></td></tr><tr><td>b099k7kpm8</td><td class='num'>$22.78</td><td class='num'>$175</td><td class='num'>5</td><td class='num'><span class='pos'>13.0%</span></td></tr></tbody></table>
+   <div class="alert a-ok" style="margin-top:10px;font-size:12px"><span>✅</span><div>品牌词「allopera pregnancy pillow」合并同词多行后：花费 $30.0、销售 $885、订单 25、ACOS 3.39%（单行口径会偏高，已按唯一词合并）。</div></div></div>
+ </div>
+
+ <div class="card"><h2>三档词库行动清单（唯一搜索词口径）</h2>
+  <table><thead><tr><th>词库</th><th>判定标准</th><th class="num">唯一词数</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th><th>动作</th></tr></thead><tbody>
+   <tr><td class="hl">好词库</td><td>出单 &amp; ACOS&lt;15%</td><td class="num">689</td><td class="num">$2,068</td><td class="num">$31,153</td><td class="num"><span class="pos">6.6%</span></td><td><span class="tag t-green">加投/转EXACT</span></td></tr>
+   <tr><td class="hl">核心库</td><td>出单 &amp; ACOS 15–40%</td><td class="num">246</td><td class="num">$84,963</td><td class="num">$296,251</td><td class="num">28.7%</td><td><span class="tag t-blue">维持/微调</span></td></tr>
+   <tr><td class="hl">高耗库</td><td>出单 &amp; ACOS&gt;40%</td><td class="num">74</td><td class="num">$9,693</td><td class="num">$16,712</td><td class="num"><span class="neg">58.0%</span></td><td><span class="tag t-amber">收紧出价</span></td></tr>
+   <tr><td class="hl">零出单</td><td>有花费 &amp; 0 订单</td><td class="num">5,493</td><td class="num">$10,511</td><td class="num">$0</td><td class="num">—</td><td><span class="tag t-red">否词(AI在做)</span></td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>口径说明：以上为<strong>唯一搜索词</strong>合并口径（6,502 个）；好词库 689 个词花费 $2,068 带来 $31,153 销售（ACOS 6.6%），是最该加投的部分；核心库 246 个词是账户发动机。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>匹配类型</h2>
+   <table><thead><tr><th>类型</th><th class="num">词数</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th><th class="num">CVR</th></tr></thead><tbody><tr><td class='hl'>EXACT</td><td class='num'>34</td><td class='num'>$64,411</td><td class='num'>$209,153</td><td class='num'>30.8%</td><td class='num'>18.72%</td></tr><tr><td class='hl'>PHRASE</td><td class='num'>102</td><td class='num'>$16,616</td><td class='num'>$49,803</td><td class='num'>33.4%</td><td class='num'>13.02%</td></tr><tr><td class='hl'>BROAD</td><td class='num'>2</td><td class='num'>$5,259</td><td class='num'>$17,623</td><td class='num'>29.8%</td><td class='num'>15.87%</td></tr></tbody></table>
+   <div class="alert a-info" style="margin-top:10px;font-size:12px"><span>ℹ️</span><div>EXACT 是绝对主力（CVR 18.72%），词库高度精准化，结构健康。</div></div></div>
+  <div class="card"><h2>广告位</h2>
+   <table><thead><tr><th>广告位</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS</th><th class="num">CVR</th><th class="num">CPC</th></tr></thead><tbody><tr><td class='hl'>Top of Search on-Amazon</td><td class='num'>$83,346</td><td class='num'>$263,522</td><td class='num'>31.6%</td><td class='num'>18.25%</td><td class='num'>$2.06</td></tr><tr><td class='hl'>Other on-Amazon</td><td class='num'>$17,524</td><td class='num'>$54,388</td><td class='num'>32.2%</td><td class='num'>10.25%</td><td class='num'>$1.19</td></tr><tr><td class='hl'>Detail Page on-Amazon</td><td class='num'>$7,038</td><td class='num'>$27,202</td><td class='num'>25.9%</td><td class='num'>12.06%</td><td class='num'>$1.12</td></tr><tr><td class='hl'>Off Amazon</td><td class='num'>$6</td><td class='num'>$0</td><td class='num'>—</td><td class='num'>0.0%</td><td class='num'>$0.63</td></tr></tbody></table>
+   <div class="alert a-info" style="margin-top:10px;font-size:12px"><span>ℹ️</span><div>搜索结果顶部是主战场（CVR 18.25%）；商品详情页 ACOS 最低（25.9%），可适当加码竞价系数。</div></div></div>
+ </div>
+</section><section class="panel" id="p-market">
+ <div class="alert a-info"><span>🌍</span><div>市场与竞品数据来自<strong>卖家精灵（SellerSprite）</strong>与 <strong>Sorftime</strong> 双源交叉校验，<strong>为外部快照数据（取数日 2026-06-29），仅作需求与竞争方向参照，不作为账户广告效率证明</strong>。两源价格高度一致（$34.99 / $35.68）。本期无 Brand Analytics（品牌搜索/搜索词份额）数据，故不做品牌搜索趋势与 SFR 对标。</div></div>
+
+ <div class="card"><h2>大盘：孕妇枕是常青大市场，需求稳定</h2>
+  <div class="kpis">
+   <div class="kpi"><div class="l">月搜索量（头部词）</div><div class="v">59.9万</div><div class="s">pregnancy pillow · 建议CPC $1.71</div></div>
+   <div class="kpi"><div class="l">类目月销额(Top100)</div><div class="v">$471万</div><div class="s">Sorftime · Maternity Pillows</div></div>
+   <div class="kpi"><div class="l">类目均价</div><div class="v">$35.68</div><div class="s">客户定价 $34.99（贴合）</div></div>
+   <div class="kpi"><div class="l">类目均星级</div><div class="v">4.33★</div><div class="s">客户爆款 4.6★（更高）</div></div>
+  </div>
+  <div class="chart-box" style="margin-top:6px"><canvas id="c_trend"></canvas></div>
+  <div class="alert a-info" style="margin-top:8px;font-size:12.5px"><span>📈</span><div><strong>Amazon 站内真实需求（卖家精灵 · 近 13 个月月度搜索/购买量）：</strong>稳定在月搜索约 55–70 万、月购买约 2–2.6 万、购买率 3.4–4%，属<strong>成熟刚需大盘</strong>，季节性温和。</div></div>
+
+  <div style="margin-top:14px"><div class="sec-title">近期趋势速读（截至 26年5月）</div>
+  <div class="kpis">
+   <div class="kpi"><div class="l">近3月月均搜索</div><div class="v">63万</div><div class="s">需求量级稳定</div></div>
+   <div class="kpi"><div class="l">搜索量 同比/环比</div><div class="v" style="font-size:20px">-2.6% / -10.5%</div><div class="s">5月季节性回落，属正常区间</div></div>
+   <div class="kpi"><div class="l">品类购买率</div><div class="v">3.42%</div><div class="s">近3月月均购买约 2万</div></div>
+   <div class="kpi"><div class="l">品类建议竞价 vs 账户CPC</div><div class="v" style="font-size:20px">$1.75 / $1.75</div><div class="s">建议竞价=市场参考价；CPC=实际点击成本</div></div>
+  </div>
+  <div class="alert a-ok" style="font-size:12.5px"><span>✅</span><div><strong>怎么用：</strong>账户实际 CPC（$1.75）与品类头部词建议竞价（$1.75）持平，说明<strong>没有为流量多付溢价</strong>，竞价健康；核心词竞价区间 $1.1–$2.17，是 AI 出价的合理参考带。需求 5 月环比 -10.5% 是季节性回落，不是衰退（供需比仍高达 232.8），下半年随旺季回升时应预留预算空间。</div></div>
+  </div>
+ </div>
+
+ <div class="card"><h2>竞争格局：成熟寡头，客户已在头部</h2>
+  <div class="bigstat">
+   <div class="bs warn"><div class="t">Top3 品牌销量占比</div><div class="big">54.38%</div><div class="sm">Top3 产品占 43.93%，高度集中</div></div>
+   <div class="bs lose"><div class="t">新品(3月内)销量占比</div><div class="big">1.66%</div><div class="sm">新进入者极难突围</div></div>
+   <div class="bs win"><div class="t">客户爆款地位</div><div class="big">类目 BSR #2</div><div class="sm">已是头部之一，是护城河</div></div>
+  </div>
+  <div class="alert a-teal" style="margin-top:14px"><span>🧭</span><div><strong>战略含义：</strong>这是一个 Top3 品牌占 54.38%、新品仅占 1.66% 的成熟寡头市场（中国卖家占比约 70%）。客户爆款已在 BSR #2，<strong>守住并扩大这个头部位置的边际收益，远高于从零做新品（如婴儿背带）</strong>。这也解释了为什么"把爆款打法复用到孕妇枕变体"比"开新类目"更稳。</div></div>
+ </div>
+
+ <div class="card"><h2>正面对位：ALLOPERA vs Momcozy（头号对手）</h2>
+  <div class="desc">客户自己的搜索词里就出现 momcozy——这是直接竞品</div>
+  <table><thead><tr><th>维度</th><th>🟢 ALLOPERA（客户爆款）</th><th>Momcozy（头号对手）</th><th>解读</th></tr></thead><tbody>
+   <tr><td class="hl">商品</td><td><strong>57寸孕妇枕主推款</strong><br><span style="font-size:11px;color:var(--muted)">B0CN9522GD</span></td><td><strong>Momcozy 57寸U形孕妇枕</strong><br><span style="font-size:11px;color:var(--muted)">B08YYVRXLM</span></td><td>同为 U 形全身孕妇枕，客户价格更低</td></tr>
+   <tr><td class="hl">售价</td><td class="hl">$34.99</td><td>$44.99</td><td><span class="pos">客户便宜约 22%</span>，价格优势明显</td></tr>
+   <tr><td class="hl">评分</td><td class="hl">4.6★</td><td>4.5★</td><td><span class="pos">客户略高</span></td></tr>
+   <tr><td class="hl">评价数</td><td>1,695</td><td>更早积累</td><td>对手上架更早(2020)，口碑沉淀更深</td></tr>
+   <tr><td class="hl">上架时间</td><td>2023-11</td><td>2020-12</td><td>客户更年轻，仍在上升期</td></tr>
+  </tbody></table>
+  <div class="alert a-ok" style="margin-top:12px"><span>💡</span><div><strong>打法启示：</strong>客户以"更低价 + 更高评分"对位 Momcozy，具备性价比卖点。<strong>建议用 SD/SB 定向 Momcozy 的 ASIN 与品牌词做截流</strong>（详见「广告打法」），把性价比优势直接展示在对手详情页与搜索结果旁。</div></div>
+ </div>
+
+ <div class="card"><h2>转化端：差评暴露的提升点（AI 管不了的部分）</h2>
+  <div class="desc">爆款 4.6★ / 1,695 评价，但近期差评集中在以下主题——广告把人带来了，转化由 Listing 与产品决定</div>
+  <div class='rec'><div class='rh'>⚠️ 尺寸与宣传不符</div>多条评论反映实际约46寸、非宣传57寸、比图片小、不适合较高个子——退货与转化风险，需核对Listing尺寸表述与主图比例</div><div class='rec'><div class='rh'>⚠️ 易塌陷/不回弹</div>很快变平、填充偏薄易破——产品/质检反馈，影响复购与评分</div><div class='rec'><div class='rh'>⚠️ 偏硬/颈部不适</div>太硬硌脖子、垫得脖子酸——可在Listing/A+中明确软硬定位与适用人群</div>
+  <div class="alert a-warn" style="margin-top:4px;font-size:13px"><span>⚠️</span><div>"尺寸与宣传不符"是最高频差评，既伤转化也增退货。<strong>建议优先核对 Listing 尺寸表述与主图实物比例</strong>——这能直接抬高广告的转化天花板，比单纯调广告更有效（尤其能改善 DE 站偏低的 CVR 8.09%）。</div></div>
+ </div>
+
+ <div class="card"><h2>产品线集中度 & 品类梯队</h2><div class="desc">广告销售按商品聚合；商品名在前，ASIN 仅作核对</div>
+  <table><thead><tr><th>产品</th><th>站点</th><th class="num">BSR</th><th class="num">售价</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">FBA库存</th></tr></thead><tbody>
+   <tr><td class='hl'>57寸孕妇枕主推款<br><span style="font-size:11px;color:var(--muted)">B0CN9522GD</span></td><td>US</td><td class='num'>2</td><td class='num'>$34.99</td><td class='num'>$106,786</td><td class='num'>$344,956</td><td class='num'>31.0%</td><td class='num'>21,175</td></tr>
+   <tr><td class='hl'>婴儿背带新线<br><span style="font-size:11px;color:var(--muted)">B0FXY7V4QY</span></td><td>US</td><td class='num'>155</td><td class='num'>$49.99</td><td class='num'>$1,032</td><td class='num'>$350</td><td class='num'>294.9%</td><td class='num'>997</td></tr>
+   <tr><td class='hl'>凉感套孕妇枕变体<br><span style="font-size:11px;color:var(--muted)">B0D4JXGG7L</span></td><td>US</td><td class='num'>2</td><td class='num'>$46.99</td><td class='num'>$0</td><td class='num'>$0</td><td class='num'>—</td><td class='num'>328</td></tr>
+   <tr><td class='hl'>灰色孕妇枕变体<br><span style="font-size:11px;color:var(--muted)">B0D4JX51SS</span></td><td>US</td><td class='num'>2</td><td class='num'>$45.99</td><td class='num'>$0</td><td class='num'>$0</td><td class='num'>—</td><td class='num'>77</td></tr>
+   <tr><td class='hl'>煤黑色孕妇枕变体<br><span style="font-size:11px;color:var(--muted)">B0DPKMQMMN</span></td><td>US</td><td class='num'>2</td><td class='num'>$41.99</td><td class='num'>$0</td><td class='num'>$0</td><td class='num'>—</td><td class='num'>342</td></tr>
+   <tr><td class='hl'>深灰色孕妇枕变体<br><span style="font-size:11px;color:var(--muted)">B0CNCMQXLC</span></td><td>US</td><td class='num'>2</td><td class='num'>$41.99</td><td class='num'>$0</td><td class='num'>$0</td><td class='num'>—</td><td class='num'>55</td></tr>
+   <tr><td class='hl'>深绿色孕妇枕变体<br><span style="font-size:11px;color:var(--muted)">B0CN93MT66</span></td><td>US</td><td class='num'>2</td><td class='num'>$41.99</td><td class='num'>$0</td><td class='num'>$0</td><td class='num'>—</td><td class='num'>649</td></tr>
+  </tbody></table>
+  <div class="chart-box" style="margin-top:14px"><canvas id="c_cat"></canvas></div>
+  <div class="alert a-info" style="margin-top:12px;font-size:13px"><span>ℹ️</span><div>主推 57 寸孕妇枕贡献约 99.9% 广告销售，是当前现金牛；婴儿背带新线花费 $1,032 只带来 $350 销售，暂不应继续用手动方式放量。多个孕妇枕变体有库存但广告销售为 0，适合复制主推款的词库、否词库和广告位策略，小预算验证能否分散单品依赖。</div></div>
+ </div>
+</section><section class="panel" id="p-adstrat">
+ <div class="alert a-teal"><span>📣</span><div>基于本账户结构 + 卖家精灵/Sorftime 市场数据 + 成熟品广告框架，给出针对「单一成熟爆款 + 寡头市场 + 多站点」的打法建议。原则：<strong>守住头部、提效核心、补齐广告类型、把对手流量截过来</strong>。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🔴 最大结构缺口：只投了 SP，没投 SB / SD</h2>
+  <div class="desc">本账户广告几乎 100% 是 Sponsored Products；Sponsored Brands / Sponsored Display 基本空缺</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">✅ Sponsored Products</div><div class="big">已在投</div><div class="sm">结构健康，EXACT 为主、AI 托管</div></div>
+   <div class="bs lose"><div class="t">❌ Sponsored Brands</div><div class="big">几乎空白</div><div class="sm">品牌词防守 + 类目词霸屏缺失</div></div>
+   <div class="bs lose"><div class="t">❌ Sponsored Display</div><div class="big">几乎空白</div><div class="sm">竞品ASIN截流 + 浏览再营销缺失</div></div>
+  </div>
+  <div class="alert a-warn" style="margin-top:14px"><span>💡</span><div>客户已是 BSR #2 的品牌注册卖家，却没用 SB/SD，等于<strong>把品牌阵地和竞品流量拱手让人</strong>。建议先以<strong>小预算测试</strong>补齐 SB（品牌防守）与 SD（竞品截流/再营销），跑出数据后再决定是否扩量，不照搬通用预算比例。下面给出可直接落地的小预算测试打法。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>① Sponsored Brands（品牌防守 + 类目霸屏）</h2>
+   <div class="rec"><div class="rh">品牌词防守</div>对 "allopera" 及自身品牌词跑 SB，占据搜索顶部，防止 Momcozy 等竞品截流自己的品牌流量（品牌词 ACOS 极低，本期「allopera pregnancy pillow」合并后 ACOS 仅 3.39%）。</div>
+   <div class="rec"><div class="rh">类目大词霸屏</div>用 SB（带品牌 logo + 多商品）跑 "pregnancy pillow""maternity pillow" 等头部大词，把约 59.9 万月搜索的大盘曝光占住，配合 SP 形成"顶部 SB + 自然位 + SP"的多点覆盖。</div>
+   <div class="rec"><div class="rh">SB Video</div>孕妇枕高度依赖"使用场景演示"，SB 视频转化通常优于图文，建议做 1–2 条睡姿支撑演示视频。</div>
+  </div>
+  <div class="card"><h2>② Sponsored Display（截流 + 再营销）</h2>
+   <div class="rec"><div class="rh">竞品 ASIN 定向（截流）</div>用 SD 商品定向直接投 <strong>Momcozy 等对手详情页</strong>，把"更低价 + 更高评分"的性价比卖点展示在对手页面旁——客户搜索词里已有 momcozy，说明用户在比价。</div>
+   <div class="rec"><div class="rh">浏览再营销</div>对看过商品未购买的用户做 SD 再营销，孕妇枕决策周期短、客单中等，再营销回收率通常不错。</div>
+   <div class="rec"><div class="rh">自身变体交叉</div>用 SD 在自己其它变体/关联商品页交叉推广，提升单客价值、分散单 SKU 风险。</div>
+  </div>
+ </div>
+
+ <div class="card"><h2>③ SP 内部：按生命周期分层定目标 ACOS</h2>
+  <div class="desc">成熟爆款应偏利润，新品/新站应偏放量——目标设对了 AI 才不跑偏</div>
+  <table><thead><tr><th>板块</th><th>当前状态</th><th class="num">当前ACOS</th><th>建议目标ACOS</th><th>打法</th></tr></thead><tbody>
+   <tr><td class="hl">美国核心爆款</td><td>成熟·BSR#2</td><td class="num">29.6%</td><td><span class="tag t-green">25–28%（偏利润）</span></td><td>保预算、收高耗词、提净利</td></tr>
+   <tr><td class="hl">加拿大站</td><td>成长中</td><td class="num">33.6%</td><td><span class="tag t-blue">30–33%</span></td><td>稳步放量，复制美国词库</td></tr>
+   <tr><td class="hl">德国站</td><td>效率偏弱</td><td class="num">51.3%</td><td><span class="tag t-amber">下调目标+强否词</span></td><td>先修转化(Listing/评分)，再放量</td></tr>
+   <tr><td class="hl">婴儿背带新线</td><td>冷启动·亏</td><td class="num">309.2%</td><td><span class="tag t-red">交 AI 托管或暂停</span></td><td>设宽冲量目标小预算测试或止损</td></tr>
+  </tbody></table>
+ </div>
+
+ <div class="card"><h2>④ 预算与节奏：先解决"预算卡脖子"</h2>
+  <div class="two">
+   <div class="alert a-warn" style="display:block"><strong>核心动作</strong><br>16 个 OOB 活动 ACOS（29.8%）优于不缺预算活动（36.3%），却被日预算限流。<br>→ 对高效 OOB 活动阶梯提预算，保持 AI「按表现调预算」开启。</div>
+   <div class="alert a-info" style="display:block"><strong>分时（Dayparting）</strong><br>AI 已 24 小时调预算/出价。<strong>注意：本期仅有 Changelog 的小时级动作分布，没有小时级订单/转化数据</strong>，因此暂不能直接断定"高转化时段加预算"。要做精细分时，需补小时级订单/销售报表；在此之前可先让 AI 的「分时预算/分时调价」覆盖更多托管组（当前已开 8/11 组）。</div>
+  </div>
+ </div>
+
+ <div class="card"><h2>⑤ 关键词与否词卫生</h2>
+  <div class="rec"><div class="rh">好词加投转 EXACT</div>689 个出单且 ACOS&lt;15% 的唯一搜索词（合计 ACOS 6.6%）迁 EXACT 单独提预算，把已验证的高效流量吃满。</div>
+  <div class="rec"><div class="rh">高耗词收紧</div>74 个 ACOS&gt;40% 的出单词收紧出价或转否词，本期高耗库花费约 $9,693。</div>
+  <div class="rec"><div class="rh">否词交给 AI</div>零出单长尾已被 AI 控制在约 $10,511；建议把「添加否定定向」在全部托管组开启（当前 10/11 组）。</div>
+ </div>
+</section><section class="panel" id="p-plan">
+ <div class="card"><h2>下一步优化计划（按优先级）</h2>
+  <div class="desc">从确定性最高、见效最快的动作排起</div>
+  <div class="rec"><div class="rh">① 给高效「预算受限」活动提预算 　<span class="tag t-red">高优先·确定性最高</span></div>16 个 OOB 活动承接约 75% 花费，ACOS 29.8%，反而优于不缺预算活动（36.3%）。优先对美国站核心爆款活动阶梯式提日预算，并保持 AI「按表现调预算 / 分时预算」开启；规则生效后不要频繁手动改同一批预算，否则会打乱 AI 对时段和预算效率的判断。</div>
+  <div class="rec"><div class="rh">② 核心大词单独拆预算 　<span class="tag t-red">高优先</span></div>"pregnancy pillow" 月搜索约 59.9 万，EXACT 目前花费 $64,411、CVR 18.72%，是主战场。高 CPC、高花费的大词要从混合活动里单独拆出来，给独立预算和目标 ACOS，避免单个大词吃掉整组预算，也方便 Insight Agent 单独追踪。</div>
+  <div class="rec"><div class="rh">③ 校正 AI 目标设定 　<span class="tag t-amber">高优先</span></div>6 个标「保持稳定」实则在放量的活动，应改为「推动增长」；真正的「推动增长」活动订单 -1.9%、花费 +16.6%，需检查目标 ACOS 是否过严、预算活跃时间是否不足。目标对了，AI 的出价/预算决策才顺。</div>
+  <div class="rec"><div class="rh">④ 自动广告收词：先词组，再精准 　<span class="tag t-amber">中高优先</span></div>自动广告跑出来的有效词，先迁到词组承接并继续观察；稳定出单、ACOS 可控后再进入精准。这样比一上来全部打精准更稳，也能减少周期过短导致的误判。</div>
+  <div class="rec"><div class="rh">⑤ 欧洲站单独诊断与收紧 　<span class="tag t-amber">中高优先</span></div>EU 站 POP 销售 -9.4%、ACOS 42.8%→50.9%，且目标 ACOS 设到 61%。建议下调 DE 托管组目标 ACOS、强化否词，并核对 Listing/评分/价格等转化端因素（DE 整体 CVR 仅 8.09%）。</div>
+  <div class="rec"><div class="rh">⑥ 婴儿背带新线：托管或止损 　<span class="tag t-amber">中优先</span></div>Carrier 线 ACOS 309.2%、ROAS 0.32，仍在手动测试。建议交给 AI 托管设较宽冲量目标做冷启动，或暂停高耗活动止血，避免持续无效消耗。</div>
+  <div class="rec"><div class="rh">⑦ 好词库加投、高耗库收紧 　<span class="tag t-blue">中优先</span></div>689 个好词（ACOS 6.6%）迁 EXACT 加投；74 个高耗词（ACOS 58.0%）收紧出价或加否词。零出单长尾 5,493 个词合计 $10,511，重点不是逐个看词，而是让 AI 继续批量清理，并盯住超 $40 的 3 个词。</div>
+  <div class="rec"><div class="rh">⑧ 补齐 SB / SD 　<span class="tag t-blue">中优先</span></div>当前几乎只有 SP。主推款价格 $34.99、评分 4.6，适合用 SB 防守品牌词和头部大词，用 SD 在 Momcozy 等竞品详情页做性价比截流，再用浏览再营销回收犹豫用户。</div>
+  <div class="rec"><div class="rh">⑨ 复用爆款打法到变体 　<span class="tag t-blue">中优先</span></div>主推款广告销售占比约 99.9%，多个孕妇枕变体有库存但广告销售为 0。把 BSR #2 爆款的关键词库、否词库、广告位策略沉淀为模板，小预算复制到变体，分散单 SKU 依赖风险。</div>
+  <div class="rec"><div class="rh">⑩ 每周用 Insight Agent 做结构巡检 　<span class="tag t-blue">低优先·长期机制</span></div>固定从托管组、广告活动、关键词三个层级检查：预算是否卡住、核心大词是否吃掉预算、自动词是否该迁移、低库存/生命周期是否拖累流量。这样后续复盘不只看结果，还能解释为什么结果会这样。</div>
+ </div>
+
+ <div class="card"><h2>核心洞察（展开看依据）</h2>
+  <div class="ins open"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">1 · AI 的本期价值：把盘子做大，转化质量守住</span><span class="chev">▾</span></div><div class="ins-b">POP 同活动前后对比：订单 +37.7%、销售 +33.3%；同期对照里 AI 扛起 81.8% 花费，CTR 1.77% vs 手动 0.85%，CVR 16.48% vs 手动 12.91%。ACOS 没有明显压低，但 AI 确实把更大规模的流量筛得更准。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">2 · 预算才是天花板，不是出价</span><span class="chev">▾</span></div><div class="ins-b">16 个活动 Out of Budget，承接约 75% 花费且 ACOS 更低（29.8%）。AI 本期 2,399 次提预算、1,330 次预算耗尽信号都指向同一件事：不是没有好流量，而是好流量被日预算卡住。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">3 · 关键词结构已经精细化，下一步是拆大词</span><span class="chev">▾</span></div><div class="ins-b">EXACT 花费 $64,411、销售 $209,153、CVR 18.72%，说明核心词库已经成熟；但 pregnancy pillow 这类头部大词搜索量约 59.9 万、CPC 建议 $1.71，必须独立预算和目标管理，避免把其它有效词挤出曝光。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">4 · 浪费不是大黑洞，是长尾灰尘</span><span class="chev">▾</span></div><div class="ins-b">5,493 个零出单词合计花费 $10,511，占总花费 9.7%；单词超 $40 的只有 3 个，AI 本期添加否定关键词 60 次。后续重点不是人工逐词翻表，而是保留 AI 批量否词，并把少数大额零单词单独处理。</div></div>
+  <div class="ins"><div class="ins-h" onclick="this.parentElement.classList.toggle('open')"><span class="ins-t">5 · 一个爆款撑起全盘，是优势也是风险</span><span class="chev">▾</span></div><div class="ins-b">主推 57 寸孕妇枕贡献约 99.9% 广告销售，库存充足、自然位靠前，适合继续防守；但新品和变体尚未承接。下一步要把爆款的词库、否词和广告位打法复制出去，同时关注库存与产品生命周期对流量的影响。</div></div>
+ </div>
+
+ <div class="alert a-info" style="font-size:12.5px"><span>📋</span><div><strong>口径与方法说明：</strong>金额为平台导出折算口径（≈USD），日预算/出价为本地币；ACOS=花费/销售额，达标=ACOS≤目标ACOS（仅计有花费有目标的活动）；POP 为「开启 AI 前 vs 期间」同活动同口径对比，成熟活动的「前」可能为历史基线，已按成熟度分层；AI vs Non-AI 为同期对照基准、非纯因果；本报告无 TACOS/总销售数据；外部市场与竞品数据仅作打法参照，AI 价值不作单一因果归因。数据周期 2026-05-30 至 2026-06-28。</div></div>
+</section><script>
+const COL={navy:'#0F172A',teal:'#0D9488',tealL:'#5EEAD4',gold:'#CA8A04',red:'#DC2626',amber:'#D97706',grayT:'#94A3B8',green:'#059669',blue:'#2563EB'};
+if(typeof Chart!=='undefined'){
+ Chart.defaults.font.family="'Inter','Noto Sans SC',sans-serif";
+ Chart.defaults.color='#475569';
+ Chart.defaults.font.size=11;
+ Chart.defaults.plugins.tooltip.backgroundColor='rgba(15,23,42,.92)';
+ Chart.defaults.plugins.tooltip.titleColor='#fff';
+ Chart.defaults.plugins.tooltip.bodyColor='#fff';
+ Chart.defaults.plugins.tooltip.borderColor='rgba(255,255,255,.16)';
+ Chart.defaults.plugins.tooltip.borderWidth=1;
+ Chart.defaults.plugins.tooltip.cornerRadius=6;
+ Chart.defaults.plugins.tooltip.padding=10;
+ Chart.defaults.plugins.tooltip.displayColors=true;
+ Chart.defaults.plugins.tooltip.callbacks.label=function(ctx){
+  const label=ctx.dataset&&ctx.dataset.label?ctx.dataset.label:'数值';
+  const raw=ctx.parsed&&ctx.parsed.x!=null?ctx.parsed.x:(ctx.parsed&&ctx.parsed.y!=null?ctx.parsed.y:ctx.raw);
+  const value=typeof raw==='number'?raw.toLocaleString('zh-CN',{maximumFractionDigits:2}):raw;
+  return label+'：'+value;
+ };
+}
+function c(id){return document.getElementById(id);}
+function opt(o){o=o||{};return{maintainAspectRatio:false,plugins:{legend:{display:o.legend!==false,position:'bottom'}},scales:{y:{beginAtZero:o.zero!==false,title:{display:!!o.y,text:o.y||''}}}};}
+function dualOpt(y1,y2){return{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:y1},beginAtZero:true},y1:{position:'right',title:{display:true,text:y2},grid:{drawOnChartArea:false},beginAtZero:true}}};}
+function slopeOpt(t,mn,mx){return{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:x=>x.dataset.label+': '+x.raw+'%'}}},scales:{y:{min:mn,max:mx,title:{display:true,text:t}}}};}
+const built={};
+function build(id){
+ if(built[id])return;
+ if(typeof Chart==='undefined'){return;}
+ built[id]=true;
+ if(id==='c_country'){new Chart(c('c_country'),{data:{labels:['US','CA','DE'],datasets:[
+   {type:'bar',label:'花费',data:[85689.33,12017.5,10639.92],backgroundColor:COL.grayT,yAxisID:'y'},
+   {type:'bar',label:'销售额',data:[289376.29,35819.4,20742.84],backgroundColor:COL.teal,yAxisID:'y'},
+   {type:'line',label:'ROAS',data:[3.38,2.98,1.95],borderColor:COL.gold,borderWidth:3,pointRadius:5,yAxisID:'y1'}]},options:dualOpt('USD','ROAS')});}
+ if(id==='c_pop_obj'){new Chart(c('c_pop_obj'),{type:'bar',data:{labels:['活动冲量','推动增长','保持稳定'],datasets:[
+   {label:'开启前 销售',data:[55526.18,48092.14,82390.47],backgroundColor:COL.grayT},
+   {label:'开启期间 销售',data:[68982.4,48580.38,130333.2],backgroundColor:COL.teal}]},options:opt({legend:true,y:'销售额 USD'})});}
+ if(id==='c_pop_acos'){new Chart(c('c_pop_acos'),{type:'line',data:{labels:['开启前','开启期间'],datasets:[
+   {label:'活动冲量',data:[33.8,38.9],borderColor:COL.teal,borderWidth:3,pointRadius:5,tension:0},
+   {label:'推动增长',data:[27.9,32.3],borderColor:COL.blue,borderWidth:3,pointRadius:5,tension:0},
+   {label:'保持稳定',data:[26.3,32.0],borderColor:COL.amber,borderWidth:3,pointRadius:5,tension:0}]},options:slopeOpt('ACOS %（越低越好）',20,45)});}
+ if(id==='c_ainon'){new Chart(c('c_ainon'),{data:{labels:['花费','销售额','订单×30'],datasets:[
+   {type:'bar',label:'AI 托管',data:[88624.83,281362.71,236610],backgroundColor:COL.teal},
+   {type:'bar',label:'Non-AI 手动',data:[19721.92,64575.82,54180],backgroundColor:COL.grayT}]},options:opt({legend:true,y:'USD'})});}
+ if(id==='c_ops'){new Chart(c('c_ops'),{type:'bar',data:{labels:["提高日预算", "降低日预算", "关键词降价", "关键词加价", "自动定向加价", "自动定向降价", "添加否定关键词", "提高搜索顶部溢价"],datasets:[{label:'AI 动作次数',data:[2399, 1184, 1178, 1047, 150, 148, 60, 24],backgroundColor:COL.teal}]},options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{type:'logarithmic',title:{display:true,text:'次数（对数轴）'}}}}});}
+ if(id==='c_hourly'){new Chart(c('c_hourly'),{type:'bar',data:{labels:[...Array(24).keys()].map(h=>h+'点'),datasets:[{label:'AI 动作',data:[283, 211, 217, 224, 189, 202, 196, 175, 301, 349, 308, 338, 357, 344, 469, 254, 363, 135, 115, 175, 197, 173, 130, 526],backgroundColor:COL.navy}]},options:opt({y:'次数'})});}
+ if(id==='c_bid'){new Chart(c('c_bid'),{data:{labels:['加价','降价'],datasets:[
+   {type:'bar',label:'次数',data:[1197,1326],backgroundColor:[COL.green,COL.amber],yAxisID:'y'},
+   {type:'line',label:'中位幅度%',data:[5.0,-4.1],borderColor:COL.gold,borderWidth:3,pointRadius:6,yAxisID:'y1'}]},options:dualOpt('次数','幅度%')});}
+ if(id==='c_budget'){new Chart(c('c_budget'),{type:'bar',data:{labels:['调高预算','调低预算'],datasets:[{label:'次数',data:[2399,1184],backgroundColor:[COL.teal,COL.grayT]}]},options:opt({y:'次数'})});}
+ if(id==='c_dabiao'){new Chart(c('c_dabiao'),{type:'bar',data:{labels:['活动冲量','推动增长','保持稳定','整体'],datasets:[{label:'达标率%',data:[75.0,50.0,33.3,58.3],backgroundColor:[COL.green,COL.amber,COL.red,COL.navy]}]},options:opt({y:'达标率 %'})});}
+ if(id==='c_waste'){new Chart(c('c_waste'),{type:'doughnut',data:{labels:['好词库(<15%)','核心库(15-40%)','高耗库(>40%)','零出单'],datasets:[{data:[2068.0,84963.0,9693.0,10511.0],backgroundColor:[COL.green,COL.teal,COL.amber,COL.red]}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});}
+ if(id==='c_cat'){new Chart(c('c_cat'),{data:{labels:["孕妇/孕产枕", "其他/未归类", "身体枕", "睡眠/侧睡场景", "哺乳枕/德语词", "品牌/竞品词", "婴儿背带"],datasets:[
+   {type:'bar',label:'销售额',data:[254658, 51092, 30364, 3592, 3015, 903, 300],backgroundColor:COL.teal,yAxisID:'y'},
+   {type:'line',label:'ACOS%',data:[29.6, 32.8, 35.7, 35.8, 60.7, 26.6, 269.4],borderColor:COL.red,borderWidth:3,pointRadius:5,yAxisID:'y1'}]},options:dualOpt('销售额 USD','ACOS %')});}
+ if(id==='c_trend'){new Chart(c('c_trend'),{data:{labels:["25年05月", "25年06月", "25年07月", "25年08月", "25年09月", "25年10月", "25年11月", "25年12月", "26年01月", "26年02月", "26年03月", "26年04月", "26年05月"],datasets:[
+   {type:'line',label:'月搜索量',data:[604453, 598827, 583088, 654928, 693674, 612246, 558492, 542774, 670675, 666504, 634523, 657685, 588779],borderColor:COL.teal,backgroundColor:'rgba(13,148,136,.10)',fill:true,borderWidth:2,pointRadius:3,tension:.3,yAxisID:'y'},
+   {type:'line',label:'月购买量',data:[21216, 21497, 22390, 26000, 23584, 21612, 22898, 18291, 25016, 26460, 23223, 26241, 20136],borderColor:COL.gold,borderWidth:2,pointRadius:3,tension:.3,yAxisID:'y1'}]},options:dualOpt('月搜索量','月购买量')});}
+}
+const firstChart={overview:['c_country'],pop:['c_pop_obj','c_pop_acos'],ainon:['c_ainon'],aivalue:['c_ops','c_hourly','c_bid','c_budget'],groups:['c_dabiao'],diag:['c_waste'],market:['c_trend','c_cat'],adstrat:[]};
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));this.classList.add('active');
+  const tt=this.getAttribute('data-t');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+tt).classList.add('active');
+  setTimeout(()=>{(firstChart[tt]||[]).forEach(build);},40);
+}));
+setTimeout(()=>build('c_country'),60);
+</script></body></html>
