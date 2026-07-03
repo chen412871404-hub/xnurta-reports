@@ -1,0 +1,531 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>READAEER 多店铺账户 · AI 托管广告月度复盘（2026.06）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--tealPale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#fff;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--greenBg:#ECFDF5;--red:#DC2626;--redBg:#FEF2F2;--amber:#D97706;--amberBg:#FFFBEB;--blue:#2563EB;--blueBg:#EFF6FF;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fb);background:var(--bg);color:#1E293B;line-height:1.7}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px}
+.hdr h1{font-family:var(--fh);font-size:28px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14px;color:rgba(255,255,255,.82);margin-bottom:14px}.hdr-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.66)}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:100px;padding:11px 12px;border:none;background:transparent;color:var(--dark);font:500 13.5px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:17px;border:1px solid var(--border)}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--navy)}.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:10px 12px;font-weight:600;font-size:11px;text-transform:uppercase;text-align:left}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;gap:11px;margin-bottom:18px;font-size:13.5px;line-height:1.7}
+.a-info{background:var(--blueBg);border:1px solid #BFDBFE;color:#1E40AF}.a-ok{background:var(--greenBg);border:1px solid #A7F3D0;color:#065F46}.a-warn{background:var(--amberBg);border:1px solid #FDE68A;color:#92400E}.a-teal{background:var(--tealPale);border:1px solid #99F6E4;color:#115E59}.a-red{background:var(--redBg);border:1px solid #FECACA;color:#991B1B}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}.t-green{background:var(--greenBg);color:#065F46}.t-red{background:var(--redBg);color:#991B1B}.t-amber{background:var(--amberBg);color:#92400E}.t-blue{background:var(--blueBg);color:#1E40AF}.t-teal{background:var(--tealPale);color:#115E59}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}.bs.warn{background:linear-gradient(135deg,#FFFBEB,#fff);border-color:#FDE68A}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px}.bs .big{font-family:var(--fh);font-size:21px;font-weight:800}.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}.bs.warn .big{color:var(--amber)}.bs .sm{font-size:12px;color:var(--muted);margin-top:6px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:340px}
+.ins{border-radius:10px;border:1px solid var(--border);margin-bottom:11px;overflow:hidden}
+.ins-h{padding:14px 17px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--card)}
+.ins-t{font-size:14px;font-weight:600;color:var(--navy)}.chev{color:var(--muted);transition:transform .2s}
+.ins-b{display:none;padding:4px 17px 16px;background:#FAFBFC;border-top:1px solid var(--border);font-size:13.5px}
+.ins.open .ins-b{display:block}.ins.open .chev{transform:rotate(180deg)}
+.rec{border-left:3px solid var(--teal);background:#F8FAFC;padding:13px 16px;border-radius:0 8px 8px 0;margin-bottom:11px;font-size:13.5px}
+.rec .rh{font-weight:600;color:var(--navy);margin-bottom:3px}
+.sec-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--teal);margin:6px 0 12px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.bigstat{grid-template-columns:1fr}}
+</style></head>
+<body><div class="container">
+
+<div class="hdr">
+<h1>READAEER 多店铺账户 · AI 托管广告月度复盘</h1>
+<div class="sub">本期 2026-06-03 ~ 2026-07-02 · 环比上期 2026-05-03 ~ 2026-06-02 · 广告端全量数据 + 市场公开数据交叉验证</div>
+<div class="hdr-meta"><span>店铺：LINGJIE（欧洲/英国）· LINGJIE US · Reason Asia（日本）· Reason（美国）</span><span>广告类型：SP 为主</span><span>金额口径：平台导出统一折算（USD）</span><span>市场数据取数：2026-07-03</span></div>
+</div>
+
+<div class="tabs">
+<button class="tab active" data-t="overview">总览</button>
+<button class="tab" data-t="pop">环比复盘</button>
+<button class="tab" data-t="ainon">AI vs 非AI</button>
+<button class="tab" data-t="aivalue">AI 工作量</button>
+<button class="tab" data-t="groups">达标 · 托管组</button>
+<button class="tab" data-t="diag">根因诊断</button>
+<button class="tab" data-t="market">市场 · 产品</button>
+<button class="tab" data-t="adstrat">打法建议</button>
+<button class="tab" data-t="plan">优化计划</button>
+</div>
+
+<section class="panel active" id="p-overview">
+<div class="alert a-info"><div>📊</div><div><b>数据覆盖度</b>：✓ 广告活动（两期环比）· 搜索词（覆盖本期 99.8% 花费）· 关键词 · 广告位 · 自动/手动定向 · 操作日志 · 托管组 · 商品广告&nbsp;&nbsp;|&nbsp;&nbsp;✗ 店铺总销售（TACOS）· 品牌搜索数据 · 按日明细。因此本报告评估的是<b>广告端表现</b>；库存与在售状态为导出时点快照，请以实时看板复核。</div></div>
+
+<div class="kpis">
+<div class="kpi"><div class="l">本期广告花费</div><div class="v">$14,546</div><div class="s"><span class="neg">-21.4%</span> vs 上期 $18,508</div></div>
+<div class="kpi"><div class="l">本期广告销售</div><div class="v">$51,869</div><div class="s"><span class="neg">-31.8%</span> vs 上期 $76,091</div></div>
+<div class="kpi"><div class="l">ACOS</div><div class="v">28.0%</div><div class="s">上期 24.3% · ROAS 3.57</div></div>
+<div class="kpi"><div class="l">订单</div><div class="v">3,759</div><div class="s"><span class="neg">-27.0%</span> · 转化率 13.7%</div></div>
+</div>
+<div class="kpis">
+<div class="kpi"><div class="l">AI 托管花费占比</div><div class="v">62.0%</div><div class="s">59 个 AI 活动 · 销售占比 51.8%</div></div>
+<div class="kpi"><div class="l">AI 目标达标率</div><div class="v">52.5%</div><div class="s">健康口径 72.9%（含贴线运行）</div></div>
+<div class="kpi"><div class="l">AI 自动执行</div><div class="v">15,047 次</div><div class="s">人工直接操作 117 次（30 天）</div></div>
+<div class="kpi"><div class="l">零单词最大损耗</div><div class="v">$33.6</div><div class="s">6,160 个零单搜索词无一烧穿 $34</div></div>
+</div>
+
+<div class="card">
+<h2>📌 本期概要：促销结束、大盘转化回软的月份，AI 在预算没动的前提下把效率守在目标带内</h2>
+<div class="desc">先看性质，再看幅度——本期下滑主要是"节奏"问题，不是"效率"问题</div>
+<div style="font-size:13.5px;line-height:1.9">
+表面看，本期广告销售环比 <b class="neg">-31.8%</b>，但拆开后性质清晰：<b>约 34% 的降幅来自上期一场促销的自然回落</b>（五彩弹力绳系列上期客单价 $53.7、本期回到 $20.4 的常态价，销售从 $12,092 回到 $2,534）；这里要澄清一个关键点：本期花费虽然少了 21.4%，但<b>预算并没有被调低</b>——两期导出的日预算设置完全一样（136 个活动总额 $12,466，逐个看无一调整）。花费变少是因为<b>促销结束后大盘转化回软，AI 在预算没变的前提下按转化情况自然收着投</b>（曝光少赢约 18%），这恰恰说明它在转化变差时没有硬把预算烧完。剔除这场促销的影响后，AI 组销售回落 <b>-25.1%</b>，与非 AI 组 <b>-22.4%</b> 基本同步，说明回落是账户级节奏，而非 AI 托管失效。同期美国阻力带大盘搜索量同比 <b class="pos">+90%</b>、5→6 月历史规律基本持平；且<b>今年会员日提前至 6 月 23-26 日、就在本期内</b>，但会员日期间预算上限没有同步调大（花满次数与平日持平）——含大促的月份反而下滑，进一步说明<b>需求盘子还在，被卡住的是我们的供给（预算上限没随需求放开 + 促销结束 + 部分断货）</b>。效率端：AI 活动合并 ACOS 33.6%，运行在账户目标带（目标 ACOS 中位数 48%）之内，达标率 52.5%、健康口径 72.9%。
+</div>
+</div>
+
+<div class="bigstat">
+<div class="bs win"><div class="t">✅ AI 价值的三重证据</div><div class="big">52.5% 达标 · 15,047 次执行 · $33.6 防浪费上限</div><div class="sm">结果达标（推动增长类 57.8%）+ 过程可见（日均 500 次微调）+ 风险兜底（零单词无大额流血）</div></div>
+<div class="bs warn"><div class="t">⚠️ 头号经营点</div><div class="big">高效活动被预算卡住</div><div class="sm">34 个天天花满的活动 ACOS 26.8%，优于未花满组的 27.8%；其中 6 个达标活动预算活跃时间不足 50%——上限低于消化能力</div></div>
+<div class="bs lose"><div class="t">🔴 确定性损失</div><div class="big">日本站金矿词断货</div><div class="sm">腕表收纳盒（時計ケース ACOS 6.0%）Not Buyable，断货前月售出 $788；补货是最确定的增量（快照口径）</div></div>
+</div>
+
+<div class="card">
+<h2>AI 花费与销售承担占比</h2>
+<div class="desc">AI 托管承担了大部分投放执行；两组任务定位不同（AI 组多为增长任务，非 AI 组多为成熟老活动）</div>
+<div class="two"><div class="chart-box"><canvas id="c_share"></canvas></div>
+<div><table><thead><tr><th></th><th class="num">AI 托管</th><th class="num">非 AI</th></tr></thead><tbody>
+<tr><td>有花费活动数</td><td class="num hl">59</td><td class="num">40</td></tr>
+<tr><td>花费</td><td class="num hl">$9,016（62.0%）</td><td class="num">$5,531</td></tr>
+<tr><td>销售</td><td class="num hl">$26,872（51.8%）</td><td class="num">$24,997</td></tr>
+<tr><td>ACOS / 目标带中位</td><td class="num hl">33.6% / 48%</td><td class="num">22.1% / 未设目标</td></tr>
+<tr><td>搜索词点击率</td><td class="num hl">2.58%</td><td class="num">1.85%</td></tr>
+</tbody></table>
+<div class="rec" style="margin-top:12px"><div class="rh">怎么读这张表</div>AI 组 ACOS 高于非 AI 组，不代表 AI 效率低：AI 组承接的是"推动增长"任务（45 个活动，含 4 个目标 ACOS ≥100% 的新品冲量组），目标本来就更激进；非 AI 组多为跑了多年的成熟活动。公平的评价标尺是"是否达成各自目标"——见"达标 · 托管组"页。</div>
+</div></div>
+</div>
+</section>
+
+<section class="panel" id="p-pop">
+<div class="alert a-warn"><div>🧭</div><div><b>环比口径</b>：两期为同一批 1,636 个广告活动的滚动 30 天对照（活动一一对应）。本期两组（AI / 非 AI）同处一个账户，共享库存、价格与促销节奏，环比结论需结合下方"下滑分解"阅读，避免把促销回落误读为投放退步。</div></div>
+
+<div class="card">
+<h2>销售下滑 $24,222 的分解：三分之一是促销回落</h2>
+<div class="desc">先分解，再定责——下滑的主体与广告配置无关</div>
+<div class="two">
+<div class="chart-box"><canvas id="c_drop"></canvas></div>
+<div>
+<table><thead><tr><th>构成</th><th class="num">金额</th><th class="num">占降幅</th></tr></thead><tbody>
+<tr><td>上月促销结束后的回落（五彩弹力绳系列）</td><td class="num">$8,279</td><td class="num hl">34.2%</td></tr>
+<tr><td>转化回软、投放量自然收缩（预算没动）<br><span style="color:var(--muted);font-size:12px">花费 -21.4%，但日预算两期未调；34 个活动天天把预算花满（3,706 次）</span></td><td class="num">≈$13,900</td><td class="num hl">≈57%</td></tr>
+<tr><td>其他（日本站季节小幅回落、断货等）</td><td class="num">≈$2,000</td><td class="num">≈8%</td></tr>
+</tbody></table>
+<div class="rec"><div class="rh">促销回落的证据</div>五彩弹力绳系列：上期销售 $12,092 / 花费 $1,285（ACOS 10.6%、客单价 $53.7——明显是组合装促销价拉高）；本期销售 $2,534 / 客单价 $20.4 回到常态。这类回落属于<b>促销日历的自然节奏</b>。更关键的是：<b>今年会员日已提前至 6 月 23-26 日</b>（美/英/德等站参加，日本站推迟到夏末），正落在本期内——但操作日志显示，会员日 4 天各主力市场的预算花满次数都没有放大：美国 64 次/天（平日 58）、德国 39 次/天（平日 47，不升反降）、英国 4 次/天（平日 3）——预算上限没有为这波流量高峰临时调大（托管系统只能在设定的上限内分配时段），等于错过了一次把曲线拉回去的窗口。本账户 88% 的花费在这轮大促覆盖的市场里（美/德/英/西/法等），只有日本站不参加、官方推迟到夏末。</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>分店铺环比：日本站最抗跌，美国站受促销回落影响最大</h2>
+<div class="desc">销售（柱）与 ACOS（表）按店铺拆分</div>
+<div class="chart-box tall"><canvas id="c_store"></canvas></div>
+<table style="margin-top:14px"><thead><tr><th>店铺</th><th class="num">上期销售</th><th class="num">本期销售</th><th class="num">环比</th><th class="num">上期 ACOS</th><th class="num">本期 ACOS</th><th>解读</th></tr></thead><tbody>
+<tr><td class="hl">LINGJIE US（美国）</td><td class="num">$39,854</td><td class="num">$24,156</td><td class="num neg">-39.4%</td><td class="num">17.7%</td><td class="num">23.0%</td><td>促销回落主场（那场促销销售从 $9,094 掉到 $816），去掉后与账户同步</td></tr>
+<tr><td class="hl">LINGJIE（欧洲/英国）</td><td class="num">$23,073</td><td class="num">$17,419</td><td class="num neg">-24.5%</td><td class="num">40.1%</td><td class="num">41.3%</td><td>含 4 个新品冲量组（目标 ACOS≥100%），高 ACOS 属主动投资</td></tr>
+<tr><td class="hl">Reason Asia（日本）</td><td class="num">$11,327</td><td class="num">$9,825</td><td class="num neg">-13.3%</td><td class="num">15.9%</td><td class="num">17.6%</td><td>最稳；瑜伽垫大盘 6 月历史有小幅回落，账户跌幅在正常带</td></tr>
+<tr><td>Reason（美国）</td><td class="num">$823</td><td class="num">$469</td><td class="num neg">-43.0%</td><td class="num">16.6%</td><td class="num">12.8%</td><td>体量小；ACOS 反而改善</td></tr>
+<tr><td>LINGJIE AU（澳洲）</td><td class="num">$1,014</td><td class="num">$0</td><td class="num neg">停投</td><td class="num">27.0%</td><td class="num">--</td><td>本期零投放，需确认是否主动暂停（见根因诊断）</td></tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>AI 活动环比记分卡（63 个两期有花费的 AI 活动）</h2>
+<div class="desc">按"销售上升 / ACOS 改善 / 达标"三项计分，逐活动看 AI 在收缩月份守住了什么</div>
+<div class="bigstat">
+<div class="bs win"><div class="t">ACOS 环比改善</div><div class="big">24 / 63 个</div><div class="sm">收缩月份仍有 38% 的活动效率在变好</div></div>
+<div class="bs win"><div class="t">销售逆势上升</div><div class="big">13 / 63 个</div><div class="sm">其中 10 个"销售↑ + ACOS↓"双优</div></div>
+<div class="bs warn"><div class="t">三项全优</div><div class="big">6 个 · 两项 15 个</div><div class="sm">0 分 22 个多为预算花满受限或促销回落活动</div></div>
+</div>
+<table style="margin-top:6px"><thead><tr><th>环比增量 Top 活动</th><th>店铺</th><th class="num">上期销售</th><th class="num">本期销售</th><th class="num">本期 ACOS</th><th class="num">目标</th></tr></thead><tbody>
+<tr><td>B0C3LWFLTW 非品牌拓展（手动）</td><td>LINGJIE US</td><td class="num">$671</td><td class="num">$878</td><td class="num pos">43.1%（上期 56.9%）</td><td class="num">28.2%</td></tr>
+<tr><td>B0DY1KR3S8 拓展-广泛（沐浴刷）</td><td>LINGJIE·DE</td><td class="num">$32</td><td class="num">$96</td><td class="num pos">34.6%（上期 72.9%）</td><td class="num">48.0%</td></tr>
+</tbody></table>
+<div class="rec" style="margin-top:10px"><div class="rh">怎么用</div>双优活动是下一步提预算的第一梯队（详见"打法建议"）；0 分活动里先剔除促销回落与预算花满受限两类客观因素，剩下的才进入配置复盘。</div>
+</div>
+</section>
+
+<section class="panel" id="p-ainon">
+<div class="alert a-info"><div>⚖️</div><div><b>对照口径说明</b>：AI 组与非 AI 组是同一账户内的同期对照，能对齐季节与大盘，但两组的任务定位不同（AI 组多为增长与新品任务、非 AI 组多为成熟活动），因此这是<b>基准参照，不是纯因果实验</b>。我们同时给出"去掉上期那场促销"后的对比（把那个活动从两期都拿掉），避免单一活动带偏结论。</div></div>
+
+<div class="card">
+<h2>环比对照：去掉上期那场促销后，AI 组和非 AI 组是同步回落的</h2>
+<div class="desc">"去掉那场促销后"= 把上期一个明显是促销行情的活动（五彩弹力绳·手动广泛匹配，上期 ACOS 只有 4.0%、卖了 $9,094）从<b>两期数字里都拿掉</b>，只比其余活动的真实环比，避免这一个活动把整组带偏</div>
+<div class="two">
+<div class="chart-box"><canvas id="c_didSales"></canvas></div>
+<div class="chart-box"><canvas id="c_didAcos"></canvas></div>
+</div>
+<table style="margin-top:14px"><thead><tr><th></th><th class="num">上期销售</th><th class="num">本期销售</th><th class="num">销售环比</th><th class="num">上期 ACOS</th><th class="num">本期 ACOS</th></tr></thead><tbody>
+<tr><td class="hl">AI 组（全部 63 个活动）</td><td class="num">$43,895</td><td class="num">$26,872</td><td class="num neg">-38.8%</td><td class="num">25.7%</td><td class="num">33.6%</td></tr>
+<tr><td class="hl">AI 组（去掉那场促销后）</td><td class="num">$34,801</td><td class="num">$26,057</td><td class="num neg">-25.1%</td><td class="num">31.3%</td><td class="num">33.9%</td></tr>
+<tr><td class="hl">非 AI 组（73 个活动）</td><td class="num">$32,196</td><td class="num">$24,997</td><td class="num neg">-22.4%</td><td class="num">22.5%</td><td class="num">22.1%</td></tr>
+</tbody></table>
+<div class="rec" style="margin-top:12px"><div class="rh">结论怎么下</div>不做剔除时"AI 组跌得更多"是促销回落造成的错觉：促销活动恰好在 AI 组名下，一个活动贡献了 AI 组降幅的三分之一强。去掉后两组回落幅度相当（-25.1% vs -22.4%，AI 组花费同期少花 19%、但预算并没有调低），且 AI 组是在承担更高目标、更多新品任务的前提下守住的。</div>
+</div>
+
+<div class="card">
+<h2>AI 组买的流量更"准"：点击率显著更高</h2>
+<div class="desc">搜索词层面（本期，按投放归属拆分）</div>
+<div class="bigstat">
+<div class="bs win"><div class="t">搜索词点击率 CTR</div><div class="big">AI 2.58% vs 非 AI 1.85%</div><div class="sm">同样的曝光，AI 定向拿到的点击多约四成</div></div>
+<div class="bs warn"><div class="t">平均点击成本 CPC</div><div class="big">AI $0.59 vs 非 AI $0.44</div><div class="sm">AI 组任务更偏进攻（新词拓展、新品冲量），出价更高属任务属性</div></div>
+<div class="bs win"><div class="t">环比记分</div><div class="big">24 个 ACOS 改善 · 10 个双优</div><div class="sm">收缩月份 AI 仍在逐活动改善效率</div></div>
+</div>
+</div>
+
+<div class="card">
+<h2>各店铺 AI 组环比一览</h2>
+<div class="desc">AI 组在不同店铺的两期表现（销售与 ACOS）</div>
+<table><thead><tr><th>店铺</th><th class="num">上期销售</th><th class="num">本期销售</th><th class="num">环比</th><th class="num">ACOS 上期→本期</th><th>备注</th></tr></thead><tbody>
+<tr><td class="hl">LINGJIE US</td><td class="num">$25,948</td><td class="num">$13,922</td><td class="num neg">-46.3%</td><td class="num">13.9% → 20.8%</td><td>促销回落主场；去掉那场促销后回落约 -24%</td></tr>
+<tr><td class="hl">LINGJIE（欧洲）</td><td class="num">$11,483</td><td class="num">$7,793</td><td class="num neg">-32.1%</td><td class="num">54.4% → 61.6%</td><td>新品冲量组集中地（目标 ACOS 48%~160%），高 ACOS 属设计内</td></tr>
+<tr><td class="hl">Reason Asia（日本）</td><td class="num">$6,262</td><td class="num">$5,157</td><td class="num neg">-17.6%</td><td class="num">21.8% → 25.6%</td><td>花费仅 -3.2%，跌幅与日本大盘 6 月季节回落方向一致</td></tr>
+</tbody></table>
+</div>
+</section>
+
+<section class="panel" id="p-aivalue">
+<div class="alert a-teal"><div>🤖</div><div><b>这一页回答"AI 到底替你做了什么"</b>：30 天操作日志里，AI 执行了 <b>15,047 次</b>投放调整，人工直接操作 117 次——日常执行的 99.2% 由 AI 完成，相当于每天 500 次出价/预算微调，这在人工运营下不可能做到。</div></div>
+
+<div class="kpis">
+<div class="kpi"><div class="l">AI 执行动作</div><div class="v">15,047</div><div class="s">日均 501 次 · 覆盖 63 个活跃 AI 活动</div></div>
+<div class="kpi"><div class="l">出价微调</div><div class="v">9,425 次</div><div class="s">上调中位 +4.7% / 下调中位 -4.5%</div></div>
+<div class="kpi"><div class="l">预算调节</div><div class="v">5,486 次</div><div class="s">上调 4,475 / 下调 1,011</div></div>
+<div class="kpi"><div class="l">预算节奏管理</div><div class="v">3,706 次</div><div class="s">分时预算把每天的钱集中花在转化时段</div></div>
+</div>
+
+<div class="card">
+<h2>AI 动作构成：以"小步快调"为主</h2>
+<div class="desc">出价上调/下调几乎对半（4,793 / 4,632），中位幅度不到 ±5%——不是猛踩油门，而是持续微调找最优价</div>
+<div class="two">
+<div class="chart-box tall"><canvas id="c_ops"></canvas></div>
+<div>
+<table><thead><tr><th>动作类型</th><th class="num">次数</th><th>作用</th></tr></thead><tbody>
+<tr><td>日预算上调 / 下调</td><td class="num">4,475 / 1,011</td><td>分时预算：按各时段转化规律分配当天预算，高转化时段加码、低转化时段回收</td></tr>
+<tr><td>关键词出价 ↑ / ↓</td><td class="num">2,478 / 2,397</td><td>逐词找最优出价</td></tr>
+<tr><td>自动定向出价 ↑ / ↓</td><td class="num">1,479 / 1,516</td><td>四类自动匹配分别调价</td></tr>
+<tr><td>商品/分类定向出价</td><td class="num">836 / 719</td><td>竞品页与类目位的攻防</td></tr>
+<tr><td>否定词 / 否定 ASIN</td><td class="num">52 / 18</td><td>拦截不相关流量</td></tr>
+<tr><td>广告位加成调整</td><td class="num">56</td><td>搜索顶部/商品页位微调</td></tr>
+</tbody></table>
+<div class="rec" style="margin-top:10px"><div class="rh">怎么理解 3,706 次"预算花满"？</div>分时预算的工作方式是把一天的预算按转化规律排布：转化时段集中花、低效时段收着花，所以"当天预算花满"多数是<b>计划内的节奏</b>，不是事故。真正的瓶颈信号只有一种——预算活跃时间长期不足一半、ACOS 又已达标（本期 6 个，见根因诊断②），那说明是<b>上限本身</b>低于活动的消化能力。</div>
+<div class="rec" style="margin-top:10px"><div class="rh">为什么否定动作只有 70 次？</div>因为没有什么可拦的——本期 6,160 个零单搜索词里，<b>没有任何一个词烧钱超过 $34</b>（合计 $4,503，单词平均 $0.73）。长尾试词的损耗被 AI 的低出价试探 + 及时降价控制在了词级别，这正是"防浪费"最直观的证据。</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>AI 一天里几点在工作 · 一个月的节奏</h2>
+<div class="desc">左：按小时分布（UTC+8）；右：按日动作量。AI 全天候在岗，凌晨与深夜同样在调</div>
+<div class="two">
+<div class="chart-box"><canvas id="c_hour"></canvas></div>
+<div class="chart-box"><canvas id="c_daily"></canvas></div>
+</div>
+</div>
+
+<div class="card">
+<h2>人机分工：把重复劳动交给 AI，人做决策</h2>
+<div class="desc">30 天操作构成（系统状态事件除外）</div>
+<div class="bigstat">
+<div class="bs win"><div class="t">AI 自动执行</div><div class="big">15,047 次</div><div class="sm">出价、预算、否定、广告位全链路</div></div>
+<div class="bs"><div class="t">人工直接操作</div><div class="big">117 次</div><div class="sm">主要是预算决策（33 次）、新增定向/商品（38 次）、暂停活动（10 次）——都是策略级动作</div></div>
+<div class="bs"><div class="t">平台状态事件</div><div class="big">3,744 次</div><div class="sm">超预算 3,706 次 + 系统事件，非人为操作</div></div>
+</div>
+<div class="rec"><div class="rh">按人工执行同等动作估算</div>15,047 次调整若人工完成，按每次 30 秒计约需 125 工时/月。更现实的差别是：人工不可能做到每天对几百个投放对象各调 ±5% ——AI 的价值不只是省时间，是执行密度带来的<b>试错速度</b>。</div>
+</div>
+</section>
+
+
+<section class="panel" id="p-groups">
+<div class="alert a-info"><div>🎯</div><div><b>怎么读达标率</b>：达标 = 本期 ACOS ≤ 该活动设定的目标 ACOS（仅统计有花费且设了目标的 59 个活动）。名义达标率会被"目标定得严"压低，所以我们同时给出<b>健康口径</b>（达标，或 ACOS 贴线在目标 1.3 倍内，或绝对 ACOS ≤15%）。</div></div>
+
+<div class="kpis">
+<div class="kpi"><div class="l">名义达标率</div><div class="v">52.5%</div><div class="s">31 / 59 个活动达标</div></div>
+<div class="kpi"><div class="l">健康口径</div><div class="v">72.9%</div><div class="s">另有 10 个活动贴线运行（≤1.3×目标）</div></div>
+<div class="kpi"><div class="l">推动增长类</div><div class="v">57.8%</div><div class="s">26 / 45 达标 · 合并 ACOS 41.1%</div></div>
+<div class="kpi"><div class="l">保持订单稳定类</div><div class="v">35.7%</div><div class="s">5 / 14 达标 · 合并 ACOS 19.0%（目标本身更严）</div></div>
+</div>
+
+<div class="card">
+<h2>两类托管目标：一类冲量、一类守利润，评价标尺不同</h2>
+<div class="desc">本期按托管目标拆分</div>
+<div class="two">
+<div class="chart-box"><canvas id="c_ach"></canvas></div>
+<div><table><thead><tr><th></th><th class="num">推动增长</th><th class="num">保持订单稳定</th></tr></thead><tbody>
+<tr><td>活动数（有花费）</td><td class="num">45</td><td class="num">14</td></tr>
+<tr><td>花费</td><td class="num">$7,273</td><td class="num">$1,742</td></tr>
+<tr><td>销售</td><td class="num">$17,699</td><td class="num">$9,173</td></tr>
+<tr><td>合并 ACOS</td><td class="num">41.1%</td><td class="num hl">19.0%</td></tr>
+<tr><td>ROAS</td><td class="num">2.43</td><td class="num hl">5.26</td></tr>
+</tbody></table>
+<div class="rec" style="margin-top:10px"><div class="rh">解读</div>"保持稳定"组用 19% 的 ACOS 守住了 $9.2k 销售——这是账户的利润舱；"推动增长"组 41.1% 的 ACOS 里含 4 个目标 ≥100% 的新品冲量活动（花费 $1,228），是主动买增长。两个舱位分开看，账户结构是清晰健康的。</div>
+</div></div>
+</div>
+
+<div class="card">
+<h2>托管组红黄绿灯（18 个本期有花费的托管组）</h2>
+<div class="desc">绿灯=达标 · 黄灯=贴线（≤1.3×目标）· 红灯=偏离；另有 100 个托管组本期无花费（对应活动暂停或预算未启用）</div>
+<div class="two">
+<div class="chart-box"><canvas id="c_lights"></canvas></div>
+<div style="max-height:340px;overflow-y:auto"><table><thead><tr><th>托管组</th><th>店铺</th><th class="num">花费</th><th class="num">ACOS/目标</th><th>灯</th></tr></thead><tbody>
+<tr><td>洗浴刷两件套·重定向</td><td>LINGJIE</td><td class="num">$1,113</td><td class="num">183% / 160%</td><td><span class="tag t-amber">黄</span></td></tr>
+<tr><td>双色弹力带·重定向</td><td>LINGJIE</td><td class="num">$825</td><td class="num">45.5% / 55%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>四层化妆盒</td><td>LINGJIE US</td><td class="num">$809</td><td class="num">16.8% / 13.3%</td><td><span class="tag t-amber">黄</span></td></tr>
+<tr><td>TPE双色弹力带</td><td>Reason Asia</td><td class="num">$805</td><td class="num">59.8% / 78.6%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>五彩拉力绳·冲量</td><td>LINGJIE</td><td class="num">$767</td><td class="num">45.1% / 36%</td><td><span class="tag t-amber">黄</span></td></tr>
+<tr><td>颠球器·重定向</td><td>LINGJIE</td><td class="num">$664</td><td class="num">82.2% / 80%</td><td><span class="tag t-amber">黄</span></td></tr>
+<tr><td>三层化妆盒</td><td>LINGJIE US</td><td class="num">$609</td><td class="num">24.8% / 28.2%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>旋转俯卧撑支架</td><td>LINGJIE</td><td class="num">$563</td><td class="num">48.6% / 55%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>洗浴刷三件套·重定向</td><td>LINGJIE</td><td class="num">$559</td><td class="num">46.9% / 48%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>旋转俯卧撑支架</td><td>LINGJIE US</td><td class="num">$521</td><td class="num">32.4% / 22.2%</td><td><span class="tag t-red">红</span></td></tr>
+<tr><td>五彩弹力绳</td><td>LINGJIE US</td><td class="num">$492</td><td class="num">22.4% / 23.1%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>双色瑜伽垫·自动</td><td>LINGJIE US</td><td class="num">$467</td><td class="num">16.4% / 18.5%</td><td><span class="tag t-green">绿</span></td></tr>
+<tr><td>读书板</td><td>Reason Asia</td><td class="num">$263</td><td class="num">10.4% / 7%</td><td><span class="tag t-red">红</span></td></tr>
+<tr><td>俯卧撑大板·重定向</td><td>LINGJIE</td><td class="num">$192</td><td class="num">41.9% / 62%</td><td><span class="tag t-green">绿</span></td></tr>
+</tbody></table></div>
+</div>
+<div class="rec" style="margin-top:10px"><div class="rh">两个红灯怎么看</div>① 美国"旋转俯卧撑支架"（32.4% vs 目标 22.2%）：目标从欧洲站沿用偏严，建议结合毛利核一次目标；② 日本"读书板"（10.4% vs 目标 7%）：绝对 ACOS 已经很低，7% 的目标过于苛刻——这是"目标设定问题"，不是投放问题。</div>
+</div>
+
+<div class="card">
+<h2>自动化功能部署：11 项能力已在托管组全面开启</h2>
+<div class="desc">各功能开启的托管组数量（共 118 个托管组）</div>
+<div class="chart-box"><canvas id="c_feat"></canvas></div>
+<div class="rec" style="margin-top:10px"><div class="rh">一个提升点</div>"按表现调预算"目前仅 8 个托管组开启，而本期恰恰有 34 个活动天天把预算花满——把这项能力在主力托管组打开，系统就能在总预算不变的前提下，把预算自动从低效活动挪给已花满的高效活动，正对本期的头号瓶颈。</div>
+</div>
+</section>
+
+<section class="panel" id="p-diag">
+<div class="alert a-warn"><div>🔍</div><div><b>诊断原则</b>：先排除经营侧因素（促销节奏、库存、预算供给、市场需求），再谈投放配置。每张卡片都给出"证据 → 根因 → 下一步"。</div></div>
+
+<div class="card">
+<h2>① 上月促销结束后的回落：下滑的第一大块，是促销安排的问题，不是投放问题</h2>
+<div style="font-size:13.5px;line-height:1.8">
+<b>证据</b>：五彩弹力绳系列上期销售 $12,092、ACOS 10.6%、客单价 $53.7（组合装促销特征明显）；本期销售 $2,534、客单价回到 $20.4 常态。单此一项 = 账户降幅的 34.2%。<br>
+<b>根因</b>：上期促销活动结束后的自然回落，与投放配置无关。<br>
+<b>下一步</b>：今年会员日（6 月 23-26 日）已在本期内度过且未放量，属于已错过的窗口。往前看抓两个确定性节点：① <b>日本站会员日官方推迟到今年夏末</b>——Reason Asia 店铺提前 1-2 周养权重、备 deal，这是最近的一次大促机会；② 美国站按历史规律 10 月通常有秋季会员日，且阻力带品类旺季正是 10 月（Sorftime），提前 6 周备货养词。期间也可以自己安排一波 Coupon/秒杀，复制 5 月打法：活动前 5-7 天预算 +30% 养权重 → 活动期预算 ×2、AI 目标 ACOS 临时上调 → 活动后 3 天回收。
+</div>
+</div>
+
+<div class="card">
+<h2>② 高效活动被预算上限锁住：天天花满的活动效率反而更好</h2>
+<div style="font-size:13.5px;line-height:1.8">
+<b>证据</b>：34 个天天把预算花满（Out Of Budget）的活动合计花费 $6,242、ACOS 26.8%，优于未花满组的 27.8%——钱是花在刀刃上才花完的；其中 6 个达标活动的预算活跃时间不足 50%（一天中超过一半时间无预算可投），合计已产出 $3,154 销售。<br>
+<b>根因</b>：先区分两类"花满"——分时预算把当天的钱集中在转化时段花完属计划内节奏；但下表活动是预算活跃时间不足一半、ACOS 又已达标，说明<b>上限本身</b>低于消化能力。而且这些活动的日预算两期完全没动过——从头到尾被同一个偏低的上限锁住，转化再好也花不出去。<br>
+<b>下一步</b>：对下表 6 个"低活跃 + 达标"活动<b>提高预算上限</b> 20-30%（提的是上限，时段内怎么花仍由分时预算调度），观察 3-5 天；同时开启"按表现调预算"，让系统把预算自动从低效活动挪给已花满的高效活动（当前仅 8 个托管组开启）。
+</div>
+<table style="margin-top:10px"><thead><tr><th>活动（预算活跃时间）</th><th>店铺</th><th class="num">花费</th><th class="num">销售</th><th class="num">ACOS/目标</th><th class="num">日预算</th></tr></thead><tbody id="bc_rows">
+</tbody></table>
+<div class="rec" style="margin-top:10px"><div class="rh">提醒</div>表中两个高目标新品活动（目标 ACOS 78.6% / 160%）虽在目标带内，提预算前请先结合"根因诊断④"的新品验收节点决定；优先给低 ACOS 的四个活动加。</div>
+</div>
+
+<div class="card">
+<h2>③ 日本站金矿词断货：最确定的一笔损失</h2>
+<div style="font-size:13.5px;line-height:1.8">
+<b>证据</b>：腕表收纳盒（B01BXYZ0WY）目前 Not Buyable、FBA/FBM 均为 0；断货前搜索词「時計ケース」ACOS 仅 6.0%（花费 $28 → 销售 $471，全账户效率最高的词），该 ASIN 本期广告端仍录得 $788 销售后停摆。<br>
+<b>根因</b>：库存断供，广告与转化都健康——这不是投放问题，AI 也无法替代补货。<br>
+<b>下一步</b>：优先补货（快照口径，请以实时库存复核）；到仓前暂停相关活动避免无效点击，到仓后 AI 会自动恢复量。另：美国"人体骨骼模型"FBA 仅剩 29 件但月销 $469，建议同步核补。
+</div>
+</div>
+
+<div class="card">
+<h2>④ 洗浴刷词族高 ACOS：是"主动投资"，但需要设验收点</h2>
+<div style="font-size:13.5px;line-height:1.8">
+<b>证据</b>：德国站 rückenbürste（背刷）词族合并花费 $242 / ACOS 125.8%，duschbürste 词族 $53 / ACOS 170.9%；对应"洗浴刷两件套·重定向"托管组目标 ACOS 本就设为 160%（新品冲量）。<br>
+<b>根因</b>：这是设计内的新品推广投入，不是失控——但冲量投入应该有期限和验收标准，否则会一直"在投资"。<br>
+<b>下一步</b>：与运营确认该新品的推广周期（建议以 8-12 周为限），设定阶段验收：自然排名进首页 / 评分数达标后，把目标 ACOS 从 160% 分两步降到 80%、55%，让 AI 逐步转向利润模式。
+</div>
+</div>
+
+<div class="card">
+<h2>⑤ 两处结构性小漏点</h2>
+<div style="font-size:13.5px;line-height:1.8">
+<b>竞品页（ASIN 形态）流量偏贵</b>：搜索词中 ASIN 形态流量合并花费 $2,930、ACOS 37.1%，高于关键词流量的 26.5%；其中 4 个竞品 ASIN 合并 ACOS 超 170%（b0cs6sqymp、b0c661bxv8 等，合计约 $328）。建议按"竞品评分是否低于我方、价格是否高于我方"筛一遍定投清单，不占优的竞品页降价或否定。<br style="margin-bottom:6px">
+<b>日本站词组匹配偏松</b>：TPE 弹力带（手动）PHRASE 匹配花费 $776 / ACOS 63.3%，是全账户最大的单活动词组投放。建议把其中已验证成交的词转 EXACT 精准承接，词组档降价 15-20% 只做探索。
+</div>
+</div>
+
+<div class="card">
+<h2>⑥ 两处暂停需要确认意图</h2>
+<div style="font-size:13.5px;line-height:1.8">
+<b>澳洲站整体停投</b>：LINGJIE AU 上期花费 $273 / 销售 $1,014（ACOS 27.0%、ROAS 3.7），本期零花费。若是主动暂停（如库存调配）可忽略；若非主动，建议恢复——上期这部分是划算的量。<br style="margin-bottom:6px">
+<b>英国木色门挡在旺季被暂停</b>：该活动 6 月上旬暂停（上期销售 $1,815 → 本期 $258），对应商品库存还有 1,101 件；而英国门挡大盘 6-9 月正是全年高点（去年 5→6 月搜索量 +30%）。若非清仓或价格原因，建议旺季内恢复投放。
+</div>
+</div>
+</section>
+
+
+<section class="panel" id="p-market">
+<div class="alert a-red"><div>📅</div><div><b>大促日历重要变化</b>：2026 年会员日（Prime Day）从往年的 7 月中旬<b>提前至 6 月 23-26 日</b>，美/英/德/欧等站参加；<b>日本站不在此轮，官方推迟到今年夏末</b>。即本期（6/03-7/02）已包含一次会员日——本账户 88% 的花费在这轮大促覆盖的市场（美/德/英/西/法等）。操作日志显示这 4 天美国、德国、英国的预算花满次数都与平日持平（德国甚至更低）——预算上限没有随大促调大，没吃到这波流量。5→6 月大盘也不是淡季（Sorftime：2025 年 6 月阻力带搜索量比 5 月还高 5%），因此本期回落不能归因于季节；主因是促销结束的自然回落，加上预算上限没有随大促和需求高峰放开（预算全程没被调低，也没被调高）。</div></div>
+<div class="alert a-info"><div>🌐</div><div><b>市场数据口径</b>：月度搜索/购买趋势来自卖家精灵（更新至 2026 年 5 月），实时词与竞价参考来自 Sorftime（周度），取数日期 2026-07-03。两个数据源统计方法不同，只做方向对照，不比绝对值。</div></div>
+
+<div class="card">
+<h2>核心品类大盘：需求在涨，账户回落不是市场原因</h2>
+<div class="desc">主力品类关键词月度搜索量（近 17 个月）</div>
+<div class="two">
+<div><div class="sec-title">阻力带 resistance bands · 美国（第一大投放品类）</div><div class="chart-box"><canvas id="c_rb"></canvas></div></div>
+<div><div class="sec-title">widerstandsbänder · 德国</div><div class="chart-box"><canvas id="c_de"></canvas></div></div>
+</div>
+<div class="two" style="margin-top:16px">
+<div><div class="sec-title">ヨガマット（瑜伽垫）· 日本</div><div class="chart-box"><canvas id="c_jp"></canvas></div></div>
+<div><div class="sec-title">makeup organizer · 美国（唯一在萎缩的主力品类）</div><div class="chart-box"><canvas id="c_mo"></canvas></div></div>
+</div>
+<table style="margin-top:14px"><thead><tr><th>品类 · 站点</th><th class="num">2026-05 同比</th><th class="num">5→6 月历史规律</th><th>对账户的含义</th></tr></thead><tbody>
+<tr><td class="hl">阻力带 · 美国</td><td class="num pos">+90%</td><td class="num">≈持平（2025 年 +3% / 2024 年 -8%）</td><td>需求大年！账户 6 月回落是促销与预算节奏，不是大盘；这是最该加码的主战场</td></tr>
+<tr><td class="hl">阻力带 · 德国</td><td class="num pos">+40%</td><td class="num">≈持平</td><td>市场回暖，支撑欧洲站新品继续推</td></tr>
+<tr><td class="hl">瑜伽垫 · 日本</td><td class="num pos">+24%</td><td class="num">小幅回落（-11% ~ +10%）</td><td>日本站 -13% 的跌幅方向与季节一致，8-9 月历史有一波高峰，提前备</td></tr>
+<tr><td class="hl">门挡 · 英国</td><td class="num neg">-43%</td><td class="num pos">+29% ~ +34%（夏季正是旺季）</td><td>大盘全年在缩，但 6-9 月是门挡全年高点；账户一个门挡活动 6 月上旬起暂停（上期销售 $1,815、库存尚有 1,101 件），建议确认是否恢复</td></tr>
+<tr><td class="hl">化妆收纳 · 美国</td><td class="num neg">-33%</td><td class="num">+12%（2025 年）</td><td>大盘萎缩中的份额型生意：不追量，守 ACOS 吃存量（账户当前 15-21% 很健康）</td></tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>竞价水位与旺季：还有加价空间，旺季在 Q4</h2>
+<div class="desc">Sorftime 实时数据 · resistance bands 美国站</div>
+<div class="bigstat">
+<div class="bs"><div class="t">我们的实付 CPC</div><div class="big">$1.11</div><div class="sm">"resistance bands" 大词本期实际点击成本</div></div>
+<div class="bs"><div class="t">市场建议竞价</div><div class="big">$1.20</div><div class="sm">4→5 月建议竞价 $1.08→$1.20 上行；当前出价贴近水位，旺季前有小幅上探空间</div></div>
+<div class="bs warn"><div class="t">品类旺季</div><div class="big">10 月（次峰 1 月）</div><div class="sm">月搜索 83 万 · 竞品 12.4 万个 · 头部品牌 Fit Simplify 占 8.5%</div></div>
+</div>
+</div>
+
+<div class="card">
+<h2>产品资产体检：两大主力 Listing 底子扎实</h2>
+<div class="desc">广告能放量的前提是转化资产健康——两条主力线都具备</div>
+<div class="two">
+<div class="rec"><div class="rh">德国站 · 阻力带套装（B0FDL24DGZ）</div>4.6 星 · 932 评分 · <b>Amazon's Choice</b> · A+ 页面 + 视频齐全 · €17.99。上架后已进类目 BSR 前列，是欧洲站放量的底仓，广告花费全账户第一（$1,384）配得上它的转化力。</div>
+<div class="rec"><div class="rh">美国站 · 化妆收纳盒（B06Y3WMF8H）</div>4.6 星 · <b>13,132 评分</b>的老牌资产 · A+ + 视频 · $36.99。在 -33% 的萎缩大盘里靠评分护城河守份额，ACOS 14.8% 是全账户利润舱的支柱。</div>
+</div>
+<div class="rec"><div class="rh">整体结构</div>广告销售 Top10 ASIN 占比 55.3%（Top1 仅 8.2%）——不依赖单一爆款，风险分散度好。48 个有花费 ASIN 中断货烧钱的仅 2 个（$59），商品端管理干净。</div>
+</div>
+</section>
+
+<section class="panel" id="p-adstrat">
+<div class="alert a-teal"><div>🎯</div><div><b>打法总纲</b>：市场端（阻力带大盘 +90%）与资产端（主力 Listing 4.6 星）都支持"进攻"，本期真正限制产出的是<b>预算供给与结构缺口</b>。以下建议按确定性排序，每条注明证据出处。</div></div>
+
+<div class="card">
+<h2>🔴 结构缺口：98.6% 的花费押在 SP 一种广告上</h2>
+<div class="desc">本期 SP $14,348 / SB $152（1 个活动）/ SD $46 —— 一条腿走路；补结构要按客单价挑产品线，不是全都上</div>
+<div style="font-size:13.5px;line-height:1.8">
+大词首屏、竞品详情页重定向、老客再营销，目前都只能靠 SP 硬顶。补结构时按品类属性排优先级：<br>
+① <b>SB 视频只上客单价 $30 以上的产品线</b>：化妆收纳（$37、1.3 万评分）、猫马桶训练（$34）、编织器（$35）——这三条线视频位的账才算得过来（举例：客单 $35 × 转化率 11% × 目标 ACOS 25%，能承受的点击价约 $0.96，超过就停）。两大主力 listing 已带视频，素材可直接复用，几乎没有制作成本。<b>低客单线不上视频广告</b>：门挡 $6.49、弹力带 $18-27 的点击价扛不住，继续用 SP 打；<br>
+② <b>经典 SB 货架位做"系列矩阵"</b>：化妆收纳有 3 个 SKU 的系列资产，适合三品位一次露出全系列；另一个参考：德国站阻力带广告位上 2/3 的竞品评分数不足 500（Sorftime），我们 932-13,132 条评分的素材放在品牌广告位有相对优势；<br>
+③ <b>品牌词防御暂不投入</b>：readaeer 品牌词美国站月搜索量近乎为 0（卖家精灵），没有需要防守的品牌流量——反过来说，品牌广告长期投放正是把"品类流量"变成"品牌搜索"的方式；<br>
+④ <b>SD 商品页重定向</b>接管详情页流量：本期 Detail Page 广告位花费 $4,843（占 33%）全部由 SP 承担，SD 浏览重定向可更低成本二次触达（证据：广告位数据）。<br>
+<span style="color:var(--muted)">注：SB/SD 需品牌备案，未备案店铺此条顺延。</span>
+</div>
+</div>
+
+<div class="card">
+<h2>确定性最高的三笔预算动作</h2>
+<div class="desc">按"证据强度 × 见效速度"排序</div>
+<div class="rec"><div class="rh">① 给 6 个"达标但断粮"的活动提预算 20-30%（本周可完成）</div>预算活跃时间不足 50%、ACOS 已达标，合计 $1,680 花费产出 $3,154 销售。按活跃时间补齐估算，每月约有 $2-3k 销售被预算上限挡住（证据：根因诊断②清单）。观察 3-5 天，ACOS 不劣化再加。</div>
+<div class="rec"><div class="rh">② 大促窗口方案：6 月会员日已错过，抓住日本站夏末场 + 美国 10 月秋促</div>今年会员日提前到 6 月 23-26 日、就在本期内，但预算上限未随大促放大（花满次数与平日持平）——放量机会没有兑现（证据：环比复盘① + 操作日志）。下两个窗口提前定方案：日本站会员日推迟到夏末，Reason Asia 提前 1-2 周养权重、备 deal；10 月的秋季会员日和黑五网一美国、欧洲站都参加，且美国阻力带旺季正是 10 月（德国大盘季节均衡，更依赖事件日拉增量）。打法复制 5 月成功经验：前 5-7 天预算 +30% → 活动期预算 ×2、AI 目标临时上调 30-50% → 活动后 3 天回收。</div>
+<div class="rec"><div class="rh">③ 金矿词精准收割 + 首位加成</div>把已验证的金矿词升级 EXACT 并适度抢首位：makeup organizer（ACOS 15.1%）、door stop（23.0%，转化率 38%）、cat toilet trainer kit（21.6%）、knitting loom（12.6%）、push up handles（15.7%）。搜索顶部位本期转化率 21.4% 全位置最高、ACOS 27.3% 与均值持平——AI 已做 31 次首位加成上调，方向一致，可以在这些词上更进一步（证据：搜索词 + 广告位数据）。</div>
+</div>
+
+<div class="card">
+<h2>匹配与定向的三处微调</h2>
+<div class="two">
+<div class="chart-box"><canvas id="c_match"></canvas></div>
+<div class="chart-box"><canvas id="c_auto"></canvas></div>
+</div>
+<div style="font-size:13.5px;line-height:1.8;margin-top:12px">
+① <b>词组匹配整体偏松</b>（ACOS 43.8%，其他匹配 27-29%）：主要出血点在日本 TPE 弹力带活动（$776 / 63.3%），成交词转精准、词组档降价 15-20%（证据：根因诊断⑤）；<br>
+② <b>自动定向里"紧密匹配"最赚</b>（ACOS 19.0%，$2,508 花费）：自动活动整体给 AI 更高的紧密匹配出价上限，压缩"同类商品"档（27.8%）；<br>
+③ <b>竞品定投做一轮体检</b>：ASIN 流量 ACOS 37.1% vs 关键词 26.5%，按"评分/价格是否占优"筛掉不对等的竞品页（证据：根因诊断⑤）。
+</div>
+</div>
+
+<div class="card">
+<h2>分品类节奏建议</h2>
+<table><thead><tr><th>品类线</th><th>大盘</th><th>账户现状</th><th>节奏</th></tr></thead><tbody>
+<tr><td class="hl">健身系列（阻力带/瑜伽垫/俯卧撑）</td><td class="pos">US +90% / DE +40% / JP +24%</td><td>第一大投放线，Listing 资产强</td><td><b>进攻</b>：美国 10 月是品类旺季（提前 6 周备货养词）；德国大盘季节均衡（Sorftime），欧洲的增量主要靠大促日（10 月秋促、黑五网一）+ 日常抢份额</td></tr>
+<tr><td class="hl">化妆收纳（美国）</td><td class="neg">-33% 萎缩</td><td>13k 评分护城河，ACOS 15-21%</td><td><b>守利润</b>：不追量，维持首页防御，预算随 ACOS 浮动</td></tr>
+<tr><td class="hl">家居小件（门挡/读书板/编织器）</td><td>英国门挡 6-9 月为旺季</td><td>door stop 转化率 38%、knitting loom ACOS 12.6%</td><td><b>稳收</b>：金矿词精准化，小步提预算</td></tr>
+<tr><td class="hl">新品线（洗浴刷 DE 等）</td><td>--</td><td>冲量期，目标 ACOS 160%</td><td><b>限时投资</b>：设 8-12 周验收点，分两步降目标（根因诊断④）</td></tr>
+</tbody></table>
+</div>
+</section>
+
+<section class="panel" id="p-plan">
+<div class="card">
+<h2>下一步优化计划（按优先级）</h2>
+<div class="desc">✦ 标注的动作本周即可完成</div>
+<table><thead><tr><th>优先级</th><th>动作</th><th>预期效果</th><th>时间</th></tr></thead><tbody>
+<tr><td><span class="tag t-red">P0</span></td><td>✦ 日本站腕表收纳盒补货（断货金矿词 ACOS 6%）；到仓前暂停相关活动</td><td>恢复月约 $800 高效率销售</td><td>立即启动</td></tr>
+<tr><td><span class="tag t-red">P0</span></td><td>✦ 6 个"达标但断粮"活动提预算 20-30%，观察 3-5 天</td><td>月增约 $2-3k 销售，ACOS 保持达标带</td><td>本周</td></tr>
+<tr><td><span class="tag t-red">P0</span></td><td>大促窗口方案：日本站夏末会员日 + 美国 10 月秋促（6 月会员日已错过，本次提前放开预算）</td><td>复制 5 月促销曲线，吃 +90% 的大盘红利</td><td>日本场提前 2 周定稿</td></tr>
+<tr><td><span class="tag t-amber">P1</span></td><td>✦ 金矿词转 EXACT + 首位加成（makeup organizer / door stop / knitting loom 等 5 词）</td><td>把最赚的词焊死在首页</td><td>本周</td></tr>
+<tr><td><span class="tag t-amber">P1</span></td><td>✦ 日本 TPE 弹力带词组档降价 15-20%，成交词转精准</td><td>月省约 $150-250 低效花费</td><td>本周</td></tr>
+<tr><td><span class="tag t-amber">P1</span></td><td>主力托管组开启"按表现调预算"（当前仅 8 个开启）</td><td>系统在总预算内自动把钱从低效活动挪给已花满的高效活动</td><td>1-2 周</td></tr>
+<tr><td><span class="tag t-amber">P1</span></td><td>SB 视频先在 $30+ 客单线（化妆盒/猫马桶/编织器）用现成视频小预算试投 + SD 商品页重定向</td><td>补齐 98.6% 单腿结构；设好点击价止损线再投</td><td>2-4 周</td></tr>
+<tr><td><span class="tag t-blue">P2</span></td><td>洗浴刷新品冲量组设 8-12 周验收点，目标 ACOS 分两步回落（160→80→55%）</td><td>投资有出口，避免长期高 ACOS 挂账</td><td>本月内定标准</td></tr>
+<tr><td><span class="tag t-blue">P2</span></td><td>竞品定投体检：筛掉评分/价格不占优的 ASIN 定向</td><td>ASIN 流量 ACOS 从 37% 向关键词水位靠拢</td><td>2 周</td></tr>
+<tr><td><span class="tag t-blue">P2</span></td><td>确认澳洲站停投意图；两个目标偏严活动（日本读书板 7%、美国俯卧撑支架 22.2%）复核目标</td><td>恢复划算流量 / 让达标率反映真实水平</td><td>本月</td></tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>口径与边界说明</h2>
+<div style="font-size:13px;line-height:1.8;color:var(--dark)">
+① 本报告基于广告后台导出与公开市场数据，金额为平台统一折算口径（USD）；库存与在售状态为导出时点快照，请以实时看板复核。<br>
+② AI 组与非 AI 组为同一账户内同期与环比对照，能对齐季节与大盘，但两组任务定位不同，结论以"各自达成目标"为准绳，不作单一因果归因。<br>
+③ 搜索词分档阈值按本账户目标 ACOS 中位数（48%）校准：金矿 &lt;48%、观察带 48%-120%、高耗 &gt;120%、零单词关注线 $30。<br>
+④ 市场数据：卖家精灵月度（至 2026-05）、Sorftime 周度（2026-07-03 取数），两源方法不同仅对照方向。<br>
+⑤ AI 无法替代的事项：库存补货、价格与促销决策、Listing 与评分建设——这些仍需运营侧推进，本报告已在相应位置标注。
+</div>
+</div>
+</section>
+
+<script>
+const D = {"ai_hourly": [995, 851, 762, 835, 653, 792, 662, 503, 717, 607, 554, 688, 604, 508, 1189, 874, 351, 396, 432, 319, 334, 389, 444, 588], "ai_daily_labels": ["2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-07", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-14", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-21", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02"], "ai_daily_vals": [737, 741, 594, 524, 527, 545, 517, 508, 454, 475, 470, 460, 460, 444, 469, 443, 456, 467, 446, 481, 437, 483, 454, 474, 471, 477, 485, 606, 489, 453], "months": ["2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05"], "rb": [527033, 518420, 548851, 526919, 518742, 531824, 509614, 532348, 597269, 529171, 412384, 482890, 839444, 857177, 920039, 990540, 987710], "de": [49987, 47627, 49482, 23693, 25488, 25044, 27543, 22084, 20842, 18915, 19292, 19638, 28807, 29424, 29304, 31823, 35746], "jp": [180961, 183639, 171942, 206188, 227923, 202322, 177326, 326275, 361510, 170500, 142801, 124989, 167654, 191241, 197213, 247530, 282292], "mo": [599726, 434793, 399367, 346891, 339511, 378608, 469718, 524416, 366449, 301769, 416583, 501340, 413717, 324156, 266045, 273535, 227649], "bc": [{"name": "SparkX AI TPE双色弹力带（手动）", "store": "Reason Asia_Reason Global Alliance", "country": "JP", "active": 30, "spend": 805.0, "sales": 1346.0, "acos": 59.8, "target": 78.6, "budget": "¥4200.00", "ai": "AI"}, {"name": "SparkX AI 五彩弹力绳-AI-类目", "store": "LINGJIE US", "country": "US", "active": 20, "spend": 143.0, "sales": 632.0, "acos": 22.6, "target": 23.1, "budget": "$4.22", "ai": "AI"}, {"name": "SparkX AI TLD_Xnurta AI_B0G3WQTZB9_自动_自动_自动_宽泛匹配/紧密匹配/同类商品/关联商品", "store": "LINGJIE", "country": "DE", "active": 40, "spend": 152.0, "sales": 433.0, "acos": 35.1, "target": 55.0, "budget": "€3.49", "ai": "AI"}, {"name": "Xnurta AI_B0DX233VJ4_自动_自动_自动_宽泛匹配/紧密匹配/同类商品/关联商品", "store": "LINGJIE", "country": "DE", "active": 30, "spend": 449.0, "sales": 299.0, "acos": 150.2, "target": 160.0, "budget": "€12.00", "ai": "AI"}, {"name": "SparkX AI B0FDL24DGZ_非品牌_效果_手动_精准复制1", "store": "LINGJIE", "country": "DE", "active": 30, "spend": 94.0, "sales": 287.0, "acos": 32.7, "target": 36.0, "budget": "€2.32", "ai": "AI"}, {"name": "SparkX AI B0FDL24DGZ_非品牌_拓展_手动_商品分类复制1", "store": "LINGJIE", "country": "DE", "active": 30, "spend": 37.0, "sales": 157.0, "acos": 23.5, "target": 36.0, "budget": "€1.04", "ai": "AI"}]};
+const NAVY='#0F172A', TEAL='#0D9488', GOLD='#CA8A04', RED='#DC2626', GREEN='#059669', AMBER='#D97706', BLUE='#2563EB', MUTED='#94A3B8';
+if(typeof Chart!=='undefined'){Chart.defaults.font.family="'Inter','Noto Sans SC',sans-serif"; Chart.defaults.font.size=12; Chart.defaults.color='#475569';}
+const built={};
+function mk(id,type,labels,datasets,opt){if(typeof Chart==='undefined')return;const el=document.getElementById(id);if(!el||built[id])return;built[id]=new Chart(el,{type,data:{labels,datasets},options:Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}},opt||{})});}
+function buildChart(id){
+ if(id==='c_share'){mk(id,'doughnut',['AI 托管花费 $9,016','非 AI 花费 $5,531'],[{data:[9016,5531],backgroundColor:[TEAL,MUTED],borderWidth:2,borderColor:'#fff'}]);}
+ else if(id==='c_drop'){mk(id,'bar',['上月促销结束的回落','转化回软投放收缩','其他(季节/断货等)'],[{label:'销售降幅构成 ($)',data:[8279,13900,2043],backgroundColor:[GOLD,BLUE,MUTED]}],{indexAxis:'y',plugins:{legend:{display:false}}});}
+ else if(id==='c_store'){mk(id,'bar',['LINGJIE US','LINGJIE 欧洲','Reason Asia 日本','Reason 美国','LINGJIE AU'],[{label:'上期销售',data:[39854,23073,11327,823,1014],backgroundColor:MUTED},{label:'本期销售',data:[24156,17419,9825,469,0],backgroundColor:TEAL}]);}
+ else if(id==='c_didSales'){mk(id,'bar',['AI 组·全部活动','AI 组·去掉促销','非 AI 组'],[{label:'销售环比 %',data:[-38.8,-25.1,-22.4],backgroundColor:[MUTED,TEAL,BLUE]}],{plugins:{legend:{display:false},title:{display:true,text:'销售环比（%）'}}});}
+ else if(id==='c_didAcos'){mk(id,'bar',['AI 组·去掉促销','非 AI 组'],[{label:'上期 ACOS %',data:[31.3,22.5],backgroundColor:MUTED},{label:'本期 ACOS %',data:[33.9,22.1],backgroundColor:TEAL}],{plugins:{title:{display:true,text:'ACOS 两期对比（%）'}}});}
+ else if(id==='c_ops'){mk(id,'bar',['预算上调','预算下调','关键词出价↑','关键词出价↓','自动定向出价↑','自动定向出价↓','商品/分类出价↑','商品/分类出价↓','否定词/ASIN','广告位加成'],[{label:'AI 动作次数',data:[4475,1011,2478,2397,1479,1516,836,719,70,56],backgroundColor:[TEAL,'#5EEAD4',BLUE,'#93C5FD',GOLD,'#FDE68A','#7C3AED','#C4B5FD',RED,NAVY]}],{indexAxis:'y',plugins:{legend:{display:false}}});}
+ else if(id==='c_hour'){mk(id,'line',[...Array(24).keys()].map(h=>h+':00'),[{label:'AI 动作次数(按小时)',data:D.ai_hourly,borderColor:TEAL,backgroundColor:'rgba(13,148,136,.12)',fill:true,tension:.35,pointRadius:0}]);}
+ else if(id==='c_daily'){mk(id,'line',D.ai_daily_labels.map(x=>x.slice(5)),[{label:'AI 动作次数(按日)',data:D.ai_daily_vals,borderColor:BLUE,backgroundColor:'rgba(37,99,235,.10)',fill:true,tension:.3,pointRadius:0}]);}
+ else if(id==='c_lights'){mk(id,'doughnut',['绿灯 · 达标 (9)','黄灯 · 贴线 (5)','红灯 · 偏离 (4)'],[{data:[9,5,4],backgroundColor:[GREEN,AMBER,RED],borderWidth:2,borderColor:'#fff'}]);}
+ else if(id==='c_ach'){mk(id,'bar',['推动增长 (45个)','保持订单稳定 (14个)'],[{label:'名义达标率 %',data:[57.8,35.7],backgroundColor:TEAL},{label:'合并 ACOS %',data:[41.1,19.0],backgroundColor:MUTED}]);}
+ else if(id==='c_feat'){mk(id,'bar',['定向收割','分时预算','暂停商品','暂停活动/组','添加否定','定向暂停','按表现调价','广告位调价','分时调价','预算重新分配','按表现调预算'],[{label:'开启的托管组数',data:[112,111,111,111,109,108,107,106,106,102,8],backgroundColor:['#0D9488','#0D9488','#0D9488','#0D9488','#0D9488','#0D9488','#0D9488','#0D9488','#0D9488','#0D9488',RED]}],{indexAxis:'y',plugins:{legend:{display:false}}});}
+ else if(id==='c_rb'){mk(id,'line',D.months,[{label:'月搜索量',data:D.rb,borderColor:TEAL,tension:.3,pointRadius:2}],{plugins:{legend:{display:false}}});}
+ else if(id==='c_de'){mk(id,'line',D.months,[{label:'月搜索量',data:D.de,borderColor:BLUE,tension:.3,pointRadius:2}],{plugins:{legend:{display:false}}});}
+ else if(id==='c_jp'){mk(id,'line',D.months,[{label:'月搜索量',data:D.jp,borderColor:GOLD,tension:.3,pointRadius:2}],{plugins:{legend:{display:false}}});}
+ else if(id==='c_mo'){mk(id,'line',D.months,[{label:'月搜索量',data:D.mo,borderColor:RED,tension:.3,pointRadius:2}],{plugins:{legend:{display:false}}});}
+ else if(id==='c_match'){mk(id,'bar',['EXACT 精准','GROUP','BROAD 广泛','PHRASE 词组'],[{label:'ACOS %',data:[27.4,27.0,29.3,43.8],backgroundColor:[GREEN,TEAL,GOLD,RED]}],{plugins:{legend:{display:false},title:{display:true,text:'关键词匹配类型 ACOS（花费: 精准$2.6k/广泛$2.0k/词组$1.7k）'}}});}
+ else if(id==='c_auto'){mk(id,'bar',['紧密匹配','宽泛匹配','关联商品','同类商品'],[{label:'ACOS %',data:[19.0,26.4,25.0,27.8],backgroundColor:[GREEN,TEAL,GOLD,RED]}],{plugins:{legend:{display:false},title:{display:true,text:'自动定向四档 ACOS（紧密匹配花费最大 $2.5k 且最优）'}}});}
+}
+const firstChart={overview:['c_share'],pop:['c_drop','c_store'],ainon:['c_didSales','c_didAcos'],aivalue:['c_ops','c_hour','c_daily'],groups:['c_lights','c_ach','c_feat'],diag:[],market:['c_rb','c_de','c_jp','c_mo'],adstrat:['c_match','c_auto'],plan:[]};
+function fillDiag(){const tb=document.getElementById('bc_rows');if(!tb||tb.dataset.done)return;tb.dataset.done=1;tb.innerHTML=D.bc.map(r=>`<tr><td>${r.name.length>46?r.name.slice(0,46)+'…':r.name}（活跃 ${r.active}%）</td><td>${r.store}·${r.country}</td><td class="num">$${r.spend}</td><td class="num">$${r.sales}</td><td class="num">${r.acos}% / ${r.target?r.target+'%':'—'}</td><td class="num">${r.budget}</td></tr>`).join('');}
+document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+ t.classList.add('active');const k=t.dataset.t;
+ const p=document.getElementById('p-'+k);if(p)p.classList.add('active');
+ (firstChart[k]||[]).forEach(buildChart);
+});});
+(firstChart.overview||[]).forEach(buildChart);
+fillDiag();
+</script>
+</div>
+</body></html>
