@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长沙福岚 · 客户复盘与挽回分析（内部）</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#1d2433; --sub:#5b6577;
+    --line:#e6e9ef; --brand:#3b5bfd; --brand-soft:#eef1ff;
+    --green:#1f9d63; --green-soft:#e7f6ee; --amber:#c98a12; --amber-soft:#fdf3df;
+    --red:#d64545; --red-soft:#fbe9e9; --purple:#6b4bd6; --purple-soft:#efeafb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;font-size:15px}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  header.hero{background:linear-gradient(135deg,#2c3e8f,#3b5bfd);color:#fff;border-radius:18px;padding:30px 32px;margin-bottom:22px}
+  header.hero .tag{display:inline-block;font-size:12px;letter-spacing:.5px;background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  header.hero h1{margin:0 0 6px;font-size:26px;font-weight:700}
+  header.hero p{margin:0;opacity:.9;font-size:14px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:16px;font-size:13px;opacity:.95}
+  .meta b{font-weight:600}
+  section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-bottom:18px}
+  h2{font-size:19px;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+  h2 .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--brand-soft);color:var(--brand);font-size:14px;font-weight:700}
+  h2 small{font-weight:400;font-size:13px;color:var(--sub)}
+  h3{font-size:15px;margin:20px 0 8px;color:var(--ink)}
+  p{margin:8px 0}
+  .lead{color:var(--sub);margin:2px 0 14px;font-size:14px}
+  ul{margin:8px 0;padding-left:20px}
+  li{margin:5px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:6px}
+  .kpi{background:var(--brand-soft);border-radius:12px;padding:14px 16px}
+  .kpi .v{font-size:24px;font-weight:700;color:var(--brand)}
+  .kpi .l{font-size:12.5px;color:var(--sub);margin-top:2px}
+  .kpi.g{background:var(--green-soft)} .kpi.g .v{color:var(--green)}
+  .kpi.a{background:var(--amber-soft)} .kpi.a .v{color:var(--amber)}
+  .callout{border-left:4px solid var(--brand);background:#f8f9ff;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px}
+  .callout.win{border-color:var(--green);background:var(--green-soft)}
+  .callout.risk{border-color:var(--red);background:var(--red-soft)}
+  .quote{font-size:13px;color:var(--sub);background:#fafbfd;border:1px dashed var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+  .quote b{color:var(--ink);font-weight:600}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#fafbfd;font-weight:600;color:var(--sub);font-size:12.5px}
+  .pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+  .p-green{background:var(--green-soft);color:var(--green)}
+  .p-amber{background:var(--amber-soft);color:var(--amber)}
+  .p-red{background:var(--red-soft);color:var(--red)}
+  .p-purple{background:var(--purple-soft);color:var(--purple)}
+  .p-brand{background:var(--brand-soft);color:var(--brand)}
+  .people{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px}
+  .person{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .person .role{font-size:12px;color:var(--sub);margin-bottom:2px}
+  .person .name{font-weight:700;font-size:15px}
+  .person .desc{font-size:13px;color:var(--sub);margin-top:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-top:8px}
+  .b-key{background:var(--red-soft);color:var(--red)}
+  .b-champ{background:var(--green-soft);color:var(--green)}
+  .b-side{background:#eef0f4;color:var(--sub)}
+  .timeline{margin-top:10px;border-left:2px solid var(--line);padding-left:18px}
+  .tl{position:relative;margin-bottom:14px}
+  .tl::before{content:"";position:absolute;left:-25px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand-soft)}
+  .tl .d{font-size:12.5px;font-weight:700;color:var(--brand)}
+  .tl .t{font-size:13.5px}
+  .foot{color:var(--sub);font-size:12px;text-align:center;margin-top:24px}
+  details{margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:6px 14px}
+  summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--sub)}
+  details .quote{margin-top:10px}
+  @media(max-width:560px){.wrap{padding:18px 12px 60px}header.hero{padding:22px 20px}section{padding:18px 16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="tag">内部资料 · 供小组传阅</span>
+  <h1>长沙福岚（湖南福岚）· 客户复盘与挽回分析</h1>
+  <p>基于 2026-07-07「长沙福岚新功能培训」会议纪要整理，用于团队理解客户、复盘流失原因、拟定挽回打法</p>
+  <div class="meta">
+    <span><b>我方参会：</b>Beryl He、Ivan Wang</span>
+    <span><b>客户参会：</b>说话人1（长期运营）等，副总/陈总未到</span>
+    <span><b>会议性质：</b>沉睡老客户激活 · 复盘 + 新功能 + 服务升级</span>
+  </div>
+</header>
+
+<!-- 速览 -->
+<section>
+  <h2><span class="n">✦</span> 一页速览</h2>
+  <p class="lead">一句话结论：这是一个<strong>数据基础很好、但因换人和价值感断层而沉睡的老客户</strong>，挽回的真正杠杆不在功能，而在<strong>触达那位在深圳出差的新副总</strong>。</p>
+  <div class="grid">
+    <div class="kpi g"><div class="v">+86%</div><div class="l">托管前后订单环比增长，ACOS 基本维稳</div></div>
+    <div class="kpi"><div class="v">2417 条</div><div class="l">历史交给 AI 托管的广告活动（客户体量在同类中偏大）</div></div>
+    <div class="kpi a"><div class="v">去年下半年</div><div class="l">开始停用，主因是广告负责人更换</div></div>
+    <div class="kpi"><div class="v">1 个月</div><div class="l">已谈定的陪跑周期，拟下周一启动</div></div>
+  </div>
+  <div class="callout win"><b>最强弹药：</b>这次拉出的 <strong>AI 托管前后对比</strong>是一份很有分量的客观数据——"订单 +86% 且 ACOS 稳定"正是老板最想要的结果，是撬动续用的第一张牌。<span class="quote" style="display:block;margin-top:8px">原话："你的订单涨了这么多，涨了86%的情况下，你的 Acos 还是维稳的一个状态，这是很多卖家都想要的一个结果。"</span></div>
+  <div class="callout risk"><b>最大风险：</b>拍板人是<strong>新来的副总（男，正在深圳出差，周四去跑工厂）</strong>，"以他的意见为主"，且他"之前 AI 用得少、没接触过这套系统"。今天到场的说话人1是使用者和拥护者，<strong>但不是决策者</strong>。不见到副总，这单基本推不动。</div>
+</section>
+
+<!-- 客户情况 -->
+<section>
+  <h2><span class="n">1</span> 客户情况</h2>
+  <p class="lead">先把客户画像还原清楚，全部来自会上确认的信息。</p>
+
+  <h3>公司与业务</h3>
+  <ul>
+    <li><b>主体：</b>长沙福岚，长沙总部 + <b>深圳分公司</b>（副总当前在深圳出差）。</li>
+    <li><b>规模：</b>人员和规模较大，"店铺确实很多"；<b>多平台</b>经营（不止亚马逊）。</li>
+    <li><b>主营类目：</b>马克笔（同时经营"中物兴"品牌），客单<b>低中高都有</b>，整体偏中低。</li>
+    <li><b>团队模式：</b>按<b>产品线</b>分工管理，非按店铺。</li>
+    <li><b>B 端属性：</b>产品适合企业采购、学校、各类设施——具备 B2B 增量空间（待确认 B 端订单占比）。</li>
+  </ul>
+  <div class="quote">"我们是……马克笔"；"低中高都有"；"我们是按产品线的那个"；"（B 端）企业采购、学校啊、各种设施……你先看一下你 B 端订单占比多少"。</div>
+
+  <h3>当前使用状态</h3>
+  <ul>
+    <li>购买初衷是<b>释放人效、提高效率</b>——"不需要那么多人，但可以达到同样的效果"，市面比选后选了我们。</li>
+    <li>前期把<b>几乎所有广告都放进了 AI 托管</b>，AI 开启率一度<b>超过 60%</b>，托管体量在同类客户里偏大。</li>
+    <li>去年下半年起停用，与我方最近一次接触还是<b>去年的新功能介绍</b>，日常沟通频次偏低。</li>
+    <li>账号板块因系统改版<b>权限过期</b>：子账号、主账号都看不到"全部搜索广告"板块，需重新申请。</li>
+  </ul>
+  <div class="quote">"我们前期……是所有的广告都放进去了"；"AI 开启率确实是比较高的，超过60%"；"最新的一次接触是新功能介绍"。</div>
+</section>
+
+<!-- 为什么流失 -->
+<section>
+  <h2><span class="n">2</span> 为什么流失 · 怎么挽回 <small>（你点名的重点）</small></h2>
+  <p class="lead">流失不是产品被否掉，而是"没人接着用 + 看不到价值"。根因拆成 5 条，每条对应一个挽回动作。</p>
+
+  <table>
+    <tr><th style="width:26%">流失根因</th><th style="width:37%">会上证据</th><th>对应挽回动作</th></tr>
+    <tr>
+      <td><span class="pill p-red">主因</span> 组织架构 / 换人</td>
+      <td>广告被单独拎给<b>另一个新负责人（副总）</b>处理，他"之前 AI 用的少""没接触过这个系统"，<b>以他的意见为主、手动调整</b>，系统就慢慢没人用了。</td>
+      <td>把"换人导致断用"讲成常态问题，主动对接新副总，帮新对接人重新把系统用起来。</td>
+    </tr>
+    <tr>
+      <td><span class="pill p-amber">放大器</span> 价值感未达决策层</td>
+      <td>AI 的成效没有直观呈现到老板/副总面前，决策层缺少价值体感——"从一个负责人或者老板的视角来看，那肯定是会继续（用）"。看不到成效，自然不会坚持推。</td>
+      <td>用这次 +86% 的复盘数据做敲门砖；承诺<b>每月一次复盘</b>（可线下），让老板"看到并认可"。</td>
+    </tr>
+    <tr>
+      <td><span class="pill p-amber">体感</span> 功能没用出效果</td>
+      <td>"使用感受并没有预期中那么好"；关键词收割"开了好像也没给我们加什么词"；定位自动加词"基本没加过"。</td>
+      <td>诊断根因（混团 / 收割流量来源不纯净 / 动作未正确打开），陪跑时一对一做打标 + 词库搭建。</td>
+    </tr>
+    <tr>
+      <td><span class="pill p-amber">印象</span> 季节品 ACOS 高</td>
+      <td>季节性产品"AI 比我们人更敢花钱"，预算/CPC 给到位就有订单，<b>但 ACOS 会非常高</b>，留下负面印象。</td>
+      <td>主推 2026 新算法（以控 ACOS 为主）+ ACOS 优先模式 + 竞价系数，直击这个旧痛点。</td>
+    </tr>
+    <tr>
+      <td><span class="pill p-brand">我方</span> 服务被动</td>
+      <td>过去以被动式服务为主、缺主动跟进（"现在可能服务是属于那种被动式服务"）；出现人员变动我方也没跟上。</td>
+      <td>服务升级：更主动、每月复盘、2–3 人对接（含运营总/老板），主动匹配场景。</td>
+    </tr>
+  </table>
+
+  <div class="callout"><b>挽回逻辑一句话：</b>先用"你们数据本来就很好"肯定客户、降低戒心 → 再用复盘数据打动老板/副总 → 用一个月陪跑拿新数据兑现承诺 → 用"每月复盘 + 多人对接"堵住"再次换人就断用"的老漏洞。</div>
+</section>
+
+<!-- 复盘弹药 -->
+<section>
+  <h2><span class="n">3</span> 复盘数据讲了什么（可复用的弹药）</h2>
+  <p class="lead">这些是会上已经拉出来、可以直接拿去说服副总/老板的客观数据。</p>
+  <div class="grid">
+    <div class="kpi g"><div class="v">+86%</div><div class="l">托管前后订单环比增长</div></div>
+    <div class="kpi"><div class="v">ACOS ≈ 13</div><div class="l">仅轻微合理波动，未随订单放大而恶化</div></div>
+    <div class="kpi a"><div class="v">75%</div><div class="l">托管前"零花费/订单&lt;5"的稀疏活动占比——客户把最难的品交给了 AI</div></div>
+    <div class="kpi"><div class="v">≤7 个点</div><div class="l">最差店铺 ACOS 恶化幅度也未超 7 个点</div></div>
+  </div>
+  <ul>
+    <li><b>难度前提要讲清：</b>托管前有 832 条活动花费为 0（视作新活动），加上订单&lt;5 的，占比达 75%。客户是<b>把数据稀疏、最不稳定的活动丢给 AI</b>，能做到订单 +86% 且 ACOS 稳，含金量更高。</li>
+    <li><b>分店铺看：</b>约 10 个店铺"订单增长 + 投产比改善"；接近一半"订单增长、投产比未优化但属正常波动"；整体与大盘一致。</li>
+    <li><b>生意目标看：</b>2000 多条里"推动增长 + 增量"约 1800 条（大头），说明客户当时偏向引流做增量；三个目标表现接近，均在一定程度达到预期。</li>
+    <li><b>关键提醒（转成行动信号）：</b>有 <b>17% 的活动交给 AI 不到两周就被关掉</b>。这些多是数据稀疏、AI 还在学习期的活动，<b>过早关停</b>，建议拉长观察窗口——这正是"需要我们陪着看"的证据。</li>
+  </ul>
+  <div class="callout win"><b>话术抓手：</b>"你们这么好的数据，从一个负责人或者老板的视角来看，那肯定是会继续用的。"</div>
+</section>
+
+<!-- 决策链 -->
+<section>
+  <h2><span class="n">4</span> 决策链与推进策略 <small>（你点名的重点）</small></h2>
+  <p class="lead">谁能拍板、谁是内应、谁不管事，先分清，再决定劲往哪儿使。</p>
+
+  <div class="people">
+    <div class="person">
+      <div class="role">新广告负责人 · 副总（男）</div>
+      <div class="name">决策拍板人</div>
+      <div class="desc">主导广告业务，"用不用要跟副总"、"以他意见为主"。之前 AI 用得少、没接触过新系统。当前在深圳出差约一周，周四去跑工厂/供应链。</div>
+      <span class="badge b-key">必须触达 · 当前最大堵点</span>
+    </div>
+    <div class="person">
+      <div class="role">长期运营（说话人1，长沙）</div>
+      <div class="name">内应 / 拥护者</div>
+      <div class="desc">系统长期使用者，"至少能解决 50% 的东西"；既管理也实操；对新的 Insight Agent、提效功能明显有兴趣。但非决策者，需帮忙牵线约副总。</div>
+      <span class="badge b-champ">发展为内部推手</span>
+    </div>
+    <div class="person">
+      <div class="role">陈总 / Mister 陈</div>
+      <div class="name">老板</div>
+      <div class="desc">只负责财务端口与安全端口，不管业务板块，未参会。属最终价值认可方，但日常推进不找他。</div>
+      <span class="badge b-side">知会即可 · 不主攻</span>
+    </div>
+  </div>
+
+  <h3>推进策略</h3>
+  <ul>
+    <li><b>主攻方向：约见副总。</b>他在深圳、我方公司在深圳前海嘉里中心，借地利邀他到公司"喝个咖啡"深聊；请说话人1下周帮约，先拉群预沟通。<b>下周他每周都会过去，时间更充裕</b>，是更好的窗口。</li>
+    <li><b>给副总的话术骨架：</b>① 亮客观复盘数据（+86%/ACOS 稳）；② 点明他关心的旧痛点已被新算法解决（控 ACOS）；③ 用一个月陪跑做"零风险验证"，用数据而非说辞让他和老板做决定。</li>
+    <li><b>稳住内应：</b>把说话人1需要的"提效工具"讲透（她每天看异常≈半小时、每周分析≈半小时到一小时），让她在内部帮我们说话。</li>
+    <li><b>制造老板可见度：</b>服务承诺里"每阶段给不同层级（运营/运营总/老板）做复盘"，目的就是让老板看到并认可，堵住"看不到价值→停用"的循环。</li>
+  </ul>
+  <div class="callout"><b>推进节奏判断：</b>客户已明确"如果不用很可惜""过去使用确实有成效"，说话人1也愿意帮约副总——意向是正向的，卡点纯在<b>触达决策人 + 用新数据兑现</b>。</div>
+</section>
+
+<!-- 痛点-功能匹配 -->
+<section>
+  <h2><span class="n">5</span> 痛点 → 功能精准匹配 <small>（你点名的重点，少而准）</small></h2>
+  <p class="lead">会上一次性过了很多新功能，容易"功能轰炸"。真正该在陪跑里重点落地的，是下面这几条对得上痛点的。</p>
+  <table>
+    <tr><th style="width:30%">客户真实痛点 / 需求</th><th style="width:32%">对应功能</th><th>为什么是它</th></tr>
+    <tr>
+      <td>季节品/主推品 ACOS 容易冲高</td>
+      <td><span class="pill p-brand">2026 控 ACOS 新算法</span> <span class="pill p-purple">ACOS 优先模式</span> <span class="pill p-purple">竞价系数</span></td>
+      <td>直击"敢花钱但 ACOS 高"的旧印象；竞价系数以相乘方式做区间控制，比旧的一刀切数值范围更能控 CPC。（优先模式为内测，需申请）</td>
+    </tr>
+    <tr>
+      <td>看不到 AI 做了什么 / 无法向老板证明价值</td>
+      <td><span class="pill p-brand">AI 透明可解释</span>（操作日志 + 果实解释）<span class="pill p-brand">自定义看板 / 绩效</span></td>
+      <td>去年看不到 AI 动作，现在操作日志可查、每个动作可溯源解释；月度看板 + ASIN 到人，直接服务"让老板看到"。</td>
+    </tr>
+    <tr>
+      <td>提效（每天抓异常、每周分析耗时）</td>
+      <td><span class="pill p-green">AI 通知</span> <span class="pill p-green">Insight Agent</span> <span class="pill p-green">智能筛选</span></td>
+      <td>抓异常从半小时压到 ~15 分钟；Insight Agent（Claude 模型、已喂养数据）5 分钟出分析、可追问；一句话自动拆解筛选条件。对应她"提升效率"的原始诉求。</td>
+    </tr>
+    <tr>
+      <td>优秀运营流失会带走经验</td>
+      <td><span class="pill p-purple">企业资产 / 模板沉淀</span></td>
+      <td>把优秀运营的托管设置、打法沉淀成模板，一键调用；对"规模大、多产品线、人员流动"的团队是长期资产。</td>
+    </tr>
+    <tr>
+      <td>关键词收割"没加词"、加词少</td>
+      <td><span class="pill p-amber">陪跑期一对一：打标 + 词库搭建</span></td>
+      <td>根因是混团/收割流量来源不够纯净/动作未正确开启，属于配置问题，需人工陪跑校正，不是单点功能能解决。</td>
+    </tr>
+    <tr>
+      <td>产品适合 B 端（学校/企业采购）</td>
+      <td><span class="pill p-purple">B2B 竞价位置</span></td>
+      <td>先看 B 端订单占比：接近 10% 可试，占比更高强烈建议试。（内测，需申请）</td>
+    </tr>
+    <tr>
+      <td>规模大、要考核/招聘运营</td>
+      <td><span class="pill p-brand">广告学院 + 考核试题</span></td>
+      <td>整合课程 + 亚马逊广告能力考题，可用于月度考核与面试筛人；也帮客户团队提升运营能力。</td>
+    </tr>
+  </table>
+  <div class="callout"><b>建议聚焦：</b>陪跑首月只主推<strong>控 ACOS（新算法/优先模式/竞价系数）+ AI 透明可解释 + 提效三件套（AI 通知/Insight Agent/智能筛选）</strong>三块，其余（B2B、模板、广告学院）作为深聊时的"增量惊喜"，避免一次讲太满反而稀释重点。</div>
+</section>
+
+<!-- 下一步 -->
+<section>
+  <h2><span class="n">6</span> 下一步计划与风险</h2>
+  <p class="lead">会上已经落到具体动作和时间，这里按时间线固化，并标出各自的卡点。</p>
+  <div class="timeline">
+    <div class="tl"><div class="d">本周内（7/9–7/10）</div><div class="t">客户内部确认参与陪跑的<b>运营人选（挑 3–5 个"主动拥抱 AI"的人）</b>和启动时间；我方 Ivan 发会议纪要 + 分享内容到群。</div></div>
+    <div class="tl"><div class="d">下周一</div><div class="t">正式启动<b>一个月陪跑</b>，按周看数据与效果（ACOS、销量涨跌），为向副总/老板汇报备料。</div></div>
+    <div class="tl"><div class="d">下周（副总在深圳期间）</div><div class="t">约见新副总：我方在前海嘉里中心，邀其到访深聊；先拉群预沟通。<b>这是决定成败的一步。</b></div></div>
+    <div class="tl"><div class="d">同步进行</div><div class="t">我方重新<b>申请板块权限 + 内测功能</b>（改版后过期）；需客户表态有测试意愿，便于向上申请资源。</div></div>
+    <div class="tl"><div class="d">一个月后</div><div class="t">用陪跑数据做去留判断——若仍无法从数据层面说服老板、客户也感受不到效果，则不再强推。</div></div>
+  </div>
+
+  <h3>风险与应对</h3>
+  <table>
+    <tr><th style="width:34%">风险</th><th>应对</th></tr>
+    <tr><td><span class="pill p-red">高</span> 见不到副总，或副总偏好手动、抵触 AI</td><td>抓住他下周在深圳的窗口，靠说话人1牵线 + 地利邀访；用复盘数据和"零风险一个月验证"降低他的决策成本。</td></tr>
+    <tr><td><span class="pill p-amber">中</span> 陪跑选到不愿用 AI 的运营，效果打折</td><td>坚持"挑 3–5 个主动拥抱 AI 的人"的诉求（Beryl 已明确提出），避免抵触者拖垮验证。</td></tr>
+    <tr><td><span class="pill p-amber">中</span> 权限/内测功能申请慢，陪跑体验受影响</td><td>先让客户书面表态测试意愿，我方尽快调度资源、优先申请核心板块。</td></tr>
+    <tr><td><span class="pill p-brand">低</span> 多平台诉求超出系统能力</td><td>系统仅支持亚马逊 + 沃尔玛，SHEIN/Temu/TikTok 不接；沟通中聚焦亚马逊价值，沃尔玛作为可选延伸。</td></tr>
+  </table>
+</section>
+
+<!-- 证据附录 -->
+<section>
+  <h2><span class="n">＋</span> 证据摘录（关键原话）</h2>
+  <p class="lead">供核对，均出自本次会议纪要。</p>
+  <details>
+    <summary>流失原因 · 换人与组织架构变动</summary>
+    <div class="quote">"广告，他们就是单独拎给我们另外一个负责人在处理"；"另外一个负责人是全新的，没有接触过这个系统……对，因为他们之前 AI 用的少"；"只是说他在那边做主导，以他的意见为主"。</div>
+    <div class="quote">"很多时候这个系统用着用着没用了……确实有一部分原因是因为组织架构发生了（变化）"；"（广告）单独拎给我们另外一个负责人在处理"。</div>
+  </details>
+  <details>
+    <summary>复盘数据 · +86% / ACOS 稳 / 75% / 17%</summary>
+    <div class="quote">"订单 orders 是环比增长86%……acos……从接近13变到13，轻微的一个波动"；"832条广告活动，在加了 AI 之前花费等于0……订单数不到5个的……占比有75%"；"17%的广告活动是交给 AI 不到两周就关闭了"。</div>
+  </details>
+  <details>
+    <summary>决策链 · 副总/陈总/说话人1</summary>
+    <div class="quote">"要跟我们副总那个"；"（陈总）他不负责业务板块……只负责财务端口跟安全端口"；"他（副总）刚好在深圳出差……大概待一个星期""周四要去跑工厂"。</div>
+  </details>
+  <details>
+    <summary>痛点 · 季节品 ACOS / 关键词收割 / 提效</summary>
+    <div class="quote">"季节性的产品……他肯定比我们人更敢花钱……但是 acos 就会非常高"；"开了好像也没有给我们加什么词进去……（定位自动加词）基本没加过"；"每天都要看（异常）……半个小时"；"（每周分析）至少要花半个小时，或者一个小时"。</div>
+  </details>
+  <details>
+    <summary>下一步 · 陪跑与约见</summary>
+    <div class="quote">"我们可以从下周一正式开始去陪跑"；"希望您这边可以挑3到5个人……主动拥抱 AI 的"；"确认好副总一个时间，我可以跟他聊一下"；"这个板块……需要重新申请一下"。</div>
+  </details>
+</section>
+
+<div class="foot">内部分析 · 数据与结论均取自 2026-07-07 长沙福岚会议纪要 · 仅供 XNurta 小组内部使用</div>
+
+</div>
+</body>
+</html>
