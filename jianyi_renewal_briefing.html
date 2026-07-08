@@ -1,0 +1,285 @@
+<title>健怡 · Ranein 到访续约会议方案</title>
+<style>
+  :root{
+    --ink:#16233a; --ink2:#33455f; --muted:#64748b; --line:#e2e8f0; --line2:#cbd5e1;
+    --bg:#f4f6fa; --card:#ffffff; --primary:#1e3a8a; --primary2:#2749a8; --indigo:#4338ca;
+    --accent:#0e7490; --good:#0f7a52; --goodbg:#e6f5ee; --warn:#b45309; --warnbg:#fbf1e0;
+    --bad:#b91c1c; --badbg:#fbe9e9; --chipbg:#eef2fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+    line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 22px 80px}
+  h1,h2,h3,h4{margin:0;line-height:1.3;font-weight:700}
+  a{color:var(--primary2)}
+  /* ---- top banner ---- */
+  .hero{background:linear-gradient(135deg,#16234a 0%,#1e3a8a 55%,#2f4bb0 100%);
+    color:#fff;border-radius:16px;padding:26px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+    background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%)}
+  .hero .kicker{font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:#b9c8f0;font-weight:600}
+  .hero h1{font-size:27px;margin:6px 0 10px}
+  .hero .lead{color:#dbe4fb;max-width:760px;font-size:14.5px}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .hero .meta span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);
+    padding:5px 12px;border-radius:999px;font-size:12.5px;color:#eaf0ff}
+  .thesis{margin-top:16px;background:rgba(255,255,255,.10);border-left:3px solid #8fb0ff;
+    padding:12px 16px;border-radius:8px;font-size:14px;color:#eef3ff}
+  /* ---- section ---- */
+  section{margin-top:26px}
+  .sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  .sec-h .no{font-size:13px;font-weight:800;color:#fff;background:var(--primary);border-radius:7px;
+    padding:3px 9px;letter-spacing:.5px}
+  .sec-h h2{font-size:19px;color:var(--ink)}
+  .sec-h .sub{font-size:12.5px;color:var(--muted);margin-left:auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+    box-shadow:var(--shadow);margin-bottom:14px}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:860px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  /* ---- kpi cards ---- */
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+  .kpi .lab{font-size:12px;color:var(--muted);font-weight:600}
+  .kpi .val{font-size:24px;font-weight:800;color:var(--ink);margin-top:2px;letter-spacing:-.5px}
+  .kpi .val small{font-size:13px;font-weight:600;color:var(--muted)}
+  .kpi .note{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .kpi.good .val{color:var(--good)} .kpi.accent .val{color:var(--accent)}
+  /* ---- tables ---- */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card);min-width:520px}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:#eef2fb;color:var(--ink);font-weight:700;font-size:12.5px;white-space:nowrap;
+    position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:nth-child(even){background:#fafbfe}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .kv td:first-child{color:var(--muted);font-weight:600;width:150px;white-space:nowrap}
+  /* ---- bars ---- */
+  .bar-row{display:grid;grid-template-columns:170px 1fr 62px;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+  .bar-row .lbl{color:var(--ink2);font-weight:600}
+  .bar-track{background:#eef1f7;border-radius:6px;height:16px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--primary),var(--indigo))}
+  .bar-row .pct{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;font-size:12.5px}
+  @media(max-width:560px){.bar-row{grid-template-columns:120px 1fr 50px}}
+  /* stacked spend bar */
+  .stack{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);font-size:12px}
+  .stack div{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:12.5px;color:var(--ink2)}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  /* ---- chips / callouts ---- */
+  .chip{display:inline-block;background:var(--chipbg);color:var(--primary2);border:1px solid #dbe3f7;
+    border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;margin:2px 4px 2px 0}
+  .tag{display:inline-block;border-radius:6px;padding:1px 8px;font-size:11.5px;font-weight:700}
+  .tag.g{background:var(--goodbg);color:var(--good)} .tag.w{background:var(--warnbg);color:var(--warn)}
+  .tag.b{background:var(--badbg);color:var(--bad)}
+  .callout{border-radius:10px;padding:13px 16px;font-size:13.5px;margin:12px 0;border:1px solid}
+  .callout.warn{background:var(--warnbg);border-color:#efd39a;color:#7c4a0b}
+  .callout.bad{background:var(--badbg);border-color:#eec3c3;color:#8a1c1c}
+  .callout.good{background:var(--goodbg);border-color:#bfe2d0;color:#0c5c3d}
+  .callout.info{background:#eaf1fb;border-color:#c6d7f2;color:#1c3a72}
+  .callout .h{font-weight:800;display:block;margin-bottom:3px}
+  .quote{background:#f7f9fd;border-left:4px solid var(--primary);border-radius:0 8px 8px 0;
+    padding:12px 16px;font-size:13.5px;color:var(--ink2);margin:10px 0;font-style:normal}
+  .quote b{color:var(--ink)}
+  ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:3px 0}
+  .must{counter-reset:m;list-style:none;margin:0;padding:0}
+  .must li{list-style:none;position:relative;padding:6px 0 6px 34px;margin:0;border-bottom:1px dashed var(--line)}
+  .must li:last-child{border-bottom:none}
+  .must li:before{counter-increment:m;content:counter(m);position:absolute;left:0;top:6px;
+    width:22px;height:22px;background:var(--primary);color:#fff;border-radius:50%;
+    font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  /* ---- agenda timeline ---- */
+  .tl{position:relative;margin-left:6px}
+  .tl:before{content:"";position:absolute;left:64px;top:4px;bottom:4px;width:2px;background:var(--line2)}
+  .tl-item{display:grid;grid-template-columns:56px 1fr;gap:18px;position:relative;margin-bottom:14px}
+  .tl-time{text-align:right;font-weight:800;color:var(--primary);font-size:13px;padding-top:12px;font-variant-numeric:tabular-nums}
+  .tl-body{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 15px;
+    box-shadow:var(--shadow);position:relative}
+  .tl-body:before{content:"";position:absolute;left:-21px;top:16px;width:11px;height:11px;border-radius:50%;
+    background:var(--primary);border:3px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+  .tl-body h4{font-size:14.5px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+  .tl-body h4 .dur{font-size:11.5px;font-weight:700;color:var(--accent);background:#e2f1f4;border-radius:5px;padding:1px 7px}
+  .tl-body h4 .who{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .tl-body p{margin:6px 0 0;font-size:13px;color:var(--ink2)}
+  @media(max-width:560px){.tl:before{left:44px}.tl-item{grid-template-columns:40px 1fr;gap:12px}.tl-body:before{left:-17px}}
+  /* option tiers */
+  .tier{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--card);box-shadow:var(--shadow);position:relative}
+  .tier.hot{border:2px solid var(--primary);box-shadow:0 6px 20px rgba(30,58,138,.16)}
+  .tier .ribbon{position:absolute;top:-11px;left:16px;background:var(--primary);color:#fff;font-size:11px;
+    font-weight:700;padding:3px 10px;border-radius:6px}
+  .tier h4{font-size:15px;margin-bottom:8px}
+  .tier ul{margin:0;padding-left:18px;font-size:12.8px;color:var(--ink2)} .tier ul li{margin:4px 0}
+  /* footer */
+  .foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+  .foot code{background:#eef2fb;padding:1px 5px;border-radius:4px;font-size:11px}
+  .anchor-note{font-size:12px;color:var(--muted);margin-top:4px}
+  /* print */
+  @media print{
+    body{background:#fff;font-size:11.5px}
+    .wrap{max-width:none;padding:0}
+    .card,.kpi,.tbl-wrap,.tier,.tl-body,.hero{box-shadow:none}
+    .hero{background:#1e3a8a !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    section,.card,.tl-item,.tier,.tbl-wrap,.callout{break-inside:avoid}
+    .sec-h{break-after:avoid}
+    @page{size:A4;margin:12mm}
+  }
+</style>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kicker">Xnurta · 到访续约会议方案 · 大方向版</div>
+    <h1>健怡 / 睿宁 · Ranein 续约 + 增购</h1>
+    <p class="lead">健怡 4 人本周五（约 2026-07-11）由<b>何总带队</b>到公司拜访。由同事代 Yuhao 主持，建议 2 小时左右。</p>
+    <div class="meta">
+      <span>品牌 Ranein（RV 房车热水器）</span>
+      <span>决策人：何总</span>
+      <span>近60天 花费 $18.8万 / 销售 $66.5万</span>
+      <span>ACOS 28% · ROAS 3.5</span>
+      <span>方向已选：词库</span>
+    </div>
+    <div class="thesis"><b>主线</b>：用健怡自己的账户数据证明「留在 Xnurta ＝ 业务持续增长」，让续约和增购成为增长计划的自然结果，而不是价格谈判。</div>
+  </div>
+
+  <!-- 须知 -->
+  <section>
+    <div class="sec-h"><span class="no">须知</span><h2>主持人开会前必看 3 条</h2></div>
+    <div class="grid g3">
+      <div class="card" style="margin:0">
+        <span class="tag b">认准决策人</span>
+        <p style="margin:8px 0 0;font-size:13px"><b>拍板的是何总</b>——战略、预算、续约由他定。<b>陈顺源 Eric 是广告运营小组长</b>，懂功能、管一线操作，但不是最终决策人。<br>👉 对<b>何总</b>讲增长、ROI、明年计划；对<b>Eric</b>讲功能怎么落地、怎么省人力。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <span class="tag g">顺势别重推</span>
+        <p style="margin:8px 0 0;font-size:13px">他们已明确选定<b>「词库」方向</b>。顺着这个方向讲收割、吃自然位，<b>不要重新推销别的方向</b>。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <span class="tag w">两个雷区先说</span>
+        <p style="margin:8px 0 0;font-size:13px"><b>(a) AI 黑箱顾虑</b>——用「AI 动作透明 / 操作日志 / 对比报告」正面回应。<br><b>(b) garbage disposal 失败广告</b>——抢在客户提之前讲清「策略错位、不是 AI 无能」。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 速览 -->
+  <section>
+    <div class="sec-h"><span class="no">1</span><h2>客户一页速览</h2></div>
+    <div class="grid g4">
+      <div class="kpi"><div class="lab">账户花费 · 近60天</div><div class="val">$18.8<small> 万</small></div><div class="note">销售 $66.5 万</div></div>
+      <div class="kpi accent"><div class="lab">ACOS / ROAS</div><div class="val">28%<small> / 3.5</small></div><div class="note">健康盘</div></div>
+      <div class="kpi"><div class="lab">投放规模</div><div class="val">875<small> 活动</small></div><div class="note">352 个 ASIN</div></div>
+      <div class="kpi good"><div class="lab">运营强度</div><div class="val">高<small> · 无冷却</small></div><div class="note">日均数百次操作，续约前不降温</div></div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:14px">
+      <table class="kv"><tbody>
+        <tr><td>客户 / 店铺</td><td>健怡 · 店铺睿宁 · 品牌 <b>Ranein</b>（房车露营，RV 热水器为主）</td></tr>
+        <tr><td>主力爆款</td><td><b>B0D7GKVWT9</b> RV 热水器（现金牛，子类目 BSR 前列）；另有电热 / 丙烷 / 天然气即热热水器多款</td></tr>
+        <tr><td>站点</td><td>美国站为主，加拿大站效率更高但投放偏少</td></tr>
+        <tr><td>决策链</td><td>拍板：<b>何总</b>；广告运营小组长：陈顺源 Eric；多店负责人：萧乐棋（另有店铺 AI 未用满）</td></tr>
+        <tr><td>合作历程</td><td>2025/10 培训 → 2026/01 深入培训 → 2026/02 数据复盘 + 词库 SOP，持续深度参与</td></tr>
+        <tr><td>续约信号</td><td><span class="tag g">正面</span> 重度使用不降温、决策链上探到何总、选定词库方向　<span class="tag b">风险</span> AI 黑箱顾虑、有失败案例、部分店铺 AI 采纳率低</td></tr>
+        <tr><td>本次目标</td><td>① 化解顾虑、证明价值 → <b>稳续约</b>；② 借扩量口子做 <b>增购</b></td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 2 在Xnurta上做什么 -->
+  <section>
+    <div class="sec-h"><span class="no">2</span><h2>他们在 Xnurta 上都做什么</h2><span class="sub">＝ 续约锚点：不止用 AI</span></div>
+    <p style="margin:0 0 12px;color:var(--ink2)">健怡是<b>四层功能全用上的深度用户</b>，切换成本极高——这是最硬的续约底气。除了 AI 托管，他们大量在用这三块<b>非 AI</b> 功能：</p>
+    <div class="grid g2">
+      <div class="card" style="margin:0">
+        <span class="tag" style="background:#eef2fb;color:var(--primary2)">① 手动精细化投放（全部搜索广告）</span>
+        <p style="margin:8px 0 0;font-size:13px">最大一块人力都在这：<b>手动否词、手动调竞价、开关活动、调预算</b>。光手动否定词就有 <b>2,000+ 条</b>——重度手动运营。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <span class="tag" style="background:#eef2fb;color:var(--primary2)">② 广告位锁定 / 首页卡位</span>
+        <p style="margin:8px 0 0;font-size:13px">用它<b>自动维持核心词的首页 / 顶部位置</b>（非 AI 功能，近60天约 900 次）。<b>停用＝排名掉</b>，粘性最强。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <span class="tag" style="background:#eef2fb;color:var(--primary2)">③ 自动化规则</span>
+        <p style="margin:8px 0 0;font-size:13px">主要跑<b>日预算规则</b>（约 650 次），自动收放预算，减少盯盘。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <span class="tag" style="background:var(--goodbg);color:var(--good)">④ AI 托管</span>
+        <p style="margin:8px 0 0;font-size:13px">AI 自动调预算 / 竞价（约 1,000 次）。他们已选定的<b>词库 / 关键词收割</b>也挂在这条线上。</p>
+      </div>
+    </div>
+    <div class="quote">
+      会上话术：「过去两个月，你们在 Xnurta 上做的不只是开 AI——<b>手动精调、首页卡位、自动化规则、AI 托管四层都在跑</b>。首页卡位在替你们守核心词的顶部位置，一旦停，排名会掉、几千条否词和调价要回到人肉。你们现在 ACOS 28%、ROAS 3.5 的健康盘，是建立在这一整套之上的。」
+    </div>
+    <p class="anchor-note">注：操作日志里约 7 成标为 Amazon Console 的记录是<b>亚马逊后台同步回写</b>（不是他们额外的操作），已排除，不影响上面的判断。</p>
+  </section>
+
+  <!-- 3 增购大方向 -->
+  <section>
+    <div class="sec-h"><span class="no">3</span><h2>增长与增购的三个大方向</h2><span class="sub">都用他们自己的现状当由头</span></div>
+    <div class="grid g3">
+      <div class="card" style="margin:0;border-top:3px solid var(--primary)">
+        <h4 style="font-size:14px;margin-bottom:6px">A. 把人肉活交给自动化</h4>
+        <p style="font-size:13px;margin:0;color:var(--ink2)">月否 2,000+ 词、大量手动调价——这些可以转成<b>自动否词 / 搜索词收割 / 分时调价</b>，把人力解放去做策略。最直击痛点。</p>
+      </div>
+      <div class="card" style="margin:0;border-top:3px solid var(--good)">
+        <h4 style="font-size:14px;margin-bottom:6px">B. 词库 × 收割吃自然位</h4>
+        <p style="font-size:13px;margin:0;color:var(--ink2)">顺着他们选的词库方向：把出单词收割成精准词、用词库系统化布局，<b>把核心词的自然排名推上去</b>，降低对广告的依赖。</p>
+      </div>
+      <div class="card" style="margin:0;border-top:3px solid var(--accent)">
+        <h4 style="font-size:14px;margin-bottom:6px">C. 扩量：SBV / AMC / CA 站 / 多店</h4>
+        <p style="font-size:13px;margin:0;color:var(--ink2)"><b>品牌视频 SBV、AMC 人群</b>还在试水；<b>加拿大站效率高却投放少</b>；<b>其他店铺 AI 没用满</b>——都是确定性的增量口子。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 产品与市场 -->
+  <section>
+    <div class="sec-h"><span class="no">4</span><h2>产品与市场：正卡 7 月旺季</h2></div>
+    <div class="callout good">
+      <span class="h">一句话时机</span>
+      <b>7 月是房车（RV）全年最旺月</b>，而且这是个 5 年热度翻倍的成长型细分。当下最该干两件事：旺季把预算压到高效品和加拿大站；同时用<b>收割 + 词库</b>把黄金词 <code>rv tankless water heater</code>（高需求、低竞争，但自然位还没吃透）的自然排名焊死成护城河——趁低价克隆刚进场、还没占住位置。
+    </div>
+  </section>
+
+  <!-- 5 议程 -->
+  <section>
+    <div class="sec-h"><span class="no">5</span><h2>会议议程（大框架）</h2><span class="sub">约 2 小时，可照着开</span></div>
+    <div class="tl">
+      <div class="tl-item"><div class="tl-time">开场</div><div class="tl-body">
+        <h4>① 对齐目标 <span class="who">主持人</span></h4>
+        <p>谢何总带队到访；把会议定义成「一起复盘过去一年、规划明年增长」，不是催签续约。抛出三个要一起拿下的结论：过去值不值 → 明年怎么增长 → 怎么继续合作。</p>
+      </div></div>
+      <div class="tl-item"><div class="tl-time">核心</div><div class="tl-body">
+        <h4>② 数据价值回顾 <span class="who">主讲</span></h4>
+        <p>用他们自己的数据讲价值：四层功能都在跑、首页卡位守住了核心词、健康盘 ROAS 3.5。<b>主动化解两个雷区</b>（AI 黑箱 + garbage disposal 失败案例）。回收上次答应的对比报告 / 文档，当场交付。</p>
+      </div></div>
+      <div class="tl-item"><div class="tl-time">增长</div><div class="tl-body">
+        <h4>③ 明年打法 + 新功能演示 <span class="who">主讲</span></h4>
+        <p>先让客户说明年计划，再把话题接到三个大方向（自动化省人力 / 词库吃自然位 / SBV·AMC·CA站扩量）+ 7 月旺季打法。现场演示 1-2 个能立刻省力的功能（自动否词、分时调价）。</p>
+      </div></div>
+      <div class="tl-item"><div class="tl-time">收口</div><div class="tl-body">
+        <h4>④ 续约 + 增购 <span class="who">主持人</span></h4>
+        <p>先确认价值共识，再把明年计划打包成一份新合约，给 3 档选项，争取当场推进或至少拿到明确的下一步。</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- 6 续约策略 -->
+  <section>
+    <div class="sec-h"><span class="no">6</span><h2>续约策略</h2><span class="sub">卖价值，不是降价</span></div>
+    <div class="grid g3">
+      <div class="tier"><h4>基础档</h4><ul><li>续约现有</li><li>AI 托管 + 首页卡位</li><li>自动化规则 + 词库</li></ul></div>
+      <div class="tier hot"><div class="ribbon">主推</div><h4>增长档</h4><ul><li>基础档全部</li><li>+ 自动否词 / 搜索词收割</li><li>+ 分时调价</li></ul></div>
+      <div class="tier"><h4>旗舰档</h4><ul><li>增长档全部</li><li>+ SBV 视频 + AMC 人群</li><li>+ 多店 / 加拿大站扩量</li></ul></div>
+    </div>
+    <div class="callout info" style="margin-top:14px">
+      <span class="h">价格异议一句话</span>
+      不比总价，比「每块钱回报 + 省下的人力」：ROAS 3.5 ＝ 每 1 块广告带回 3.5 块；月省 2,000+ 条人肉否词。真要让步就<b>绑条件</b>（换更长约期 / 换增购），不裸降单价。核心杠杆是<b>切换成本</b>（数据沉淀 + AI 学习 + 团队磨合，换工具等于从零）＞ 降价。
+    </div>
+  </section>
+
+  <div class="foot">
+    源：4 份飞书健怡纪要 + 操作日志分析 + 广告报表 + 卖家精灵市场研究 + 续约最佳实践 + Xnurta 底层逻辑文档。会前从 ads 复盘技能导出 AI vs Non-AI 对比图与托管对比报告，用于第 ② 段。内部简报，勿外发。
+  </div>
+
+</div>
