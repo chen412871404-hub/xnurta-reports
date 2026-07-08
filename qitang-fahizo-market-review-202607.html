@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绍兴祁唐 · FAHIZO 男士正装衬衫 · 市场与竞品格局复盘</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--tealPale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#fff;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--greenBg:#ECFDF5;--red:#DC2626;--redBg:#FEF2F2;--amber:#D97706;--amberBg:#FFFBEB;--blue:#2563EB;--blueBg:#EFF6FF;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fb);background:var(--bg);color:#1E293B;line-height:1.7}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px}
+.hdr h1{font-family:var(--fh);font-size:28px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14px;color:rgba(255,255,255,.82);margin-bottom:14px}.hdr-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.66)}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:120px;padding:12px 14px;border:none;background:transparent;color:var(--dark);font:500 14px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:18px;border:1px solid var(--border)}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--navy)}.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.card h3{font-size:15px;font-weight:700;color:var(--navy);margin:18px 0 8px}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+p.tx{font-size:14px;color:var(--dark);margin:10px 0}
+ul.tx{font-size:14px;color:var(--dark);margin:8px 0 8px 20px}ul.tx li{margin:5px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:11px 13px;font-weight:600;font-size:11px;text-transform:uppercase;text-align:left}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:700;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+tr.me td{background:var(--tealPale)!important;font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;gap:11px;margin-bottom:18px;font-size:13.5px;line-height:1.7}
+.a-info{background:var(--blueBg);border:1px solid #BFDBFE;color:#1E40AF}.a-ok{background:var(--greenBg);border:1px solid #A7F3D0;color:#065F46}.a-warn{background:var(--amberBg);border:1px solid #FDE68A;color:#92400E}.a-teal{background:var(--tealPale);border:1px solid #99F6E4;color:#115E59}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}.t-green{background:var(--greenBg);color:#065F46}.t-red{background:var(--redBg);color:#991B1B}.t-amber{background:var(--amberBg);color:#92400E}.t-blue{background:var(--blueBg);color:#1E40AF}.t-teal{background:var(--tealPale);color:#115E59}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}.bs.neu{background:linear-gradient(135deg,#EFF6FF,#fff);border-color:#BFDBFE}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px}.bs .big{font-family:var(--fh);font-size:21px;font-weight:800}.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}.bs.neu .big{color:var(--blue)}.bs .sm{font-size:12px;color:var(--muted);margin-top:6px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:340px}
+.prodcard{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pc{border:1px solid var(--border);border-radius:12px;padding:18px 20px;background:linear-gradient(135deg,#F8FAFC,#fff)}
+.pc .code{font-size:12px;color:var(--muted);font-weight:600}.pc .nm{font-size:15px;font-weight:700;color:var(--navy);margin:3px 0 10px}
+.pc .row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px dashed var(--border)}
+.feat{display:grid;grid-template-columns:1fr;gap:12px}
+.ft{border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:10px;padding:14px 18px;background:#fff}
+.ft .find{font-size:13px;color:var(--dark)}.ft .fn{font-weight:700;color:var(--teal);font-size:14px;margin:4px 0}.ft .gain{font-size:12.5px;color:var(--muted)}
+.foot{font-size:12px;color:var(--muted);text-align:center;padding:18px 0 6px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.bigstat,.prodcard{grid-template-columns:1fr}}
+</style></head>
+<body><div class="container">
+
+<header class="hdr">
+  <h1>绍兴祁唐 · FAHIZO 男士正装衬衫｜市场与竞品格局复盘</h1>
+  <div class="sub">聚焦两款主推父体，含去年同期（YoY）市场对比，解读本期 ACOS 上浮的市场侧原因</div>
+  <div class="hdr-meta"><span>🛒 站点 美国站（Amazon.com）</span><span>👔 品类 男士纽扣衬衫 · 正装 / 燕尾服</span><span>🎯 对象 HT1768-1（B0D4LTT6WS）· 1840A（B09HRRH38V）</span><span>📅 编制 2026-07</span></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-t="overview">📊 结论总览</button>
+  <button class="tab" data-t="yoy">📈 去年同期对比</button>
+  <button class="tab" data-t="market">🔍 市场格局</button>
+  <button class="tab" data-t="comp">⚔️ 竞品格局</button>
+  <button class="tab" data-t="actions">🎯 行动建议</button>
+</nav>
+
+<!-- ================= 结论总览 ================= -->
+<section class="panel active" id="p-overview">
+  <div class="alert a-info"><span>ℹ️</span>
+    <div><strong>数据覆盖说明</strong><br>本报告基于美国站公开的市场与竞品数据（品类销量/价格/评分、关键词搜索与竞价、竞品梯队），并结合您本期提供的两款产品广告经营快照。去年同期对比采用「品类」与「关键词」的同比口径（2025 年 7 月 vs 最新月份）。您后台的历年 ACOS 具体数值请以广告后台为准，本报告侧重解释「市场侧为什么会推高 ACOS」。</div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--teal)">
+    <h2>📌 一句话结论</h2>
+    <div class="desc">您反馈「本期 ACOS 明显高于去年同期」——从市场数据看，主因不是需求萎缩，而是竞争与流量成本结构变化</div>
+    <div class="bigstat">
+      <div class="bs win"><div class="t">① 需求还在不在？</div><div class="big">在，而且更旺</div><div class="sm">「mens dress shirt」搜索量同比 <span class="pos">+44%</span>（6 月 4.3 万→6.2 万）</div></div>
+      <div class="bs lose"><div class="t">② 竞争强不强？</div><div class="big">明显加剧</div><div class="sm">正装衬衫在售商品 <span class="neg">5.4 万+</span>，$16.99 低价爆款持续涌入</div></div>
+      <div class="bs neu"><div class="t">③ ACOS 上浮怎么来？</div><div class="big">价差 + 季节</div><div class="sm">您定价高于主流爆款约 <span class="warn">70%</span>；燕尾服款正处夏季淡季</div></div>
+    </div>
+    <p class="tx"><strong>核心判断（置信度：高）：</strong>男士正装衬衫市场去年同期以来需求上升、品类销售额同比约 +27%，但竞争同步加剧——大量中国卖家以 $15–20 低价、数万条评论的爆款持续进入。您的两款产品定位在 $28.99 / $35.99 的中高价位，单次点击成本（$1.19）其实与市场持平，ACOS 上浮更多来自「点击率偏低 + 转化承压」这两个由竞争与价差驱动的环节，叠加燕尾服款当前处于季节性淡季。<strong>这不是广告投放失误，而是市场格局的结构性变化。</strong></p>
+  </div>
+
+  <div class="card">
+    <h2>两款产品的市场定位</h2>
+    <div class="desc">同属「男士纽扣衬衫」大类，但落在两个竞争完全不同的细分</div>
+    <div class="prodcard">
+      <div class="pc">
+        <div class="code">HT1768-1 · B0D4LTT6WS</div>
+        <div class="nm">FAHIZO 燕尾服衬衫套装（翼领 / 法式袖口 + 领结 + 袖扣）</div>
+        <div class="row"><span>细分</span><span class="hl">燕尾服衬衫（利基/差异化）</span></div>
+        <div class="row"><span>售价</span><span class="hl">$35.99</span></div>
+        <div class="row"><span>评分</span><span>4.4★ · 约 1,809 条</span></div>
+        <div class="row"><span>市场地位</span><span class="pos">tuxedo 词头部品牌之一</span></div>
+        <div class="row"><span>本期 ACOS / TACOS</span><span class="warn">37.6% / 23.7%</span></div>
+        <div class="row"><span>广告销售占比</span><span>约 63%</span></div>
+      </div>
+      <div class="pc">
+        <div class="code">1840A · B09HRRH38V</div>
+        <div class="nm">FAHIZO 常规版商务正装衬衫（免烫弹力）</div>
+        <div class="row"><span>细分</span><span class="hl">常规正装衬衫（红海/价格战）</span></div>
+        <div class="row"><span>售价</span><span class="hl">$28.99</span></div>
+        <div class="row"><span>评分</span><span>4.4★ · 约 2,939 条</span></div>
+        <div class="row"><span>市场地位</span><span class="neg">对阵 $16.99 万评爆款</span></div>
+        <div class="row"><span>本期 ACOS / TACOS</span><span class="warn">36.4% / 19.1%</span></div>
+        <div class="row"><span>广告销售占比</span><span>约 52%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>本期广告经营快照</h2>
+    <div class="desc">来自您提供的两款父体本期数据 · 用于与市场情况对照</div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">合计销售额</div><div class="v">$29,896</div><div class="s">两款父体本期</div></div>
+      <div class="kpi"><div class="l">加权 ACOS</div><div class="v">37.0%</div><div class="s">燕尾服 37.6% / 正装 36.4%</div></div>
+      <div class="kpi"><div class="l">点击率 CTR</div><div class="v">0.40–0.46%</div><div class="s warn">偏低——曝光多、点击少</div></div>
+      <div class="kpi"><div class="l">单次点击成本</div><div class="v">$1.19</div><div class="s">与品类均值持平</div></div>
+    </div>
+    <h3>广告销售占比：两款都偏「靠广告拉动」</h3>
+    <div class="chart-box" style="height:210px"><canvas id="c_dep"></canvas></div>
+    <div class="alert a-warn" style="margin:14px 0 0"><span>⚠️</span><div><strong>值得关注：</strong>两款产品曝光量很大（合计约 125 万次）但点击率仅 0.4% 左右，说明「被展示、没被点」。在一个满屏 $16.99 爆款的搜索页里，中高价产品被略过是可预期的——这正是 ACOS 上浮的第一道闸口，也是最有优化空间的地方。</div></div>
+  </div>
+</section>
+
+<!-- ================= 去年同期对比 ================= -->
+<section class="panel" id="p-yoy">
+  <div class="alert a-teal"><span>📈</span><div><strong>YoY 核心口径：</strong>用「品类整体表现」和「关键词搜索需求」的同比变化，还原去年同期到现在市场发生了什么。结论：<strong>需求上升、品类做大，但供给与竞争上升更快</strong>——这是 ACOS 抬升的市场底色。</div></div>
+
+  <div class="two">
+    <div class="card">
+      <h2>品类在变大（不是变小）</h2>
+      <div class="desc">男士纽扣衬衫 · 单品平均月销售额 · 去年同期 vs 最新</div>
+      <div class="chart-box"><canvas id="c_yoyRev"></canvas></div>
+      <p class="tx">品类单品平均月销售额同比约 <span class="pos">+27%</span>（$25.6万→$32.5万），头部 Top10 更是从 $92万 涨到 $118万。<strong>说明蛋糕在变大，值得继续投入</strong>——但也吸引了更多人来分。</p>
+    </div>
+    <div class="card">
+      <h2>竞争强度同比抬升</h2>
+      <div class="desc">同一品类样本 · 卖家 / 品牌 / 平均售价</div>
+      <table>
+        <thead><tr><th>指标</th><th class="num">去年同期</th><th class="num">最新</th><th class="num">变化</th></tr></thead>
+        <tbody>
+          <tr><td>在售卖家数</td><td class="num">36</td><td class="num">39</td><td class="num pos">+8%</td></tr>
+          <tr><td>在售品牌数</td><td class="num">39</td><td class="num">41</td><td class="num pos">+5%</td></tr>
+          <tr><td>平均售价</td><td class="num">$21.59</td><td class="num">$22.53</td><td class="num">+4%</td></tr>
+          <tr><td>新品占比</td><td class="num">12%</td><td class="num">9%</td><td class="num">—</td></tr>
+          <tr class="me"><td>低价爆款主力价位</td><td class="num" colspan="2">$16.99</td><td class="num neg">长期承压</td></tr>
+        </tbody>
+      </table>
+      <p class="tx">卖家与品牌数同比上升，而平均售价仅涨 4%——<strong>价格带整体没往上走，低价爆款把成交价死死压在 $17 附近</strong>。中高价产品要在这样的页面里买到点击，自然更贵。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>关键词需求：同比上行，且淡旺季分明</h2>
+    <div class="desc">两大核心词月搜索量 · 2025 vs 2026（3–6 月）</div>
+    <div class="two">
+      <div><h3>mens dress shirt（正装衬衫主词）</h3><div class="chart-box"><canvas id="c_demandDress"></canvas></div></div>
+      <div><h3>tuxedo shirt（燕尾服主词）</h3><div class="chart-box"><canvas id="c_demandTux"></canvas></div></div>
+    </div>
+    <p class="tx">「mens dress shirt」今年各月搜索量普遍比去年同期高 <span class="pos">24%–44%</span>，需求明确上行；「tuxedo shirt」同比基本持平（6 月 +2%），且有清晰的<strong>春季高峰（prom/婚礼季）+ 夏季低谷</strong>规律。当前 7 月正是燕尾服款的季节性淡季，此时 ACOS 天然偏高，属可预期现象，不宜与旺季直接比。</p>
+  </div>
+
+  <div class="card">
+    <h2>把三条线接起来：ACOS 为什么会上浮</h2>
+    <ul class="tx">
+      <li><strong>需求侧（利好）：</strong>搜索需求同比上升、品类销售额 +27%，市场值得继续做。</li>
+      <li><strong>供给侧（压力）：</strong>卖家/品牌数上升、在售商品 5.4 万+，$16.99 低价爆款持续进入，页面竞争更拥挤。</li>
+      <li><strong>价格侧（关键）：</strong>您定价 $28.99 / $35.99，高出主流成交价约 70%；在同一搜索页里点击率被稀释（本期 CTR 仅 0.4%），要拿到同样的单量就要买更多、更贵的曝光。</li>
+      <li><strong>季节侧（燕尾服款）：</strong>正装/燕尾服偏婚礼与正式场合，春季旺、夏季淡，当前时点效率天然偏低。</li>
+    </ul>
+    <div class="alert a-info" style="margin-bottom:0"><span>ℹ️</span><div>换句话说：<strong>不是您投得差，而是同样一次曝光，今年要和更多、更便宜、评论更多的对手抢点击和转化。</strong>下一页看清竞争对手长什么样。</div></div>
+  </div>
+</section>
+
+<!-- ================= 市场格局 ================= -->
+<section class="panel" id="p-market">
+  <div class="card">
+    <h2>市场规模与结构</h2>
+    <div class="desc">男士纽扣衬衫（正装 / 商务方向）· 最新月份</div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">品类单品月均销售额</div><div class="v">$32.5万</div><div class="s pos">同比 +27%</div></div>
+      <div class="kpi"><div class="l">头部 Top10 月均</div><div class="v">$118万</div><div class="s">头部集中、体量大</div></div>
+      <div class="kpi"><div class="l">品类平均售价</div><div class="v">$22.5</div><div class="s">主流成交价约 $17</div></div>
+      <div class="kpi"><div class="l">平均评分</div><div class="v">4.5★</div><div class="s">口碑门槛高</div></div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>竞争强度：越大众越拥挤</h2>
+      <div class="desc">主要关键词 · 在售商品数 vs 平均竞价</div>
+      <div class="chart-box"><canvas id="c_comp"></canvas></div>
+      <p class="tx">越靠近「mens dress shirt」这样的大众词，在售商品越多（5.4 万+）、竞价越高（$1.19–1.38）；越往「tuxedo shirt」这样的利基词走，商品数骤降到 5–7 千、竞价降到 $1.0 左右。<strong>这解释了为什么燕尾服款（利基）比常规正装款（红海）更有守住空间。</strong></p>
+    </div>
+    <div class="card">
+      <h2>价格带：低价把成交按在 $15–20</h2>
+      <div class="desc">主流转化款价位 vs 您的定价</div>
+      <table>
+        <thead><tr><th>价位带</th><th>典型玩家</th><th class="num">定位</th></tr></thead>
+        <tbody>
+          <tr><td>$12–17</td><td>BEILU、ROUWELL、J.VER 基础款</td><td class="num"><span class="tag t-red">走量爆款</span></td></tr>
+          <tr><td>$17–20</td><td>J.VER、Alimens、JEMITOP</td><td class="num"><span class="tag t-red">主流成交</span></td></tr>
+          <tr><td>$25–30</td><td>HISDERN、<b>FAHIZO 1840A</b></td><td class="num"><span class="tag t-amber">中价</span></td></tr>
+          <tr class="me"><td>$34–36</td><td><b>FAHIZO HT1768-1</b>、Gollnwe</td><td class="num"><span class="tag t-teal">套装溢价</span></td></tr>
+          <tr><td>$50+</td><td>Van Heusen、Sir Gregory</td><td class="num"><span class="tag t-blue">品牌/高端</span></td></tr>
+        </tbody>
+      </table>
+      <p class="tx">燕尾服款的溢价有「领结 + 袖扣整套」支撑，站得住；常规正装款 $28.99 处在最尴尬的位置——比爆款贵七成，又没到品牌高端区。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>卖家结构：中国卖家主导、低价新品快速迭代</h2>
+    <p class="tx">正装衬衫在售主力（J.VER、Alimens & Gentle、JEMITOP、Lusead、ROUWELL 等）多为中国卖家，打法一致：<strong>低价 + 免烫弹力卖点 + 快速堆评论 + 高频上新</strong>。近一年新进的 Lusead（2025-03 上架）、ROUWELL（2025-10 上架）等已快速起量。这类对手会持续压低成交价、推高关键词竞价，是 ACOS 长期承压的根源。您的 FAHIZO 已在燕尾服细分建立品牌与评论优势，应把这一优势守稳、放大，而不是在最红海的低价正装词上硬拼。</p>
+  </div>
+</section>
+
+<!-- ================= 竞品格局 ================= -->
+<section class="panel" id="p-comp">
+  <div class="alert a-info"><span>⚔️</span><div><strong>看点：</strong>横轴是价格、纵轴是评论数（口碑体量）。谁在「低价 + 万评」的右下重区，谁在「利基 + 差异化」的空间里。FAHIZO 用<span class="t-teal tag">青色</span>标出。</div></div>
+
+  <div class="card">
+    <h2>细分一：常规正装衬衫（1840A / B09HRRH38V 的战场）</h2>
+    <div class="desc">价格 × 评论数分布 · 主要竞品</div>
+    <div class="chart-box tall"><canvas id="c_dress"></canvas></div>
+    <table style="margin-top:14px">
+      <thead><tr><th>品牌 / 款</th><th class="num">价格</th><th class="num">评分</th><th class="num">评论数</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>J.VER（正装主力）</td><td class="num">$16.99</td><td class="num">4.5</td><td class="num neg">36,000+</td><td>品类王者，价低评论海量</td></tr>
+        <tr><td>Alimens &amp; Gentle</td><td class="num">$18.99</td><td class="num">4.5</td><td class="num">6,000–10,000</td><td>免烫防污，稳定二番</td></tr>
+        <tr><td>JEMITOP</td><td class="num">$19.99</td><td class="num">4.5</td><td class="num">8,000+</td><td>婚礼/prom 卖点</td></tr>
+        <tr><td>Lusead（新）</td><td class="num">$16.99</td><td class="num">4.6</td><td class="num">3,100</td><td>2025 上架，快速起量</td></tr>
+        <tr><td>ROUWELL（新）</td><td class="num">$17.99</td><td class="num">4.6</td><td class="num">~980</td><td>2025-10 上架</td></tr>
+        <tr class="me"><td><b>FAHIZO 1840A</b></td><td class="num">$28.99</td><td class="num">4.4</td><td class="num">2,939</td><td>价格高七成，口碑非最强</td></tr>
+        <tr><td>Van Heusen（品牌）</td><td class="num">$55.00</td><td class="num">4.4</td><td class="num">42,000+</td><td>老牌，另一价格逻辑</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-warn" style="margin:14px 0 0"><span>⚠️</span><div><strong>诊断：</strong>这是最难打的战场。$28.99 要正面对抗 $16.99、拥有 3.6 万条评论的 J.VER，广告只能靠加价买曝光，ACOS 很难压下来。<strong>建议不要在最大众的低价正装词上和爆款硬碰</strong>，而是靠差异化（免烫弹力、Regular Fit、14.5″–20.5″ 全尺码/大码）切细分词，把广告预算用在能体现差异的场景词上。</div></div>
+  </div>
+
+  <div class="card">
+    <h2>细分二：燕尾服衬衫（HT1768-1 / B0D4LTT6WS 的战场）</h2>
+    <div class="desc">价格 × 评论数分布 · 主要竞品</div>
+    <div class="chart-box tall"><canvas id="c_tux"></canvas></div>
+    <table style="margin-top:14px">
+      <thead><tr><th>品牌 / 款</th><th class="num">价格</th><th class="num">评分</th><th class="num">评论数</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr class="me"><td><b>FAHIZO HT1768-1</b></td><td class="num">$35.99</td><td class="num">4.4</td><td class="num pos">1,643</td><td>整套配件，评论领先，tuxedo 词头部</td></tr>
+        <tr><td>Gollnwe（直接对标）</td><td class="num">$35.99</td><td class="num">4.4</td><td class="num">1,428</td><td>同价、同卖点，最需盯防</td></tr>
+        <tr><td>HISDERN</td><td class="num">$25.98</td><td class="num">4.4</td><td class="num">2,851</td><td>低一档价位</td></tr>
+        <tr><td>Alimens（法式袖口）</td><td class="num">$25.99</td><td class="num">4.2</td><td class="num">4,188</td><td>评论多但评分偏低</td></tr>
+        <tr><td>J.VER（燕尾服款）</td><td class="num">$25.99</td><td class="num">4.6</td><td class="num">1,331</td><td>评分高、价更低</td></tr>
+        <tr><td>Sir Gregory（高端棉）</td><td class="num">$59.95</td><td class="num">4.4</td><td class="num">516</td><td>高端小众</td></tr>
+      </tbody>
+    </table>
+    <div class="alert a-ok" style="margin:14px 0 0"><span>✅</span><div><strong>诊断：</strong>这里 FAHIZO 是<strong>相对优势方</strong>——「翼领 + 法式袖口 + 领结 + 袖扣」整套差异化，评论数在同价位领先，且在「mens tuxedo shirt」等词上已是头部品牌。竞争没有正装词那么惨烈（商品数仅 5–7 千）。<strong>唯一贴身对手是同价同卖点的 Gollnwe</strong>，需要持续盯防其价格与评论。这一款的 ACOS 上浮更多是季节性（当前夏季淡季），旺季（春季 prom/婚礼）应能明显回落。</div></div>
+  </div>
+</section>
+
+<!-- ================= 行动建议 ================= -->
+<section class="panel" id="p-actions">
+  <div class="alert a-teal"><span>🎯</span><div><strong>思路：</strong>市场决定了「常规正装款打差异化、燕尾服款守利基」两条不同策略。下面每条建议都挂在本报告的一个具体发现上，并对应到 Xnurta 的具体功能——对症下药，而不是泛泛开功能。</div></div>
+
+  <div class="card">
+    <h2>分产品策略</h2>
+    <div class="two">
+      <div class="pc">
+        <div class="nm" style="color:var(--teal)">HT1768-1 燕尾服款 · 守利基、放大优势</div>
+        <ul class="tx">
+          <li>把广告预算集中到「tuxedo shirt / wing collar / french cuff / prom / wedding」等强相关词，利基词竞价低（~$1.0）、转化更精准。</li>
+          <li>盯防 Gollnwe：价格、评论、广告位异动要第一时间知道。</li>
+          <li>顺季节做节奏：春季 prom/婚礼旺季前放量、拉预算；当前夏季淡季控成本、不空烧。</li>
+          <li>用「整套配件」差异化守住 $35.99 溢价，避免被拖入低价战。</li>
+        </ul>
+      </div>
+      <div class="pc">
+        <div class="nm" style="color:var(--amber)">1840A 常规正装款 · 避红海、切差异</div>
+        <ul class="tx">
+          <li>不与 $16.99 万评爆款抢最大众的低价正装词，改切「stretch / regular fit / 大码 big &amp; tall / 场景（wedding/business）」等差异化词。</li>
+          <li>重估定价与利润：$28.99 在当前价格带偏尴尬，评估小幅调价或用优惠券贴近心理价位测试转化弹性。</li>
+          <li>把预算从「广度铺词」转向「精度收口」，用相关性换点击率。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>发现 → Xnurta 功能 → 预期收益</h2>
+    <div class="desc">每条功能都对应本报告的一个数据发现</div>
+    <div class="feat">
+      <div class="ft"><div class="find">📉 <b>发现：</b>曝光大、点击率仅 0.4%，大量预算花在被略过的展示上（尤其正装款在低价爆款页）。</div><div class="fn">Xnurta 功能：AI 否定定向（AI 否词：精确 / 词根 / 竞品 ASIN）+ 出价区间保险</div><div class="gain">预期收益：砍掉低相关、纯比价的无效曝光，把预算收拢到相关词，抬升点击率、直接止损。</div></div>
+      <div class="ft"><div class="find">🌦️ <b>发现：</b>燕尾服款有明显春旺夏淡季节性，当前正处淡季、效率偏低。</div><div class="fn">Xnurta 功能：托管组排期（旺季自动切换）+ 分时预算 / 分时调价</div><div class="gain">预期收益：旺季前自动放量、淡季自动收敛；高转化时段吃满预算，避免淡季空烧。</div></div>
+      <div class="ft"><div class="find">🏆 <b>发现：</b>FAHIZO 是 tuxedo 词头部品牌，有出单好词与品牌资产需保护。</div><div class="fn">Xnurta 功能：定向收割 + 不收割关键词列表（FAHIZO 品牌词保护）</div><div class="gain">预期收益：自动把已验证的高潜出单词纳入精准投放放量，同时守住品牌词不被自身广告哄抢。</div></div>
+      <div class="ft"><div class="find">💰 <b>发现：</b>CPC（$1.19）与市场持平，说明 ACOS 高在转化/点击效率，而非单价过高。</div><div class="fn">Xnurta 功能：按表现调价（按目标 ACOS 调基础竞价）+ 搜索词四象限洞察</div><div class="gain">预期收益：把钱压到高转化词、压低低效词出价，用结构优化而非全局加价来改善 ACOS。</div></div>
+      <div class="ft"><div class="find">🛡️ <b>发现：</b>市场竞品持续新增、低价新品快速迭代，正装款尤其需要盯防。</div><div class="fn">Xnurta 功能：排名监控 + 智能诊断（结构诊断）</div><div class="gain">预期收益：竞品价格/排名异动、广告结构问题及时预警，第一时间人工干预。</div></div>
+      <div class="ft"><div class="find">📊 <b>发现：</b>广告销售占比高（52%–63%）、TACOS 19%–24%，需要用「生意盘」而非只看单条广告。</div><div class="fn">Xnurta 功能：自定义看板 + TACOS 预警</div><div class="gain">预期收益：把广告与整体生意联动起来看，避免只盯 ACOS 而忽视自然流量与总盈利。</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>下一步 &amp; 待补数据</h2>
+    <ul class="tx">
+      <li><strong>优先做：</strong>①正装款切差异化词 + AI 否词收口；②燕尾服款按季节排期、盯防 Gollnwe；③接入 TACOS/自定义看板做生意盘视角。</li>
+      <li><strong>可验证 ACOS 同比的下一步：</strong>如需坐实「ACOS 比去年同期高多少」，请提供两款产品去年同期的广告花费/销售额，我们可做精确的前后对比，把市场归因和账户表现叠在一张图上。</li>
+      <li><strong>可补充：</strong>若提供近期搜索词与广告位数据，可进一步定位「哪些词/位置在拉高 ACOS」，把上面的功能建议落成具体的否词清单与出价方案。</li>
+    </ul>
+  </div>
+</section>
+
+<div class="foot">本报告基于美国站公开市场数据与您提供的广告经营快照编制，用于市场与竞品格局分析参考。市场数据存在采样与延迟，具体投放请结合广告后台实时数据。</div>
+
+</div>
+<script>
+const COL={navy:'#0F172A',teal:'#0D9488',tealL:'#5EEAD4',gold:'#CA8A04',red:'#DC2626',grayT:'#94A3B8',green:'#059669',blue:'#2563EB',amber:'#D97706'};
+Chart.defaults.font.family="'Inter','Noto Sans SC',sans-serif";Chart.defaults.color='#475569';
+function c(id){return document.getElementById(id);}
+function buildScatter(id,pts){
+ new Chart(c(id),{type:'scatter',data:{datasets:pts.map(function(p){return {label:p.n,data:[{x:p.x,y:p.y}],backgroundColor:p.c,pointRadius:p.big?11:7,pointHoverRadius:13,pointStyle:p.big?'rectRot':'circle',borderColor:p.big?COL.navy:'transparent',borderWidth:p.big?2:0};})},
+  options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}},tooltip:{callbacks:{label:function(x){return x.dataset.label+' · 评论 '+x.raw.y.toLocaleString();}}}},
+  scales:{x:{title:{display:true,text:'价格 $（越右越贵）'}},y:{title:{display:true,text:'评论数（口碑体量）'}}}}});
+}
+const built={};
+function build(id){
+ if(built[id])return; if(!c(id))return; built[id]=true;
+ if(id==='c_dep'){new Chart(c('c_dep'),{type:'bar',data:{labels:['燕尾服 HT1768-1','正装 1840A'],datasets:[
+   {label:'广告带来的销售 %',data:[63,52],backgroundColor:COL.gold},
+   {label:'自然/其他销售 %',data:[37,48],backgroundColor:COL.teal}]},
+   options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(x){return x.dataset.label+': '+x.raw+'%';}}}},scales:{x:{stacked:true,max:100,title:{display:true,text:'占总销售额 %'}},y:{stacked:true}}}});}
+ if(id==='c_yoyRev'){new Chart(c('c_yoyRev'),{type:'bar',data:{labels:['单品平均月销售额','头部 Top10 月均'],datasets:[
+   {label:'去年同期',data:[256024,922465],backgroundColor:COL.grayT},
+   {label:'最新',data:[324561,1179339],backgroundColor:COL.teal}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(x){return x.dataset.label+': $'+x.raw.toLocaleString();}}}},scales:{y:{beginAtZero:true,title:{display:true,text:'USD / 月'}}}}});}
+ if(id==='c_demandDress'){new Chart(c('c_demandDress'),{type:'bar',data:{labels:['3月','4月','5月','6月'],datasets:[
+   {label:'2025',data:[46542,56476,56036,43362],backgroundColor:COL.grayT},
+   {label:'2026',data:[59260,69927,74128,62375],backgroundColor:COL.teal}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(x){return x.dataset.label+': '+x.raw.toLocaleString();}}}},scales:{y:{beginAtZero:true,title:{display:true,text:'月搜索量'}}}}});}
+ if(id==='c_demandTux'){new Chart(c('c_demandTux'),{type:'bar',data:{labels:['3月','4月','5月','6月'],datasets:[
+   {label:'2025',data:[25070,30375,25178,17186],backgroundColor:COL.grayT},
+   {label:'2026',data:[21834,30582,28238,17535],backgroundColor:COL.gold}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(x){return x.dataset.label+': '+x.raw.toLocaleString();}}}},scales:{y:{beginAtZero:true,title:{display:true,text:'月搜索量'}}}}});}
+ if(id==='c_comp'){new Chart(c('c_comp'),{data:{labels:['mens dress shirt','mens white dress shirt','tuxedo shirt','mens tuxedo shirt'],datasets:[
+   {type:'bar',label:'在售商品数',data:[54755,24859,7550,5816],backgroundColor:COL.navy,yAxisID:'y'},
+   {type:'line',label:'平均竞价 $',data:[1.19,1.38,1.00,1.17],backgroundColor:COL.gold,borderColor:COL.gold,borderWidth:3,pointRadius:5,tension:.2,yAxisID:'y1'}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,position:'left',title:{display:true,text:'在售商品数'}},y1:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'平均竞价 $'}}}}});}
+ if(id==='c_dress'){buildScatter('c_dress',[
+   {n:'J.VER $16.99',x:16.99,y:36442,c:COL.grayT},
+   {n:'Alimens $18.99',x:18.99,y:6364,c:COL.grayT},
+   {n:'JEMITOP $19.99',x:19.99,y:8248,c:COL.grayT},
+   {n:'Lusead $16.99',x:16.99,y:3103,c:COL.amber},
+   {n:'ROUWELL $17.99',x:17.99,y:978,c:COL.amber},
+   {n:'FAHIZO 1840A $28.99',x:28.99,y:2939,c:COL.teal,big:1},
+   {n:'Van Heusen $55',x:55,y:42259,c:COL.blue}]);}
+ if(id==='c_tux'){buildScatter('c_tux',[
+   {n:'FAHIZO HT1768-1 $35.99',x:35.99,y:1643,c:COL.teal,big:1},
+   {n:'Gollnwe $35.99',x:35.99,y:1428,c:COL.red},
+   {n:'HISDERN $25.98',x:25.98,y:2851,c:COL.grayT},
+   {n:'Alimens $25.99',x:25.99,y:4188,c:COL.grayT},
+   {n:'J.VER $25.99',x:25.99,y:1331,c:COL.grayT},
+   {n:'Sir Gregory $59.95',x:59.95,y:516,c:COL.blue}]);}
+}
+const firstChart={overview:['c_dep'],yoy:['c_yoyRev','c_demandDress','c_demandTux'],market:['c_comp'],comp:['c_dress','c_tux'],actions:[]};
+function buildTab(tt){(firstChart[tt]||[]).forEach(function(id){build(id);});}
+document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});this.classList.add('active');
+  var tt=this.getAttribute('data-t');
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('p-'+tt).classList.add('active');
+  setTimeout(function(){buildTab(tt);},40);
+});});
+window.addEventListener('DOMContentLoaded',function(){buildTab('overview');});
+</script>
+</body></html>
