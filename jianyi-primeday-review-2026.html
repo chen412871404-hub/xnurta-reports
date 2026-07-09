@@ -52,6 +52,7 @@ tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-varian
  <button class="tab" data-t="ai">⚖️ AI vs 人工</button>
  <button class="tab" data-t="work">🤖 AI 价值</button>
  <button class="tab" data-t="prod">📦 产品·口碑</button>
+ <button class="tab" data-t="profit">💰 盈利·增量</button>
  <button class="tab" data-t="mkt">🌍 市场·竞品</button>
  <button class="tab" data-t="xn">✨ 功能建议</button>
  <button class="tab" data-t="plan">💡 下一步</button>
@@ -164,6 +165,20 @@ tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-varian
    <tr><td class="hl">类目定向 Category</td><td class="num">$285</td><td class="num">$1,042</td><td class="num"><span class="warn">27.3%</span></td><td class="num">2.6%</td><td class="num">3.66</td></tr>
   </tbody></table>
   <div class="alert a-info" style="margin-top:12px"><span>🧭</span><div>大促期的匹配效率排序很清晰:<strong>商品定向(投向竞品与关联 ASIN)效率最高</strong>(ACOS 16.3%、ROAS 6.14),说明在竞品与关联商品页面的展示在大促很有效;<strong>词组匹配转化率最高</strong>(5.3%)、ACOS 良性,平衡最好;广泛匹配是高效的拓量入口。相对地,<strong>精准匹配花费最多但 ACOS 最高</strong>(26.2%)——大促期精准词竞争激烈、出价被抬高,需检查是否过度加价;类目定向效率最低,可收缩。<strong>建议:</strong>适度向商品定向与词组匹配倾斜(商品定向体量有限,宜逐步加投、观察效率向均值回归,不宜一次性猛加);精准词控价而非削减、聚焦转化确定的核心词,它也是沉淀自然排名的关键;自动与类目匹配体量小,用于探索并及时把跑出订单的词收割为词组/精准。</div></div>
+ </div>
+
+ <div class="card"><h2>搜索词主题地图:钱花在哪类需求上更值</h2>
+  <div class="desc">把大促核心期的搜索花费按需求主题归类(主题可重叠)</div>
+  <div class="chart-box"><canvas id="c_theme"></canvas></div>
+  <table style="margin-top:16px"><thead><tr><th>需求主题</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">订单</th></tr></thead><tbody>
+   <tr><td class="hl">即热 tankless</td><td class="num">$11,117</td><td class="num">$59,708</td><td class="num"><span class="pos">19%</span></td><td class="num">182</td></tr>
+   <tr><td class="hl">丙烷/燃气</td><td class="num">$6,683</td><td class="num">$35,102</td><td class="num"><span class="pos">19%</span></td><td class="num">103</td></tr>
+   <tr><td class="hl">房车 RV</td><td class="num">$4,718</td><td class="num">$18,440</td><td class="num">26%</td><td class="num">65</td></tr>
+   <tr><td class="hl">电即热</td><td class="num">$3,150</td><td class="num">$11,708</td><td class="num"><span class="warn">27%</span></td><td class="num">57</td></tr>
+   <tr><td class="hl">露营/户外</td><td class="num">$1,646</td><td class="num">$8,759</td><td class="num"><span class="pos">19%</span></td><td class="num">28</td></tr>
+   <tr><td class="hl">竞品品牌词</td><td class="num">$460</td><td class="num">$2,707</td><td class="num"><span class="pos">17%</span></td><td class="num">7</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px"><span>🧭</span><div>即热 tankless 与 丙烷/燃气 是高效的核心引擎(ACOS 19%);电即热(27%)、房车 RV(26%)偏高,需优化词与出价;而<strong>竞品品牌词 ACOS 最低(17%)却只花了 $460——这是最该放大的金矿</strong>(具体打法见"市场·竞品"页竞品拆解)。</div></div>
  </div>
 </section>
 
@@ -281,6 +296,44 @@ tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-varian
   <div class="alert a-teal" style="margin-top:12px"><span>🎯</span><div><strong>对标结论:产品力与定价已达到品类标准,差距集中在两处——投放节奏与流量结构。</strong>一是大促节奏(提前蓄水、分层定价、余温回收)尚未成体系;二是品类公认的"善用自动化/AI 提效 + 站外引流拓展增量"两条,目前基本还没用上。这两块恰好是本报告"功能建议"与"下一步"聚焦的方向,也是把已验证的产品力转化为更稳增长的关键。</div></div>
  </div>
 </section>
+<section class="panel" id="p-profit">
+ <div class="alert a-teal"><span>💰</span><div>这一页回答客户最关心的问题:<strong>这场大促到底赚不赚钱、投入是否划算、有没有为未来买到东西</strong>——从大促增量、利润分层、新客获取三个角度看。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>大促增量价值:每多花 $1 广告,换回 $7.5 增量销售</h2>
+  <div class="desc">核心 4 天相对平日同期的净增(已剔除平日本就会产生的销量)</div>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">净增销售额</div><div class="big">+$56,017</div><div class="sm">核心期比平日多卖出的部分</div></div>
+   <div class="bs win"><div class="t">净增广告花费</div><div class="big">+$7,428</div><div class="sm">为拿下大促多投入的广告</div></div>
+   <div class="bs win"><div class="t">增量 ROAS</div><div class="big">7.5</div><div class="sm">每多花 $1 换回 $7.5 增量销售</div></div>
+  </div>
+  <div class="alert a-ok" style="margin-top:14px"><span>✅</span><div>大促期的加投极其划算:多投的每一块广告费带来的增量销售,是平日整体 ROAS(3.37)的两倍以上。结论很直接——<strong>大促就该敢投,而且值得投得更多</strong>;把预算集中到大促这种高效窗口,是回报最高的做法。</div></div>
+ </div>
+
+ <div class="card"><h2>广告花在哪些产品上赚钱、哪些在烧钱</h2>
+  <div class="desc">按盈亏平衡 ACOS 40%(假设广告前毛利约 40%,可按实际毛利调整)对在投单品分层</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_profit"></canvas></div>
+   <div>
+    <table><thead><tr><th>分层</th><th class="num">ASIN数</th><th class="num">花费</th><th class="num">销售额</th><th class="num">广告净贡献</th></tr></thead><tbody>
+     <tr><td class="hl">明星(ACOS&lt;20%)</td><td class="num">23</td><td class="num">$6,769</td><td class="num">$57,466</td><td class="num"><span class="pos">+$16,217</span></td></tr>
+     <tr><td class="hl">盈利(20–40%)</td><td class="num">7</td><td class="num">$6,709</td><td class="num">$25,662</td><td class="num"><span class="pos">+$3,556</span></td></tr>
+     <tr><td class="hl">亏损(ACOS&gt;40%)</td><td class="num">13</td><td class="num">$4,620</td><td class="num">$6,387</td><td class="num"><span class="neg">−$2,066</span></td></tr>
+     <tr><td class="hl">僵尸(0 单在烧钱)</td><td class="num">39</td><td class="num">$1,084</td><td class="num">$0</td><td class="num"><span class="neg">−$1,084</span></td></tr>
+    </tbody></table>
+    <div class="alert a-warn" style="margin-top:10px;font-size:12.5px"><span>⚠️</span><div>亏损款 + 僵尸款合计烧掉约 <strong>$5,704(占广告花费 30%)</strong>却几乎无产出。把这部分预算收回、转投明星款,是能立刻拿到的利润提升。("广告净贡献"= 销售额×假设毛利 40% − 广告花费)</div></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>大促也是拉新引擎:4 天买来约 $2.2 万新客生意</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">大促新客销售额</div><div class="big">$22,197</div><div class="sm">核心 4 天</div></div>
+   <div class="bs win"><div class="t">大促新客销售占比</div><div class="big">21%</div><div class="sm">订单占比 22%</div></div>
+   <div class="bs neu"><div class="t">日均新客销售</div><div class="big">$5,549</div><div class="sm">平日约 $2,641,大促翻倍以上</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:14px"><span>ℹ️</span><div>广告在大促 4 天就带来约 <strong>$22,197 的新客生意</strong>,日均拉新速度是平日的两倍多。这些新客未来会复购——<strong>广告买的不是一单,而是长期客户</strong>。把大促当拉新战场加大投入,它的长期回报常被明显低估。</div></div>
+ </div>
+</section>
 
 <section class="panel" id="p-mkt">
  <div class="alert a-teal"><span>🌍</span><div>跳出账户,从外部市场与竞品数据看清品类当前的行情、季节性与竞争格局,以及主力款所处的位置。</div></div>
@@ -341,6 +394,19 @@ tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-varian
   <div class="rec"><div class="rh">3 · 扩大品牌推广:品牌防守 + 品类拦截</div><div class="rm">品牌推广目前仅占 11%。用它守住自有品牌词(防竞品截流),并投品类大词做曝光;高客单价产品适合用品牌视频/图文讲清"省丙烷、安装简单、高海拔适用"卖点,提升点击与转化。</div></div>
   <div class="rec"><div class="rh">4 · 按生命周期分层设 ACOS 目标</div><div class="rm">增长型/新品用较宽松 ACOS(30–35%)抢排名,成熟主力款用较紧 ACOS(15–25%)要利润。把这套分层交给 AI 托管按目标自动执行,人工聚焦策略与预算分配,投放规模与效率同时提升。</div></div>
  </div>
+
+ <div class="card" style="border-left:4px solid var(--blue)"><h2>竞品广告打法拆解:头部 Fogatti 靠什么赢</h2>
+  <div class="desc">拆解品类领导者旗舰款的广告结构与主打渠道,给出针对性反打</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_fogatti"></canvas></div>
+   <div>
+    <div class="rec"><div class="rh">主战场是品牌推广(SB)</div><div class="rm">Fogatti 旗舰款近期以品牌推广为主力,大促周 SB 曝光冲到 2.3 万+/周,是其商品推广(SP)的 6–12 倍;而本账户 SB 仅占 11%,顶部品牌/品类位的争夺明显不足。</div></div>
+    <div class="rec"><div class="rh">结构更聚焦</div><div class="rm">其旗舰款约 84 个广告活动,比本账户主力款(约 144 个)更集中,火力不分散、更好管理。</div></div>
+    <div class="rec"><div class="rh">自然位更硬(护城河)</div><div class="rm">多个核心词自然排名 p1、自然流量占比 36%–89%——这是两年持续投放沉淀出的护城河,正好印证"广告投入产生复利、能带起自然位"。</div></div>
+   </div>
+  </div>
+  <div class="alert a-teal" style="margin-top:12px"><span>🎯</span><div><strong>反打建议:</strong>①把品牌推广(SB)占比从 11% 拉起来,抢占 Fogatti 主导的品牌/品类顶部位;②守住自有品牌词,并在竞品品牌词上截流(如 Fogatti 品牌词点击成本仅约 $1.76、本账户已验证能转化);③适度合并碎片化活动、集中火力,像头部一样把结构做聚焦。</div></div>
+ </div>
 </section>
 
 <section class="panel" id="p-xn">
@@ -400,5 +466,9 @@ mk('c_mktdemand',{type:'line',data:{labels:MKD,datasets:[{label:'词根综合需
 mk('c_prodsales',{type:'bar',data:{labels:['24/09','24/10','24/11','24/12','25/01','25/02','25/03','25/04','25/05','25/06','25/07','25/08','25/09','25/10','25/11','25/12','26/01','26/02','26/03','26/04','26/05','26/06','26/07'],datasets:[{label:'主力款月销量(件)',data:[367,328,277,229,286,226,378,368,956,423,897,396,366,350,307,230,295,474,229,252,300,274,307],backgroundColor:'#5EEAD4',borderColor:'#0D9488',borderWidth:1}]},options:{plugins:{legend:{labels:GD}},scales:{y:{ticks:{color:GD.color}},x:{ticks:{color:GD.color,maxTicksLimit:12}}}}});
 mk('c_match',{type:'bar',data:{labels:['商品定向','词组','广泛','自动','精准','类目'],datasets:[{label:'ACOS %(越低越好)',data:[16.3,20.7,21.9,20.3,26.2,27.3],backgroundColor:['#0D9488','#5EEAD4','#94A3B8','#94A3B8','#D97706','#DC2626']},{label:'ROAS',type:'line',data:[6.14,4.83,4.56,4.93,3.82,3.66],borderColor:'#2563EB',backgroundColor:'#2563EB',yAxisID:'y1',tension:.3}]},options:{plugins:{legend:{labels:GD}},scales:{y:{ticks:{color:GD.color,callback:function(v){return v+'%'}}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#2563EB'}},x:{ticks:{color:GD.color}}}}});
 mk('c_budgetmix',{type:'bar',data:{labels:['商品推广 SP','品牌推广 SB','展示推广 SD'],datasets:[{label:'当前占比 %',data:[80,11,9],backgroundColor:'#94A3B8'},{label:'建议方向 %',data:[68,20,13],backgroundColor:'#0D9488'}]},options:{plugins:{legend:{labels:GD}},scales:{y:{ticks:{color:GD.color,callback:function(v){return v+'%'}}},x:{ticks:{color:GD.color}}}}});
+
+mk('c_profit',{type:'bar',data:{labels:['明星','盈利','亏损','僵尸'],datasets:[{label:'广告净贡献 $',data:[16217,3556,-2066,-1084],backgroundColor:['#059669','#5EEAD4','#D97706','#DC2626']}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{color:GD.color,callback:function(v){return '$'+v/1000+'k'}}},x:{ticks:{color:GD.color}}}}});
+mk('c_theme',{type:'bar',data:{labels:['即热','丙烷/燃气','房车RV','电即热','露营/户外','竞品品牌'],datasets:[{label:'花费 $',data:[11117,6683,4718,3150,1646,460],backgroundColor:'#94A3B8',yAxisID:'y'},{label:'ACOS %',type:'line',data:[19,19,26,27,19,17],borderColor:'#CA8A04',backgroundColor:'#CA8A04',yAxisID:'y1',tension:.3}]},options:{plugins:{legend:{labels:GD}},scales:{y:{ticks:{color:GD.color,callback:function(v){return '$'+v/1000+'k'}}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,max:40,ticks:{color:'#CA8A04',callback:function(v){return v+'%'}}},x:{ticks:{color:GD.color}}}}});
+mk('c_fogatti',{type:'line',data:{labels:['04/26','05/03','05/10','05/17','05/24','05/31','06/07','06/14','06/21','06/28','07/05'],datasets:[{label:'Fogatti 品牌推广SB 曝光',data:[2445,2676,2933,2508,2058,1792,6035,18281,23705,24935,9946],borderColor:'#0D9488',backgroundColor:'rgba(13,148,136,.1)',fill:true,tension:.35,borderWidth:2,pointRadius:0},{label:'Fogatti 商品推广SP 曝光',data:[2650,3353,2495,1466,1405,1753,2076,3616,1895,982,967],borderColor:'#94A3B8',backgroundColor:'transparent',tension:.35,borderWidth:2,pointRadius:0}]},options:{plugins:{legend:{labels:GD}},scales:{y:{ticks:{color:GD.color,callback:function(v){return v/1000+'k'}}},x:{ticks:{color:GD.color,maxTicksLimit:11}}}}});
 </script>
 </body></html>
