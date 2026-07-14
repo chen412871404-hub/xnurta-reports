@@ -1,0 +1,524 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乐清速驰 · Amazon 广告双月复盘（客户版）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--tealPale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#fff;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--greenBg:#ECFDF5;--red:#DC2626;--redBg:#FEF2F2;--amber:#D97706;--amberBg:#FFFBEB;--blue:#2563EB;--blueBg:#EFF6FF;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fb);background:var(--bg);color:#1E293B;line-height:1.7}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px}
+.hdr h1{font-family:var(--fh);font-size:27px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14px;color:rgba(255,255,255,.82);margin-bottom:14px}.hdr-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.66)}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:96px;padding:11px 12px;border:none;background:transparent;color:var(--dark);font:500 13.5px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:17px;border:1px solid var(--border)}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:23px;font-weight:700;color:var(--navy)}.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:10px 12px;font-weight:600;font-size:11px;text-transform:uppercase;text-align:left}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;gap:11px;margin-bottom:18px;font-size:13.5px;line-height:1.7}
+.a-info{background:var(--blueBg);border:1px solid #BFDBFE;color:#1E40AF}.a-ok{background:var(--greenBg);border:1px solid #A7F3D0;color:#065F46}.a-warn{background:var(--amberBg);border:1px solid #FDE68A;color:#92400E}.a-teal{background:var(--tealPale);border:1px solid #99F6E4;color:#115E59}.a-red{background:var(--redBg);border:1px solid #FECACA;color:#991B1B}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}.t-green{background:var(--greenBg);color:#065F46}.t-red{background:var(--redBg);color:#991B1B}.t-amber{background:var(--amberBg);color:#92400E}.t-blue{background:var(--blueBg);color:#1E40AF}.t-teal{background:var(--tealPale);color:#115E59}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}.bs.warn{background:linear-gradient(135deg,#FFFBEB,#fff);border-color:#FDE68A}.bs.neu{background:linear-gradient(135deg,#EFF6FF,#fff);border-color:#BFDBFE}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px}.bs .big{font-family:var(--fh);font-size:20px;font-weight:800}.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}.bs.warn .big{color:var(--amber)}.bs.neu .big{color:var(--blue)}.bs .sm{font-size:12px;color:var(--muted);margin-top:6px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:340px}
+.rec{border-left:3px solid var(--teal);background:#F8FAFC;padding:14px 17px;border-radius:0 8px 8px 0;margin-bottom:13px;font-size:13.5px}
+.rec .rh{font-weight:700;color:var(--navy);margin-bottom:5px;font-size:14.5px}
+.rec .rm{font-size:12.5px;color:var(--dark);margin:3px 0}
+.bridge{font-size:12.5px;color:var(--muted);text-align:right;padding:2px 6px 14px}
+.foot{text-align:center;color:var(--muted);font-size:12px;padding:20px 0 8px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.bigstat{grid-template-columns:1fr}}</style></head><body><div class="container">
+<header class="hdr"><h1>乐清速驰 · Amazon 广告双月复盘</h1>
+<div class="sub">客户版 · Yesmotor 摩托车头盔矩阵 · 效率已经站稳，这一期看清三个还没兑现的增量</div>
+<div class="hdr-meta"><span>📅 周期 2026-05-15 – 2026-07-13（60 天）</span><span>💵 美国站 USD</span><span>🏬 店铺 Yesmotor.US / yecream.us</span></div></header>
+<nav class="tabs" id="tabs">
+ <button class="tab active" data-t="ov">📊 总览</button>
+ <button class="tab" data-t="ai">🤖 AI 托管价值</button>
+ <button class="tab" data-t="groups">🎯 达标·托管组</button>
+ <button class="tab" data-t="prod">📦 产品·断货</button>
+ <button class="tab" data-t="words">🔍 搜索词·打法</button>
+ <button class="tab" data-t="mkt">🌍 市场·竞品</button>
+ <button class="tab" data-t="xn">✨ 功能建议</button>
+ <button class="tab" data-t="plan">💡 下一步</button>
+</nav>
+
+<section class="panel active" id="p-ov">
+ <div class="alert a-teal"><span>🧭</span><div>这份复盘的主线一句话：<strong>旺季顶部，账户拿到了 17.59% 的 ACOS 和低于市场建议价三到五成的点击成本——效率这一仗已经赢了；还没赢的是三个确定性增量：补货、高效词收割、结构套利。</strong>12 月的搜索主峰是当前的近 3 倍，这三件事需要在 Q4 之前做完。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>📌 结论速览</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">✅ 效率站上健康位</div><div class="big">ACOS 17.59%</div><div class="sm">贴住目标中位数 18%；CPC $0.72，低于三方市场建议价（$0.98–1.63）三到五成，且核心词搜索首位仍拿得住</div></div>
+   <div class="bs warn"><div class="t">⚠️ 三个增量待兑现</div><div class="big">补货 · 收割 · 套利</div><div class="sm">24 个有花费断货款（含两个明星款）；1,293 个高效词没有精准投放承接；匹配层与广告位仍有结构性空间</div></div>
+   <div class="bs neu"><div class="t">🧱 排名资产空间大</div><div class="big">自然位占比不足 20%</div><div class="sm">主力款的销量大头由广告位打下来，而词的头部格局松动——继续投放并加强顶部占位，把排名资产一并拿下</div></div>
+  </div>
+ </div>
+
+ <div class="kpis">
+  <div class="kpi"><div class="l">广告花费</div><div class="v">$80,462</div><div class="s">日均约 $1,341</div></div>
+  <div class="kpi"><div class="l">广告销售额</div><div class="v">$457,551</div><div class="s">ROAS 5.69</div></div>
+  <div class="kpi"><div class="l">订单数</div><div class="v">8,314</div><div class="s">转化率 7.46% · 点击率 0.72%</div></div>
+  <div class="kpi"><div class="l">整体 ACOS</div><div class="v">17.59%</div><div class="s">点击成本 $0.72</div></div>
+  <div class="kpi"><div class="l">AI 托管花费占比</div><div class="v">93%</div><div class="s">$74,827 / $80,462</div></div>
+  <div class="kpi"><div class="l">本期有 AI 动作的活动</div><div class="v">88<span style="font-size:14px"> 个</span></div><div class="s">已接入 AI 的活动 151 个</div></div>
+  <div class="kpi"><div class="l">AI 自动优化动作</div><div class="v">76,265</div><div class="s">日均约 1,271 次</div></div>
+  <div class="kpi"><div class="l">运营手动操作</div><div class="v">786<span style="font-size:14px"> 次</span></div><div class="s">人管结构，AI 管高频微调</div></div>
+ </div>
+
+ <div class="card"><h2>两个店铺 · 十一条产品线</h2>
+  <div class="desc">Yesmotor.US 是绝对主体；产品线按广告组合划分，头部五条承载约七成花费</div>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>店铺</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th></tr></thead><tbody>
+    <tr><td class="hl">Yesmotor.US · 摩托车头盔</td><td class="num">$79,703</td><td class="num">$456,076</td><td class="num"><span class="pos">17.5%</span></td></tr>
+    <tr><td class="hl">yecream.us · 摩托配件</td><td class="num">$759</td><td class="num">$1,475</td><td class="num"><span class="neg">51.5%</span></td></tr>
+    </tbody></table>
+    <div class="alert a-ok" style="margin-top:10px;font-size:12.5px"><span>💡</span><div>头盔主账户在旺季顶部保持了 17.5% 的 ACOS，转化率 7.46% 高于品类常见水平。配件小店量级很小，但 51.5% 的 ACOS 需要单独收敛，方案见"下一步"。</div></div>
+   </div>
+   <div class="chart-box"><canvas id="c_store"></canvas></div>
+  </div>
+ </div>
+
+ <div class="card"><h2>数据口径</h2>
+  <div class="desc">一次说清，后文不再重复</div>
+  <div class="alert a-info" style="margin-bottom:0"><span>ℹ️</span><div>本期实际投放全部为商品推广（SP），4 个品牌推广活动本期零花费。销售与转化为平台导出口径（亚马逊默认归因窗口）。无上期同长度数据，本报告做当期 60 天结构分析，不写涨跌对比。商品与定向两张明细表受导出行数上限影响，个别 ASIN 汇总会略低于活动层合计，活动层数字完整可信。库存以导出时点为准。AI 托管花费占 93%，账户内没有规模可比的非托管对照组，AI 托管的效果用实际动作与结果说明，不做两组横向对比。市场数据来自三方平台（取数 2026-07-13），不同平台绝对值口径不同，只用于方向判断。</div></div>
+ </div>
+ <div class="bridge">下一页：AI 托管这 60 天做了什么，效果落在哪 →</div>
+</section>
+<section class="panel" id="p-ai">
+ <div class="alert a-teal"><span>🤖</span><div>本账户 93% 的花费由 AI 托管，账户内没有规模可比的对照组，所以这一页不做"AI 和人工谁强"的对比，只回答一个问题：<strong>AI 替运营做的 76,265 次调整，每一类是否做在了对的地方</strong>。以下内容全部来自账户操作记录，逐条可回查。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>规模与节奏：全天候接管高频微调，越跑越稳</h2>
+  <div class="two">
+   <div>
+    <div class="bigstat" style="grid-template-columns:1fr 1fr">
+     <div class="bs win"><div class="t">🤖 AI 自动优化</div><div class="big">76,265 次</div><div class="sm">日均约 1,271 次</div></div>
+     <div class="bs neu"><div class="t">✋ 运营手动</div><div class="big">786 次</div><div class="sm">集中在商品上下架、否定词、结构调整</div></div>
+    </div>
+    <div class="alert a-ok" style="margin-top:12px;font-size:12.5px"><span>🌙</span><div>一天 24 小时里有 <strong>15 个小时段运营零操作，AI 在这些时段完成了 47,573 次调整（占总量 62.4%）</strong>——半夜和清晨的出价、预算变化照样有人接住。</div></div>
+    <div class="alert a-info" style="margin-top:10px;font-size:12.5px"><span>📉</span><div>动作量从前 14 天的 22,747 次降到后 14 天的 15,546 次，其中出价类调整少了 43%——初期高频校准、摸清后收敛，这是托管进入稳定期的典型轨迹。</div></div>
+   </div>
+   <div class="chart-box"><canvas id="c_pace"></canvas></div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>调价方向：差词被系统性压价，好词被托底和选择性加价</h2>
+  <div class="desc">把 30,837 次关键词调价按被调对象的实际表现分组，看净调价轨迹（首次出价 → 末次出价）</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_bid"></canvas></div>
+   <div>
+    <div class="alert a-ok" style="display:block"><strong>方向分明：</strong>表现好的词（ACOS&lt;18%）净调价中位数为 0，其中四成被净加价——好词被托住、择优抢量；ACOS 超过 45% 的词净压价 5.9%，有花费没销售的词压得最狠（净降 7.3%）。</div>
+    <div class="alert a-info" style="display:block;margin-top:10px;font-size:12.5px">两个真实轨迹拆开看：motorcycle helmet（精准活动，ACOS 12.6%）——运营先把出价降到 $0.50 观察，AI 接手后 8 天小步抬回 $0.76（每步 $0.02–0.10），运营确认效果后在后台把基准价提到 $1.00，AI 再围绕 $1.00 做 ±$0.02 的分时微调，人机各走一段；helmet dirtbike（ACOS 69.4%）——基准价被分步压到 $0.31，低效时段再被分时压到 $0.32 一线。基准价永远小步走、单步不超过 $0.10，日内的大幅波动来自分时调价——AI 不会一次性把出价翻倍。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="two">
+  <div class="card" style="border-left:4px solid var(--teal)"><h2>否定词：砍在刀刃上</h2>
+   <div class="rec" style="border-left-color:var(--green)">
+    <div class="rm">本期 AI 添加的否定关键词中，<strong>89% 此前确实"有花费、零订单"</strong>（158 个词，合计花掉 $983 / 1,460 次点击后被拦下）；否定 ASIN 中该比例为 81%。</div>
+    <div class="rm" style="margin-top:6px">19 个曾出单的词被精确否定，其中 4 个属于"收割进精准活动后，在来源活动反向否定"的标准闭环动作（如 half motorcycle helmets，收割后已产出 $889 销售）；其余列入词库保护建议（见功能建议②③）。</div>
+   </div>
+  </div>
+  <div class="card" style="border-left:4px solid var(--teal)"><h2>收割闭环：已经跑通</h2>
+   <div class="rec" style="border-left-color:var(--green)">
+    <div class="rm">AI 本期把 <strong>116 个已验证搜索词升级为精准/词组投放</strong>（134 次加词动作），这批词合计带来 <strong>约 $18,210 销售 / 329 单，ACOS 约 23%</strong>——含 7 月刚收割、仍在爬坡的词，试错成本合计只有 $290。</div>
+    <div class="rm" style="margin-top:6px">最佳样本：half helmet 收割进精准组后单词贡献 $4,371 销售、ACOS 18.6%。收割方向正确，下一步是把这套闭环开到最大的 13 个组（见功能建议①）。</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>开启前后：两个活动的逐日轨迹</h2>
+  <div class="desc">切点 = 各自的 AI 开启日（灰柱为开启前、绿柱为开启后，深色线为 7 天移动平均）· 前后为时序对照，非严格实验 · 同期品类搜索量 5→6 月持平略降（三方数据），放量并非季节带来</div>
+  <div class="two">
+   <div>
+    <div class="chart-box"><canvas id="c_case1"></canvas></div>
+    <div class="alert a-ok" style="margin-top:10px;font-size:12.5px"><span>📈</span><div><strong>精准_小词_K1PRO（6-01 开启，目标 20%）：</strong>开启前 55 天日均销售 $72，开启后 43 天 $128（+76%）；转化率 6.4%→7.5%；ACOS 15.4%→16.8%，全程压在目标线内。点击单价 $0.52→$0.64，是"推动增长"目标下的主动抢量——多付的点击费换来了量与转化率同涨。</div></div>
+   </div>
+   <div>
+    <div class="chart-box"><canvas id="c_case2"></canvas></div>
+    <div class="alert a-ok" style="margin-top:10px;font-size:12.5px"><span>📈</span><div><strong>ASIN_爱国者_K1PRO（6-08 开启，目标 12.2%）：</strong>开启前 62 天日均销售 $103，开启后 36 天 $166（+61%）；点击单价 $0.32 一分未涨，ACOS 稳在 10.3%。放量通常会摊高 ACOS，这条没有——花钱的方式没变，只是花得更多、也更准。</div></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card"><h2>动作构成：预算和出价是主战场</h2>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_ops"></canvas></div>
+   <div>
+    <div class="alert a-info" style="display:block"><strong>构成：</strong>预算类 39,542 次（51.8%）、出价类 36,038 次（47.3%）、否定 245 次、收割 136 次、广告位调整 96 次、暂停 65 次。预算类动作由三个预算功能共用一类事件，按官方口径不拆分归因。</div>
+    <div class="alert a-info" style="display:block;margin-top:10px;font-size:12.5px"><strong>口径说明：</strong>已接入 AI 的活动 151 个（按托管字段），本期实际发生 AI 动作的活动 88 个（按操作记录）。前者说明接入面，后者说明当期自动化的活跃面，两个数含义不同。</div>
+   </div>
+  </div>
+ </div>
+ <div class="bridge">下一页：把"效果好不好"落到达标率和 73 个托管组的设置体检 →</div>
+</section>
+
+<section class="panel" id="p-groups">
+ <div class="alert a-teal"><span>🎯</span><div>达标率是客户最常看的一个数，但它受"目标定多严"影响很大。这一页把两个口径都摆出来，再给 73 个托管组做一次设置体检——<strong>相当一部分"未达标"来自目标定得偏严，调整目标区间就能让这个数反映真实经营。</strong></div></div>
+
+ <div class="card"><h2>达标率：名义 47.1%，健康口径 74.5%</h2>
+  <div class="desc">口径：本期有花费且设了目标 ACOS 的 102 个活动（活动级）</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_dabiao"></canvas></div>
+   <div>
+    <div class="alert a-info" style="display:block"><strong>两个口径差在哪：</strong>名义口径要求实际 ACOS ≤ 目标，48 个活动达标（47.1%）；健康口径把两类也算进来——未达标但 ACOS 绝对值已在 15% 以内的 12 个、以及贴近目标（1.3 倍以内）的活动，合计 76 个（74.5%）。</div>
+    <div class="alert a-ok" style="display:block;margin-top:10px;font-size:12.5px">账户目标 ACOS 中位数 18%，本身定得不松。ACOS 已经压到 15% 以内还被记为"未达标"的活动，问题在目标数字，不在投放。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--amber)"><h2>托管组目标体检：12 个组建议校准</h2>
+  <div class="desc">口径：托管中且本期有花费的 54 个组 · 校准规则——推动增长目标不应低于实际，保持稳定目标不应高于实际</div>
+  <table><thead><tr><th>类别</th><th class="num">组数</th><th>典型例子（目标 vs 实际 ACOS）</th><th>建议</th></tr></thead><tbody>
+  <tr><td class="hl">推动增长 · 目标低于实际</td><td class="num">8</td><td>词组_K2_15%（14.6% vs 23.8%）、318_精准收割（27.1% vs 33.1%）</td><td>目标上调至实际水平附近，给放量留空间</td></tr>
+  <tr><td class="hl">保持稳定 · 目标高于实际</td><td class="num">4</td><td>108-精准（20% vs 16.7%）</td><td>目标下调锁住效率；个别若属新品期刻意放宽，请运营确认后保留</td></tr>
+  <tr><td class="hl">目标偏严（差 5 个点以上且实际已健康）</td><td class="num">6</td><td>108-拓词（17% vs 22.5%，花费最大 $5,751）</td><td>按建议区间放宽，减少"假性未达标"</td></tr>
+  <tr><td class="hl">可放量（实际远好于目标）</td><td class="num">2</td><td>精准_20%_125（25% vs 14.9%，销售 $9,805）</td><td>提高预算或放宽目标，吃掉溢出空间</td></tr>
+  </tbody></table>
+ </div>
+
+ <div class="card"><h2>AI 功能授权矩阵：钱在哪、开关就该开到哪</h2>
+  <div class="desc">73 个托管组的 11 项功能开启情况 · 未授权的功能不构成托管缺席，是待开启的空间</div>
+  <table><thead><tr><th>功能</th><th class="num">已开</th><th class="num">未开</th><th>未开部分的分量</th></tr></thead><tbody>
+  <tr><td class="hl">添加否定定向</td><td class="num">73</td><td class="num">0</td><td>全覆盖</td></tr>
+  <tr><td class="hl">预算重新分配</td><td class="num">72</td><td class="num">1</td><td>接近全覆盖</td></tr>
+  <tr><td class="hl">按表现调价</td><td class="num">69</td><td class="num">4</td><td>接近全覆盖</td></tr>
+  <tr><td class="hl">分时调价 / 分时预算</td><td class="num">61</td><td class="num">12</td><td>—</td></tr>
+  <tr><td class="hl">广告位调价</td><td class="num">60</td><td class="num">13</td><td><span class="warn">未开组承载 $29,300 花费</span></td></tr>
+  <tr><td class="hl">定向收割</td><td class="num">60</td><td class="num">13</td><td><span class="warn">未开组承载 $32,890 花费 / $202,192 销售，恰是最大的精准与核心组</span></td></tr>
+  <tr><td class="hl">按表现调预算</td><td class="num">40</td><td class="num">33</td><td>未开组含 7 个达标赢家组</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:12px;font-size:12.5px"><span>🧭</span><div>矩阵读法：开关开在小组上、大盘子反而没开，是本账户功能配置最主要的错位。哪几个先开、为什么，见"功能建议"页的逐条对症说明。</div></div>
+ </div>
+ <div class="bridge">下一页：钱花在哪些产品上，断货断掉了什么 →</div>
+</section>
+<section class="panel" id="p-prod">
+ <div class="alert a-teal"><span>📦</span><div>产品线三分层，钱的去向一目了然：<strong>效率线守住利润，走量线扛住规模，出血线金额很小但要处理干净</strong>。断货那一节请当作补货优先级清单来读。</div></div>
+
+ <div class="card"><h2>产品线三分层</h2>
+  <div class="desc">按广告组合（活动层权威口径）· 柱子越短效率越好</div>
+  <div class="two">
+   <div class="chart-box tall"><canvas id="c_lineacos"></canvas></div>
+   <div>
+    <table><thead><tr><th>分层</th><th>产品线</th><th class="num">花费</th><th class="num">ACOS</th></tr></thead><tbody>
+    <tr><td rowspan="3"><span class="tag t-green">效率线</span></td><td class="hl">K2DZP</td><td class="num">$7,809</td><td class="num"><span class="pos">13.0%</span></td></tr>
+    <tr><td class="hl">K1PRO</td><td class="num">$5,036</td><td class="num"><span class="pos">14.8%</span></td></tr>
+    <tr><td class="hl">TC-307</td><td class="num">$6,180</td><td class="num"><span class="pos">15.2%</span></td></tr>
+    <tr><td rowspan="3"><span class="tag t-blue">走量线</span></td><td class="hl">K2</td><td class="num">$17,399</td><td class="num">17.5%</td></tr>
+    <tr><td class="hl">225-HY</td><td class="num">$20,338</td><td class="num"><span class="warn">22.4%</span></td></tr>
+    <tr><td class="hl">JYT-108</td><td class="num">$6,989</td><td class="num"><span class="warn">20.5%</span></td></tr>
+    <tr><td rowspan="2"><span class="tag t-red">出血线</span></td><td class="hl">WLT-318</td><td class="num">$601</td><td class="num"><span class="neg">33.1%</span></td></tr>
+    <tr><td class="hl">yecream 三组合</td><td class="num">$759</td><td class="num"><span class="neg">44%–270%</span></td></tr>
+    </tbody></table>
+    <div class="alert a-info" style="margin-top:10px;font-size:12.5px">K2 是量效平衡最好的一条线；225-HY 花费最大（$20,338）但 ACOS 已越过目标线，是"先提效再放量"的主要对象；JYT-108 的问题在转化率（4.3%，账户平均 7.46%），修产品页比调价更对症。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card"><h2>ASIN 系列画像</h2>
+  <div class="desc">按产品系列聚合花费 Top ASIN · 汇总以活动层为准</div>
+  <table><thead><tr><th>系列</th><th>代表 ASIN</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">转化率</th><th>判断</th></tr></thead><tbody>
+  <tr><td class="hl">Vintage 半盔</td><td>B0C5HDXCGH / B0C5HGC7WG</td><td class="num">$3,010</td><td class="num">$25,287</td><td class="num"><span class="pos">13.2%</span></td><td class="num"><span class="pos">10.9%</span></td><td><span class="tag t-green">效率标杆</span></td></tr>
+  <tr><td class="hl">半盔 Hawk</td><td>B09Q2SRLZR / B09Q2TDGHQ / B09Q2VBV54</td><td class="num">$8,769</td><td class="num">$52,355</td><td class="num"><span class="pos">17.9%</span></td><td class="num">9.6%</td><td><span class="tag t-green">主力健康</span></td></tr>
+  <tr><td class="hl">青少年越野盔</td><td>B0BQ2RFC51 / B0BQ2RHSDW</td><td class="num">$14,020</td><td class="num">$60,713</td><td class="num"><span class="warn">23.1%</span></td><td class="num">8.4%</td><td><span class="tag t-amber">量最大 · 待提效</span></td></tr>
+  <tr><td class="hl">复古皮盔</td><td>B0B3VXC6DM / B0B3VWXRSP</td><td class="num">$3,430</td><td class="num">$15,854</td><td class="num">20.1%</td><td class="num"><span class="neg">4.4%</span></td><td><span class="tag t-amber">转化率待修</span></td></tr>
+  </tbody></table>
+  <div class="alert a-ok" style="margin-top:10px;font-size:12.5px"><span>💡</span><div>旗舰单品 B0BQ2RFC51（青少年越野盔，$68.99）：60 天 $8,579 花费换 $39,866 销售、605 单，类目排名第 14、4.5 星 803 评。它所在的 youth 词族 12 月有一个 3 倍于当前的搜索主峰——Q4 之前把它的 ACOS 从 21.5% 修到 18% 一线，主峰期的每一美元都更值钱。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--amber)"><h2>断货 = 补货优先级清单</h2>
+  <div class="desc">以导出时点库存为准 · 24 个有花费断货 ASIN（97 个断货 ASIN），断货前累计花费 $7,604 · SP 广告断货后由亚马逊自动暂停，这些花费产生于断货之前</div>
+  <div class="bigstat">
+   <div class="bs lose"><div class="t">🥇 第一优先 · B09Q2TDGHQ</div><div class="big">$19,904 销售后断货</div><div class="sm">半盔 Hawk 主力，ACOS 16.2%、转化率 11.0%；断货期正是半盔全年峰值，姊妹款 6 月销量从 472 件跳到 1,393 件——需求还在，流量被迫挤到一个款上</div></div>
+   <div class="bs lose"><div class="t">🥈 第二优先 · B0C5HGC7WG</div><div class="big">$13,294 销售后断货</div><div class="sm">Vintage 半盔，ACOS 10.7%、转化率 14.7%，全账户效率最好的单品之一</div></div>
+   <div class="bs warn"><div class="t">🥉 第三优先 · B0B65HDQL5</div><div class="big">ACOS 8.9%</div><div class="sm">小体量高效款；B09Q2TV2T2（ACOS 30.9%）补货优先级放最后</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:14px"><span>📦</span><div>能卖到断货本身就是需求信号。半盔旺季窗口还剩约 6-8 周，第一梯队两款每晚到仓一周，就少吃一周全年最好的自然流量。到仓当天重启广告并给冷启动预算，配合"下一步"第 1 条执行。</div></div>
+ </div>
+
+ <div class="card"><h2>预算结构：先提效，再放量</h2>
+  <div class="desc">60 天预算撞顶事件 4,464 次，涉及 78 个活动 · 在投活动 109 个，日预算合计 $2,930，中位数 $17</div>
+  <div class="alert a-warn"><span>⚖️</span><div>撞顶不等于该加钱：高频撞顶（≥100 次）的 12 个活动合并 ACOS 21.1%，高于账户 17.6%——一刀切提预算会把整体效率拉下来。加预算只给效率过线的：<strong>SparkX AI 自动_618（ACOS 17.1%，撞顶 255 次，日预算仅 $30）、精准_收割_K2（16.9%，124 次）、宽泛_618（17.2%，162 次）</strong>这三个先放；<strong>精准_收割_318（33.1%，312 次）和精准_长尾词_225（25.2%，281 次，$150 日预算）</strong>先修效率再谈预算。</div></div>
+  <div class="alert a-info" style="margin-bottom:0;font-size:12.5px"><span>ℹ️</span><div>账户另有 1,800 个历史暂停活动，属长期迭代沉淀（本期活动级暂停仅 1 次），期间花费 95.3% 来自在投活动，不影响上述结论。</div></div>
+ </div>
+ <div class="bridge">下一页：词和位置——钱是按什么方式花出去的 →</div>
+</section>
+
+<section class="panel" id="p-words">
+ <div class="alert a-teal"><span>🔍</span><div>这一页回答三个问题：<strong>哪种匹配方式在赚钱、哪个广告位值得加价、哪些词该收该放</strong>。分档线按账户目标 ACOS 中位数 18% 校准（坏线 45%，零单词花费阈值 $14.5），全部结论先跨活动合并同词后判定。</div></div>
+
+ <div class="card"><h2>匹配方式效率排名：收割层偏贵，发现层便宜</h2>
+  <div class="desc">按搜索词口径聚合 · 自动四型经独立交叉验证一致</div>
+  <div class="two">
+   <div class="chart-box tall"><canvas id="c_match"></canvas></div>
+   <div>
+    <table><thead><tr><th>匹配方式</th><th class="num">花费</th><th class="num">ACOS</th><th class="num">CPC</th></tr></thead><tbody>
+    <tr><td class="hl">紧密匹配（自动）</td><td class="num">$5,773</td><td class="num"><span class="pos">12.0%</span></td><td class="num">$0.37</td></tr>
+    <tr><td class="hl">ASIN 扩展</td><td class="num">$2,980</td><td class="num"><span class="pos">12.3%</span></td><td class="num">$0.41</td></tr>
+    <tr><td class="hl">ASIN 定向</td><td class="num">$1,551</td><td class="num"><span class="pos">15.9%</span></td><td class="num">$0.69</td></tr>
+    <tr><td class="hl">BROAD</td><td class="num">$16,801</td><td class="num">16.8%</td><td class="num">$0.73</td></tr>
+    <tr><td class="hl">同类商品（自动）</td><td class="num">$1,718</td><td class="num">17.0%</td><td class="num">$0.43</td></tr>
+    <tr><td class="hl">PHRASE</td><td class="num">$3,706</td><td class="num">18.2%</td><td class="num">$0.76</td></tr>
+    <tr><td class="hl">分类定向</td><td class="num">$5,813</td><td class="num">18.7%</td><td class="num">$0.49</td></tr>
+    <tr><td class="hl">EXACT</td><td class="num">$38,874</td><td class="num"><span class="warn">20.4%</span></td><td class="num"><span class="warn">$1.05</span></td></tr>
+    </tbody></table>
+   </div>
+  </div>
+  <div class="alert a-warn" style="margin-top:12px"><span>⚙️</span><div><strong>结构判断（算法：可承受点击成本 = 客单价 × 转化率 × 目标ACOS 18%）：</strong>EXACT 层客单价 $56.2、转化率 9.13%，可承受点击成本 $56.2×9.13%×18% = $0.92，实际付了 $1.05——超出保本一成二；紧密匹配客单价 $55.1、转化率 5.59%，可承受 $0.55，实际只出 $0.37，还有五成空间。钱从贵的收割层挪一部分给便宜的发现层，是本账户最直接的结构机会。</div></div>
+ </div>
+
+ <div class="card"><h2>广告位：搜索顶部是唯一"高转化且没超标"的位置</h2>
+  <div class="desc">转化率：搜索顶部 10.37% · 商品页 7.18% · 其余位置 6.27% · ACOS 三个位置几乎持平（17.2%–18.1%）</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_place"></canvas></div>
+   <div>
+    <div class="alert a-ok" style="display:block"><strong>溢价机会：</strong>109 个有花费活动里 24 个搜索顶部溢价还是 0。筛出 13 个"溢价≤10% 且顶部位 ACOS&lt;18% 且订单≥5"的活动建议提溢价：ASIN_爱国者_K2DZP_251225（顶部 ACOS 6.5%、转化 16.2%、现溢价 0，建议 +40%）、捡漏_自动_307（3.8%，+30%）、词组_收割_K2_260318（12.7%，+30%），其余 +20%~30%。</div>
+    <div class="alert a-warn" style="display:block;margin-top:10px;font-size:12.5px"><strong>反向降档 5 个：</strong>核心词-精准-818（溢价 50%、顶部 ACOS 61%，降到 0）、QRB1-RES-精准（109%/54%，降到 0-20%）等——溢价要跟着位置的真实转化走。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card"><h2>搜索词四档与词根盈亏</h2>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>档位</th><th class="num">词数</th><th class="num">金额</th><th>处理</th></tr></thead><tbody>
+    <tr><td class="hl">高效词（ACOS&lt;18%）</td><td class="num">1,681</td><td class="num">$264,357 销售</td><td>收割承接（见下）</td></tr>
+    <tr><td class="hl">出单超坏线（&gt;45%）</td><td class="num">36</td><td class="num">$2,423 花费</td><td>逐词压价或换匹配</td></tr>
+    <tr><td class="hl">零单低效词</td><td class="num">44</td><td class="num">$913 花费</td><td>EXACT 主导的暂停，宽泛来源的加否定</td></tr>
+    <tr><td class="hl">品牌词</td><td class="num">114</td><td class="num">$813 花费 / ACOS 7.0%</td><td>防御成本仅占 1%，维持</td></tr>
+    </tbody></table>
+    <div class="alert a-info" style="margin-top:10px;font-size:12.5px">高耗头部：motorcycle helmet 3/4（$696 / ACOS 72.6%，可承受点击成本仅 $0.27，现付 $1.08）、baseball cap motorcycle helmet（$317 / 47.5%）。零单头部：micro dot helmet（$46）、motorcycle helmets for kids（$41）。ASIN 形态词单独一层：$7,963 花费中高效部分带来 $51,411 销售。</div>
+   </div>
+   <div class="chart-box tall"><canvas id="c_roots"></canvas></div>
+  </div>
+  <div class="alert a-ok" style="margin-top:12px"><span>🧩</span><div><strong>词根读法：</strong>low profile（ACOS 13.1%、转化 14.8%）、vintage/retro（13.8%）、棒球帽型（15.0%）、德式（15.9%）是赚钱需求，还有加注空间；dirt bike 族 22.7%、女款 25.1%（转化仅 5.0%）、配件词根 33.1%（客单 $10 撑不住 $1 点击）、自行车/BMX 错需求 28.2% 是失血方向。儿童预算内部：kids×ATV 16.8% 达标，kids×dirtbike 20.4% 超标，往 ATV 倾斜。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>最大的确定性增量：1,293 个高效词还没被收割</h2>
+  <div class="rec">
+   <div class="rm">1,639 个非品牌高效词里，<strong>79% 还没有精准投放承接</strong>，仍靠自动/宽泛活动接流量：3/4 motorcycle helmet（$3,224 销售 / ACOS 13.3%）、baseball cap helmet motorcycle（$2,736 / 12.0%）、german helmet（$1,923 / 14.9%）都在此列。</div>
+   <div class="rm" style="margin-top:6px">AI 收割闭环已经跑通（见 AI 托管价值页），当前瓶颈有两个：13 个最大的组没开定向收割授权；关键词词库空置，收割后的词缺少分档管理载体。两个都是设置层面的动作，见"功能建议"①③。</div>
+  </div>
+ </div>
+
+ <div class="card"><h2>本期打法五条（每条注明数据出处）</h2>
+  <div class="rec"><div class="rh">1 · EXACT 层分档压价止损</div><div class="rm">37 个高耗词按"客单价×转化率×18%"重定价，44 个零单词分途处理，合计止血约 $3,336/期（占花费 4.1%）。依据：本页四档表。</div></div>
+  <div class="rec"><div class="rh">2 · 搜索顶部溢价套利</div><div class="rm">13 个活动提溢价（+20%~40%）、5 个降档；顶部位可承受点击成本 $1.00，现付 $0.97。依据：本页广告位卡。</div></div>
+  <div class="rec"><div class="rh">3 · 收割补课</div><div class="rm">首批取花费/销售 Top 100 的积压高效词升精准，出价上限=客单价×该词转化率×18%（如 3/4 motorcycle helmet 从紧密匹配 $0.35 切精准 $0.45–0.48）。依据：收割积压卡。</div></div>
+  <div class="rec"><div class="rh">4 · 词根间预算再分配</div><div class="rm">从 dirt bike / 女款族回收 10%–15% 预算（约 $2,500/期）加给 low profile / vintage / 德式族；紧密匹配整体加价 $0.37→$0.45–0.50。依据：词根盈亏卡。</div></div>
+  <div class="rec"><div class="rh">5 · 竞价空间总判断</div><div class="rm">账户点击成本 $0.72 已贴近保本线 $0.74，全面加价没有空间；提效来自结构挪移，客单 $60 以上的款（low profile、爱国者系）是唯一能承受 $1 以上点击的载体。依据：匹配方式卡与市场页 CPC 对照。</div></div>
+ </div>
+ <div class="bridge">下一页：跳出账户，用市场数据验证这些判断 →</div>
+</section>
+<section class="panel" id="p-mkt">
+ <div class="alert a-teal"><span>🌍</span><div>市场页用三方平台数据（取数 2026-07-13）交叉验证四件事：<strong>现在是旺季还是淡季、点击买贵了没有、主力款在市场里站在什么位置、哪些词族值得继续打</strong>。不同平台绝对值口径不同，全部只对照方向，方向一致才下判断。</div></div>
+
+ <div class="card"><h2>季节曲线：两个词族、两套日历</h2>
+  <div class="desc">月度搜索量（2024-07 至 2026-06）· 实线为主源，虚线为第二数据源方向验证</div>
+  <div class="chart-box tall"><canvas id="c_season"></canvas></div>
+  <div class="bigstat" style="margin-top:14px">
+   <div class="bs neu"><div class="t">半盔词族</div><div class="big">4–7 月是全年顶部</div><div class="sm">本复盘期正处峰值；8 月起缓降——ACOS 若在 8-9 月被动走高，属市场因素</div></div>
+   <div class="bs win"><div class="t">越野盔词族</div><div class="big">12 月主峰 = 当前约 3 倍</div><div class="sm">双峰结构：5-6 月骑行季 + 11-12 月礼品季；8 月是低谷，9-10 月回升</div></div>
+   <div class="bs warn"><div class="t">节奏含义</div><div class="big">10 月起提前布局</div><div class="sm">youth 词族要在 Q4 主峰前加码抢位，别按 8 月的回落信号收缩</div></div>
+  </div>
+ </div>
+
+ <div class="two">
+  <div class="card"><h2>点击成本对照：没有买贵</h2>
+   <table><thead><tr><th>口径</th><th class="num">数值</th></tr></thead><tbody>
+   <tr><td class="hl">本账户实际 CPC</td><td class="num"><span class="pos">$0.72</span></td></tr>
+   <tr><td>市场建议（源一）</td><td class="num">$0.78 – 1.08</td></tr>
+   <tr><td>市场建议（源二）</td><td class="num">$0.98 – 1.63</td></tr>
+   <tr><td>词级成交中位（源三）</td><td class="num">$0.58 – 0.89</td></tr>
+   </tbody></table>
+   <div class="alert a-ok" style="margin-top:10px;font-size:12.5px"><span>💡</span><div>低于市场建议价还拿住了 youth dirt bike helmet 的搜索首位，说明议价效率高。三到五成的加价空间留给两个用途：高客单款抢位、Q4 主峰前的顶部溢价。</div></div>
+  </div>
+  <div class="card"><h2>主力款月销走势</h2>
+   <div class="chart-box"><canvas id="c_asintrend"></canvas></div>
+   <div class="alert a-info" style="margin-top:10px;font-size:12.5px">旗舰越野盔 2026 上半年与去年同期基本持平，5→6 月回落与品类季节转折同步；Hawk 半盔 6 月销量从 472 件跳至 1,393 件——半盔旺季叠加断货姊妹款的流量集中，进一步佐证补货优先级。</div>
+  </div>
+ </div>
+
+ <div class="card"><h2>竞品位次：评论差距分层，决胜点在点击与占位</h2>
+  <div class="desc">youth dirt bike helmet 与 half helmet 两个主战场的头部对照（三方平台实时数据）</div>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>youth 越野盔</th><th class="num">价格</th><th class="num">评分</th><th class="num">评论数</th></tr></thead><tbody>
+    <tr><td>老牌 XFMT</td><td class="num">$46.99</td><td class="num">4.7</td><td class="num">13,503</td></tr>
+    <tr><td>老牌 TCMT</td><td class="num">$54.99</td><td class="num">4.7</td><td class="num">12,652</td></tr>
+    <tr><td>Oumurs</td><td class="num">$59.95</td><td class="num">4.8</td><td class="num">1,079</td></tr>
+    <tr><td>Roozo</td><td class="num">$59.99</td><td class="num">4.7</td><td class="num">720</td></tr>
+    <tr><td class="hl">我方 B0BQ2RFC51</td><td class="num">$68.99</td><td class="num"><span class="warn">4.5</span></td><td class="num">803</td></tr>
+    </tbody></table>
+   </div>
+   <div>
+    <table><thead><tr><th>half helmet</th><th class="num">价格</th><th class="num">评分</th><th class="num">评论数</th></tr></thead><tbody>
+    <tr><td>ILM</td><td class="num">$59.99</td><td class="num">4.4</td><td class="num">4,853</td></tr>
+    <tr><td>VCAN</td><td class="num">$41.99</td><td class="num">4.3</td><td class="num">3,656</td></tr>
+    <tr><td>Cartman</td><td class="num">$37.99</td><td class="num">4.7</td><td class="num">1,863</td></tr>
+    <tr><td class="hl">我方 Hawk 半盔</td><td class="num">$48.99</td><td class="num"><span class="pos">4.6</span></td><td class="num">973</td></tr>
+    <tr><td class="hl">我方 Vintage 半盔</td><td class="num">$52.99</td><td class="num"><span class="pos">4.6</span></td><td class="num">702</td></tr>
+    </tbody></table>
+   </div>
+  </div>
+  <div class="alert a-info" style="margin-top:12px"><span>🧠</span><div><strong>读法：</strong>越野盔词下老牌头部评论是我方 16 倍，但同价位新生代对手（Roozo/Oumurs/ILM）与我方同量级，且该词头部三家的点击份额只有 20%、位次每周在换——当前竞争的决胜点在点击率和广告占位，评论量差距影响的是长期天花板。半盔端我方评论数已在直接竞品第一梯队，自然位前 20 占 2 席，定价高 $10 左右靠 4.6 星撑住。越野盔 4.5 星低于该词头部常见的 4.7，是产品与页面侧的改进项。</div></div>
+ </div>
+
+ <div class="card"><h2>类目格局与词族检验</h2>
+  <div class="two">
+   <div>
+    <div class="alert a-ok" style="display:block"><strong>类目：</strong>摩托车头盔类目充分竞争但无垄断——前三品牌销量占比 35.9%，评论不足 300 的产品仍占销量 24.5%，新款有上桌机会。Yesmotor 以约 5,334 件/月排在类目 Top100 品牌第 4 位（ILM、Oumurs、Roozo 之后）。</div>
+   </div>
+   <div>
+    <div class="alert a-warn" style="display:block;font-size:12.5px"><strong>词族三条检验：</strong>dirt bike 族需求在扩张（同比 +16%，月搜约 7.7 万），值得继续打，重点是把 22.7% 的 ACOS 修进目标；motorcycle helmets 大词月搜 22 万但词意分散（首页混着 $7-8 的面罩/内衬），用词组/精准加否定控制，不宜宽泛放量；low profile motorcycle helmet 精确词月搜仅 789，账户 $2.8k 花费主要来自匹配延伸流量——下钻成交词，把预算显性迁到真正出单的词上。</div>
+   </div>
+  </div>
+  <div class="alert a-teal" style="margin-bottom:0"><span>🧱</span><div><strong>结构性主题——广告投入的复利：</strong>旗舰款近 30 天的头部流量词大多由广告位承接，自然位占比不足 20%（kids helmet 12%、dirt bike helmets 17%）。这恰恰是加大投放的理由：词的头部格局是开放的（前三点击份额只有 20%、位次每周轮换），谁的广告持续占住顶部，谁的自然排名就先上去。接下来两个月保持并加强投放——顶部溢价、AI 占位、旺季加码——每一美元广告费同时买两样东西：当期订单和排名资产；自然位上来后，转化率与权重又反过来摊薄广告成本，投放形成复利循环。</div></div>
+ </div>
+ <div class="bridge">下一页：针对以上发现，哪几个功能开了会比现在更好 →</div>
+</section>
+
+<section class="panel" id="p-xn">
+ <div class="alert a-teal"><span>✨</span><div>下面 5 条功能建议全部对着本账户查到的具体发现，每条都写清"发现 → 功能 → 预期收益"。<strong>没有对应卡点的功能不出现在这里。</strong>前三条优先，两周内可以全部落地。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>① 定向收割 —— 把已验证的闭环开到最大的盘子上</h2>
+  <div class="rec">
+   <div class="rh">发现</div><div class="rm">收割闭环已被验证（116 个词升精准，带来约 $18,210 销售），但未开启定向收割的 13 个托管组恰是最大的精准与核心组——承载 $32,890 花费 / $202,192 销售；另有 1,293 个高效词积压待承接。</div>
+   <div class="rh" style="margin-top:8px">功能与用法</div><div class="rm">开启这 13 个组的"定向收割"，配套设置收割黑名单，并保持"收割后在来源广告精准否定"的联动，避免同一个词在两个活动里互相抬价。</div>
+   <div class="rh" style="margin-top:8px">预期收益</div><div class="rm">已验证的好词自动升级精准投放并压住来源侧重复花费，收割积压按月消化。</div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>② AI 通知 —— 按贵司数据配好的五条通知规则</h2>
+  <div class="desc">AI 通知支持自定义规则（维度+指标+频率），通过邮件 / 企业微信 / Slack 推送；下面五条按本账户的实际数据设计，可直接照配</div>
+  <table><thead><tr><th>#</th><th>通知规则</th><th>建议配置</th><th>为什么是这条（本账户依据）</th></tr></thead><tbody>
+  <tr><td>1</td><td class="hl">预算撞顶盯盘</td><td>维度=广告活动；条件=当日出现"花费超出预算"；每天上午推送一次</td><td>本期 78 个活动共撞顶 4,464 次。收到后按"效率过线才加预算"处理，先盯 自动_618、精准_收割_K2、宽泛_618 三个高效撞顶活动</td></tr>
+  <tr><td>2</td><td class="hl">库存预警</td><td>维度=商品；条件=可售库存 &lt; 近 30 天日均销量 × 21（在预置"商品库存小于10"上改阈值）；每天一次</td><td>本期 24 个款卖到断货、断货前已投入 $7,604；半盔旺季一周的流量顶平季数周，提前三周预警才来得及补货</td></tr>
+  <tr><td>3</td><td class="hl">花费涨、订单跌</td><td>直接启用官方预置"推广商品近 7 天花费环比 +30% 且订单量 -30%"；每 12 小时</td><td>dirt bike 族 ACOS 22.7%、motorcycle helmets 大词词意分散——这条规则是流量漂移最早的信号</td></tr>
+  <tr><td>4</td><td class="hl">AI 目标修正待确认</td><td>开启"AI 目标修正"场景推送；每周固定时刻集中处理</td><td>本期 12 个组目标需校准、6 个组偏严（含花费最大的 108-拓词，目标 17% vs 实际 22.5%）。采纳建议后系统自动更新目标，不必逐组手改</td></tr>
+  <tr><td>5</td><td class="hl">高潜活动开 AI 推荐</td><td>开启"发现高潜广告活动"场景；每周一次</td><td>账户仍有一批表现不错的非托管活动（合计 ACOS 15.5%），系统会把资质良好、商品一致的活动打包推荐开 AI，把托管覆盖面分批提上去</td></tr>
+  </tbody></table>
+  <div class="alert a-info" style="margin-top:10px;font-size:12.5px"><span>🛠️</span><div>配置入口在偏好设置的自定义通知页面，通知频率支持每天固定时刻 / 每 6 或 12 小时 / 每周；规则上限 300 条。建议先用这五条跑两周，再按命中情况增删。名义达标率被目标口径拉低 27 个点的问题，主要靠第 4 条滚动消化。</div></div>
+ </div>
+
+ <div class="two">
+  <div class="card" style="border-left:4px solid var(--teal)"><h2>③ 关键词词库 —— 给核心词上保护</h2>
+   <div class="rec">
+    <div class="rm"><strong>发现：</strong>19 个曾出单的词被精确否定（4 个属收割协同，15 个建议复核）；词库当前空置，收割词也缺分档管理载体。<br><strong>功能：</strong>把核心出单词与品牌词加入"不否定词库"，稳定出单的收割词加入"不收割词库"（精确匹配）。<br><strong>收益：</strong>否定提效不误伤，收割词有了管理容器。</div>
+   </div>
+  </div>
+  <div class="card" style="border-left:4px solid var(--teal)"><h2>④ 广告位调价 —— 顶部转化优势变成结构优势</h2>
+   <div class="rec">
+    <div class="rm"><strong>发现：</strong>搜索顶部转化率 10.4%，是其余位置的 1.4–1.7 倍，而未开启广告位调价的 13 个组承载 $29,300 花费；已授权组里 AI 的 96 次位置调整有 92 次是提高溢价——方向已被系统验证。<br><strong>功能：</strong>为这 13 个组开启广告位调价。<br><strong>收益：</strong>同等花费下，点击结构向高转化位置倾斜。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>⑤ 按表现调预算 —— Q4 前补上的旺季开关</h2>
+  <div class="rec">
+   <div class="rm"><strong>发现：</strong>33 个组未开启按表现调预算，其中包含 7 个达标赢家组；本期预算总体够用，但 12 月主峰的需求波动远大于当前。<br><strong>功能：</strong>为赢家组开启按表现调预算（与预算重新分配联动生效）。<br><strong>收益：</strong>旺季需求高峰日，表现好的组不因预算上限错失订单。定位为旺季前的设置补全，优先级排在前三条之后。</div>
+  </div>
+ </div>
+ <div class="bridge">最后一页：两到四周内可以直接照做的清单 →</div>
+</section>
+
+<section class="panel" id="p-plan">
+ <div class="alert a-teal"><span>💡</span><div>按确定性排序的行动清单。每条写清了动作、边界和复查节点，前四条本周可以启动。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🥇 1 · 补货三款明星断货款（需要贵司配合的第一优先事项）</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>B09Q2TDGHQ、B0C5HGC7WG、B0B65HDQL5 按此顺序补货；到仓当天重启广告并给冷启动预算（建议按断货前日预算的 120% 起步，一周内回看）。<strong>为什么急：</strong>半盔旺季窗口还剩约 6-8 周，两款断货前合计 $33,198 销售、效率均好于账户平均。<strong>复查：</strong>到仓后 7 天看排名回收进度。</div></div>
+ </div>
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>🥈 2 · EXACT 层止血 + 零单词处理</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>37 个高耗词按"客单价×转化率×18%"重定价；44 个零单词中 EXACT 主导的暂停、宽泛来源的加否定。预计止血约 $3,336/期。<strong>复查：</strong>7 天看整体 ACOS 与核心词排名是否稳住。</div></div>
+ </div>
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>🥉 3 · 搜索顶部溢价套利</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>13 个活动提顶部溢价（+20%~40%）、5 个降档，按"搜索词·打法"页清单执行。<strong>复查：</strong>7 天看顶部位花费占比与位内 ACOS。</div></div>
+ </div>
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>4 · 功能开关三件套</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>13 个大组开定向收割 + 词库保护（不否定/不收割清单先各放 20 个核心词）+ 13 个组开广告位调价；收割首批 100 个积压高效词升精准。<strong>复查：</strong>14 天看收割词的承接 ACOS 是否落在 18% 一线。</div></div>
+ </div>
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>5 · 托管目标校准</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>12 个组按"达标·托管组"页清单调整目标区间；4 个疑似新品期放宽的组请运营确认后再动。<strong>复查：</strong>下次复盘看名义达标率与健康口径的差距是否收窄。</div></div>
+ </div>
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>6 · 词根预算再分配 + yecream 收敛</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>约 $2,500/期从 dirt bike/女款族移向 low profile/vintage/德式族；儿童预算向 ATV 倾斜。yecream 店 FJ 组合暂停或换承接品，配件词出价按 $10 客单校准到 $0.27 一线并单列低价活动。</div></div>
+ </div>
+ <div class="card" style="border-left:4px solid var(--gold)"><h2>7 · 季节节奏（贯穿 Q3-Q4）</h2>
+  <div class="rec"><div class="rm">8-9 月半盔与越野盔同步回落，ACOS 波动按市场因素管理预期；10 月起为 12 月主峰（约 3 倍于当前的搜索量）提前加码 youth 词族与顶部占位，把旺季投放沉淀成自然排名。</div></div>
+ </div>
+
+ <div class="alert a-ok"><span>🎯</span><div><strong>一句话收尾：</strong>效率仗已经打赢，接下来赢的是结构仗——货补上、词收进来、钱挪到对的位置，Q4 主峰自然会放大这一切。若团队想系统了解收割与词库、预算与竞价的功能用法，广告学院（school.sparkx.io）的关键词管理与预算竞价方向课程可以作为运营侧的配套学习。</div></div>
+ <div class="foot">乐清速驰 · Amazon 广告双月复盘（客户版）· 周期 2026-05-15 – 2026-07-13 · 美国站 USD<br>数据来源：账户 60 天完整投放与操作记录；市场与竞品数据来自三方平台交叉验证（取数 2026-07-13）</div>
+</section>
+</div>
+<script>
+var NAVY='#0F172A',TEAL='#0D9488',GREEN='#059669',RED='#DC2626',AMBER='#D97706',BLUE='#2563EB',SLATE='#94A3B8';
+var done={};
+var CASE_LABELS=["04-07", "04-08", "04-09", "04-10", "04-11", "04-12", "04-13", "04-14", "04-15", "04-16", "04-17", "04-18", "04-19", "04-20", "04-21", "04-22", "04-23", "04-24", "04-25", "04-26", "04-27", "04-28", "04-29", "04-30", "05-01", "05-02", "05-03", "05-04", "05-05", "05-06", "05-07", "05-08", "05-09", "05-10", "05-11", "05-12", "05-13", "05-14", "05-15", "05-16", "05-17", "05-18", "05-19", "05-20", "05-21", "05-22", "05-23", "05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06", "06-07", "06-08", "06-09", "06-10", "06-11", "06-12", "06-13", "06-14", "06-15", "06-16", "06-17", "06-18", "06-19", "06-20", "06-21", "06-22", "06-23", "06-24", "06-25", "06-26", "06-27", "06-28", "06-29", "06-30", "07-01", "07-02", "07-03", "07-04", "07-05", "07-06", "07-07", "07-08", "07-09", "07-10", "07-11", "07-12", "07-13"];
+
+function mk(id){
+ if(done[id])return; var el=document.getElementById(id); if(!el)return; done[id]=1;
+ var ctx=el.getContext('2d');
+ if(id=='c_store'){new Chart(ctx,{type:'bar',data:{labels:['225-HY','K2','K2DZP','JYT-108','TC-307','618','K1PRO','125','818','其他'],datasets:[
+  {label:'花费 $',data:[20338,17399,7809,6989,6180,5783,5036,3680,2636,4612],backgroundColor:SLATE},
+  {label:'销售额 $',data:[90864,99210,60235,34109,40552,33420,34076,22342,16970,25773],backgroundColor:TEAL}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return '$'+(v/1000)+'k'}}}}}});}
+ if(id=='c_pace'){new Chart(ctx,{type:'line',data:{labels:['第1周(3天)','第2周','第3周','第4周','第5周','第6周','第7周','第8周','第9周'],datasets:[
+  {label:'AI 每周动作数',data:[4944,11358,11195,9548,8047,7102,7475,8243,8154],borderColor:TEAL,backgroundColor:'rgba(13,148,136,.12)',fill:true,tension:.3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'初期高频校准 → 稳定运行'}},scales:{y:{beginAtZero:true}}}});}
+ if(id=='c_bid'){new Chart(ctx,{type:'bar',data:{labels:['ACOS<18%','18–45%','>45%','有花费无销售'],datasets:[
+  {label:'净调价中位数 %',data:[0,-3.4,-5.9,-7.3],backgroundColor:[GREEN,SLATE,AMBER,RED]}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'词的表现越差，出价被压得越狠（绿=托底，红=压价）'}},scales:{y:{ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_ops'){new Chart(ctx,{type:'doughnut',data:{labels:['预算类 51.8%','出价类 47.3%','否定·收割·广告位等 0.9%'],datasets:[
+  {data:[51.8,47.3,0.9],backgroundColor:[TEAL,BLUE,AMBER]}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});}
+ if(id=='c_dabiao'){new Chart(ctx,{type:'bar',data:{labels:['名义口径','健康口径'],datasets:[
+  {label:'达标率 %',data:[47.1,74.5],backgroundColor:[SLATE,GREEN]}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'同一批活动，两种口径'}},scales:{y:{beginAtZero:true,max:100,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_lineacos'){new Chart(ctx,{type:'bar',data:{labels:['K1-DZP','K2DZP','K1PRO','TC-307','818','125','618','K2','JYT-108','225-HY','WLT-318'],datasets:[
+  {label:'ACOS %',data:[10.8,13.0,14.8,15.2,15.5,16.5,17.3,17.5,20.5,22.4,33.1],backgroundColor:[GREEN,GREEN,GREEN,GREEN,GREEN,TEAL,TEAL,TEAL,AMBER,AMBER,RED]}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'产品线 ACOS（越短越好，红色为出血线）'}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_match'){new Chart(ctx,{type:'bar',data:{labels:['紧密匹配','ASIN扩展','ASIN定向','BROAD','同类商品','PHRASE','分类定向','EXACT'],datasets:[
+  {label:'ACOS %',data:[12.0,12.3,15.9,16.8,17.0,18.2,18.7,20.4],backgroundColor:[GREEN,GREEN,GREEN,TEAL,TEAL,SLATE,SLATE,AMBER]}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'发现层便宜、收割层偏贵（18%为保本参考线）'}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_place'){new Chart(ctx,{type:'bar',data:{labels:['搜索顶部','商品页','其余位置'],datasets:[
+  {label:'转化率 %',data:[10.37,7.18,6.27],backgroundColor:TEAL},
+  {label:'ACOS %',data:[17.5,18.1,17.2],backgroundColor:SLATE}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'顶部转化显著更高，ACOS 三位持平'}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_roots'){new Chart(ctx,{type:'bar',data:{labels:['low profile','vintage/retro','棒球帽型','德式','DOT','half','ATV','youth/kids','dirt bike','女款','自行车/BMX错需求','配件词'],datasets:[
+  {label:'ACOS %',data:[13.1,13.8,15.0,15.9,17.1,18.3,19.1,19.6,22.7,25.1,28.2,33.1],backgroundColor:[GREEN,GREEN,GREEN,GREEN,TEAL,TEAL,SLATE,SLATE,AMBER,RED,RED,RED]}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'词根族 ACOS（绿=加注方向，红=收缩方向）'}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_season'){new Chart(ctx,{type:'line',data:{labels:['24-07','24-08','24-09','24-10','24-11','24-12','25-01','25-02','25-03','25-04','25-05','25-06','25-07','25-08','25-09','25-10','25-11','25-12','26-01','26-02','26-03','26-04','26-05','26-06'],datasets:[
+  {label:'youth dirt bike helmet（源一）',data:[6453,5581,5862,5542,12010,21526,4514,3927,7684,8776,9540,9441,8869,7985,9334,8494,17244,30571,8686,8151,13330,13722,12561,11793],borderColor:BLUE,backgroundColor:'rgba(37,99,235,.08)',tension:.3},
+  {label:'youth dirt bike helmet（源二·方向验证）',data:[6060,4954,4939,5257,10601,22611,4358,3333,6545,7085,8131,8101,8494,7227,7878,8222,16030,34101,7994,6510,10767,11782,10888,10838],borderColor:BLUE,borderDash:[6,4],pointRadius:0,tension:.3},
+  {label:'half helmet（源一）',data:[9949,9029,8277,6907,3994,3056,4786,6034,11462,10434,13720,15000,12829,12633,12676,8429,6126,5593,7878,8734,14880,18417,17716,15420],borderColor:TEAL,backgroundColor:'rgba(13,148,136,.08)',tension:.3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'月度搜索量：越野盔 12 月主峰，半盔 4-7 月顶部'}},scales:{y:{beginAtZero:true}}}});}
+ if(id=='c_asintrend'){new Chart(ctx,{type:'line',data:{labels:['25-01','25-02','25-03','25-04','25-05','25-06','25-07','25-08','25-09','25-10','25-11','25-12','26-01','26-02','26-03','26-04','26-05','26-06','26-07'],datasets:[
+  {label:'旗舰越野盔 月销量（源一·父体口径）',data:[1007,1159,1662,1493,903,1551,1656,1331,1252,1443,1045,1792,833,838,1441,1652,1397,1245,null],borderColor:BLUE,tension:.3,spanGaps:true},
+  {label:'Hawk 半盔 月销量（源二）',data:[210,362,526,627,852,927,1138,764,894,531,360,255,245,349,620,567,472,1393,1324],borderColor:TEAL,tension:.3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'主力款月销走势（不同来源口径，只看方向）'}},scales:{y:{beginAtZero:true}}}});}
+ if(id=='c_case1'){var cols=[];for(var k=0;k<98;k++)cols.push(k<55?'#CBD5E1':'#0D9488');new Chart(ctx,{type:'bar',data:{labels:CASE_LABELS,datasets:[{type:'line',label:'7天移动平均',data:[0.0,0.0,0.0,12.5,10.0,8.3,7.1,14.7,21.9,36.9,36.9,52.0,52.0,67.0,59.4,67.3,52.2,52.2,37.1,44.3,36.9,44.0,29.0,29.0,29.3,37.2,37.2,44.7,44.7,44.7,44.7,37.2,29.4,22.2,7.1,7.1,36.1,72.3,86.6,93.7,108.4,130.6,167.5,153.2,138.7,138.6,137.1,137.1,129.1,114.8,151.7,130.1,130.5,161.3,160.4,153.8,131.2,102.5,131.1,145.8,116.4,117.7,124.9,117.8,109.9,102.8,102.1,102.1,129.5,129.5,167.4,159.4,158.4,195.4,218.0,197.3,182.6,151.8,158.0,149.0,115.3,99.8,120.8,135.1,142.3,151.3,147.0,136.6,150.8,145.1,145.8,154.1,146.8,139.6,118.2,111.1,74.0,58.9],borderColor:NAVY,pointRadius:0,tension:.3,order:0},{label:'日销售额 $',data:[0.0,0.0,0.0,50.0,0.0,0.0,0.0,53.0,50.0,105.5,50.0,105.5,0.0,105.0,0.0,105.0,0.0,50.0,0.0,50.0,53.0,50.0,0.0,0.0,52.3,55.0,50.0,105.5,50.0,0.0,0.0,0.0,0.0,0.0,0.0,50.0,203.0,252.9,100.0,50.0,103.0,155.5,307.9,103.0,151.5,99.0,40.0,103.0,99.0,208.0,361.4,0.0,102.0,255.5,97.0,52.5,50.0,160.5,200.0,205.0,50.0,106.0,103.0,0.0,105.5,150.0,200.0,50.0,297.9,103.0,265.2,50.0,143.0,458.9,208.0,153.0,0.0,50.0,93.0,80.0,222.9,100.0,299.9,100.0,100.0,156.0,50.0,150.0,200.0,259.4,105.5,157.5,105.0,0.0,0.0,150.0,0.0,0.0],backgroundColor:cols,order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'精准_小词_K1PRO：灰=开启前 / 绿=开启后（6-01）'}},scales:{x:{ticks:{maxTicksLimit:8}},y:{beginAtZero:true,ticks:{callback:function(v){return '$'+v}}}}}});}
+ if(id=='c_case2'){var cols=[];for(var k=0;k<98;k++)cols.push(k<62?'#CBD5E1':'#0D9488');new Chart(ctx,{type:'bar',data:{labels:CASE_LABELS,datasets:[{type:'line',label:'7天移动平均',data:[0.0,0.0,0.0,0.0,0.0,0.0,45.6,45.6,52.7,67.3,67.3,67.3,82.1,36.5,36.5,36.9,29.4,37.0,44.1,29.4,37.0,37.0,36.6,36.6,29.0,21.9,36.6,29.0,29.0,29.4,22.2,22.2,22.2,14.6,43.6,43.6,80.2,124.7,146.5,161.7,161.7,169.9,206.0,205.6,190.0,218.7,233.3,248.6,247.5,218.5,196.7,174.5,138.6,116.0,101.1,79.7,87.2,95.0,110.6,175.9,191.0,240.5,350.3,415.1,472.1,515.3,478.5,545.3,539.8,430.1,350.6,292.4,255.9,227.5,161.1,139.1,137.7,164.2,150.8,121.9,115.3,92.6,78.1,79.9,76.4,68.9,68.9,68.4,75.9,60.9,45.7,29.9,29.9,44.6,37.0,36.6,36.6,36.6],borderColor:NAVY,pointRadius:0,tension:.3,order:0},{label:'日销售额 $',data:[0.0,0.0,0.0,0.0,0.0,0.0,318.9,0.0,50.0,102.5,0.0,0.0,103.0,0.0,0.0,53.0,50.0,53.0,50.0,0.0,53.0,0.0,50.0,50.0,0.0,0.0,103.0,0.0,0.0,52.5,0.0,0.0,0.0,50.0,203.0,0.0,308.4,311.4,153.0,106.0,50.0,260.5,252.9,305.4,202.5,353.4,208.5,157.0,252.9,50.0,152.5,47.0,102.5,50.0,53.0,103.0,102.5,207.0,156.0,559.9,155.5,399.9,871.3,555.9,606.4,458.4,301.9,623.4,361.4,103.0,0.0,199.0,202.5,103.0,159.0,207.2,93.0,186.0,105.0,0.0,57.0,0.0,105.5,106.0,161.0,53.0,0.0,53.0,53.0,0.0,0.0,50.0,53.0,103.0,0.0,50.0,0.0,0.0],backgroundColor:cols,order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'ASIN_爱国者_K1PRO：灰=开启前 / 绿=开启后（6-08）'}},scales:{x:{ticks:{maxTicksLimit:8}},y:{beginAtZero:true,ticks:{callback:function(v){return '$'+v}}}}}});}
+}
+const firstChart={ov:['c_store'],ai:['c_pace','c_bid','c_ops','c_case1','c_case2'],groups:['c_dabiao'],prod:['c_lineacos'],words:['c_match','c_place','c_roots'],mkt:['c_season','c_asintrend'],xn:[],plan:[]};
+function show(t){
+ document.querySelectorAll('.tab').forEach(function(b){b.classList.toggle('active',b.dataset.t==t)});
+ document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+ var pn=document.getElementById('p-'+t); if(pn)pn.classList.add('active');
+ (firstChart[t]||[]).forEach(function(c){setTimeout(function(){mk(c)},60)});
+}
+document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
+mk('c_store');
+</script>
+</body></html>
