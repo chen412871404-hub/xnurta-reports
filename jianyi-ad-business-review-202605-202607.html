@@ -1,0 +1,722 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>健怡 · Amazon 广告经营复盘（客户版 v2）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>:root{--navy:#0F172A;--teal:#0D9488;--tealL:#5EEAD4;--tealPale:#CCFBF1;--gold:#CA8A04;--bg:#F1F5F9;--card:#fff;--border:#E2E8F0;--muted:#64748B;--dark:#475569;--green:#059669;--greenBg:#ECFDF5;--red:#DC2626;--redBg:#FEF2F2;--amber:#D97706;--amberBg:#FFFBEB;--blue:#2563EB;--blueBg:#EFF6FF;--fh:'Playfair Display',Georgia,serif;--fb:'Inter','Noto Sans SC',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fb);background:var(--bg);color:#1E293B;line-height:1.7}
+.container{max-width:1280px;margin:0 auto;padding:24px 28px}
+.hdr{background:linear-gradient(135deg,var(--navy),#134E4A 75%,var(--teal));color:#fff;padding:34px 38px;border-radius:18px;margin-bottom:22px}
+.hdr h1{font-family:var(--fh);font-size:27px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.hdr .sub{font-size:14px;color:rgba(255,255,255,.82);margin-bottom:14px}.hdr-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.66)}
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:5px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.06);overflow-x:auto}
+.tab{flex:1;min-width:96px;padding:11px 12px;border:none;background:transparent;color:var(--dark);font:500 13.5px var(--fb);cursor:pointer;border-radius:9px;white-space:nowrap}
+.tab.active{background:var(--navy);color:#fff}.panel{display:none}.panel.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border-radius:12px;padding:17px;border:1px solid var(--border)}
+.kpi .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.kpi .v{font-family:var(--fh);font-size:23px;font-weight:700;color:var(--navy)}.kpi .s{font-size:12px;color:var(--dark);margin-top:4px}
+.card{background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border);margin-bottom:18px}
+.card h2{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.card .desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--navy);color:#fff;padding:10px 12px;font-weight:600;font-size:11px;text-transform:uppercase;text-align:left}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--dark)}
+tbody tr:nth-child(even) td{background:#F8FAFC}.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{font-weight:600;color:var(--navy)}.pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}.warn{color:var(--amber);font-weight:600}
+.alert{padding:15px 18px;border-radius:10px;display:flex;gap:11px;margin-bottom:18px;font-size:13.5px;line-height:1.7}
+.a-info{background:var(--blueBg);border:1px solid #BFDBFE;color:#1E40AF}.a-ok{background:var(--greenBg);border:1px solid #A7F3D0;color:#065F46}.a-warn{background:var(--amberBg);border:1px solid #FDE68A;color:#92400E}.a-teal{background:var(--tealPale);border:1px solid #99F6E4;color:#115E59}.a-red{background:var(--redBg);border:1px solid #FECACA;color:#991B1B}
+.tag{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600}.t-green{background:var(--greenBg);color:#065F46}.t-red{background:var(--redBg);color:#991B1B}.t-amber{background:var(--amberBg);color:#92400E}.t-blue{background:var(--blueBg);color:#1E40AF}.t-teal{background:var(--tealPale);color:#115E59}
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bs{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}.bs.win{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}.bs.lose{background:linear-gradient(135deg,#FEF2F2,#fff);border-color:#FECACA}.bs.warn{background:linear-gradient(135deg,#FFFBEB,#fff);border-color:#FDE68A}.bs.neu{background:linear-gradient(135deg,#EFF6FF,#fff);border-color:#BFDBFE}
+.bs .t{font-size:13px;font-weight:600;margin-bottom:8px}.bs .big{font-family:var(--fh);font-size:20px;font-weight:800}.bs.win .big{color:var(--green)}.bs.lose .big{color:var(--red)}.bs.warn .big{color:var(--amber)}.bs.neu .big{color:var(--blue)}.bs .sm{font-size:12px;color:var(--muted);margin-top:6px}
+.chart-box{position:relative;height:300px}.chart-box.tall{height:340px}
+.rec{border-left:3px solid var(--teal);background:#F8FAFC;padding:14px 17px;border-radius:0 8px 8px 0;margin-bottom:13px;font-size:13.5px}
+.rec .rh{font-weight:700;color:var(--navy);margin-bottom:5px;font-size:14.5px}
+.rec .rm{font-size:12.5px;color:var(--dark);margin:3px 0}
+.bridge{font-size:12.5px;color:var(--muted);text-align:right;padding:2px 6px 14px}
+.foot{text-align:center;color:var(--muted);font-size:12px;padding:20px 0 8px}
+.sop{background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden}
+.sop-h{background:linear-gradient(135deg,#0F172A,#134E4A);color:#fff;padding:15px 22px;display:flex;align-items:center;gap:12px}
+.sop-h .n{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none}
+.sop-h .t{font-family:var(--fh);font-size:17px;font-weight:700}
+.sop-b{padding:18px 22px}
+.sop-row{display:grid;grid-template-columns:104px 1fr;gap:14px;padding:10px 0;border-bottom:1px dashed var(--border);font-size:13px}
+.sop-row:last-child{border-bottom:none}
+.sop-row .k{font-weight:700;font-size:12px;color:var(--muted);padding-top:2px}
+.sop-row.now .k{color:var(--dark)}.sop-row.cost .k{color:var(--amber)}.sop-row.fit .k{color:var(--teal)}.sop-row.hum .k{color:var(--blue)}.sop-row.step .k{color:var(--green)}
+.sop-row .v{color:var(--dark);line-height:1.75}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.bigstat{grid-template-columns:1fr}.sop-row{grid-template-columns:1fr;gap:4px}}</style></head><body><div class="container">
+<header class="hdr"><h1>健怡 · Amazon 广告经营复盘</h1>
+<div class="sub">客户版 · Ranein / Vancepic / Eyoo 三品牌四店矩阵 · 这一期看清钱的流向，和 Q4 之前必须做完的三件事</div>
+<div class="hdr-meta"><span>📅 周期 2026-05-28 – 2026-07-26（60 天）</span><span>💵 美国站 USD</span><span>🏬 睿宁 · 懿可 · 健怡 · 柯宝</span></div></header>
+<nav class="tabs" id="tabs">
+ <button class="tab active" data-t="ov">📊 总览</button>
+ <button class="tab" data-t="prod">📦 产品与品牌</button>
+ <button class="tab" data-t="struct">🎯 结构与广告位</button>
+ <button class="tab" data-t="words">🔍 搜索词</button>
+ <button class="tab" data-t="mkt">🌍 市场与节奏</button>
+ <button class="tab" data-t="sop">⚙️ 运营流程</button>
+ <button class="tab" data-t="plan">💡 下一步</button>
+</nav>
+
+<section class="panel active" id="p-ov">
+ <div class="alert a-teal"><span>🧭</span><div>这份复盘的主线一句话：<strong>账户里已经有一批非常能打的产品——23 个款用 14% 的预算拿回了 35% 的销售；这一期这一期的机会不在市场，在预算的流向：另有 58 个款占掉四分之一的花费，只换回 7% 的销售。</strong>更关键的是，钱花错的地方往往就在同一个商品页面内部——同一个产品家族里，最好的变体和最差的变体同时存在，而预算给了中间那一档。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>📌 结论速览</h2>
+  <div class="bigstat">
+   <div class="bs win"><div class="t">✅ 主力产品线很扎实</div><div class="big">燃气即热 ACOS 22.0%</div><div class="sm">65 款、$60,161 花费带回 $272,991，是账户第一大也是效率最好的产品线；睿宁店整体 24.8%，撑起全账户八成销售</div></div>
+   <div class="bs warn"><div class="t">⚠️ 预算流向是最大变量</div><div class="big">25.7% 的钱 → 7.4% 的销售</div><div class="sm">58 个款投入产出倒挂（合计 $46,245 → $44,060）；同期 23 个高效款只用 $25,805 就带回 $207,671</div></div>
+   <div class="bs neu"><div class="t">🧱 增量是现成的</div><div class="big">180 个词已在低成本出单</div><div class="sm">$4,406 带回 $80,236，但全部靠自动匹配顺带跑出，还没有专属的位置和预算去接住</div></div>
+  </div>
+ </div>
+
+ <div class="kpis">
+  <div class="kpi"><div class="l">广告花费</div><div class="v">$208,995</div><div class="s">日均约 $3,483</div></div>
+  <div class="kpi"><div class="l">广告销售额</div><div class="v">$671,769</div><div class="s">投产比 3.21（每 $1 广告换回 $3.21）</div></div>
+  <div class="kpi"><div class="l">订单数</div><div class="v">2,400</div><div class="s">转化率 2.73% · 点击率 0.50%</div></div>
+  <div class="kpi"><div class="l">整体 ACOS</div><div class="v">31.1%</div><div class="s">点击成本 $2.38</div></div>
+  <div class="kpi"><div class="l">新客订单占比</div><div class="v">22.8%</div><div class="s">547 单 · 新客销售 $151,985</div></div>
+  <div class="kpi"><div class="l">曝光量</div><div class="v">1,744<span style="font-size:14px"> 万</span></div><div class="s">点击 87,983 次</div></div>
+  <div class="kpi"><div class="l">在投商品</div><div class="v">111<span style="font-size:14px"> 款</span></div><div class="s">有花费广告活动 593 个</div></div>
+  <div class="kpi"><div class="l">广告组合</div><div class="v">59<span style="font-size:14px"> 个</span></div><div class="s">按产品线与机型划分</div></div>
+ </div>
+
+ <div class="card"><h2>环比上一个等长周期：花费涨了两成，销售涨了八个点</h2>
+  <div class="desc">与上一个 60 天窗口对比 · 这组数字决定了这一期该把力气用在哪里</div>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>指标</th><th class="num">上期</th><th class="num">本期</th><th class="num">变化</th></tr></thead><tbody>
+    <tr><td class="hl">广告花费</td><td class="num">$174,741</td><td class="num">$208,995</td><td class="num"><span class="warn">+19.6%</span></td></tr>
+    <tr><td class="hl">广告销售额</td><td class="num">$621,919</td><td class="num">$671,769</td><td class="num"><span class="pos">+8.0%</span></td></tr>
+    <tr><td class="hl">订单数</td><td class="num">2,071</td><td class="num">2,400</td><td class="num"><span class="pos">+15.9%</span></td></tr>
+    <tr><td class="hl">曝光量</td><td class="num">1,902 万</td><td class="num">1,744 万</td><td class="num"><span class="neg">−8.3%</span></td></tr>
+    <tr><td class="hl">转化率</td><td class="num">2.65%</td><td class="num">2.73%</td><td class="num"><span class="pos">+0.08 个百分点</span></td></tr>
+    <tr><td class="hl">点击成本</td><td class="num">$2.23</td><td class="num">$2.38</td><td class="num"><span class="warn">+6.7%</span></td></tr>
+    <tr><td class="hl">整体 ACOS</td><td class="num">28.1%</td><td class="num">31.1%</td><td class="num"><span class="neg">+3.0 个百分点</span></td></tr>
+    </tbody></table>
+   </div>
+   <div>
+    <div class="alert a-ok" style="display:block"><strong>先说好消息：转化能力是在变好的。</strong>转化率从 2.65% 提到 2.73%，订单数涨了 15.9%——快于花费涨幅之外的部分说明商品端和投放精度都在进步。曝光少了 8.3% 却拿到更多订单，也说明流量质量在提升。</div>
+    <div class="alert a-warn" style="display:block;margin-top:10px;font-size:12.5px"><strong>问题不在转化，在流量成本和钱的去向。</strong>把 ACOS 这 3 个点拆开看：点击成本上涨贡献约 +1.9 个百分点，成交客单价回落（约 $300 → $280）贡献约 +2.1 个百分点，转化率改善抵消掉 −0.8 个百分点。也就是说，最大的单一来源其实来自客单结构与预算流向，出价只是其中较小的一块。把注意力全押在"压出价"上会用错力。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card"><h2>四个店铺：一个在健康放量，三个需要分别对待</h2>
+  <div class="desc">本期花费与销售 · 以及各自与上期的 ACOS 变化</div>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>店铺</th><th class="num">花费</th><th class="num">销售额</th><th class="num">上期ACOS</th><th class="num">本期ACOS</th></tr></thead><tbody>
+    <tr><td class="hl">睿宁</td><td class="num">$133,014</td><td class="num">$536,201</td><td class="num">22.5%</td><td class="num"><span class="pos">24.8%</span></td></tr>
+    <tr><td class="hl">懿可</td><td class="num">$43,636</td><td class="num">$87,271</td><td class="num">35.1%</td><td class="num"><span class="warn">50.0%</span></td></tr>
+    <tr><td class="hl">健怡</td><td class="num">$19,618</td><td class="num">$38,675</td><td class="num">51.3%</td><td class="num"><span class="warn">50.7%</span></td></tr>
+    <tr><td class="hl">柯宝</td><td class="num">$12,727</td><td class="num">$9,621</td><td class="num">113.2%</td><td class="num"><span class="neg">132.3%</span></td></tr>
+    </tbody></table>
+    <div class="alert a-info" style="margin-top:10px;font-size:12.5px"><span>💡</span><div><strong>睿宁是这一期做得最对的一件事：</strong>花费加了 45%，ACOS 只从 22.5% 走到 24.8%——加量而效率基本守住，这是很难得的。它一个店贡献了全账户 80% 的销售。<br><strong>柯宝是新开的店铺：</strong>花费增长 362.8%，目前 117 个广告活动只覆盖 6 个商品，其中四成花费落在还没有成交的活动上——这是铺量测试期的正常形态，但需要一个明确的"多久必须看到第一批成交"的闸门。</div></div>
+   </div>
+   <div class="chart-box"><canvas id="c_store"></canvas></div>
+  </div>
+ </div>
+ <div class="bridge">下一页：111 个在投款里，哪些在贡献利润、哪些在消耗预算 →</div>
+</section>
+
+<section class="panel" id="p-prod">
+ <div class="alert a-teal"><span>📦</span><div>这一页只回答一个问题：<strong>钱花在了哪些商品上，效率又在哪些商品上</strong>。答案是这份复盘里最重要的一张表——两者目前是错开的，而把它们对齐不需要新增任何预算。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>把 111 个在投款按投入产出分四档</h2>
+  <div class="desc">按各款 60 天的整体投产比分档 · 花费与销售占比均以有商品归属的广告投放为基数</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_tier"></canvas></div>
+   <div>
+    <table><thead><tr><th>分档</th><th class="num">款数</th><th class="num">花费占比</th><th class="num">销售占比</th><th class="num">投产比</th><th class="num">转化率</th></tr></thead><tbody>
+    <tr><td class="hl">效率领先</td><td class="num">23</td><td class="num">14.4%</td><td class="num"><span class="pos">35.0%</span></td><td class="num"><span class="pos">8.05</span></td><td class="num">5.12%</td></tr>
+    <tr><td class="hl">健康</td><td class="num">22</td><td class="num">37.4%</td><td class="num">39.9%</td><td class="num">3.52</td><td class="num">2.99%</td></tr>
+    <tr><td class="hl">偏高</td><td class="num">8</td><td class="num">22.5%</td><td class="num">17.6%</td><td class="num">2.58</td><td class="num">2.53%</td></tr>
+    <tr><td class="hl">待修复</td><td class="num">58</td><td class="num"><span class="neg">25.7%</span></td><td class="num"><span class="neg">7.4%</span></td><td class="num"><span class="neg">0.95</span></td><td class="num">1.35%</td></tr>
+    </tbody></table>
+    <div class="alert a-warn" style="margin-top:12px;display:block"><strong>一句话读法：</strong>最能赚钱的 23 个款只拿到 14.4% 的预算，投产比 8.05；而 58 个待修复款拿走 25.7% 的预算，投产比 0.95——每花 1 美元换回不到 1 美元销售。<strong>待修复款花的钱，是效率领先款的 1.8 倍。</strong></div>
+   </div>
+  </div>
+  <div class="alert a-ok" style="margin-bottom:0"><span>🧮</span><div><strong>这意味着什么：</strong>如果把待修复档里的一半预算（约 $23,000）按"健康档"3.52 的投产比重新投放，同一笔钱可以多带回约 $59,000 销售。这个数字不依赖旺季、不依赖市场好转、也不需要多花一分钱——只是换个地方花。这是本期回报最高的单一动作。</div></div>
+ </div>
+
+ <div class="card"><h2>八条产品线：燃气即热是主心骨，两条线需要重新定位</h2>
+  <div class="desc">按商品所属品类归集 · 气泡大小代表花费规模</div>
+  <div class="two">
+   <div class="chart-box tall"><canvas id="c_line"></canvas></div>
+   <div>
+    <table><thead><tr><th>产品线</th><th class="num">款数</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">转化率</th></tr></thead><tbody>
+    <tr><td class="hl">燃气即热</td><td class="num">65</td><td class="num">$60,161</td><td class="num">$272,991</td><td class="num"><span class="pos">22.0%</span></td><td class="num">2.93%</td></tr>
+    <tr><td class="hl">RV 房车热水器</td><td class="num">37</td><td class="num">$50,597</td><td class="num">$147,038</td><td class="num">34.4%</td><td class="num">2.80%</td></tr>
+    <tr><td class="hl">电即热</td><td class="num">23</td><td class="num">$21,826</td><td class="num">$74,213</td><td class="num">29.4%</td><td class="num">2.72%</td></tr>
+    <tr><td class="hl">净水器</td><td class="num">20</td><td class="num">$13,307</td><td class="num">$9,412</td><td class="num"><span class="neg">141.4%</span></td><td class="num"><span class="neg">0.96%</span></td></tr>
+    <tr><td class="hl">小厨宝</td><td class="num">19</td><td class="num">$11,896</td><td class="num">$40,689</td><td class="num">29.2%</td><td class="num"><span class="pos">4.07%</span></td></tr>
+    <tr><td class="hl">灶具</td><td class="num">21</td><td class="num">$10,102</td><td class="num">$13,305</td><td class="num"><span class="neg">75.9%</span></td><td class="num"><span class="neg">1.15%</span></td></tr>
+    <tr><td class="hl">便携热水器</td><td class="num">17</td><td class="num">$9,062</td><td class="num">$24,527</td><td class="num">36.9%</td><td class="num">1.63%</td></tr>
+    <tr><td class="hl">厨余粉碎机</td><td class="num">4</td><td class="num">$1,121</td><td class="num">$4,809</td><td class="num"><span class="pos">23.3%</span></td><td class="num"><span class="pos">6.52%</span></td></tr>
+    </tbody></table>
+   </div>
+  </div>
+  <div class="two" style="margin-top:14px">
+   <div class="alert a-info" style="display:block;font-size:12.5px"><strong>两条高转化线，但瓶颈完全相反。</strong>小厨宝 4.07%、厨余粉碎机 6.52%，都高于账户均值 2.73%，但两条线受限的原因不同，不能用同一套办法放大——详见下方单独说明。</div>
+   <div class="alert a-warn" style="display:block;font-size:12.5px"><strong>两条需要调整策略的线。</strong>净水器转化率 0.96%、灶具 1.15%，都只有账户均值的三到四成。问题在"点进来之后没有成交"，不是"没人点进来"——继续加预算或换广告位都解决不了。<strong>这两条线的具体处置方式见下。</strong></div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--blue)"><h2>净水器：不是赛道问题，是一款还没做完的商品</h2>
+  <div class="alert a-info"><span>🔍</span><div>这条线 141.4% 的广告成本占比很容易让人以为是赛道选错了。把类目数据摊开看，结论正好相反——<strong>品类本身是我们几条线里毛利结构最好的一条，价格带也踩得很准，差距集中在页面完成度和评论数上。</strong></div></div>
+
+  <div class="bigstat" style="margin-bottom:14px">
+   <div class="bs win"><div class="t">✅ 类目本身很健康</div><div class="big">平均毛利率 74.0%</div><div class="sm">月销约 99,664 台；单品月均 996 台 / $220,966；A+ 覆盖率 93%——是目前几条线里毛利结构最好的一条</div></div>
+   <div class="bs win"><div class="t">✅ 价格带踩得很准</div><div class="big">$150–200 是最强一档</div><div class="sm">全类目销量占比最高（20.41%）、单品效率也最高（1.57%，八档第一）。V600 定价 $199.99 正落在这一档</div></div>
+   <div class="bs warn"><div class="t">⚠️ 门槛在评论数</div><div class="big">临界点在 300 条</div><div class="sm">单品效率从 200–300 条区间的 0.37% 跳到 300–500 条的 1.49%（四倍），此后不再上升。V600 现在是 5 条</div></div>
+  </div>
+
+  <div class="two">
+   <div>
+    <h2 style="font-size:15px">按评论数拆开整个类目</h2>
+    <table style="margin-top:10px"><thead><tr><th>评论数区间</th><th class="num">商品数</th><th class="num">月销量</th><th class="num">销量占比</th><th class="num">单品效率</th></tr></thead><tbody>
+    <tr><td class="hl">1–50 条</td><td class="num">12</td><td class="num">4,886</td><td class="num">4.96%</td><td class="num">0.41%</td></tr>
+    <tr><td class="hl">50–100 条</td><td class="num">13</td><td class="num">4,208</td><td class="num">4.28%</td><td class="num">0.33%</td></tr>
+    <tr><td class="hl">100–200 条</td><td class="num">9</td><td class="num">5,167</td><td class="num">5.25%</td><td class="num">0.58%</td></tr>
+    <tr><td class="hl">200–300 条</td><td class="num">10</td><td class="num">3,662</td><td class="num">3.72%</td><td class="num">0.37%</td></tr>
+    <tr style="background:#ECFDF5"><td class="hl">300–500 条</td><td class="num">9</td><td class="num">13,166</td><td class="num"><span class="pos">13.38%</span></td><td class="num"><span class="pos">1.49%</span></td></tr>
+    <tr><td class="hl">500 条以上</td><td class="num">47</td><td class="num">67,329</td><td class="num">68.41%</td><td class="num">1.46%</td></tr>
+    </tbody></table>
+    <div class="alert a-ok" style="margin-top:10px;font-size:12.5px"><span>💡</span><div><strong>这张表给出两个结论：</strong>一是低评论区间并非没有机会——评论低于 100 条的 25 款商品仍拿走 9.24% 的类目销量、每月约 220 万美元；二是效率的台阶出现在 <strong>300 条</strong>，不是几千条。这个品类不需要海量评论才卖得动。</div></div>
+   </div>
+   <div>
+    <h2 style="font-size:15px">新品牌能不能破局：有现成的答案</h2>
+    <div class="alert a-info" style="margin-top:10px;display:block"><strong>表面上是垄断格局：</strong>前 10 品牌合计占 90.01% 销量，头部一家 30 款就占 43.97%。<br><br><strong>但类目销量第 5 的品牌，旗下两款商品全部是 2026 年新上架的。</strong>它的主力款 2026 年 1 月 19 日上线、定价 $169.99，6 月单月做到 5,926 台 / $1,080,632、占类目 7.25%——排名超过多个经营多年的老牌，而它当时的评分数只有 504 条。<br><br><strong>一个 2026 年才进场的新品牌，用半年时间、500 条评论做到类目第五。</strong>门槛确实存在，但不是"进不去"那种门槛。</div>
+    <div class="alert a-warn" style="margin-top:10px;display:block;font-size:12.5px"><strong>差距在页面本身。</strong>V600 的页面质量得分是 <strong>79</strong>，而上述新品牌主力款与头部旗舰都是 <strong>100</strong>，这个类目 93% 的商品都上了 A+ 内容。同时 V600 挂了 <strong>10 个变体却只有 5 条评分</strong>，本就稀少的评价权重还被摊薄。<br><br>值得对照的是：贵司主力燃气款的页面质量得分是 <strong>99</strong>，与品类头部同级。<strong>所以这不是能力问题，是资源没有投到这条线上。</strong></div>
+   </div>
+  </div>
+
+  <div class="alert a-teal" style="margin-top:14px;display:block"><strong>🔬 我们已经知道这个品类的买家在担心什么</strong>
+   <div style="margin-top:6px">拆解头部竞品的低星评价，抱怨高度集中在六件事：<strong>换滤芯后系统失效</strong>（出水变细流、机器不识别新滤芯——最高频）、<strong>售后联系不上</strong>、<strong>滤芯成本与可得性</strong>（有买家算出"滤芯比整机还贵"）、<strong>漏水泡坏底柜</strong>、<strong>除杂效果不达标</strong>、以及<strong>垃圾处理器/洗碗机场景需要额外转接件而说明书未写</strong>。另一款台面机的低星里还多出一条：有买家扫了页面上的检测报告二维码，发现实测只覆盖十几项物质，与"去除上千种物质"的宣传不符，直接给了一星。</div>
+   <div style="margin-top:8px"><strong>这份清单可以直接当作页面改造大纲：</strong>把"换滤芯有多简单"做成主图视频和 A+ 独立模块；把滤芯型号、单价、更换周期、年度总成本明明白白摊在页面上（3:1 纯废水比和无罐设计在这里是加分项）；把防漏结构讲清楚；把 TDS 去除率的检测依据放出来，<strong>并且只说检测实际覆盖的项目</strong>——这个品类的买家真的会去查；把垃圾处理器场景的适配件标明。</div>
+  </div>
+
+  <div class="alert a-ok" style="margin-bottom:0"><span>🎯</span><div><strong>所以这条线的动作是"限期修页面"，而且有一句必须说在前面：现在的问题，广告解决不了。</strong>0.96% 的转化率不是出价买不到位置造成的（这个词的广告竞争强度在贵司所有主线里是最低的），是页面转化能力不足造成的，继续加投只会把 141% 的广告成本占比原样放大。<br><br><strong>具体安排：</strong>未来 8 周把这条线的广告预算维持在当前水平附近（不加码、也不撤出），预算的作用只是守住自然位不掉；资源投到页面重做（A+、主图视频、变体从 10 个收敛到 3–4 个）和评价积累。<strong>8 周后以两个指标复核：评分数是否过 100 条、转化率是否从 0.96% 提到 2% 以上。</strong>两个都动了，这条线在评论过 300 条之后有机会成为账户里毛利最高的产品线；如果 8 周后页面做完、评论也上来了而转化仍不动，<strong>那时候再撤出才是有依据的决定。</strong></div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--amber)"><h2>灶具：问题不在燃料类型，在电灶那款站错了价格带</h2>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>词组</th><th class="num">月搜索</th><th class="num">购买率</th><th class="num">市场均价</th></tr></thead><tbody>
+    <tr><td class="hl">electric cooktop</td><td class="num">16,015</td><td class="num">1.59%</td><td class="num">$26.76</td></tr>
+    <tr><td class="hl">portable induction cooktop</td><td class="num">12,020</td><td class="num">2.08%</td><td class="num">$60.23</td></tr>
+    <tr><td class="hl">2 burner electric cooktop</td><td class="num">9,515</td><td class="num">2.76%</td><td class="num">$29.99</td></tr>
+    <tr style="background:#FEF2F2"><td class="hl">gas cooktop</td><td class="num">3,996</td><td class="num"><span class="neg">0.48%</span></td><td class="num">$209.99</td></tr>
+    <tr style="background:#FEF2F2"><td class="hl">2 burner gas cooktop</td><td class="num">140</td><td class="num">1.40%</td><td class="num">$75.99</td></tr>
+    </tbody></table>
+    <div class="alert a-info" style="margin-top:10px;font-size:12.5px"><strong>电灶具词族的月搜索量合计约是燃气的 9 倍</strong>（37,550 对 4,136），购买率也全面更高。燃气大词 0.48% 的购买率是这一组里最低的，且不到 4,000 次搜索对着一万多个在售商品。<strong>所以"燃气这条线更有优势"并不是市场给出的结论</strong>——燃气款 74.2% 的广告成本占比同样远高于账户均值，两款都没跑通，只是程度不同。</div>
+   </div>
+   <div>
+    <div class="alert a-warn" style="display:block"><strong>真正拉开差距的是价格与搜索意图的错位，跟燃料类型无关。</strong><br><br>12 寸双头燃气灶定价 <strong>$129</strong>，而该词族市场均价 $209.99——比市场预期便宜 $81，点进来的人不会因为价格劝退。<br><br>120V 双头电磁炉定价 <strong>$159</strong>，而 electric cooktop 均价只有 $26.76、2 burner electric cooktop $29.99——<strong>比这些词的市场预期贵 5 倍以上</strong>。广告确实把流量买进来了，但买进来的是在找 $30 便携电炉的人，看到 $159 的嵌入式电磁炉就走。116.4% 的广告成本占比主要是这么来的。</div>
+    <div class="alert a-ok" style="display:block;margin-top:10px;font-size:12.5px"><strong>唯一还空着的位置是便携电磁炉。</strong>portable induction cooktop 月搜索 12,020、购买率 2.08%、<strong>市场均价 $60.23、在售仅 1,010 个、供需比 11.90</strong>——是这一组里唯一供给明显不足的词，而且价格带最接近贵司现有产品。目前这条线在这个词上投入极少。<br><br><strong>建议：</strong>电磁炉款从均价 $30 的泛词上撤下来，集中打便携电磁炉和带明确规格场景的长尾（12 寸嵌入式、120V、1800W、公寓/房车）；燃气款把"比市场均价便宜 $81"在页面上视觉化。两款都先把评分推到 50 条以上再谈加预算（现在分别是 21 条和 3 条）。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card"><h2>三个品牌的成熟度差得很远</h2>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>品牌</th><th class="num">在投款</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">转化率</th><th class="num">新客占比</th></tr></thead><tbody>
+    <tr><td class="hl">Ranein</td><td class="num">185</td><td class="num">$135,363</td><td class="num">$520,582</td><td class="num"><span class="pos">26.0%</span></td><td class="num">2.93%</td><td class="num">14%</td></tr>
+    <tr><td class="hl">Vancepic</td><td class="num">37</td><td class="num">$32,088</td><td class="num">$53,764</td><td class="num"><span class="warn">59.7%</span></td><td class="num">1.93%</td><td class="num">2%</td></tr>
+    <tr><td class="hl">Eyoo</td><td class="num">64</td><td class="num">$11,932</td><td class="num">$17,845</td><td class="num"><span class="warn">66.9%</span></td><td class="num">1.36%</td><td class="num">11%</td></tr>
+    </tbody></table>
+   </div>
+   <div>
+    <div class="alert a-info" style="display:block"><strong>Ranein 已经进入良性循环</strong>——185 个在投款、ACOS 26.0%、新客占比 14%，是三个品牌里唯一能一边拉新一边保住效率的。Vancepic 和 Eyoo 目前处在"用广告费买认知"的阶段，ACOS 高是这个阶段的正常形态。<br><br><strong>但两个新品牌的路径应该分开走：</strong>Eyoo 新客占比 11%，说明它确实在拉到新人群；Vancepic 只有 2%，且它承载了净水器和灶具这两条转化率最低的线——这更像是品类选择的问题，而不是广告投放的问题，建议优先做品类取舍而不是加大投放。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>效率领先的款集中在主力产品线，且投入规模都还有空间</h2>
+  <div class="desc">投产比最高的一批在投款 · 共同点是花费规模都还很小</div>
+  <table><thead><tr><th>商品</th><th>店铺</th><th>产品线</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">转化率</th></tr></thead><tbody>
+  <tr><td class="hl">Ranein 天然气即热 8.5 GPM 室内</td><td>睿宁</td><td>燃气即热</td><td class="num">$2,979</td><td class="num">$31,102</td><td class="num"><span class="pos">9.6%</span></td><td class="num">4.31%</td></tr>
+  <tr><td class="hl">Ranein 丙烷即热 8.5 GPM 室内</td><td>睿宁</td><td>燃气即热</td><td class="num">$2,974</td><td class="num">$29,213</td><td class="num"><span class="pos">10.2%</span></td><td class="num">4.77%</td></tr>
+  <tr><td class="hl">Ranein 丙烷即热 5.3 GPM 户外</td><td>睿宁</td><td>燃气即热</td><td class="num">$2,220</td><td class="num">$23,196</td><td class="num"><span class="pos">9.6%</span></td><td class="num"><span class="pos">6.71%</span></td></tr>
+  <tr><td class="hl">Ranein 丙烷即热 4.3 GPM 室内</td><td>睿宁</td><td>燃气即热</td><td class="num">$2,857</td><td class="num">$21,206</td><td class="num"><span class="pos">13.5%</span></td><td class="num">5.47%</td></tr>
+  <tr><td class="hl">Gen II Ranein 房车即热（丙烷）</td><td>睿宁</td><td>RV 房车</td><td class="num">$3,307</td><td class="num">$22,708</td><td class="num"><span class="pos">14.6%</span></td><td class="num">5.75%</td></tr>
+  <tr><td class="hl">Ranein 18L 丙烷即热</td><td>睿宁</td><td>燃气即热</td><td class="num">$771</td><td class="num">$10,100</td><td class="num"><span class="pos">7.6%</span></td><td class="num"><span class="pos">6.42%</span></td></tr>
+  <tr><td class="hl">Ranein 天然气即热 5.3 GPM 室内</td><td>睿宁</td><td>燃气即热</td><td class="num">$1,942</td><td class="num">$14,852</td><td class="num"><span class="pos">13.1%</span></td><td class="num">4.03%</td></tr>
+  <tr><td class="hl">Ranein 8L 丙烷即热 户外</td><td>睿宁</td><td>燃气即热</td><td class="num">$2,703</td><td class="num">$14,417</td><td class="num"><span class="pos">18.7%</span></td><td class="num">4.32%</td></tr>
+  </tbody></table>
+  <div class="alert a-ok" style="margin-top:12px;margin-bottom:0"><span>🔑</span><div><strong>这张表最值得注意的不是 ACOS，是花费一列。</strong>这批款的转化率是账户均值的 1.5–2.5 倍，投产比在 5 到 13 之间，但单款 60 天花费全部只有 700 到 3,300 美元。它们不是被市场限制住的，是被预算限制住的——账户里目前有 67 个这样的活动，合并 ACOS 15.6%、投产比 6.41，日预算却都压在 20 美元以内。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🔍 最值得先看的一张表：钱花错的地方，就在同一个商品页面内部</h2>
+  <div class="desc">主力燃气产品家族的 16 个变体 · 同一个父体、同一批评论、同一个页面</div>
+  <table><thead><tr><th>变体</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">转化率</th></tr></thead><tbody>
+  <tr style="background:#FFFBEB"><td class="hl">3.6 GPM 室内（丙烷）</td><td class="num"><span class="warn">$11,543</span></td><td class="num">$36,534</td><td class="num">31.6%</td><td class="num">2.39%</td></tr>
+  <tr style="background:#FFFBEB"><td class="hl">4.3 GPM 室内（天然气）</td><td class="num"><span class="warn">$7,288</span></td><td class="num">$22,265</td><td class="num">32.7%</td><td class="num">1.79%</td></tr>
+  <tr style="background:#ECFDF5"><td class="hl">8.5 GPM 室内（天然气）</td><td class="num">$2,979</td><td class="num">$31,102</td><td class="num"><span class="pos">9.6%</span></td><td class="num"><span class="pos">4.31%</span></td></tr>
+  <tr style="background:#ECFDF5"><td class="hl">8.5 GPM 室内（丙烷）</td><td class="num">$2,974</td><td class="num">$29,213</td><td class="num"><span class="pos">10.2%</span></td><td class="num"><span class="pos">4.77%</span></td></tr>
+  <tr style="background:#ECFDF5"><td class="hl">5.3 GPM 户外（丙烷）</td><td class="num">$2,220</td><td class="num">$23,196</td><td class="num"><span class="pos">9.6%</span></td><td class="num"><span class="pos">6.71%</span></td></tr>
+  <tr style="background:#FEF2F2"><td class="hl">3.6 GPM 室内（天然气 GEN II）</td><td class="num">$3,789</td><td class="num">$3,322</td><td class="num"><span class="neg">114.0%</span></td><td class="num">1.11%</td></tr>
+  <tr style="background:#FEF2F2"><td class="hl">3.17 GPM 室内（<strong>白色</strong>丙烷）</td><td class="num">$1,709</td><td class="num">$538</td><td class="num"><span class="neg">317.7%</span></td><td class="num"><span class="neg">0.43%</span></td></tr>
+  <tr style="background:#FEF2F2"><td class="hl">3.17 GPM 室内（<strong>白色</strong>天然气）</td><td class="num">$285</td><td class="num">$299</td><td class="num"><span class="neg">95.3%</span></td><td class="num">1.20%</td></tr>
+  </tbody></table>
+  <div class="two" style="margin-top:12px">
+   <div class="alert a-info" style="display:block"><strong>规律非常干净：</strong>大流量段（8.5 GPM）ACOS 9.6–10.2%、转化率 4.3–6.7%；小流量段（3.17 GPM）ACOS 95–318%、转化率不到 1.2%。三个白色款全部失败，灰色款全部健康。这是同一个页面、同一批评论、同一个品牌下的结果——<strong>差异只来自规格段位和颜色。</strong></div>
+   <div class="alert a-warn" style="display:block"><strong>而预算给的正好是中间那一档：</strong>ACOS 31–33% 的两个中档变体拿走了 <strong>$18,831</strong>，ACOS 9.6% 的那个只拿到 $2,979。整个家族合计 $46,035 带回 $217,974（合并 ACOS 21.1%），其中效率最好的 8 个变体只用了三分之一的预算，就带回了六成以上的销售。</div>
+  </div>
+  <div class="alert a-ok" style="margin-bottom:0"><span>✅</span><div><strong>这条比"缩减低效商品"更容易落地：</strong>不需要下架任何商品、不需要调整产品线，只需要在同一个广告结构里把预算从中低流量段和白色款转移到大流量段与户外款。整个动作在一个商品家族内部完成，风险和沟通成本都很低。<strong>而且这类"同一父体内部的预算错配"在其他产品家族里很可能同样存在，值得按同一方法排查一遍。</strong></div></div>
+ </div>
+ <div class="bridge">下一页：广告位、竞价方式和预算结构里还藏着哪些空间 →</div>
+</section>
+
+<section class="panel" id="p-struct">
+ <div class="alert a-teal"><span>🎯</span><div>产品那一页说的是"钱该给谁"，这一页说的是"钱该怎么花出去"。<strong>三个杠杆——广告位、竞价方式、预算上限——每一个都与市场行情无关，都是账户内部就能调的。</strong></div></div>
+
+ <div class="card" style="border-left:4px solid var(--amber)"><h2>广告位：两个位置花的钱几乎一样多，产出差了六成</h2>
+  <div class="desc">按广告展示位置拆分 60 天投放</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_place"></canvas></div>
+   <div>
+    <table><thead><tr><th>广告位</th><th class="num">花费</th><th class="num">销售额</th><th class="num">ACOS</th><th class="num">转化率</th><th class="num">点击成本</th></tr></thead><tbody>
+    <tr><td class="hl">搜索结果顶部</td><td class="num">$71,189</td><td class="num">$263,150</td><td class="num"><span class="pos">27.1%</span></td><td class="num"><span class="pos">3.87%</span></td><td class="num">$2.93</td></tr>
+    <tr><td class="hl">商品页面</td><td class="num">$68,672</td><td class="num">$164,203</td><td class="num"><span class="warn">41.8%</span></td><td class="num">2.14%</td><td class="num">$2.47</td></tr>
+    <tr><td class="hl">其余搜索位</td><td class="num">$47,011</td><td class="num">$149,162</td><td class="num">31.5%</td><td class="num">2.55%</td><td class="num">$2.16</td></tr>
+    <tr><td class="hl">站外</td><td class="num">$1,888</td><td class="num">$5,200</td><td class="num">36.3%</td><td class="num">0.73%</td><td class="num">$1.06</td></tr>
+    </tbody></table>
+    <div class="alert a-warn" style="margin-top:12px;display:block"><strong>核心对比：</strong>搜索顶部和商品页面的花费只差不到 4%，但顶部的转化率是商品页面的 <strong>1.8 倍</strong>，同样的钱多带回约六成销售。顶部点击成本确实贵 19%，可转化率高出 81%——净效率明显更优。</div>
+   </div>
+  </div>
+  <div class="alert a-info" style="margin-bottom:0"><span>⚖️</span><div><strong>但不建议一刀切地把商品页面预算全搬走。</strong>商品页面承担的是竞品拦截和自家详情页防守，账户 22.8% 的新客订单里有相当部分从这里来。合理的做法是分档：把已经跑通的高效活动往顶部推，把转化本身不成立的品类（净水器 0.96%、灶具 1.15%）先排除在外——那两条线换位置也解决不了问题。</div></div>
+ </div>
+
+ <div class="card"><h2>一批高效活动的位置份额还很低，而一批低效活动占着好位置</h2>
+  <div class="two">
+   <div class="alert a-ok" style="display:block"><strong>该往上推的：</strong>38 个 ACOS 低于 25% 的活动，搜索顶部曝光份额不到 10%。这批活动合计花 $31,018 带回 $215,403，投产比 6.94——已经被验证有效，只是还没站到最好的位置上。</div>
+   <div class="alert a-warn" style="display:block"><strong>该让位的：</strong>29 个 ACOS 高于 60% 的活动，顶部份额反而在 20% 以上，合计花 $18,547 只带回 $19,702。位置是稀缺资源，这部分占用需要重新评估。</div>
+  </div>
+  <div class="alert a-info" style="margin-bottom:0;font-size:12.5px"><span>📌</span><div>需要说明的是，搜索顶部的位置是<strong>逐个关键词</strong>竞争的，不是账户里一池可以随意调配的库存——低效活动让出来的位置，高效活动未必接得到（两者跑的是不同的搜索词）。所以这要当成两件独立的事来做：一边收缩无效占位，一边为高效活动单独争取顶部。收益也要分开算，不能当成一次零成本的置换。</div></div>
+ </div>
+
+ <div class="card"><h2>竞价方式：让系统参与调价的那一档，效率明显更好</h2>
+  <div class="desc">按各广告活动设置的竞价策略分组</div>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>竞价策略</th><th class="num">活动数</th><th class="num">花费</th><th class="num">ACOS</th><th class="num">转化率</th></tr></thead><tbody>
+    <tr><td class="hl">动态竞价 · 提高和降低</td><td class="num">123</td><td class="num">$34,777</td><td class="num"><span class="pos">27.2%</span></td><td class="num"><span class="pos">3.28%</span></td></tr>
+    <tr><td class="hl">固定竞价</td><td class="num">324</td><td class="num">$108,859</td><td class="num">32.1%</td><td class="num">2.70%</td></tr>
+    <tr><td class="hl">动态竞价 · 只降低</td><td class="num">40</td><td class="num">$16,069</td><td class="num"><span class="neg">42.7%</span></td><td class="num">2.38%</td></tr>
+    </tbody></table>
+   </div>
+   <div>
+    <div class="alert a-info" style="display:block"><strong>读法：</strong>在商品推广这一类里，"动态竞价·提高和降低"的 ACOS 比"固定竞价"低约 5 个百分点，转化率高 0.58 个百分点。固定竞价目前覆盖 324 个活动、超过一半的商品推广花费。<br><br><strong>不过这个对比不能直接当结论用。</strong>选择固定竞价的活动往往本身就是需要严格控成本的产品线（比如新品测试、成本敏感款），两组的商品构成不同。更稳妥的读法是：在<strong>同一条产品线内部</strong>挑几个可比活动做一次小范围切换测试，用自己的数据验证一次，比直接照搬这张表更可靠。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>品牌广告和展示广告：账户里全部新客都来自这两类，它们只拿到不到四分之一预算</h2>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_type"></canvas></div>
+   <div>
+    <table><thead><tr><th>广告类型</th><th class="num">花费</th><th class="num">占比</th><th class="num">ACOS</th><th class="num">新客单占比</th><th class="num">新客成本</th></tr></thead><tbody>
+    <tr><td class="hl">商品推广 SP</td><td class="num">$159,705</td><td class="num">76.4%</td><td class="num">31.7%</td><td class="num">—</td><td class="num">—</td></tr>
+    <tr><td class="hl">品牌推广 SB</td><td class="num">$29,977</td><td class="num">14.3%</td><td class="num">37.5%</td><td class="num"><span class="pos">90%</span></td><td class="num">$101.96</td></tr>
+    <tr><td class="hl">展示型推广 SD</td><td class="num">$19,313</td><td class="num">9.2%</td><td class="num"><span class="pos">22.0%</span></td><td class="num"><span class="pos">89%</span></td><td class="num"><span class="pos">$76.34</span></td></tr>
+    </tbody></table>
+    <div class="alert a-ok" style="margin-top:12px;display:block"><strong>展示型推广是这一期最被低估的一块。</strong>它只拿到 9.2% 的预算，却贡献了 13.1% 的销售，ACOS 22.0% 是三类里最低的，点击成本 $1.63 比商品推广便宜三成多。其中"受众定向"这一小块 60 天只花了 $5,800，转化率 7.60%，是全账户转化能力最强的部分。</div>
+    <div class="alert a-info" style="margin-top:10px;display:block;font-size:12.5px"><strong>一个必要的提醒：</strong>展示型 ACOS 低主要来自"点击更便宜"和"客单价更高"，它的转化率本身并不高于账户均值。所以它的正确定位是<strong>低成本的新客入口与再营销通道</strong>，而不是"效率最高所以应该无限放大"——放大到一定规模后点击成本会向均值回归。建议按"新客获取成本能否守住"来管它，而不是按 ACOS。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card"><h2>两处结构性的预算空间</h2>
+  <div class="two">
+   <div class="rec" style="border-left-color:var(--green)">
+    <div class="rh">① 67 个高效活动被日预算压着</div>
+    <div class="rm">这批活动合并 ACOS <strong>15.6%</strong>、投产比 <strong>6.41</strong>，60 天合计只花了 $20,070 却带回 $128,669，日预算却都设在 20 美元以内。其中不乏 ACOS 8–12% 的活动。</div>
+    <div class="rm">需要先分辨的是：有些小预算是有意为之（成本闸门、库存受限、新品控量）。建议先圈出"确实想放量却被卡住"的那部分再动，而不是统一上调。</div>
+   </div>
+   <div class="rec" style="border-left-color:var(--amber)">
+    <div class="rh">② 37 个曾经跑得不错的活动已经停投</div>
+    <div class="rm">有 98 个活动上期有销售、本期零花费，其中 <strong>37 个上期 ACOS 低于 30%</strong>，上期合计带回 $47,105 销售。</div>
+    <div class="rm">停投未必是错的——可能对应断货、换季或产品调整。但这批活动目前没有一个定期回看的机制，容易在恢复供货后被遗忘。建议做成一份"待复核清单"按月过一遍。</div>
+   </div>
+  </div>
+ </div>
+ <div class="bridge">下一页：搜索词层面还有哪些已经验证过的需求没被接住 →</div>
+</section>
+
+<section class="panel" id="p-words">
+ <div class="alert a-teal"><span>🔍</span><div>搜索词是账户里确定性最高的一块——<strong>因为这些需求已经被真实成交验证过了，剩下的只是把它从"顺带跑出来"变成"稳定接得住"。</strong>本页基于两个主力店 60 天的搜索词表现。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>180 个搜索词已经在低成本出单，但还没有专属的位置和预算</h2>
+  <div class="desc">这些词目前全部由广泛匹配和自动投放顺带跑出，曝光多少取决于系统当天的匹配结果</div>
+  <div class="bigstat" style="margin-bottom:14px">
+   <div class="bs win"><div class="t">✅ 已验证的需求</div><div class="big">$4,406 → $80,236</div><div class="sm">180 个词，ACOS 5.5%；只占有搜索词记录部分 3.9% 的花费，贡献 21.6% 的销售</div></div>
+   <div class="bs neu"><div class="t">🎯 可以立刻着手的核心</div><div class="big">33 个稳健词</div><div class="sm">$2,542 → $29,099，转化率 11.95%，是账户均值 2.73% 的 4.4 倍</div></div>
+   <div class="bs warn"><div class="t">⚠️ 目前的状态</div><div class="big">曝光不可控</div><div class="sm">没有独立承接，就无法用预算和出价去决定这些词每天能拿到多少流量</div></div>
+  </div>
+  <div class="alert a-info"><span>💬</span><div>这属于自动投放本身的运行方式，不是执行上的疏忽：<strong>跑出好词是它的功能，把好词固化下来则需要另外一步动作</strong>。目前差的就是这一步。</div></div>
+
+  <h2 style="font-size:16px;margin-top:18px">把这 180 个词拆开看，三类性质完全不同，不能一视同仁</h2>
+  <table style="margin-top:12px"><thead><tr><th>类型</th><th>代表词表现</th><th>该怎么定预期</th></tr></thead><tbody>
+  <tr><td class="hl">通用需求词<br><span class="tag t-green">增量口</span></td><td>garbage disposal $372→$2,134（24 单）<br>outdoor propane water heater $120→$2,085</td><td>背后是尚未指定品牌的需求，是唯一能把整体规模做大的部分。但要先确认接得住多少——厨余粉碎机全线只有 4 个在投款，这个词一个就占了该线约四成销售，<strong>天花板可能在款数上而不在广告上</strong>，放量前先对一下上架计划。</td></tr>
+  <tr><td class="hl">竞品品牌词<br><span class="tag t-blue">效率最高但封顶</span></td><td>fogatti rv tankless water heater $479→$3,221<br>rinnai tankless water heater propane $102→$1,398</td><td>转化好是因为购买意图已经很明确。但搜索量由对方的品牌热度决定，我们能做的是提高在这个固定池子里的占有率，不是把池子做大。转成独立投放后竞争通常会明显变贵，<strong>按"守住一块稳定的高效流量"定预期，不按新增长引擎定预期</strong>。</td></tr>
+  <tr><td class="hl">自有品牌词<br><span class="tag t-amber">先看要不要花钱买</span></td><td>ranein propane tankless water heater $102→$1,055</td><td>这部分订单有相当比例在没有广告时也会自然发生。加大投入前建议先核对对应商品的自然排名，<strong>避免把已有的自然单换成付费单</strong>。</td></tr>
+  </tbody></table>
+
+  <div class="alert a-warn" style="margin-top:14px;margin-bottom:0;display:block"><strong>关于收益，这里给一个区间而不是一个单一数字——有三件事要提前说清楚：</strong>
+   <div style="margin-top:8px">① <strong>独立承接后效率一定会回落。</strong>现在的低成本来自自动匹配的低竞价环境，转为独立投放并争取靠前位置后，点击成本会上升。参考本账户实测：搜索顶部平均点击成本 $2.93，其他位置 $2.16，贵约三分之一。</div>
+   <div>② <strong>但对这批词，顶部位置仍然划算。</strong>账户里搜索顶部转化率 3.87%，是商品页面 2.14% 的 1.8 倍，高转化词更适合放顶部。合理预期是 ACOS 从 5.5% 上行到 <strong>10–15% 区间</strong>——即便如此，仍远优于账户整体的 31.1%。</div>
+   <div>③ <strong>必须同步在原广泛/自动活动里做否定</strong>，否则新旧两边会互相抬价，成本上升而增量有限。</div>
+  </div>
+ </div>
+
+ <div class="card"><h2>词族结构：燃气这条主干效率最好，规格词是被忽略的高意图区</h2>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_fuel"></canvas></div>
+   <div>
+    <div class="alert a-ok" style="display:block"><strong>主干很清晰。</strong>即热（tankless）词是绝对主干，占已归集搜索词花费的一半以上，带回 $251,145，ACOS 26.0%——核心词场是稳的，钱花在了对的赛道上。</div>
+    <div class="alert a-info" style="display:block;margin-top:10px;font-size:12.5px"><strong>同一主干里按燃料分层：</strong>丙烷词族 ACOS 23.6% 最健康，天然气 37.3%，电 40.3%。<br>需要说明的是，电这块的转化率 2.39% 其实与账户均值 2.73% 很接近，差距不大。ACOS 偏高更多来自另一个方向：<strong>这类产品的成交客单价比账户平均低一档，而点击成本没有同步降下来</strong>。所以要动的不一定是"少投"，而是让出价和这条线的实际客单价对齐。</div>
+    <div class="alert a-warn" style="display:block;margin-top:10px;font-size:12.5px"><strong>季节性提醒：</strong>这个观察窗口是 5 月底到 7 月底的夏季。燃气即热和房车正处在自身旺季，而电即热、整屋换新类需求的高峰通常在秋冬。上面的分层更适合当作"夏季窗口的效率排序"，进入 Q4 前建议按同样的方式再看一次，避免在需求爬坡前把电这条线压得过紧。</div>
+   </div>
+  </div>
+
+  <div class="alert a-teal" style="margin-top:14px;display:block"><strong>🔬 一块尚未被充分利用的高意图词：规格词。</strong>
+   <div style="margin-top:6px">带具体 BTU 数字的 78 个词，一共只花了 <strong>$478</strong>，带回 <strong>$4,072</strong>，ACOS 11.7%、转化率 11.20%——约是账户整体的 4 倍。带 GPM 的 105 个词类似：$578 → $2,951，ACOS 19.6%。两类加起来总花费只有 $1,056。</div>
+   <div style="margin-top:6px">这类买家的特征很明确：<strong>能报出具体 BTU 或 GPM 的人，基本已经算完自家的热水需求、锁定了机型区间，剩下的只是选牌子。</strong>转化率也印证了这一点。</div>
+   <div style="margin-top:6px"><strong>但这块要用"试验田"的方式做，不要一次放大。</strong>两点要先说清楚：一是目前对应的成交在几十笔量级，效率数字漂亮但样本还不足以当稳定结论；二是规格词天然是长尾，它的高转化一部分正来自"精准且稀缺"，一旦大幅提价抢曝光，效率大概率会向均值回落。建议单独拆成一组、给一个明确的小额上限（例如按当前花费的 3–5 倍设，一个月为期），先测出真实的量级天花板在哪里。</div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--amber)"><h2>零成交的搜索词：建议分三类处理</h2>
+  <div class="desc">60 天里有 79 个词单词花费超过 $50 且零订单，合计 $8,433、3,630 次点击</div>
+  <div class="alert a-info"><span>📐</span><div>先给个参照：按账户整体 2.73% 的转化率，这 3,630 次点击本应对应约 99 个订单。差距大到不太可能是运气问题，值得单独核查。</div></div>
+  <table><thead><tr><th>类型</th><th>具体情况</th><th>建议动作</th></tr></thead><tbody>
+  <tr><td class="hl"><span class="tag t-red">①</span> 意图确实偏了</td><td>泳池加热器方向 28 个词共 $495 全部零单；房车配件泛词（rv accessories / camper accessories 等）共 $323 零单。合计约 $820。</td><td><strong>可以直接否定，几乎没有试错成本。</strong>需要说明的是，5–7 月正是泳池季和露营季，这类流量往热水器类目外溢是季节性常态，不是没盯住的问题；只是季节过了它也不会自己消失，所以现在做正好。</td></tr>
+  <tr><td class="hl"><span class="tag t-amber">②</span> 意图对但没转化</td><td>natural gas water heater tankless（$250）说的就是燃气即热——这条线是账户里最强的。portable shower with heater（$450）对应便携和 RV 热水器。</td><td><strong>不建议否定，建议查商品页。</strong>需求方向没跑偏，零单更可能出在价格带、主图、评论数或当时的库存状态上。否掉等于关掉一条本来对路的进店通道。</td></tr>
+  <tr><td class="hl"><span class="tag t-blue">③</span> 自有品牌词</td><td>花费最高的两个零单词都是自家品牌词：ranein hot water heater propane（$531）、ranein tankless water heate gas（$498，拼写有误但显然在找 Ranein），合计约 $1,029。</td><td><strong>这是这批数据里信息量最大的一条，建议优先看。</strong>品牌词通常不做否定。但有人带着品牌名搜进来却没下单，一般指向具体商品页上的某个问题——修好了，这批词很可能反而是整个清单里转化最好的。</td></tr>
+  </tbody></table>
+  <div class="alert a-warn" style="margin-top:12px;margin-bottom:0"><span>🚧</span><div><strong>一个需要单独拎出来的情况：</strong>净水器和灶具两条线目前正处在铺量测词阶段，柯宝店 60 天花费增长 362.8%。这两条线里的一部分零单词，是<strong>有意支付的探索成本</strong>，不该和成熟产品线的无效花费混在一个池子里算。建议把它单独标出来，用"多久要看到第一批成交"这样的时间线去管，而不是用 ACOS 去砍。</div></div>
+ </div>
+ <div class="bridge">下一页：这些结论放到市场大盘和季节节奏里，该怎么排时间 →</div>
+</section>
+
+<section class="panel" id="p-mkt">
+ <div class="alert a-teal"><span>🌍</span><div>这一页回答两个问题：<strong>ACOS 上升有多少是市场造成的？接下来三个月该按什么节奏走？</strong>结论先放这里——市场因素确实存在，但只解释了其中约三分之一；剩下三分之二在账户结构里，而这部分是可控的。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--blue)"><h2>把 ACOS 上升的 3 个点拆开</h2>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_decomp"></canvas></div>
+   <div>
+    <table><thead><tr><th>来源</th><th class="num">影响</th><th>性质</th></tr></thead><tbody>
+    <tr><td class="hl">成交客单价回落<br><span style="font-size:11px;color:var(--muted)">约 $300 → $280</span></td><td class="num"><span class="neg">+2.1 个百分点</span></td><td>行业普遍现象，可通过组合定价与促销结构应对</td></tr>
+    <tr><td class="hl">点击成本上涨<br><span style="font-size:11px;color:var(--muted)">$2.23 → $2.38</span></td><td class="num"><span class="warn">+1.9 个百分点</span></td><td>约一半来自行业性涨价与大促窗口溢价，一半来自自身竞价与结构</td></tr>
+    <tr><td class="hl">转化率改善</td><td class="num"><span class="pos">−0.8 个百分点</span></td><td>自身进步，抵消了一部分</td></tr>
+    <tr style="background:#F1F5F9"><td class="hl">合计</td><td class="num"><span class="neg">+3.0 个百分点</span></td><td>—</td></tr>
+    </tbody></table>
+    <div class="alert a-warn" style="margin-top:12px;display:block"><strong>关键结论：ACOS 恶化的最大单一来源来自客单结构与预算流向，出价只占较小一块。</strong>把注意力全押在"压出价"上会用错力。</div>
+   </div>
+  </div>
+  <div class="alert a-red" style="margin-bottom:0"><span>🔍</span><div><strong>对照一下账户内部的影响量级：</strong>58 个投入产出倒挂的款，单独把整体 ACOS 抬高了约 <strong>6 个百分点</strong>（把它们剔除后，其余商品的合并 ACOS 是 24.3%）。这个影响是可归因于市场那 1–2 个点的<strong>三倍以上</strong>。账户内部的结构问题，比整个市场环境的变化更值得先处理。</div></div>
+ </div>
+
+ <div class="card"><h2>2026 下半年：赛道是对的，但不会有外力来自动修复效率</h2>
+  <div class="two">
+   <div class="alert a-ok" style="display:block"><strong>✅ 方向选对了。</strong>美国即热式热水器市场处在双位数增长通道，燃气产品占据主要份额，住宅端是主体——这正是贵司的主力方向。且住宅端新的强制能效标准要到 2029 年才生效，燃气即热品类还被单独排除，短期内不存在被政策逼迫产品换代的风险。</div>
+   <div class="alert a-warn" style="display:block"><strong>⚠️ 但今年没有顺风。</strong>联邦层面的能效改造税抵免已于 2025 年底到期，2026 是"补贴退坡第一年"——去年底出现过一轮赶末班车的需求透支，今年整体需求偏软，行业出货端也在同比下滑。同时美国家装大盘的增速在逐季放缓。<strong>结论很直接：效率要靠自己的账户结构拿回来，等不到市场把 ACOS 拉回去。</strong></div>
+  </div>
+  <div class="alert a-info" style="margin-bottom:0;font-size:12.5px"><span>ℹ️</span><div>补贴退坡也解释了客单价那 6.8% 的回落：原本由税抵免承担的那部分"价格心理差"消失了。应对方式是用促销或组合定价主动补上，而不是靠加大投放硬扛——那是需求侧的问题，加投放只会推高点击成本。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--gold)"><h2>季节节奏：真实曲线中间有一个 12 月的回落</h2>
+  <div class="desc">基于品类过去 51 个月的公开搜索数据</div>
+  <div class="two">
+   <div class="chart-box"><canvas id="c_season"></canvas></div>
+   <div>
+    <div class="alert a-teal" style="display:block"><strong>需求曲线比常识里的"冬季旺季"更细。</strong>以电即热品类为例：6–8 月是全年谷底（2026 年 6 月 8,136 次），9 月开始明显抬头（2025 年 9 月 11,563 次，环比 <strong>+34%</strong>），10 月 12,960、11 月 14,536，<strong>12 月因节日消费挤占反而回落到 11,379（环比 −22%）</strong>，年度高点出现在次年 1–2 月（2026 年 1 月 15,999）。燃气主线是同一个形状：2026 年 1 月的 45,090 次是整个序列最高点。</div>
+    <div class="alert a-info" style="display:block;margin-top:10px;font-size:12.5px"><strong>这改变了准备工作的截止时间：</strong>9 月已经是收成的起点，不是蓄水期。排名、评论、库存这些准备动作要在 <strong>8 月之内</strong>完成才来得及；而 12 月的回落意味着不必把预算全压在年底，要留给次年 1–2 月。</div>
+    <div class="alert a-warn" style="display:block;margin-top:10px;font-size:12.5px"><strong>同时要如实说明大盘方向：</strong>该品类 2026 年 3 月以来同比持续为负（3–6 月分别 −15%、−10%、−15%、−16%），燃气主线近三个月下滑 22.7%。这轮旺季的绝对量大概率不会超过去年同期。建议按<strong>"同比持平甚至略降"</strong>来做预算和备货，把目标定在提高份额，而不是等大盘把量带起来。</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>一个反直觉的发现：旺季的点击其实更便宜</h2>
+  <div class="desc">把主词的建议竞价按月拉出来对比</div>
+  <div class="alert a-info"><span>💡</span><div>业内常见的说法是"大促期间点击成本会大涨、所以要提前在淡季囤排名"。这个账户所在品类的数据不支持这个说法——<strong>逐月核对下来，全年的竞价波动不到三成，而且贵的月份恰恰不是旺季。</strong></div></div>
+  <div class="two">
+   <div>
+    <table><thead><tr><th>月份</th><th class="num">当月搜索量</th><th class="num">建议竞价</th></tr></thead><tbody>
+    <tr><td class="hl">2025-08</td><td class="num">30,709</td><td class="num"><span class="neg">$2.58</span></td></tr>
+    <tr><td class="hl">2025-10</td><td class="num">35,319</td><td class="num"><span class="neg">$2.70</span></td></tr>
+    <tr><td class="hl">2025-11</td><td class="num">43,474</td><td class="num"><span class="pos">$2.11</span></td></tr>
+    <tr><td class="hl">2026-01</td><td class="num">45,090</td><td class="num"><span class="pos">$2.20</span></td></tr>
+    <tr><td class="hl">2026-06</td><td class="num">24,580</td><td class="num">$2.26</td></tr>
+    </tbody></table>
+   </div>
+   <div>
+    <div class="alert a-warn" style="display:block"><strong>8 月和 10 月是全年最贵的两个月；而搜索量最高的 11 月和次年 1 月，建议竞价反而是全年最低的两档。</strong>全年区间只有 $2.11–$2.70，波动不到三成。</div>
+    <div class="alert a-info" style="display:block;margin-top:10px;font-size:12.5px"><strong>背后的机制：</strong>旺季涌入的搜索量（也就是可买的曝光供给）增长得比同行的预算增长更快，单位点击成本反而被摊薄了。</div>
+   </div>
+  </div>
+  <div class="alert a-ok" style="margin-bottom:0"><span>✅</span><div><strong>两个实际结论：</strong>第一，8、9 月不是"趁便宜囤排名"的窗口，这两个月加码要按正常甚至偏贵的成本来算账。第二，<strong>旺季不必因为担心点击成本上涨而提前收缩</strong>——11 月到次年 1 月既是量最大的时候、单位点击也最划算，是全年效率最高的窗口，预算重心应该压在那里，而不是在 8、9 月提前打完。</div></div>
+ </div>
+
+ <div class="card"><h2>各产品线的 Q4 定位建议</h2>
+  <table><thead><tr><th>产品线</th><th>市场环境</th><th class="num">建议</th><th>理由</th></tr></thead><tbody>
+  <tr><td class="hl">燃气即热 / 电即热<br><span class="tag t-green">主线</span></td><td>需求高峰在次年 1–2 月，12 月有回落；2026 年同比转负</td><td class="num"><span class="pos">加码，重心后移</span></td><td>9 月起就是收成期，准备动作 8 月内做完。<strong>预算重心压在 11 月至次年 2 月</strong>（量最大且单位点击最便宜），不要在 8–9 月提前打完。按同比持平做预算，目标是提份额。</td></tr>
+  <tr><td class="hl">RV 房车（车载安装）<br><span class="tag t-amber">11 月中起降档</span></td><td>Q4 占全年 20.4%（Q2 为 30.3%），确实最淡；但 <strong>10 月不淡</strong></td><td class="num"><span class="warn">11 月中起降档</span></td><td>降档时点值得单独确认：2025 年 10 月搜索 19,919 次，<strong>高于 9 月的 19,812</strong>，也高于当年 1 月。下坠发生在 11 月（−10%）和 12 月（−20%）。<strong>如果按"十月起降档"执行，会让出一个需求水位正常的月份。</strong>另外 Q4 是缓坡不是断崖，仍有旺季三分之二的水位。</td></tr>
+  <tr><td class="hl">RV 便携丙烷<br><span class="tag t-green">逆势加档</span></td><td><strong>季节完全相反</strong>：2025 年 Q3 最淡（19.8%），Q4 反而 22.4%；2026 年逆势正增长</td><td class="num"><span class="pos">10 月起加档</span></td><td>这是整条房车线里唯一还在涨的一支——2026 年 1–6 月有五个月同比在涨（+22%/+50%/+24%/+14%/+30%）。而且贵司已经有一款站在这个位置上（$159.00、36 条评论），与该词头部机型价格带完全重合。<strong>房车线如果按整条线一刀切降档，会正好收缩到这一支上。</strong></td></tr>
+  <tr><td class="hl">净水器<br><span class="tag t-blue">限期修页面</span></td><td>类目健康：月销约 99,664 台、平均毛利率 74.0%、A+ 覆盖 93%</td><td class="num"><span class="pos">维持预算，改做页面</span></td><td>这条线的高广告成本占比容易被误读成赛道选错。类目数据不支持这个判断——<strong>价格带站对了，差距在页面完成度和评论数</strong>，详见产品页的完整说明。</td></tr>
+  </tbody></table>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>出价高低要分产品线看：账户内部是两极的</h2>
+  <div class="alert a-info"><span>⚖️</span><div>"提高出价只会共同推高赛道成本、位置买不回来"这个说法，在这个账户里<strong>只对一半的产品线成立</strong>。把 $2.38 的平均点击成本与各组词的市场建议竞价逐一比对，会看到两个方向相反的问题同时存在。</div></div>
+  <div class="two">
+   <div>
+    <div class="alert a-warn" style="display:block"><strong>已经买贵了的（继续加价确实无用）</strong>
+     <table style="margin-top:8px"><thead><tr><th>词组</th><th class="num">市场建议竞价</th></tr></thead><tbody>
+     <tr><td>gas tankless water heater indoor</td><td class="num">$0.57–1.46</td></tr>
+     <tr><td>natural gas tankless water heater</td><td class="num">$1.62</td></tr>
+     <tr><td>electric tankless water heater</td><td class="num">$2.02</td></tr>
+     <tr><td>tankless water heater electric</td><td class="num">$1.15–2.12</td></tr>
+     <tr><td>outdoor tankless water heater</td><td class="num">$1.30–2.13</td></tr>
+     </tbody></table>
+     <div style="margin-top:8px">账户平均点击成本 <strong>$2.38</strong> 全部高于这些区间的上限。这几组词的突破口在页面转化与评论积累，不在出价。</div>
+    </div>
+   </div>
+   <div>
+    <div class="alert a-ok" style="display:block"><strong>反而买便宜了的（出价太低拿不到好位置）</strong>
+     <table style="margin-top:8px"><thead><tr><th>词组</th><th class="num">市场建议竞价</th></tr></thead><tbody>
+     <tr><td>propane tankless water heater</td><td class="num">$2.34–3.75（中位 $2.65）</td></tr>
+     <tr><td>rv tankless water heater</td><td class="num">$2.35–4.33（中位 $3.26）</td></tr>
+     </tbody></table>
+     <div style="margin-top:8px">账户 $2.38 的出价<strong>恰好卡在这两组词区间的最低点</strong>。这意味着房车与丙烷线问题在出价偏低，拿不到优质位置，反过来拖累了转化率和广告成本占比。<strong>正确动作是有节奏地提价测试，而不是降档。</strong></div>
+    </div>
+   </div>
+  </div>
+  <div class="alert a-info" style="margin-bottom:0"><span>🌏</span><div><strong>竞争格局这一点数据完全支持：</strong>无论燃气还是房车的竞品集，除两个美国品牌外其余全部是中国（含香港）卖家，页面质量评分普遍 96–100 分、多数已拿到平台推荐标。这是一场围绕页面与口碑的竞争，出价绕不开——但也说明<strong>同样出身的卖家能做到的事，不存在结构性门槛。</strong></div></div>
+ </div>
+ <div class="bridge">下一页：把上面这些结论，落到贵司现有的运营流程里 →</div>
+</section>
+
+<section class="panel" id="p-sop">
+ <div class="alert a-teal"><span>⚙️</span><div>这一页不谈功能，谈流程。<strong>我们把贵司现在的广告运营拆成七个环节，逐个看：现在是怎么做的、这样做的代价是多少、哪一部分适合交给系统、哪一部分应该继续由人来做。</strong>每个环节都给了一个两到四周内可以验证的第一步——都都是小范围、有对照、可回退的动作，不涉及全面托管。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--green)"><h2>先说一个前提：贵司的运营流程本身是成熟的</h2>
+  <div class="two">
+   <div class="alert a-ok" style="display:block;font-size:12.5px"><strong>看得出专业度的几个地方：</strong>广告活动命名里已经按"产品线—品牌—机型—匹配方式—目标参数"分好结构，任何人接手都能看懂当前跑在什么参数上；已经在跑分时预算规则和自动否词规则；也已经在用广告位锁定这类相对进阶的工具。这些都不是新手账户会有的东西。</div>
+   <div class="alert a-info" style="display:block;font-size:12.5px"><strong>所以下面要讨论的不是换一套做法。在这套已经跑顺的流程里，</strong>在这套已经跑顺的流程里，哪些动作是重复执行、哪些是需要判断。把执行交出去，把判断留下来——<strong>交出去的是执行，不是决策权。</strong></div>
+  </div>
+  <div class="alert a-warn" style="margin-bottom:0"><span>📊</span><div>一个总量参照：把 27 天内的全部运营动作按性质分开看，<strong>真正需要判断的部分（大幅调价、启用暂停、广告位与人群系数、策略切换）合计约占两成，其余八成是重复执行。</strong>下面七个环节，就是按这个八二分界来划的。</div></div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">1</div><div class="t">每日盯盘与竞价微调</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">团队每天对在投活动做竞价调整，27 天共 5,405 次。其中有一套已经跑顺的定时流程：34 个品牌与展示类活动，每天固定时点触发（对应美西上午的流量高峰），27 天不间断，单次调幅中位 0.66%。<strong>时点选得准、节奏也稳，这套流程本身是账户里最省心的一块。</strong></div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">5,405 次改价里，<strong>2,353 次（43.4%）单次幅度不超过 2%</strong>，且集中在 29 个活动上、天天在做。与此同时，593 个有花费活动里有 168 个整月被调整不超过 2 次——注意力的分布是不均的。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">用「按表现调价」接手 ≤2% 这一档的日常微调。<strong>它可以设竞价上下限区间</strong>，也就是只把这个区间内的调价权交出去，一旦需要超出区间，仍然回到人工决定。</div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v">出价区间的上下限由人定；大幅调价、竞价策略切换、活动启用与暂停仍然是人的动作。<strong>一个必须提醒的点：</strong>纳入这套流程的活动要明确不再手工动价，否则两边会互相抵消——这是实践中最常见的失效原因。其余活动照旧手工管理，互不干扰。</div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v">从 126 个 ACOS 低于 25% 的高效活动里挑 15–20 个（这批合计 $54,458 花费、$376,640 销售、ACOS 14.5%，量已经稳定），给一个不超过当前出价 <strong>±15%</strong> 的区间；<strong>同时留同类活动不动作为对照</strong>，跑 4 周只看 ACOS 和销售额两项，任一项转差即回退。</div></div>
+  </div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">2</div><div class="t">日预算看护与触顶响应</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">团队按活动设日预算（中位 $20），已经配置了分时预算规则在跑，对重点活动会在跑量前后手工补预算。<strong>预算这条线是有意识在管的，不是放着不管。</strong></div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">27 天里发生 <strong>1,118 次日预算触顶</strong>，涉及 161 个活动。其中 <strong>42% 落在美西 11:00–17:00</strong>——而这 7 个小时里 27 天累计只有 195 条人工动作。触顶之后，<strong>75% 的活动预算此后未被调整过</strong>；有调整的那部分，触顶到调整的中位间隔约 92 小时。<br><strong>关键是：账户并不缺额度。</strong>在跑活动的日预算合计 $12,473，实际日均花费 $3,483，利用率 27.9%——问题不是额度不够，是触顶之后缺一个"要不要跟进"的判断动作。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">用「广告组合分时预算」按 7 天 × 24 小时控制整个组合的预算上限，<strong>一条规则可以覆盖组合内的商品推广、品牌推广、展示推广三类</strong>，不用再逐个活动维护；再配合「按表现调预算」把触顶做成一条带条件的信号：近 7 天效率达标的自动上调并留痕，不达标的自动保持原样并进复盘清单——<strong>后者的触顶本来就是在替你止损，不该被无差别补上去。</strong></div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v">效率门槛由人定；哪些活动的小预算是有意为之（成本闸门、库存受限、新品控量）需要人先圈出来排除在规则之外；大促期间的触顶属于正常现象，也要人工先做剔除。</div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v">在触顶最频繁的 40 个活动里，<strong>只挑近 7 天效率低于目标的那部分</strong>（控制在 15 个以内）开启触顶自动补预算，单次上调幅度封顶 20%、每天最多触发一次。跑两周同时看两个指标：触顶次数是否下降，以及这批活动的整体 ACOS 有没有同步转差。</div></div>
+  </div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">3</div><div class="t">搜索词清理与否定词维护</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">团队有按搜索词报告加否词的例行动作，27 天做了 2,332 次，<strong>88% 使用精确否定</strong>（颗粒度控制得好）；其中 45% 是在批量操作里完成的，说明已经在主动压缩工作量。账户里也已经跑着 2 条自动否词规则——<strong>这条路本身是通的。</strong></div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">2,332 次否词背后只有 <strong>1,125 个不同的词</strong>，其中 1,207 次（52%）属于重复添加，绝大部分是"同一个词换一个活动再加一遍"——被重复最多的一个词前后加了 <strong>59 次、跨 47 个活动、跨 12 天</strong>才铺完。<br>覆盖面也不均：按每万美元花费折算的否词密度，柯宝店约是睿宁店的<strong>十分之一</strong>，而柯宝正是 ACOS 最高的那个店。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">自动否词支持<strong>核心词白名单</strong>——只否白名单以外的词，配合花费或点击门槛触发（例如累计点击 ≥50 或花费 ≥$100 仍零单自动进待否清单），<strong>一次维护、多活动生效</strong>，跨活动重复录入这部分可以直接省掉。</div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v">白名单由人维护：品牌词、卡位词、新品测词期的词一律进白名单，不交给规则。词意是否真的跑偏（比如泳池加热器、房车配件泛词这两类）由人判断后再交给规则批量执行；<strong>有成交但投产偏低的词该降价而不是否掉</strong>，这个分寸也留给人。</div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v"><strong>先只在柯宝、健怡两个店开。</strong>把这两个店当前在投的核心词做成白名单，设一条"60 天点击 ≥50 且零单自动进待否清单、人工一键确认"的规则，跑两周看零单花费占比能否下降。柯宝 27 天只做了 14 条否词而 ACOS 已到 132.3%，是最先能受益、也最容易看出效果的一个。</div></div>
+  </div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">4</div><div class="t">好词收割与独立承接</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">广泛匹配和自动投放在持续跑出新词，团队定期从搜索词报告里挑词、建独立承接，新建节奏稳定（27 天新建 243 个活动），<strong>命名里已经按产品线—品牌—机型分好结构，纪律很好。</strong></div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">就是上一页说的那 <strong>180 个已经在出单却没被承接的词</strong>（$4,406 → $80,236）。按词长看更清楚：<strong>7 个词以上的长尾词共 514 个、ACOS 17.8%，但只有 18 个建了专门承接</strong>；而 ACOS 最高的 3–4 词短词，承接率反而高达 89.2%——<strong>承接结构和效率目前是反着走的</strong>。这不是判断失误，是长尾词数量太多、人工筛选跟不上产生的必然结果。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">「定向收割」可以按设定的成交与效率门槛，把已经被验证的搜索词自动转成独立承接，并<strong>同步在原广泛/自动活动里做否定</strong>，避免新旧两边互相抬价；转出后的出价交给带上下限区间的按表现调价管理，不用再逐条盯。</div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v">哪些词值得收割仍然由人定性：通用需求词要先对库存和可投款数；自有品牌词要先看对应商品的自然排名，避免把自然单换成付费单；竞品品牌词按"守住一块稳定的高效流量"定预期。<strong>这三类的判断标准完全不同，规则替代不了。</strong></div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v">只做 33 个稳健核心词里的<strong>通用需求词和竞品品牌词</strong>（自有品牌词单独评估），建独立承接、争取搜索结果顶部，起始预算小额，跑 4 周。判定标准写死两条：<strong>ACOS 是否维持在 15% 以内、曝光是否随预算线性增长</strong>——曝光加不上去说明这批词的量确实见顶，及时收缩，损失可控。</div></div>
+  </div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">5</div><div class="t">广告位与卡位管理</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">账户里已经配了广告位锁定策略，<strong>说明位置这个杠杆团队是有意识在用的</strong>；部分活动也已经按位置设了竞价溢价，做法本身是对的。</div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">在有花费的位置记录里，<strong>83.7% 目前没有设置溢价</strong>；单看搜索顶部，其中 267 条未设溢价、涉及花费 $35,125。<br>到活动层面差距更具体：38 个 ACOS 低于 25% 的活动顶部曝光份额不到 10%，而 29 个 ACOS 高于 60% 的活动顶部份额反而在 20% 以上。另外那条已启用的位置策略，近期处于零执行状态，触发条件值得核一遍。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">「广告位调价」可以按每个广告组合过去 60 天的顶部表现<strong>分档给溢价、按周滚动更新</strong>，替掉现在逐条手工设溢价的做法；同时把加价系数设一个上限——<strong>过高的广告位加价系数会让点击成本与出价脱钩</strong>，是自动化效果最常见的拖累来源之一，先封住这个口子再放开。</div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v">位置的战术判断留给人：哪些商品页面投放承担的是竞品拦截和自家详情页防守，不能跟着一起收；哪些品类是转化本身不成立（净水器 0.96%、灶具 1.15%），<strong>换位置解决不了问题，不该纳入这套规则</strong>。</div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v">只取那 38 个高效低份额活动里花费最高的 <strong>10 个</strong>，按分档给顶部溢价、<strong>加价系数上限先设 30%</strong>；同时把 29 个低效高份额活动中已确认非防守型的那部分下调溢价。跑两周只看这 10 个活动的顶部曝光份额和 ACOS 两项。</div></div>
+  </div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">6</div><div class="t">新品与新店冷启动、止损闸门</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">新品和新店按"先铺量、后收敛"的方式起量，<strong>活动名里写进了目标点击成本、竞价系数和阶段标签</strong>，团队随时知道每个活动当前跑在什么参数上——这套做法让参数透明，是一套务实的做法。</div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">本期新增投放 399 条，ACOS 41.7%；持续投放 335 条 ACOS 26.5%，<strong>两者相差 15.2 个百分点</strong>——爬坡成本是真实存在的，问题只在于它有没有上限和期限。柯宝店是最集中的一处：117 个活动只覆盖 6 个商品，<strong>41.3% 的花费落在完全零成交的活动上</strong>。<br>另一侧的代价在参数寄生：<strong>策略每变一次就要改一次活动名</strong>，27 天发生 443 次改名、涉及 221 个活动（平均每个改 2 次，最多 7 次）。按活动名做的历史对比会跟着出现断点。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">把目标点击成本、竞价系数、阶段标签<strong>从活动名挪进独立字段</strong>，规则直接读这些字段执行，名字就可以固定下来，历史对比不再断线；配合分时预算给培育期活动设明确的日/周花费上限，让爬坡成本<strong>从"事后才知道花了多少"变成"事前就有上限"</strong>。</div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v"><strong>新品冷启动本身不交给系统。</strong>选品、起始出价、测词期长度、什么时候算跑通、什么条件下退出，全部由人定。系统只负责在人设定的上限和期限内执行，并在到期时把清单推回来给人做去留判断。</div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v"><strong>只给柯宝店做一次。</strong>把 117 个活动收敛到与 6 个商品相称的数量，给这一批设统一的培育期参数（观察窗口 21 天，单活动累计点击达标仍零单即自动收缩预算），同时把目标点击成本从活动名迁到独立字段里跑一轮。两周后看零成交花费占比能否从 41.3% 降下来。</div></div>
+  </div>
+ </div>
+
+ <div class="sop">
+  <div class="sop-h"><div class="n">7</div><div class="t">高价值人群复投</div></div>
+  <div class="sop-b">
+   <div class="sop-row now"><div class="k">现在怎么做</div><div class="v">团队已经在用展示型广告做受众定向和商品页再营销，并且<strong>自己观察到"已加购未购买人群、老客回流人群的表现优于全店基准"——这个判断在数据上是站得住的，方向找对了。</strong></div></div>
+   <div class="sop-row cost"><div class="k">现在的代价</div><div class="v">展示型受众定向 60 天只花了 $5,800，<strong>转化率 7.60%、新客获取成本 $55.24/单，是账户里转化能力最强的一块</strong>，却只占总花费的 2.8%。整个展示型也只有 9.2% 的花费份额。<br>更另有一处：<strong>账户 547 个可见的新客订单，全部来自品牌推广和展示推广这两条线，而它们合计只拿到 23.6% 的预算。</strong>目前人群的圈选靠人工经验，能验证的颗粒度有限。</div></div>
+   <div class="sop-row fit"><div class="k">系统承接</div><div class="v">高价值受众推荐基于用户级数据识别"已验证转化好、数据量足、仍有放量空间"的人群（浏览未购、搜过品牌、老客回流），并给出竞价加成建议，以推荐卡片形式出现、可一键采纳——<strong>相当于把团队原来靠经验做的那一步，换成有数据排序的版本。</strong>贵司现有的数据分析实例绑定店铺后即可使用。</div></div>
+   <div class="sop-row hum"><div class="k">留给人</div><div class="v">采不采纳、用在哪个品牌和哪条产品线、加成幅度多大，都由人决定；<strong>人群与素材是否对得上只能靠人判断</strong>——同样是视频素材，账户里最好的一条新客成本 $46.30，最差的一条花 $1,694 只换回 $2,332，差别正出在这里。</div></div>
+   <div class="sop-row step"><div class="k">第一步</div><div class="v">先在睿宁店绑一个实例，<strong>只看推荐里排前 3 的人群</strong>，对已经跑通的燃气即热和 RV 主力款采纳竞价加成；增量预算控制在现有受众定向花费的 30% 以内（约 $1,700/60 天），跑两周，<strong>判定标准只有一条：增量部分的新客成本能否守在 $70/单以内</strong>。守不住就撤回，成本很小。</div></div>
+  </div>
+ </div>
+
+ <div class="alert a-teal"><span>🧭</span><div><strong>七个环节的共同点：</strong>每一个的第一步都控制在 10–20 个活动、两到四周、有明确的回退条件，而且都<strong>保留了同类活动作为对照</strong>。这样即使某一条不奏效，损失都被限制在很小的范围内，而奏效的那几条可以立刻复制到其余活动上。</div></div>
+ <div class="bridge">最后一页：把七个环节排成一张三个月的时间表 →</div>
+</section>
+
+<section class="panel" id="p-plan">
+ <div class="alert a-teal"><span>💡</span><div>按<strong>确定性</strong>排序，不是按工作量排序。前四条在 8 月内可以全部启动，而且都不需要新增预算——钱就在账户里，只是换个地方花。时间表按"Q4 之前必须完成"倒推。</div></div>
+
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🥇 1 · 先做变体级预算重排（最快、风险最低、不动产品线）</h2>
+  <div class="rec"><div class="rm">
+   <strong>动作：</strong>从主力燃气产品家族开始——把预算从中低流量段（3.17/3.6 GPM）和白色款，转移到大流量段（8.5 GPM）与户外款。这个家族里 ACOS 31–33% 的两个变体正拿着 $18,831，而 ACOS 9.6% 的只有 $2,979。<strong>做完这一家再用同一方法排查其余父体。</strong><br>
+   <strong>为什么排第一：</strong>不下架任何商品、不调整产品线、不需要跨部门沟通，全部在一个广告结构内部完成，两周内可见效。<br>
+   <strong>复查：</strong>两周看该家族的合并 ACOS（当前 21.1%）与总销售是否同步改善。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--red)"><h2>🥈 2 · 把预算从倒挂款挪到高效款</h2>
+  <div class="rec"><div class="rm">
+   <strong>动作：</strong>58 个投入产出倒挂的款里，先处理花费最大的前 10 个（合计约 $33,000）。分三种处理——<strong>同线内拖累整体的单款</strong>（如 RV 线那个 $8,037/ACOS 71.8% 的款）单独收缩而不动整条线；<strong>确属新品铺量期的</strong>设明确观察期和上限；<strong>净水器与灶具不在此列</strong>，改走下面第 4 条的页面路线。<br>
+   <strong>钱去哪：</strong>优先补给 67 个被日预算压着的高效活动（合并 ACOS 15.6%、投产比 6.41）。<br>
+   <strong>关于预期：</strong>按健康档投产比测算，挪动其中一半可多带回约 $59,000 销售。但要如实说明——主线需求池本身在收缩（主词近三月 −22.7%），且这批款已做到子类目前列、上方可抢的对手有限，<strong>更现实的预期是"同样的钱换回更多的单"，而不是"整体规模会因此变大"</strong>。建议分两次加、每次观察两周的边际成本，一旦边际成本抬头就转向相邻细分（户外机型、更高 GPM 段位）。<br>
+   <strong>复查：</strong>两周看整体 ACOS 与主力款销售。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>🥉 3 · 出价按产品线分开校准（不是统一降，也不是统一升）</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>电即热、天然气、户外这几组词的市场建议竞价上限在 $1.46–2.13，而账户平均点击成本是 $2.38——<strong>这几组要压价</strong>，省下的钱不留在原地。丙烷（$2.34–3.75）和房车（$2.35–4.33）两组，账户出价恰好卡在区间最低点——<strong>这两组要有节奏地提价测试</strong>，目标是拿到更好的位置来改善转化。<br><strong>为什么重要：</strong>账户目前是"该压的没压、该提的没提"，两个方向的问题同时存在，用一套统一的出价策略去管必然顾此失彼。<strong>复查：</strong>两周看两组词各自的位置份额与 ACOS 变化方向。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--blue)"><h2>4 · 净水器：8 周限期修页面（预算不加不撤）</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>广告预算维持当前水平守自然位；资源投到页面重做——A+ 与主图视频（重点讲"换滤芯有多简单"、防漏结构、滤芯年度总成本）、检测依据如实披露、<strong>变体从 10 个收敛到 3–4 个</strong>以集中评价权重；同步启动评价积累。<br><strong>为什么是修页面而不是砍预算：</strong>这个类目平均毛利率 74.0%，$150–200 价格带是全类目效率最高的一档（贵司正站在这一档），评论效率的台阶在 300 条而非几千条，且有新品牌半年做到类目第五的先例。<strong>问题在页面完成度，不在赛道。</strong><br><strong>判定节点：</strong>8 周后看两个指标——评分数是否过 100 条、转化率是否从 0.96% 提到 2% 以上。都动了就继续；页面做完、评论上来而转化仍不动，那时撤出才是有依据的决定。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>5 · 33 个已验证核心词建独立承接</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>先做通用需求词和竞品品牌词（自有品牌词单独评估），建独立承接、争取搜索结果顶部，同步在原广泛/自动活动里做否定。起始预算小额。<br><strong>判定：</strong>ACOS 是否维持在 15% 以内、曝光是否随预算线性增长。<strong>复查：</strong>4 周。曝光加不上去说明量确实见顶，及时收缩。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>6 · 柯宝店专项：结构收敛 + 否词机制</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>117 个活动收敛到与 6 个商品相称的数量；建核心词白名单 + 零单自动进待否清单的规则；给培育期设 21 天观察窗口和花费上限。<br><strong>为什么单独列：</strong>这个店 ACOS 132.3%、否词密度只有主力店的十分之一、41.3% 花费零成交——<strong>问题最集中，也最容易看出效果</strong>。<strong>复查：</strong>两周看零成交花费占比。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>7 · 广告位溢价分档（10 个活动试点）</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>38 个高效低份额活动里取花费最高的 10 个，按分档给顶部溢价、加价系数上限 30%；低效高份额活动中的非防守型部分下调溢价；核一遍那条零执行的位置策略。<br><strong>为什么在 Q4 前做：</strong>搜索顶部是旺季竞争最激烈的位置，<strong>8-9 月先把这个位置的历史表现养起来，进入旺季时的成本优势会被放大</strong>。<strong>复查：</strong>两周看顶部曝光份额与 ACOS。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>8 · 竞价微调与预算触顶交给规则（各 15–20 个活动）</h2>
+  <div class="rec"><div class="rm"><strong>动作：</strong>高效活动里挑 15–20 个开 ±15% 区间的按表现调价，留同类活动做对照；触顶最频繁的 40 个里挑效率未达标的 15 个开触顶自动补预算，单次封顶 20%。<br><strong>边界：</strong>纳入的活动不再手工动价，其余照旧。<strong>复查：</strong>4 周，只看 ACOS 和销售额，任一转差即回退。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--teal)"><h2>9 · 规格词试验田 + 高价值人群小额测试</h2>
+  <div class="rec"><div class="rm"><strong>动作 A：</strong>把 BTU / GPM 类规格词单独拆组，给当前花费 3–5 倍的上限，一个月为期，测出真实量级天花板。<br><strong>动作 B：</strong>睿宁店绑定数据分析实例，只取推荐排前 3 的人群，对燃气即热与 RV 主力款采纳竞价加成，增量控制在现有受众定向花费的 30% 以内。<strong>判定：</strong>增量新客成本守在 $70/单以内。</div></div>
+ </div>
+
+ <div class="card" style="border-left:4px solid var(--gold)"><h2>10 · 三个月节奏表</h2>
+  <table><thead><tr><th>时间</th><th>主线动作</th><th>产品线侧重</th></tr></thead><tbody>
+  <tr><td class="hl">8 月</td><td>变体级预算重排 + 倒挂款处置 + 出价分线校准 + 柯宝收敛 + 广告位试点。<strong>准备工作必须在本月内做完</strong>——9 月起就是收成期。</td><td>净水器页面改造启动（8 周期）；灶具停在现有预算</td></tr>
+  <tr><td class="hl">9 月</td><td>把 8 月跑通的规则复制到其余父体与活动；核心词独立承接跑满 4 周；把活动名里的运行参数迁到独立字段。</td><td>主线开始起量（需求环比已 +34%）；房车车载款正常投</td></tr>
+  <tr><td class="hl">10 月</td><td>阶梯式加预算、测试分时节奏。<strong>注意：10 月是全年建议竞价最贵的月份之一，加预算要盯边际成本。</strong></td><td><strong>房车车载款不降档</strong>（10 月不淡）；<strong>便携丙烷款反而加档</strong>（Q4 是它的旺季）</td></tr>
+  <tr><td class="hl">11 月中 – 次年 2 月</td><td><strong>预算重心压在这里。</strong>量最大且单位点击最便宜——旺季不必因担心成本上涨而提前收缩。12 月有一个回落，不必把预算全压年底，要留给次年 1–2 月的真正高点。</td><td>燃气即热 / 电即热为绝对主力；房车车载款 11 月中起降档</td></tr>
+  </tbody></table>
+ </div>
+
+ <div class="alert a-ok"><span>🎯</span><div><strong>一句话收尾：</strong>这个账户的基本盘是好的——主力产品线 ACOS 22.0%、主力店铺在加量的同时守住了效率、转化能力还在逐期改善，运营流程本身也相当成熟。这一期要解决的问题不在"怎么把广告做得更好"，在于<strong>把钱放回已经被验证过的位置上</strong>——而这些位置，很多就在同一个商品页面内部。这件事不依赖市场好转，也不需要新增预算。<br><br>需要一并说明的是：主线大盘 2026 年确实在同比走弱，这轮旺季的绝对量大概率不会超过去年同期。<strong>所以目标应该定在提高份额，而不是等大盘把量带起来。</strong></div></div>
+ <div class="foot">健怡 · Amazon 广告经营复盘（客户版）· 周期 2026-05-28 – 2026-07-26 · 美国站 USD<br>睿宁 · 懿可 · 健怡 · 柯宝 四店合并｜市场、季节性与竞品数据取自公开市场数据平台（取数 2026-07-28）</div>
+</section>
+</div>
+<script>
+var NAVY='#0F172A',TEAL='#0D9488',GREEN='#059669',RED='#DC2626',AMBER='#D97706',BLUE='#2563EB',SLATE='#94A3B8';
+var done={};
+function mk(id){
+ if(done[id])return; var el=document.getElementById(id); if(!el)return; done[id]=1;
+ var ctx=el.getContext('2d');
+ if(id=='c_store'){new Chart(ctx,{type:'bar',data:{labels:['睿宁','懿可','健怡','柯宝'],datasets:[
+  {label:'花费 $',data:[133014,43636,19618,12727],backgroundColor:SLATE,yAxisID:'y'},
+  {label:'销售额 $',data:[536201,87271,38675,9621],backgroundColor:TEAL,yAxisID:'y'},
+  {label:'ACOS %',data:[24.8,50.0,50.7,132.3],type:'line',borderColor:AMBER,backgroundColor:AMBER,yAxisID:'y1',tension:.3,pointRadius:5}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{
+   y:{beginAtZero:true,ticks:{callback:function(v){return '$'+(v/1000)+'k'}}},
+   y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_tier'){new Chart(ctx,{type:'bar',data:{labels:['效率领先','健康','偏高','待修复'],datasets:[
+  {label:'花费占比 %',data:[14.4,37.4,22.5,25.7],backgroundColor:SLATE},
+  {label:'销售占比 %',data:[35.0,39.9,17.6,7.4],backgroundColor:TEAL}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'钱花在哪 vs 销售来自哪（左灰=花费，右绿=销售）'}},
+  scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_line'){new Chart(ctx,{type:'bar',data:{labels:['燃气即热','RV 房车','电即热','净水器','小厨宝','灶具','便携','厨余粉碎机'],datasets:[
+  {label:'花费 $',data:[60161,50597,21826,13307,11896,10102,9062,1121],backgroundColor:SLATE,yAxisID:'y'},
+  {label:'ACOS %',data:[22.0,34.4,29.4,141.4,29.2,75.9,36.9,23.3],type:'line',borderColor:RED,backgroundColor:RED,yAxisID:'y1',tension:.25,pointRadius:5}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'柱=花费规模，线=投放效率（线越高越需要修复）'}},
+  scales:{y:{beginAtZero:true,ticks:{callback:function(v){return '$'+(v/1000)+'k'}}},
+   y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_place'){new Chart(ctx,{type:'bar',data:{labels:['搜索结果顶部','商品页面','其余搜索位','站外'],datasets:[
+  {label:'花费 $',data:[71189,68672,47011,1888],backgroundColor:SLATE,yAxisID:'y'},
+  {label:'销售额 $',data:[263150,164203,149162,5200],backgroundColor:TEAL,yAxisID:'y'},
+  {label:'转化率 %',data:[3.87,2.14,2.55,0.73],type:'line',borderColor:GREEN,backgroundColor:GREEN,yAxisID:'y1',tension:.3,pointRadius:5}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'顶部与商品页面花费相近，产出差六成'}},scales:{
+   y:{beginAtZero:true,ticks:{callback:function(v){return '$'+(v/1000)+'k'}}},
+   y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_type'){new Chart(ctx,{type:'bar',data:{labels:['商品推广 SP','品牌推广 SB','展示型推广 SD'],datasets:[
+  {label:'花费占比 %',data:[76.4,14.3,9.2],backgroundColor:SLATE},
+  {label:'销售占比 %',data:[75.0,11.9,13.1],backgroundColor:TEAL},
+  {label:'ACOS %',data:[31.7,37.5,22.0],backgroundColor:AMBER}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'展示型：花费占比最小，效率最好'}},
+  scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_fuel'){new Chart(ctx,{type:'bar',data:{labels:['丙烷 propane','天然气 natural gas','电 electric'],datasets:[
+  {label:'花费 $',data:[30341,7070,18222],backgroundColor:SLATE,yAxisID:'y'},
+  {label:'ACOS %',data:[23.6,37.3,40.3],type:'line',borderColor:RED,backgroundColor:RED,yAxisID:'y1',tension:.25,pointRadius:6}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'同一主干、不同燃料：效率分层明显'}},scales:{
+   y:{beginAtZero:true,ticks:{callback:function(v){return '$'+(v/1000)+'k'}}},
+   y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return v+'%'}}}}}});}
+ if(id=='c_decomp'){new Chart(ctx,{type:'bar',data:{labels:['客单价回落','点击成本上涨','转化率改善','合计变化'],datasets:[
+  {label:'对 ACOS 的影响（百分点）',data:[2.1,1.9,-0.8,3.0],backgroundColor:[AMBER,AMBER,GREEN,RED]}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'ACOS 上升 3 个百分点的来源拆解（绿色为抵消项）'}},
+  scales:{y:{ticks:{callback:function(v){return v+" 个百分点"}}}}}});}
+ if(id=='c_season'){new Chart(ctx,{type:'bar',data:{labels:['8月','9月','10月','11月','12月','次年1月','次年2月'],datasets:[
+  {label:'电即热品类月搜索量',data:[8633,11563,12960,14536,11379,15999,15467],backgroundColor:'rgba(13,148,136,.55)',yAxisID:'y',order:2},
+  {label:'主词建议竞价 $',data:[2.58,null,2.70,2.11,null,2.20,null],type:'line',borderColor:RED,backgroundColor:RED,yAxisID:'y1',tension:.2,pointRadius:7,spanGaps:true,order:1}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},
+   title:{display:true,text:'需求最高的 11 月与次年 1 月，点击反而最便宜'}},
+  scales:{y:{beginAtZero:true,title:{display:true,text:'月搜索量'}},
+   y1:{position:'right',min:1.8,max:3.0,grid:{drawOnChartArea:false},title:{display:true,text:'建议竞价 $'},ticks:{callback:function(v){return '$'+v.toFixed(2)}}}}}});}
+}
+const firstChart={ov:['c_store'],prod:['c_tier','c_line'],struct:['c_place','c_type'],words:['c_fuel'],mkt:['c_decomp','c_season'],sop:[],plan:[]};
+function show(t){
+ document.querySelectorAll('.tab').forEach(function(b){b.classList.toggle('active',b.dataset.t==t)});
+ document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+ var pn=document.getElementById('p-'+t); if(pn)pn.classList.add('active');
+ (firstChart[t]||[]).forEach(function(c){setTimeout(function(){mk(c)},60)});
+}
+document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
+mk('c_store');
+</script>
+</body></html>
