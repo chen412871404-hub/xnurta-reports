@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>江苏盖亚亚马逊运营 AI Agent 流程搭建及 SparkX MCP 应用方案</title>
+<style>
+  :root{
+    --navy:#0f2c4c; --navy2:#1e4976; --blue:#2563eb; --cyan:#0891b2;
+    --amber:#d97706; --amber-bg:#fef3e2;
+    --bg:#eef2f7; --card:#ffffff; --ink:#1f2937; --muted:#5b6b7f;
+    --line:#e3e9f1; --soft:#f5f8fc; --green:#0f766e;
+    --shadow:0 2px 14px rgba(15,44,76,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.85; font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ===== 封面 ===== */
+  .cover{
+    background:linear-gradient(135deg,#0c2540 0%,#1e4976 55%,#2563eb 100%);
+    color:#fff; padding:72px 24px 60px; position:relative; overflow:hidden;
+  }
+  .cover::after{
+    content:""; position:absolute; right:-120px; top:-120px; width:380px; height:380px;
+    border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);
+  }
+  .cover-inner{max-width:920px;margin:0 auto;position:relative;z-index:2}
+  .cover .kicker{
+    display:inline-block; font-size:13px; letter-spacing:3px; text-transform:uppercase;
+    background:rgba(255,255,255,.14); padding:6px 16px; border-radius:30px; margin-bottom:24px;
+    border:1px solid rgba(255,255,255,.22);
+  }
+  .cover h1{font-size:34px;line-height:1.4;font-weight:800;letter-spacing:.5px;margin-bottom:18px}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:14px 28px;font-size:15px;opacity:.92;margin-top:20px}
+  .cover .meta span{display:inline-flex;align-items:center;gap:8px}
+  .dot{width:7px;height:7px;border-radius:50%;background:#7dd3fc;display:inline-block}
+  /* ===== 布局 ===== */
+  .layout{max-width:1180px;margin:0 auto;padding:36px 24px 80px;display:grid;grid-template-columns:230px 1fr;gap:34px;align-items:start}
+  nav.toc{
+    position:sticky; top:24px; background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:18px 16px; box-shadow:var(--shadow); max-height:calc(100vh - 48px); overflow:auto;
+  }
+  nav.toc .toc-title{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:1px;margin-bottom:12px;padding-left:8px}
+  nav.toc ol{list-style:none}
+  nav.toc li{margin:2px 0}
+  nav.toc a{
+    display:block; color:var(--muted); text-decoration:none; font-size:13.5px; line-height:1.5;
+    padding:6px 10px; border-radius:8px; border-left:2px solid transparent; transition:.15s;
+  }
+  nav.toc a:hover{background:var(--soft);color:var(--blue);border-left-color:var(--blue)}
+  main{min-width:0}
+  section.block{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; margin-bottom:26px; box-shadow:var(--shadow);
+  }
+  h2.sec{
+    font-size:23px; color:var(--navy); font-weight:800; margin-bottom:20px;
+    padding-bottom:14px; border-bottom:2px solid var(--line); display:flex; align-items:center;gap:12px;
+  }
+  h2.sec .num{
+    flex:none; width:36px;height:36px;border-radius:10px; background:linear-gradient(135deg,var(--navy2),var(--blue));
+    color:#fff; display:flex;align-items:center;justify-content:center; font-size:16px;font-weight:800;
+  }
+  h3.sub{font-size:18px;color:var(--navy2);font-weight:700;margin:24px 0 10px;padding-left:12px;border-left:4px solid var(--cyan)}
+  p{margin:12px 0;color:#334155}
+  strong{color:var(--navy)}
+  ul,ol.body{margin:12px 0 12px 4px;padding-left:22px}
+  ul li,ol.body li{margin:7px 0;color:#334155}
+  /* ===== 核心结论 ===== */
+  .summary{background:linear-gradient(135deg,#f0f6ff,#f7fbff);border:1px solid #d6e6fb;border-radius:14px;padding:24px 26px;margin-top:8px}
+  .summary p{margin:10px 0}
+  .lead{font-size:16.5px}
+  /* ===== 表格 ===== */
+  .table-wrap{overflow-x:auto;margin:18px 0;border-radius:12px;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff}
+  thead th{
+    background:var(--navy); color:#fff; text-align:left; padding:12px 16px; font-weight:600; white-space:nowrap;
+  }
+  tbody td{padding:11px 16px;border-top:1px solid var(--line);vertical-align:top;color:#334155}
+  tbody tr:nth-child(even){background:var(--soft)}
+  tbody tr:hover{background:#eef5ff}
+  td .hl{color:var(--amber);font-weight:700}
+  /* ===== 卡片栅格 ===== */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:18px 0}
+  .feat{
+    background:var(--soft); border:1px solid var(--line); border-radius:14px; padding:20px;
+  }
+  .feat .ico{
+    width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:800;color:#fff;margin-bottom:12px;
+  }
+  .ico.b{background:linear-gradient(135deg,#1e4976,#2563eb)}
+  .ico.c{background:linear-gradient(135deg,#0e7490,#06b6d4)}
+  .ico.a{background:linear-gradient(135deg,#b45309,#f59e0b)}
+  .feat h4{font-size:16px;color:var(--navy);margin-bottom:6px}
+  .feat p{font-size:14px;margin:6px 0;color:var(--muted)}
+  /* ===== 数据高亮 ===== */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+  .kpi{background:linear-gradient(135deg,#fff,var(--amber-bg));border:1px solid #f3e0c2;border-radius:13px;padding:16px;text-align:center}
+  .kpi .v{font-size:22px;font-weight:800;color:var(--amber);line-height:1.2}
+  .kpi .l{font-size:12.5px;color:var(--muted);margin-top:5px}
+  /* ===== 步骤 ===== */
+  .steps{margin:18px 0;position:relative}
+  .step{display:flex;gap:16px;margin-bottom:16px}
+  .step .snum{
+    flex:none;width:34px;height:34px;border-radius:50%;background:var(--cyan);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;margin-top:2px;
+  }
+  .step .sbody{flex:1;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .step .sbody h4{color:var(--navy);font-size:16px;margin-bottom:4px}
+  .step .sbody p{font-size:14.5px;margin:4px 0}
+  /* ===== 场景卡 ===== */
+  .scene{border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;background:#fff}
+  .scene .stag{display:inline-block;background:var(--blue);color:#fff;font-size:12.5px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:10px}
+  .scene h4{font-size:17px;color:var(--navy);margin-bottom:8px}
+  .scene .row{display:flex;gap:10px;margin:8px 0;font-size:14.5px}
+  .scene .row .tag{flex:none;font-weight:700;color:var(--cyan);min-width:74px}
+  /* ===== 提示框 ===== */
+  .callout{
+    border-radius:12px;padding:16px 20px;margin:18px 0;font-size:14.5px;
+    background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;
+  }
+  .callout.warn{background:var(--amber-bg);border-color:#f3d9a8;color:#92400e}
+  .callout.info{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+  .callout b{display:block;margin-bottom:4px}
+  /* ===== 分层 ===== */
+  .layers{counter-reset:layer;margin:16px 0}
+  .layer{display:flex;gap:16px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:12px}
+  .layer .ln{
+    counter-increment:layer;flex:none;width:30px;height:30px;border-radius:8px;background:var(--navy2);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+  }
+  .layer h4{font-size:15.5px;color:var(--navy)}
+  .layer p{font-size:14px;margin:3px 0}
+  /* ===== 价值列表 ===== */
+  .value-list{counter-reset:v;list-style:none;margin:14px 0;padding:0}
+  .value-list li{
+    counter-increment:v;position:relative;padding:14px 16px 14px 54px;margin-bottom:10px;
+    background:var(--soft);border:1px solid var(--line);border-radius:12px;
+  }
+  .value-list li::before{
+    content:counter(v);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:8px;
+    background:linear-gradient(135deg,var(--navy2),var(--blue));color:#fff;font-weight:800;font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  /* ===== 结尾 ===== */
+  .closing{
+    background:linear-gradient(135deg,#0c2540,#1e4976);color:#fff;border-radius:16px;padding:34px 38px;margin-top:26px;
+  }
+  .closing h2{font-size:22px;margin-bottom:14px}
+  .closing p{color:#dbe7f5}
+  .closing .chain{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .closing .chain span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:20px;font-size:13.5px}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  a.ext{color:var(--blue);word-break:break-all}
+  @media(max-width:920px){
+    .layout{grid-template-columns:1fr}
+    nav.toc{position:static;max-height:none}
+    .grid3,.kpis{grid-template-columns:repeat(2,1fr)}
+    .grid2{grid-template-columns:1fr}
+    section.block{padding:24px 20px}
+    .cover h1{font-size:26px}
+  }
+  @media print{
+    body{background:#fff} nav.toc{display:none} .layout{grid-template-columns:1fr;max-width:100%}
+    section.block,.closing{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <span class="kicker">客户版 · AI Agent 落地方案</span>
+    <h1>江苏盖亚亚马逊运营 AI Agent 流程搭建<br>及 SparkX MCP 应用方案</h1>
+    <div class="meta">
+      <span><span class="dot"></span>编制日期：2026 年 8 月 31 日</span>
+      <span><span class="dot"></span>覆盖品牌：KROSER · VANKEAN · EMPSIGN</span>
+      <span><span class="dot"></span>广告档案：36 个</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc">
+    <div class="toc-title">目录导航</div>
+    <ol>
+      <li><a href="#summary">核心结论</a></li>
+      <li><a href="#s1">一、系统的三个组成部件</a></li>
+      <li><a href="#s2">二、第一步：搭建工作台</a></li>
+      <li><a href="#s3">三、第二步：模型选择</a></li>
+      <li><a href="#s4">四、第三步：沉淀执行标准</a></li>
+      <li><a href="#s5">五、第四步：搭建知识库</a></li>
+      <li><a href="#s6">六、第五步：数据接入</a></li>
+      <li><a href="#s7">七、盖亚的账户特点</a></li>
+      <li><a href="#s8">八、优先落地的三个场景</a></li>
+      <li><a href="#s9">九、品牌与站点分层分工</a></li>
+      <li><a href="#s10">十、落地顺序与时间</a></li>
+      <li><a href="#s11">十一、对盖亚的价值</a></li>
+      <li><a href="#s12">十二、三工具协同场景</a></li>
+      <li><a href="#closing">结语</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <!-- 核心结论 -->
+    <section class="block" id="summary">
+      <h2 class="sec"><span class="num">★</span>核心结论</h2>
+      <div class="summary">
+        <p class="lead">现在很多亚马逊团队已经在用 AI 写文案、翻译五点描述、整理竞品信息。这些用法确实有价值，但多数仍停留在"问一句、答一句"的阶段——运营依然要自己下载报表、判断问题、整理建议，再到后台逐项核对。</p>
+        <p class="lead">真正能改变团队效率的，是把 AI 变成一套<strong>能持续工作的系统</strong>：它按团队定好的标准取数、分析、输出建议、记录经验，人负责审核和拍板。这套系统通常被称为 AI Agent。</p>
+        <p>对江苏盖亚而言，重点不是再增加一个通用聊天工具，而是让现有的多品牌、多站点广告运营拥有一条稳定的数据通道。经授权范围核验，目前账户覆盖 <strong>36 个广告档案</strong>，涉及 <strong>KROSER、VANKEAN、EMPSIGN</strong> 三个品牌，以及美国、加拿大、墨西哥、英国、德国、法国、意大利、西班牙、荷兰、日本、澳大利亚和阿联酋等站点。在这样的规模下，单靠人工切换后台、导出报表和复盘，很难长期保持同一套判断标准。</p>
+        <p>本材料沿用一套已经跑通的 Agent 落地思路，重点讲清三件事：<strong>系统由哪几块组成、盖亚应按什么顺序搭建、SparkX MCP 在其中承担什么作用。</strong></p>
+      </div>
+    </section>
+
+    <!-- 一 -->
+    <section class="block" id="s1">
+      <h2 class="sec"><span class="num">一</span>先把这套系统拆开看</h2>
+      <p>这套系统主要由三个部件组成，缺少任何一个都难以长期稳定运行。</p>
+      <div class="grid3">
+        <div class="feat">
+          <div class="ico b">脑</div>
+          <h4>第一块：会判断的大脑</h4>
+          <p>即 ChatGPT、DeepSeek 等大模型，能够读懂数据、进行逻辑推理，并写出结构化分析。</p>
+          <p>但大模型有一个硬边界：它无法自动知道盖亚各站点昨天花了多少广告费，也不知道某次 ACOS 上升之前谁调过预算或竞价。没有真实数据，它只能依据一般经验作答。</p>
+        </div>
+        <div class="feat">
+          <div class="ico c">通</div>
+          <h4>第二块：取数据的通道</h4>
+          <p>负责把大模型与真实业务连接起来，涵盖市场与竞品数据、店铺经营数据、广告表现、广告结构和操作记录。</p>
+          <p>有了通道，AI 才能照着盖亚自己的账户做判断；没有通道，运营仍需手动导表，整套系统最终会退化成一个更贵的聊天工具。</p>
+        </div>
+        <div class="feat">
+          <div class="ico a">序</div>
+          <h4>第三块：固定的工作流程</h4>
+          <p>大模型擅长回答问题，Agent 负责执行任务，Skill 则把团队的做事顺序固定下来。</p>
+          <p>以"广告周度优化"为例，老运营通常会先排除数据异常和缺货，再依次查看花费无单词、转化下滑词、广告位变化、预算受限和历史调整。把这套顺序写成 Skill 后，不同运营面对同一份数据，都会按相同标准给出建议。</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>部件</th><th>可选方案</th></tr></thead>
+          <tbody>
+            <tr><td>大脑</td><td>ChatGPT、DeepSeek、千问等</td></tr>
+            <tr><td>流程与工作台</td><td>workbuddy 及其他 Agent 工具</td></tr>
+            <tr><td>市场和竞品数据</td><td>卖家精灵、SIF 等</td></tr>
+            <tr><td>经营数据</td><td>ERP 系统</td></tr>
+            <tr><td>自有账户广告数据</td><td><strong>SparkX MCP</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">市场数据说明行业发生了什么，ERP 说明经营结果，SparkX MCP 说明广告当前怎么投、表现如何、期间改过什么——<b>三者不能互相替代。</b>三块合起来，就是：大模型负责判断，MCP 负责供数，Skill 负责执行标准。</div>
+    </section>
+
+    <!-- 二 -->
+    <section class="block" id="s2">
+      <h2 class="sec"><span class="num">二</span>第一步：给它一个能跑起来的工作台</h2>
+      <p>过去搭建 Agent 往往需要准备服务器、安装环境、维护依赖。现在使用 workbuddy 这类工作台，可以省掉大部分基础设施工作。运营直接在同一界面发任务、查看结果、上传文件和调用 Skill。</p>
+      <p>workbuddy 客户端还可以读取电脑上的本地资料，适合与后续要使用的 Obsidian 知识库配合。运营看到的是一个统一工作界面，背后则由不同模型、Skill 和 MCP 协同完成任务。</p>
+      <div class="callout warn"><b>需要提前确认的一件事</b>如果希望每天定时生成异常清单，需要有稳定运行的客户端或外部定时执行环境。这一点不影响先完成数据接入和人工触发的流程。</div>
+      <p><strong>这一步的产出：</strong>团队拥有一个统一入口，可以直接发出"复盘 KROSER 美国站近 7 天广告异常"这类业务指令。</p>
+      <p>工作台装好之后，第一次做广告分析就会遇到数据问题：运营要么每次下载报表再上传，要么直接把 SparkX MCP 接上。对盖亚这种 36 个档案的账户规模而言，手工导表不适合作为长期方案。</p>
+    </section>
+
+    <!-- 三 -->
+    <section class="block" id="s3">
+      <h2 class="sec"><span class="num">三</span>第二步：模型怎么选——不追最强，追求合适</h2>
+      <p>亚马逊运营中，有些任务需要强推理，有些只是批量整理。如果全部使用最贵的模型，成本没有必要。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>任务类型</th><th>模型选择</th><th>原因</th></tr></thead>
+          <tbody>
+            <tr><td>广告异常诊断、跨品牌资源分配、复杂策略</td><td>强推理模型</td><td>判断错误的成本较高</td></tr>
+            <tr><td>关键词分类、报表整理、格式转换</td><td>低成本模型</td><td>规则明确，适合批量处理</td></tr>
+            <tr><td>周报初稿、SOP 整理、知识库归档</td><td>稳定且成本可控的模型</td><td>量大，结果容易审核</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>同一套系统可以按任务混用模型：<strong>关键判断保证质量，重复处理控制成本。</strong></p>
+      <p>比模型强弱更影响结果的，是数据是否足够新、范围是否完整。广告数据变化很快——一个词上周还在稳定出单，本周就可能因为价格、库存、竞价或广告位变化而失去转化。如果输入的是三周前的报表，模型算得再准，回答的也是三周前的问题。</p>
+      <div class="callout">因此，模型够用即可，<b>数据接入和分析口径需要优先确定。</b></div>
+    </section>
+
+    <!-- 四 -->
+    <section class="block" id="s4">
+      <h2 class="sec"><span class="num">四</span>第三步：把运营经验写成 AI 能执行的标准</h2>
+      <p>很多团队觉得 AI 输出不稳定，常见原因并不是模型不够强，而是指令缺少业务边界。"帮我分析一下广告"这样的指令，既无法保证每次都看相同的数据，也无法保证不同运营拿到相同结论。</p>
+      <p>一条合格的广告分析 Skill，至少要明确以下六方面内容：</p>
+      <ol class="body">
+        <li><strong>分析对象</strong>：包括品牌、站点、产品线、ASIN 和广告活动。</li>
+        <li><strong>数据范围</strong>：例如最近 7 天、30 天及上一周期。</li>
+        <li><strong>判断指标</strong>：包括花费、订单、ACOS、转化率、CPC、广告位和预算状态。</li>
+        <li><strong>输出分类</strong>：包括扩量、降价、否定、观察和需要人工确认。</li>
+        <li><strong>不能碰的红线</strong>：例如有稳定订单的核心词，不能因为短期波动就直接否定。</li>
+        <li><strong>输出格式</strong>：包括证据、建议动作、风险和复查日期。</li>
+      </ol>
+      <h3 class="sub">盖亚还需要额外增加两条规则</h3>
+      <p><strong>第一，同一阈值不能直接套用到所有品牌和站点。</strong>美国站、德国站、日本站的点击成本、转化率和币种各不相同，KROSER、VANKEAN、EMPSIGN 的产品结构也不同。Skill 应先读取对应品牌和站点的历史基线，再判断异常。</p>
+      <p><strong>第二，背包、公文包、拉杆电脑包和宠物用品不能放在同一个判断模板里。</strong>它们的核心词、客单价、转化周期和季节性不同，至少要按产品线分开设规则。</p>
+      <div class="callout info"><b>这一步的产出</b>先完成 2 到 3 个 Skill，建议从"广告周度优化""品牌与站点体检""托管组复盘"开始。</div>
+    </section>
+
+    <!-- 五 -->
+    <section class="block" id="s5">
+      <h2 class="sec"><span class="num">五</span>第四步：搭知识库，让系统记住盖亚自己的经验</h2>
+      <p>亚马逊运营最值钱的内容，往往不是公开教程，而是团队长期积累下来的判断：</p>
+      <ul>
+        <li>哪些背包大词有量，但容易拉高 ACOS；</li>
+        <li>哪些站点需要更保守的出价和预算边界；</li>
+        <li>哪些产品临近缺货时不适合继续扩量；</li>
+        <li>哪些广告位对特定 ASIN 有效，哪些只是抬高 CPC；</li>
+        <li>某次异常究竟是市场变化，还是账户调整造成的。</li>
+      </ul>
+      <p>建议使用 <strong>Obsidian</strong> 搭建知识库。它本质上是一组本地 Markdown 文件，团队能直接阅读，Agent 也能按权限读取。前期先由一位负责人维护，内容跑顺之后再接公司网盘或代码仓库同步。</p>
+      <h3 class="sub">知识库分三层</h3>
+      <div class="grid3">
+        <div class="feat">
+          <div class="ico b">1</div>
+          <h4>第一层：原始证据</h4>
+          <p>保存每次分析所依据的数据范围、指标快照和必要报表。原始证据只存档、不随意改写，便于日后追溯。</p>
+        </div>
+        <div class="feat">
+          <div class="ico c">2</div>
+          <h4>第二层：经验沉淀</h4>
+          <p>保存经过复盘确认的规律，例如"VANKEAN 某类精准词在英国站需要多少点击才有判断价值"。</p>
+        </div>
+        <div class="feat">
+          <div class="ico a">3</div>
+          <h4>第三层：执行标准</h4>
+          <p>保存 Agent 每次执行前必须读取的硬规则，包括目标 ACOS、动作边界、核心词保护、库存红线、审批要求和复查周期。</p>
+        </div>
+      </div>
+      <p>经验层最容易荒废。建议把"分析结束后生成一条待审核经验"作为 Skill 的最后一步，运营确认后再进入正式知识库，避免把一次偶然波动写成长期规则。</p>
+      <h3 class="sub">参考维护节奏</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>频率</th><th>建议动作</th></tr></thead>
+          <tbody>
+            <tr><td>每天</td><td>把重要异常和调整记录放入原始证据层</td></tr>
+            <tr><td>每周</td><td>复盘已执行建议，提炼可复用经验</td></tr>
+            <tr><td>每月</td><td>审核目标、阈值和红线是否需要调整</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info"><b>这一步的产出</b>一个按品牌、站点和产品线组织的 Obsidian 知识库。</div>
+    </section>
+
+    <!-- 六 -->
+    <section class="block" id="s6">
+      <h2 class="sec"><span class="num">六</span>第五步：数据从哪里进来</h2>
+      <p>亚马逊运营要看的数据分为四类：</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>要看什么</th><th>常见来源</th><th>主要用途</th></tr></thead>
+          <tbody>
+            <tr><td>市场容量、价格带、竞品规模</td><td>卖家精灵、SIF 等</td><td>判断外部市场</td></tr>
+            <tr><td>竞品结构、竞品流量词</td><td>SIF 等</td><td>研究对手</td></tr>
+            <tr><td>销量、库存、利润、FBA</td><td>ERP</td><td>判断经营结果</td></tr>
+            <tr><td>自有账户的广告表现、结构、配置和调整记录</td><td><strong>SparkX MCP</strong></td><td>判断广告该怎么改</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>前三类说明市场和经营，第四类说明盖亚自己的广告账户。SparkX MCP 的价值，正在于把第四类数据稳定地交给 Agent，不需要运营在 36 个档案之间反复导表。</p>
+
+      <h3 class="sub">当前已验收的数据能力</h3>
+      <p>本次已经使用江苏盖亚的独立授权完成真实查询，当前可用范围包括：</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>能力</th><th>能解决的问题</th></tr></thead>
+          <tbody>
+            <tr><td>授权范围</td><td>当前能看哪些品牌、站点和广告档案</td></tr>
+            <tr><td>广告表现</td><td>花费、曝光、点击、销售、订单、ACOS、ROAS 和周期对比</td></tr>
+            <tr><td>广告结构</td><td>活动、广告组、投放、广告位、推广商品、预算和状态</td></tr>
+            <tr><td>商品信息</td><td>ASIN、标题、品牌、价格、库存状态、BSR 和产品线</td></tr>
+            <tr><td>托管组配置</td><td>托管组状态、目标、活动数量、商品数量和当前设置</td></tr>
+            <tr><td>操作记录</td><td>人、AI 和自动化对竞价、预算、状态及广告位做过的调整</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>SparkX MCP 还提供托管组创建、修改、删除和排期等执行接口。建议按<strong>"先读数、再出建议、人工审核、最后执行"</strong>的顺序上线。任何会改动账户的动作，都应由盖亚明确授权，并先在小范围完成验收。本文不把尚未逐项验收的广告写入动作当作已上线承诺。</p>
+
+      <h3 class="sub">为什么不能只接 ERP 报表</h3>
+      <p>广告报告能说明结果，但不一定说明当前怎么设置，也不能完整解释期间发生了什么。</p>
+      <p>例如，某条活动本周 ACOS 上升：只看报告，可以看到花费和销售变化；加上结构配置，可以看到当前预算、竞价策略和广告位设置；再加上操作记录，才有机会判断问题是否出现在某次调整之后。</p>
+      <div class="callout"><b>一句话概括</b>报告说明结果，配置说明现状，日志说明过程。</div>
+    </section>
+
+    <!-- 七 -->
+    <section class="block" id="s7">
+      <h2 class="sec"><span class="num">七</span>盖亚的实际情况：重点不是多开功能，而是统一判断</h2>
+      <p>盖亚当前的核心产品以电脑背包、公文包、拉杆电脑包为主，同时存在宠物用品等不同产品线。近 30 天销量较高的 ASIN 中，KROSER、VANKEAN 和 EMPSIGN 的主力款覆盖 15.6 英寸、17.3 英寸和 18.4 英寸电脑包，以及商务、旅行、女性通勤、游戏背包等不同使用场景。</p>
+      <p>这类账户有三个鲜明特点。</p>
+      <div class="grid3">
+        <div class="feat">
+          <div class="ico b">多</div>
+          <h4>品牌和站点多</h4>
+          <p>同一条规则如果直接横跨 36 个档案，很容易把正常的站点差异误判为异常。</p>
+        </div>
+        <div class="feat">
+          <div class="ico c">大</div>
+          <h4>活动和托管组数量大</h4>
+          <p>当前可见 477 个托管组，其中 250 个处于运行状态，覆盖 613 条活动和 1,147 个商品。</p>
+        </div>
+        <div class="feat">
+          <div class="ico a">异</div>
+          <h4>主力产品相似但定位不同</h4>
+          <p>电脑背包、公文包和拉杆包共享一部分流量词，也存在明显的场景词差异。</p>
+        </div>
+      </div>
+      <p>数量本身不等于有效管理，真正要看的是：<strong>重点花费是否被覆盖、目标是否合理、动作空间是否一致、调整后是否产生结果。</strong>运营也需要持续判断哪些词适合跨款复用，哪些词必须留在单独产品线上。</p>
+      <div class="callout info">SparkX MCP 要做的不是替代运营思考，而是先把每天重复的查数、对比、追溯和分层完成，让运营把时间放在目标、边界和最终选择上。</div>
+    </section>
+
+    <!-- 八 -->
+    <section class="block" id="s8">
+      <h2 class="sec"><span class="num">八</span>建议先做的三个场景</h2>
+      <p>三个场景不要同时铺开，建议先把第一个跑通，再扩展到后两个。</p>
+
+      <div class="scene">
+        <span class="stag">场景一</span>
+        <h4>广告周度优化</h4>
+        <div class="row"><span class="tag">数据输入</span><span>最近 30 天和上一周期的广告表现、当前结构、广告位、预算状态和历史调整。</span></div>
+        <div class="row"><span class="tag">Agent 处理</span><span>先读取盖亚知识库中的品牌、站点和产品线规则，再把问题分为扩量、降效、浪费、预算受限、结构问题和需观察六类。</span></div>
+        <div class="row"><span class="tag">输出</span><span>每条建议包含对象、证据、建议动作、动作边界、风险和复查日期。</span></div>
+        <div class="row"><span class="tag">人的角色</span><span>负责审核，未经确认不直接修改账户。</span></div>
+      </div>
+
+      <div class="scene">
+        <span class="stag">场景二</span>
+        <h4>品牌、站点和产品线体检</h4>
+        <p style="margin-bottom:8px">每周固定回答以下问题：</p>
+        <ul>
+          <li>哪个品牌在增长，哪个品牌的花费增长快于销售；</li>
+          <li>哪些国家站点正在改善，哪些站点的效率持续走弱；</li>
+          <li>哪些主力 ASIN 的流量、转化或广告贡献发生变化；</li>
+          <li>哪些问题需要广告处理，哪些需要库存、价格或页面团队处理。</li>
+        </ul>
+        <p>这样可以避免只盯总 ACOS——总盘改善时，仍可能有个别品牌或站点的问题被掩盖。</p>
+      </div>
+
+      <div class="scene">
+        <span class="stag">场景三</span>
+        <h4>托管组治理与经验回写</h4>
+        <p>Agent 定期检查运行中、暂停和未启动的托管组，核对目标 ACOS、活动覆盖、商品覆盖、动作空间和近期效果。</p>
+        <p>需要新增或调整托管组时，先生成候选清单和建议参数，运营审核后再调用执行接口。执行完成后，用操作记录核对是否下发成功，并在约定观察期后复盘结果。</p>
+        <p>每次复盘只把经过确认的结论写回 Obsidian，例如某个品牌在某站点适合什么目标范围、某类产品在什么条件下不应自动扩量。这样知识库会越来越接近盖亚自己的运营标准。</p>
+      </div>
+    </section>
+
+    <!-- 九 -->
+    <section class="block" id="s9">
+      <h2 class="sec"><span class="num">九</span>三个品牌和多个站点怎么分工</h2>
+      <p>建议把账户管理拆成三层。</p>
+      <div class="layers">
+        <div class="layer"><div class="ln">1</div><div><h4>公司总盘</h4><p>看总花费、广告销售、订单、ACOS、自然销售占比和各品牌贡献，解决资源分配问题。</p></div></div>
+        <div class="layer"><div class="ln">2</div><div><h4>品牌盘</h4><p>KROSER、VANKEAN、EMPSIGN 分开看增长、效率、主力产品和托管覆盖，解决品牌目标不同的问题。</p></div></div>
+        <div class="layer"><div class="ln">3</div><div><h4>站点和产品线</h4><p>美国站体量最大，应重点保障稳定和放量；欧洲、日本、澳大利亚等站点按自己的转化和成本基线判断。背包、公文包、拉杆包和宠物用品分别维护关键词与动作规则。</p></div></div>
+      </div>
+
+      <h3 class="sub">近 30 天账户快照：分层的必要性</h3>
+      <div class="kpis">
+        <div class="kpi"><div class="v">40.89 万$</div><div class="l">广告花费</div></div>
+        <div class="kpi"><div class="v">128.37 万$</div><div class="l">广告销售</div></div>
+        <div class="kpi"><div class="v">31.85%</div><div class="l">总盘 ACOS</div></div>
+        <div class="kpi"><div class="v">66.4%</div><div class="l">美国站花费占比</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>观察对象</th><th>近 30 天表现</th><th>运营含义</th></tr></thead>
+          <tbody>
+            <tr><td><strong>总盘</strong></td><td>广告花费约 <span class="hl">40.89 万美元</span>，广告销售约 <span class="hl">128.37 万美元</span>，ACOS 约 31.85%</td><td>账户体量大，需要稳定的自动取数和分层复盘</td></tr>
+            <tr><td><strong>环比上一周期</strong></td><td>花费增加约 7.7%，广告销售增加约 11.3%，ACOS 改善约 1.1 个百分点</td><td>总盘在增长，但仍需检查增长来自哪些品牌和站点</td></tr>
+            <tr><td><strong>KROSER</strong></td><td>近 30 天总销售约 106.35 万美元，为三品牌最大</td><td>重点是守住主力款，同时控制扩量成本</td></tr>
+            <tr><td><strong>VANKEAN</strong></td><td>总销售环比增长约 17.4%，广告 ACOS 从约 36.25% 改善到 32.26%</td><td>当前增长和效率改善较明显，可筛选稳定放量对象</td></tr>
+            <tr><td><strong>EMPSIGN</strong></td><td>花费增长约 11.3%，广告销售增长约 4.4%，ACOS 从约 28.04% 上升到 29.89%</td><td>应优先检查新增花费去了哪些站点、词和广告位</td></tr>
+            <tr><td><strong>美国站</strong></td><td>占总广告花费约 66.4%</td><td>美国站的异常和调整对总盘影响最大</td></tr>
+            <tr><td><strong>德 / 法 / 意</strong></td><td>近 30 天 ACOS 约 35.29%、35.43%、37.83%</td><td>需要按站点和品牌继续下钻，不能一刀切降价</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn"><b>数据口径说明</b>以上金额来自 SparkX MCP 多档案汇总，统一按美元口径展示。广告数据通常存在处理延迟，本文使用 2026 年 7 月 31 日至 8 月 29 日数据，并与 7 月 1 日至 7 月 30 日比较。品牌总销售与广告销售来自 ASIN 经营事实表，广告总盘来自活动事实表，两张表的归因和覆盖口径不同，不应强行逐项对平。</div>
+      <p>运行中托管组的近 30 天 ACOS 约为 <strong>27.67%</strong>，未归入当前运行托管状态的广告约为 <strong>32.36%</strong>。这个差异可以作为扩展托管的线索，但不能直接证明是 AI 造成的——被选入托管的活动本身可能质量更好。正确做法是按同类产品、同站点和相近历史阶段做小范围对照。</p>
+    </section>
+
+    <!-- 十 -->
+    <section class="block" id="s10">
+      <h2 class="sec"><span class="num">十</span>落地顺序和时间</h2>
+      <p>建议分四步推进，每一步都有明确的验收标准。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>阶段</th><th>做什么</th><th>建议时间</th><th>验收产出</th></tr></thead>
+          <tbody>
+            <tr><td><strong>第一步</strong></td><td>workbuddy 接入 SparkX MCP，完成权限和 36 个档案核验</td><td>约 3 天</td><td>能按品牌和站点查到同一口径的数据</td></tr>
+            <tr><td><strong>第二步</strong></td><td>建 Obsidian 三层知识库，写入现有规则</td><td>约 1 周</td><td>Agent 每次执行前能读取对应规则</td></tr>
+            <tr><td><strong>第三步</strong></td><td>只跑"广告周度优化"一个场景</td><td>2 至 3 周</td><td>连续两周稳定出建议，能追溯证据和历史调整</td></tr>
+            <tr><td><strong>第四步</strong></td><td>增加品牌站点体检和托管组治理</td><td>第二个月起</td><td>从出建议扩展到小范围、可回滚的执行闭环</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn"><b>第三步最关键</b>一次铺开很多场景，容易让数据口径、规则和审批流程同时失控。先让一个场景真正跑起来，再复制到其他品牌和站点。</div>
+      <p>是否跑通，建议看四个指标：<strong>建议采纳率、误报率、运营处理时间、执行后复查完成率</strong>。广告结果还会受到价格、促销、库存、页面和市场竞争影响，因此不把短期 ACOS 变化单独当作 Agent 成败标准。</p>
+    </section>
+
+    <!-- 十一 -->
+    <section class="block" id="s11">
+      <h2 class="sec"><span class="num">十一</span>这套自动化对盖亚的价值</h2>
+      <ol class="value-list">
+        <li><strong>减少重复查数。</strong>36 个档案不再依赖运营逐个导表，品牌和站点可以用同一套口径比较。</li>
+        <li><strong>统一判断标准。</strong>不同运营面对相同问题，都会先读取同一套红线、阈值和审批要求。</li>
+        <li><strong>保留调整过程。</strong>配置和操作记录可以帮助团队回看某次变化前后发生了什么，减少只靠记忆复盘。</li>
+        <li><strong>让托管从"数量管理"转向"结果管理"。</strong>不是追求开更多托管组，而是持续检查重点花费覆盖、参数合理性和执行后的真实结果。</li>
+        <li><strong>积累盖亚自己的运营知识。</strong>公开教程只能告诉团队一般方法，SparkX MCP 与 Obsidian 组合之后，才能把盖亚自己的品牌、站点、产品和历史结果沉淀下来。</li>
+      </ol>
+    </section>
+
+    <!-- 十二 -->
+    <section class="block" id="s12">
+      <h2 class="sec"><span class="num">十二</span>SparkX MCP 作为主驾驶舱的三工具协同场景</h2>
+      <p>以 KROSER 美国站主力电脑背包 <a class="ext" href="https://www.amazon.com/dp/B07MK6J5NT" target="_blank" rel="noopener">B07MK6J5NT</a> 为例，这套流程并不是三种数据并列使用，而是<strong>以 SparkX MCP 为主驾驶舱</strong>：卖家精灵和 SIF 负责补充外部市场信号，SparkX MCP 负责判断账户问题、生成动作、承接执行和验证结果。</p>
+      <p>原因很直接：外部工具能看到竞品和公开流量，但看不到盖亚这条广告当前的预算、竞价、广告位、搜索词花费、托管设置，以及谁在什么时间改过它。没有 SparkX MCP，Agent 最多只能提出猜测，无法形成可执行、可追溯的广告方案。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>工具</th><th>在系统中的位置</th><th>不可替代的价值</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SparkX MCP</strong></td><td>主数据底座、决策中心和执行回路</td><td>读取盖亚真实的广告表现、结构、设置和调整记录；把外部信号转成指定活动、指定词、指定预算或托管组的动作；执行后还可复查结果</td></tr>
+            <tr><td>卖家精灵</td><td>外部市场参照</td><td>帮助判断问题是否可能来自价格、评价、产品成熟度或竞品格局，而不是盲目把所有问题归因于广告</td></tr>
+            <tr><td>SIF</td><td>外部流量雷达</td><td>帮助判断词和曝光变化是账户内部投放变化，还是自然位、竞品广告位和市场流量变化造成</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="snum">1</div>
+          <div class="sbody">
+            <h4>SparkX MCP 先发现真实的账户问题</h4>
+            <p>每周先由 SparkX MCP 扫描盖亚自己的账户，按品牌、站点、产品线、ASIN、广告活动和托管组分层找出异常。它不只看 ACOS，还会同时看花费、订单、销售、点击、预算、广告位、投放结构和历史操作。</p>
+            <p>在 2026 年 7 月 31 日至 8 月 29 日，KROSER 美国站该 ASIN 的广告花费约为 <strong>13,487.53 美元</strong>，广告销售约为 <strong>45,632.71 美元</strong>，广告订单 910 单，ACOS 约为 <strong>29.56%</strong>。同期商品总销售约为 59,479.62 美元，总订单 940 单，Sessions 为 16,286。</p>
+            <p>这组数据先告诉团队一件事：这是一条必须精细管理广告的主力链接。接下来不是泛泛地问"竞品在做什么"，而是从 SparkX MCP 下钻到具体活动、搜索词、广告位和历史调整，找出哪一段花费、哪一类词、哪一次设置变化需要处理。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">2</div>
+          <div class="sbody">
+            <h4>卖家精灵帮助排除产品和竞品因素</h4>
+            <p>当 SparkX MCP 发现转化或效率异常，再用卖家精灵核对外部参照，回答同类产品的价格带、评价门槛、上架成熟度和可比竞品是谁。</p>
+            <p>本次验收中，卖家精灵返回该产品售价 45.99 美元、评分 4.7、评价量 13,782、FBA 履约、2019 年 2 月上架，Listing 质量得分为 100。它是一条成熟老链接，因此如果 SparkX MCP 发现转化突然走弱，不应先把问题归因为评价不足，而应优先检查价格、促销、搜索词相关性和广告结构。</p>
+            <p>卖家精灵在这里是<strong>校准器</strong>，不是广告决策的替代品。它帮助 Agent 少走弯路，最终是否调整以及调整哪一条广告，仍由 SparkX MCP 的账户数据决定。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">3</div>
+          <div class="sbody">
+            <h4>SIF 解释外部流量和关键词环境</h4>
+            <p>在 SparkX MCP 锁定可疑 ASIN、活动或关键词后，再用 SIF 看自然搜索、SP 广告、推荐位和竞品可见曝光的变化，判断账户内的异常是否伴随外部流量变化。</p>
+            <p>本次 SIF 验收显示，该产品最近三个月整体曝光趋势仍偏弱，但最近一周较前一周回升约 17.3%。最新一周自然搜索曝光约占 75.3%，广告曝光约占 24.7%。过去 13 周的广告曝光占比在约 2.9% 至 64.4% 之间波动，说明单周波动不能直接作为改预算或提价的依据。</p>
+            <p>SIF 同时显示主变体近 30 天销量处于 500+ 档位。这里的销量是区间值、曝光是相对得分，不等同于盖亚后台的精确访问量和订单。<strong>SIF 用来解释外部环境，SparkX MCP 用来确认盖亚账户究竟发生了什么。</strong></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">4</div>
+          <div class="sbody">
+            <h4>所有动作都由 SparkX MCP 落到具体对象</h4>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>SparkX MCP 发现的问题</th><th>卖家精灵和 SIF 的外部证据</th><th>最终由 SparkX MCP 完成的判断和动作</th></tr></thead>
+                <tbody>
+                  <tr><td>某词花费上升、订单下降</td><td>SIF 显示该词自然和竞品广告曝光没有同步恶化</td><td>下钻当前竞价、广告位、搜索词和近期操作记录，决定降价、观察或暂停，而不是只凭外部波动处理</td></tr>
+                  <tr><td>活动曝光下降且预算受限</td><td>SIF 显示产品外部流量保持或回升</td><td>找出受限活动和对应商品，评估历史转化后提出预算恢复或广告位测试，并设置金额上限</td></tr>
+                  <tr><td>点击增加但转化没跟上</td><td>卖家精灵显示价格或评价落后，SIF 显示新增曝光来自低相关词</td><td>精确定位低转化搜索词和产品投放，形成否定、降价或拆分活动建议，同时把页面问题交给对应团队</td></tr>
+                  <tr><td>核心词稳定出单但展示不足</td><td>SIF 显示该词仍有可见流量，卖家精灵确认竞品强度可承受</td><td>检查该词当前竞价、广告位和预算，设计小范围提价或广告位测试，明确复查日期</td></tr>
+                  <tr><td>托管组效果分化</td><td>外部工具说明市场环境没有明显同向恶化</td><td>用托管组配置和操作日志判断目标 ACOS、活动覆盖或动作空间是否需要调整，避免只按总盘数据扩组或关组</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">5</div>
+          <div class="sbody">
+            <h4>SparkX MCP 让建议形成闭环</h4>
+            <p>Agent 输出的不是一句"建议增加广告"，而是一张以 SparkX MCP 对象为单位的清单。每条建议都要落到具体品牌、站点、ASIN、活动、广告组、搜索词或托管组，并写明证据、建议动作、动作边界、风险和复查日期。</p>
+            <p>运营审核后，先通过 SparkX MCP 的已验收能力调整托管组或配置；执行完成后，再查询操作记录确认实际下发内容。经过约定观察期，SparkX MCP 用同一口径复查花费、订单、销售和 ACOS，SIF 与卖家精灵只在需要判断外部变化时再次介入。</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout"><b>完整闭环</b>SparkX MCP 发现问题、定位对象、提出动作、承接执行、复查结果；卖家精灵负责市场校准，SIF 负责外部流量解释，Obsidian 保存已验证的经验。三者不是平均分工——<b>SparkX MCP 是让 Agent 真正能运营账户的核心。</b></div>
+    </section>
+
+    <!-- 结语 -->
+    <section class="closing" id="closing">
+      <h2>最后：从"会聊天的 AI"到"按盖亚标准工作的流程"</h2>
+      <p>这套系统带来的不是一个更会聊天的 AI，而是一套能按盖亚标准持续工作的运营流程。</p>
+      <p>建议先用一个周度广告优化场景完成闭环：<strong>数据能自动进来，建议有证据，人工能审核，执行后能复查，经验能写回知识库。</strong>这个闭环稳定之后，再扩展到品牌站点体检和托管组治理。</p>
+      <div class="chain">
+        <span>workbuddy · 工作入口</span>
+        <span>大模型 · 判断</span>
+        <span>Skill · 业务流程</span>
+        <span>Obsidian · 经验沉淀</span>
+        <span>市场工具 · 外部信息</span>
+        <span>SparkX MCP · 账户数据与执行</span>
+      </div>
+    </section>
+
+    <footer>江苏盖亚亚马逊运营 AI Agent 流程搭建及 SparkX MCP 应用方案 · 客户版 · 2026 年 8 月 31 日</footer>
+  </main>
+</div>
+</body>
+</html>
